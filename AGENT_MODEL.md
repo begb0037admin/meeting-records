@@ -240,6 +240,19 @@ without constitutional amendment.
 
 ---
 
+## Section 9 — Git Convention
+
+All work in governed repositories commits directly to `main`. Do not
+create feature branches. Do not raise pull requests. These are content
+and notes repositories — there is no code review gate.
+
+If a session harness creates a branch automatically, merge it to `main`
+immediately and delete the branch. Do not accumulate stale branches.
+
+This rule applies to all repositories listed in Section 8.
+
+---
+
 ## Version History
 
 | Version | Date       | Change                              |
@@ -247,3 +260,5 @@ without constitutional amendment.
 | 1.0     | 2026-06-06 | Initial ratification. Amendments    |
 |         |            | applied from governance review:     |
 |         |            | Sections 1, 2, 3, 4, 5, 6, 7, 8.   |
+| 1.1     | 2026-06-15 | Section 9 added: Git convention —   |
+|         |            | commit direct to main, no branches. |

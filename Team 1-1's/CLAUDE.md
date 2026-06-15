@@ -159,6 +159,11 @@ Execute in order. Do not present anything until Granola has been queried.
 
 ---
 
+## Git Convention
+Commit all work directly to `main`. Do not create branches. Do not raise PRs. If the session harness creates a branch automatically, merge it to `main` immediately and delete the branch.
+
+---
+
 ## Failover Chain
 Kevin → Hope → Adam → Work → Admin
 
