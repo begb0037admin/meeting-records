@@ -2,7 +2,7 @@
 
 ## Identity
 - **Project:** Team 1-1's
-- **Purpose:** Structured prep, facilitation, and follow-up for regular 1-1 meetings with Michael, Asta, and James.
+- **Purpose:** Prep, facilitation support, and note-keeping for regular 1-1 meetings with Michael, Asta, and James. All meeting notes live in Granola.
 - **Owner:** Kevin Lelitte — HR Systems Manager/Director
 - **Status:** Active
 - **Repository:** `meeting-records/Team 1-1's`
@@ -22,13 +22,14 @@
 |---|---|
 | Current state | `docs/STATUS.md` |
 | Latest handover | `docs/HANDOVER.md` |
-| Meeting notes | `docs/sessions/YYYY-MM-DD-[name]-1on1.md` |
-| Talking points / prep | `docs/sessions/YYYY-MM-DD-[name]-prep.md` |
+| Session prep + post-meeting notes | `docs/sessions/YYYY-MM-DD-[name]-1on1.md` |
 | Standing agenda per person | `docs/reference/[name]-standing-agenda.md` |
 | Open follow-ups | `docs/reference/open-actions.md` |
 | Framework reference | `PROJECT_OS.md` |
 | Rollover procedure | `ROLLOVER_SOP.md` |
 | Agent roles | `AGENT_MODEL.md` |
+
+**Single source of truth for meeting transcripts: Granola.** Notes are pulled from Granola — never duplicated here. Session files in `docs/sessions/` contain prep and structured summaries only.
 
 ---
 
@@ -44,72 +45,106 @@
 
 ## Trigger Commands
 
-Start a run immediately — without asking for clarification — when Kevin says any of:
+Run immediately — without asking for clarification — when Kevin says any of:
 
-- `go`
-- `run my 1-1s`
-- `prep my 1-1`
-- `1-1 briefing`
-- `check my 1-1s`
-- `morning briefing`
-- or any close variant
+**Start of a 1-1 (prep run):**
+- `prep for [name]`
+- `starting [name]'s 1-1`
+- `[name] 1-1`
+- `go` / `let's go` (infer person from context or ask only if genuinely ambiguous)
+
+**After a 1-1 (notes run):**
+- `capture notes for [name]`
+- `done with [name]`
+- `wrap up [name]`
+- `post-meeting [name]`
 
 ---
 
-## Standard Run — What to Do on Trigger
+## Pre-Meeting Run — What to Do at the Start of a 1-1
 
-Execute these steps in order. Do not ask for clarification before starting.
+Execute in order. Pull everything from Granola before presenting anything.
 
-### Step 1 — Pull Granola transcripts
-Query Granola for any 1-1 meeting notes from the last 14 days involving Michael, Asta, or James. If Granola is unavailable, note it and proceed.
+### Step 1 — Pull Granola history for this person
+Query Granola for all past 1-1 meetings with this person. Focus on the most recent session.
 
-### Step 2 — Check open actions
-Read `docs/reference/open-actions.md`. Flag any items overdue or due this week, by person.
+### Step 2 — Surface open actions
+Read `docs/reference/open-actions.md`. Show any open items for this person — overdue ones first.
 
-### Step 3 — Build per-person briefing
-
-For each team member (Michael → Asta → James), produce:
+### Step 3 — Produce a pre-meeting brief
 
 ```
-## [Name] — [Next meeting date or "No meeting scheduled"]
+## [Name] — 1-1 Prep — [Today's date]
 
-**Last time:** [1-sentence summary of last 1-1]
-**Open actions:** [bullet list — owner, item, due date]
-**Talking points for next meeting:**
-  - [bullet]
-  - [bullet]
-**Anything to raise from their side:** [if visible from Granola notes]
+**Last meeting:** [date] — [1-sentence recap]
+
+**Open actions (theirs):**
+- [item — due date]
+
+**Open actions (Kevin's, for this person):**
+- [item — due date]
+
+**Suggested talking points:**
+- [bullet]
+- [bullet]
+
+**Carry-forward from last time:**
+- [anything unresolved]
 ```
 
-Surface order: anyone with overdue actions appears first, regardless of alphabetical order.
+### Step 4 — Save prep to session file
+Write to `docs/sessions/YYYY-MM-DD-[name]-1on1.md`. Leave a `## Meeting Notes` section blank — that gets filled after the meeting via Granola.
 
-### Step 4 — Flag anything that needs a decision or escalation
-One short section at the end: items that need Kevin to decide or act before the next meeting.
+---
 
-### Step 5 — Save the briefing
-Write the full briefing to `docs/sessions/YYYY-MM-DD-1on1-briefing.md` using today's date. Confirm the save path at the end of the response.
+## Post-Meeting Run — Capturing Notes After a 1-1
+
+### Step 1 — Pull Granola transcript
+Query Granola for the meeting that just ended with this person. Use today's date and the person's name to identify the right session.
+
+### Step 2 — Structure the notes
+Append to (or create) `docs/sessions/YYYY-MM-DD-[name]-1on1.md`:
+
+```
+## Meeting Notes — [date]
+
+**Summary:** [2–3 sentences]
+
+**Decisions made:**
+- [bullet]
+
+**Actions agreed:**
+| Owner | Action | Due |
+|---|---|---|
+| | | |
+
+**Anything to carry forward to next time:**
+- [bullet]
+```
+
+### Step 3 — Flag new actions
+List any new action items for Kevin to review and add to `docs/reference/open-actions.md`. Do not write to that file automatically — surface the items and let Kevin confirm.
 
 ---
 
 ## Voice and Style
-
 - Warm but direct. No filler.
-- Action items phrased as concrete next steps, not vague intentions.
-- Flag blockers plainly — "James is waiting on Kevin to X" not "there may be some dependencies".
-- Under 5 sentences per talking point. Less is more.
+- Action items phrased as concrete next steps with a named owner.
+- Flag blockers plainly: "James is waiting on Kevin to X" not "there may be dependencies".
+- Summaries under 5 sentences. Less is more.
 
 ---
 
 ## Hard Rules
-- Never skip a team member in the briefing output — even if there's nothing to report, say so explicitly.
-- Action items must have a named owner (Kevin or team member) — no orphaned actions.
-- Open actions from the previous meeting must be resolved or explicitly carried forward each cycle.
-- Do not write to `docs/reference/open-actions.md` during a standard run — that file is Kevin's to edit. Flag items for his attention instead.
+- All meeting transcripts live in Granola — do not duplicate full transcripts here.
+- Action items must have a named owner — no orphaned actions.
+- Do not write to `docs/reference/open-actions.md` automatically — surface items and let Kevin confirm.
+- If Granola returns no results, say so explicitly and proceed with what's available locally.
 
 ---
 
 ## Out of Scope
-- Performance management decisions (escalate to Kevin separately)
+- Performance management decisions (handle separately)
 - HR policy questions raised in 1-1s (log and route to the appropriate project)
 - Team-wide issues (route to KPI Monthly Standing Agenda project)
 

@@ -5,7 +5,7 @@ Last updated: 2026-06-15
 ---
 
 ## Current Phase
-**Setup** — Project structure created. Standing agendas and open-actions file to be populated in first working session.
+**Setup** — Project structure created. Workflow updated to reflect the real pattern: triggered per person at the start of each 1-1, with Granola as the live notes source. Standing agendas and open-actions file to be populated in first working session.
 
 ---
 
