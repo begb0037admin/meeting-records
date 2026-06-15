@@ -2,58 +2,72 @@
 
 ## Identity
 - **Project:** Team 1-1's
-- **Purpose:** Prep, facilitation support, and note-keeping for regular 1-1 meetings with Michael, Asta, and James. All meeting notes live in Granola.
+- **Purpose:** Prep, facilitation support, and note-keeping for regular 1-1 meetings with Michael, Asta, and James. All meeting transcripts live in Granola.
 - **Owner:** Kevin Lelitte — HR Systems Manager/Director
 - **Status:** Active
 - **Repository:** `meeting-records/Team 1-1's`
 
 ---
 
-## Bootstrap Order
-1. This file
-2. `docs/STATUS.md`
-3. `docs/HANDOVER.md`
+## Team Members — Each Has Their Own Folder
 
----
-
-## Where Things Live
-
-| What | Where |
-|---|---|
-| Current state | `docs/STATUS.md` |
-| Latest handover | `docs/HANDOVER.md` |
-| Session prep + post-meeting notes | `docs/sessions/YYYY-MM-DD-[name]-1on1.md` |
-| Standing agenda per person | `docs/reference/[name]-standing-agenda.md` |
-| Open follow-ups | `docs/reference/open-actions.md` |
-| Framework reference | `PROJECT_OS.md` |
-| Rollover procedure | `ROLLOVER_SOP.md` |
-| Agent roles | `AGENT_MODEL.md` |
-
-**Single source of truth for meeting transcripts: Granola.** Notes are pulled from Granola — never duplicated here. Session files in `docs/sessions/` contain prep and structured summaries only.
-
----
-
-## Team Members
-
-| Person | Cadence | Notes |
+| Person | Folder | Cadence |
 |---|---|---|
-| Michael | Fortnightly | |
-| Asta | Fortnightly | |
-| James | Fortnightly | |
+| Michael | `Michael/` | Fortnightly |
+| Asta | `Asta/` | Fortnightly |
+| James | `James/` | Fortnightly |
+
+Each person is tracked independently. Their history, open actions, standing agenda, and session notes do not bleed into each other.
+
+---
+
+## Bootstrap Order
+
+**For a team-level overview:**
+1. This file
+2. Each person's `[Name]/docs/STATUS.md`
+
+**For a specific person's 1-1:**
+1. This file
+2. `[Name]/docs/STATUS.md`
+3. `[Name]/docs/HANDOVER.md`
+
+---
+
+## Folder Structure (per person)
+
+```
+Team 1-1's/
+├── CLAUDE.md                        ← you are here (team router)
+├── Michael/
+│   └── docs/
+│       ├── STATUS.md                ← Michael's current state
+│       ├── HANDOVER.md              ← in-flight context from last session
+│       ├── sessions/                ← YYYY-MM-DD-michael-1on1.md
+│       └── reference/
+│           ├── standing-agenda.md   ← recurring talking points
+│           └── open-actions.md      ← Michael's action register
+├── Asta/
+│   └── docs/  (same structure)
+└── James/
+    └── docs/  (same structure)
+```
+
+**Granola is the single source of truth for transcripts.** Session files hold prep and structured summaries only — never full transcript copies.
 
 ---
 
 ## Trigger Commands
 
-Run immediately — without asking for clarification — when Kevin says any of:
+Run immediately — no clarification needed — when Kevin says:
 
-**Start of a 1-1 (prep run):**
+**Pre-meeting prep:**
 - `prep for [name]`
 - `starting [name]'s 1-1`
 - `[name] 1-1`
-- `go` / `let's go` (infer person from context or ask only if genuinely ambiguous)
+- `go` / `let's go` (infer person from context; ask only if genuinely ambiguous)
 
-**After a 1-1 (notes run):**
+**Post-meeting notes:**
 - `capture notes for [name]`
 - `done with [name]`
 - `wrap up [name]`
@@ -61,17 +75,15 @@ Run immediately — without asking for clarification — when Kevin says any of:
 
 ---
 
-## Pre-Meeting Run — What to Do at the Start of a 1-1
+## Pre-Meeting Run
 
-Execute in order. Pull everything from Granola before presenting anything.
+Execute in order. Do not present anything until Granola has been queried.
 
-### Step 1 — Pull Granola history for this person
-Query Granola for all past 1-1 meetings with this person. Focus on the most recent session.
+**1. Pull Granola history** — all past 1-1s with this person. Focus on the most recent session.
 
-### Step 2 — Surface open actions
-Read `docs/reference/open-actions.md`. Show any open items for this person — overdue ones first.
+**2. Check open actions** — read `[Name]/docs/reference/open-actions.md`. Overdue items first.
 
-### Step 3 — Produce a pre-meeting brief
+**3. Produce pre-meeting brief:**
 
 ```
 ## [Name] — 1-1 Prep — [Today's date]
@@ -92,18 +104,15 @@ Read `docs/reference/open-actions.md`. Show any open items for this person — o
 - [anything unresolved]
 ```
 
-### Step 4 — Save prep to session file
-Write to `docs/sessions/YYYY-MM-DD-[name]-1on1.md`. Leave a `## Meeting Notes` section blank — that gets filled after the meeting via Granola.
+**4. Save prep** to `[Name]/docs/sessions/YYYY-MM-DD-[name]-1on1.md`. Leave a `## Meeting Notes` section blank for the post-meeting run.
 
 ---
 
-## Post-Meeting Run — Capturing Notes After a 1-1
+## Post-Meeting Run
 
-### Step 1 — Pull Granola transcript
-Query Granola for the meeting that just ended with this person. Use today's date and the person's name to identify the right session.
+**1. Pull Granola transcript** — the session that just ended with this person.
 
-### Step 2 — Structure the notes
-Append to (or create) `docs/sessions/YYYY-MM-DD-[name]-1on1.md`:
+**2. Append to the session file** created during prep (or create it if prep was skipped):
 
 ```
 ## Meeting Notes — [date]
@@ -116,37 +125,37 @@ Append to (or create) `docs/sessions/YYYY-MM-DD-[name]-1on1.md`:
 **Actions agreed:**
 | Owner | Action | Due |
 |---|---|---|
-| | | |
 
-**Anything to carry forward to next time:**
+**Carry forward to next time:**
 - [bullet]
 ```
 
-### Step 3 — Flag new actions
-List any new action items for Kevin to review and add to `docs/reference/open-actions.md`. Do not write to that file automatically — surface the items and let Kevin confirm.
+**3. Surface new actions** — list items for Kevin to confirm before they go into `[Name]/docs/reference/open-actions.md`. Do not write to that file automatically.
+
+**4. Update `[Name]/docs/STATUS.md`** — bump last/next meeting dates.
 
 ---
 
 ## Voice and Style
 - Warm but direct. No filler.
-- Action items phrased as concrete next steps with a named owner.
-- Flag blockers plainly: "James is waiting on Kevin to X" not "there may be dependencies".
-- Summaries under 5 sentences. Less is more.
+- Action items: named owner, concrete next step, due date.
+- Flag blockers plainly: "James is waiting on Kevin to X."
+- Summaries under 5 sentences.
 
 ---
 
 ## Hard Rules
-- All meeting transcripts live in Granola — do not duplicate full transcripts here.
-- Action items must have a named owner — no orphaned actions.
-- Do not write to `docs/reference/open-actions.md` automatically — surface items and let Kevin confirm.
-- If Granola returns no results, say so explicitly and proceed with what's available locally.
+- Each person's files are self-contained — never mix actions or notes across people.
+- Granola is the transcript source — do not duplicate full transcripts in session files.
+- Do not auto-write to any `open-actions.md` — surface and let Kevin confirm.
+- If Granola returns nothing, say so and proceed with local files only.
 
 ---
 
 ## Out of Scope
-- Performance management decisions (handle separately)
-- HR policy questions raised in 1-1s (log and route to the appropriate project)
-- Team-wide issues (route to KPI Monthly Standing Agenda project)
+- Performance management (handle separately)
+- HR policy questions from 1-1s (route to appropriate project)
+- Team-wide issues (route to KPI Monthly Standing Agenda)
 
 ---
 
