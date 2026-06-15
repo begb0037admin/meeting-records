@@ -246,8 +246,10 @@ All work in governed repositories commits directly to `main`. Do not
 create feature branches. Do not raise pull requests. These are content
 and notes repositories — there is no code review gate.
 
-If a session harness creates a branch automatically, merge it to `main`
-immediately and delete the branch. Do not accumulate stale branches.
+If a session harness creates a branch automatically:
+1. Merge it to `main` immediately.
+2. Notify Kevin: "Branch merged to main — please delete `[branch-name]` on GitHub."
+3. Do not close the session until Kevin confirms the branch is deleted.
 
 This rule applies to all repositories listed in Section 8.
 

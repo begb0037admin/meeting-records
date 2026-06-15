@@ -160,7 +160,10 @@ Execute in order. Do not present anything until Granola has been queried.
 ---
 
 ## Git Convention
-Commit all work directly to `main`. Do not create branches. Do not raise PRs. If the session harness creates a branch automatically, merge it to `main` immediately and delete the branch.
+Commit all work directly to `main`. Do not create branches. Do not raise PRs. If the session harness creates a branch automatically:
+1. Merge it to `main` immediately.
+2. Tell Kevin: "Branch merged to main — please delete `[branch-name]` on GitHub."
+3. Do not close the session until Kevin confirms the branch is deleted.
 
 ---
 
