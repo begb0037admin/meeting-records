@@ -13,19 +13,33 @@
 
 ### In Progress
 
-| Item | Notes |
-|------|-------|
-| **College Staff into PeopleXD (DTP1092)** | Multi-company setup (FP 68261303) active with Conor O’Brien (AG). REF2029 Pay Admin By codes to set up in UOXU. Division Code config ongoing. |
-| **Web page URL linking — Internal Mobility Principles** | 3 pages need link updating to new OxIntranet URL. Follow-up with Laura Porter due 15–16 Jun. Updates planned 22 Jun ahead of old page retiring 23/24 Jun. |
-| **Holiday Records Reports** | Quote requested from Mike West (AG case 69001638). Quote received and approved by Marie. Proceeding — funded via flex points. |
+#### College Staff into PeopleXD (DTP1092)
+**What it is:** Migration of college and hall staff data into PeopleXD as part of a new multi-company setup. Colleges and halls currently sit outside PXD; this project brings them in under a formal org structure with payroll company configuration.
+**Status:** In Progress
+**Progress:** Multi-company setup case (FP 68261303) is active with Conor O’Brien at Access Group. REF2029 Pay Administered By codes needed for all 40 colleges and halls — draft load file prepared and sent to Conor. Division Code configuration is the current blocker; ongoing work with Conor to resolve. Change management record raised in OSM. Crispin Muncaster’s updated org structure document uploaded to project Teams site.
+
+---
+
+#### Web Page URL Linking — Internal Mobility Principles
+**What it is:** The Internal Mobility Principles page has moved to a new OxIntranet URL. Three pages still link to the old location: the main ops intranet page, the professional services search page, and individual vacancy application pages. The old page is being retired 23/24 June.
+**Status:** In Progress
+**Progress:** New URL confirmed live 3 June. Follow-up with Laura Porter due 15–16 Jun to align on approach. Link updates planned for 22 June — will replace old URLs with hyperlinked text and verify links open in a new tab. Deadline is firm: old page retires 23/24 June.
+
+---
+
+#### Holiday Records Reports — PeopleXD Insight Reporting
+**What it is:** A set of holiday records duty reports to be built in PeopleXD’s Insight Reporting module. Requirements defined by Athena Artuso — a three-report specification reviewed and confirmed by Kevin. Funded via Access Group flex points.
+**Status:** Quote approved — proceeding
+**Progress:** Athena sent the full requirements review (three-report spec) following management team meeting discussion. Kevin reviewed and confirmed the spec aligns with requirements. Quote requested from Mike West at AG (case 69001638). Quote received and approved by Marie. Work now proceeding via flex points.
+
+---
 
 ### Awaiting
 
-| Item | Waiting on |
-|------|------------|
-| **Chemistry bulk delete (case 68974493)** | AG (Reenu Delaney) to complete deletion of 5,568 appraisal assignments. Employee list and cycle name passed across. £525 flex points approved. |
-| **Flex points — remaining balance** | Confirm remaining allocation plan with Marie / Simon. Expiry ~29 June. Chemistry (£525) and Holiday Records Reports committed. Any further spend needs deciding now. |
-| **DPIA — PeopleXD** | Marie’s Stage 7 signature before submission to Information Compliance. v0.2 complete, Stages 1–6 done. |
+#### Chemistry Bulk Delete (Case 68974493)
+**What it is:** Bulk deletion of 5,568 appraisal cycle assignments in PeopleXD for the Chemistry department. The appraisal cycle ‘(DO NOT USE) CDR2025Chemistry’ was incorrectly assigned to staff and needs to be removed. Handled by Access Group.
+**Status:** Awaiting AG action
+**Progress:** £525 flex points approved by Marie as payment route. Cycle name and affected employee list (5,568 staff) confirmed by Julie Hickman and passed to Reenu Delaney at AG. AG have everything they need. Waiting on AG to complete the deletion.
 
 ---
 
@@ -44,7 +58,7 @@
 ## Standing Items (verbal — all)
 
 1. KPI review — May figures already circulated; any questions?
-2. Flex points — confirm full allocation plan before 29 Jun expiry
+2. Flex points — Holiday Records Reports approved and proceeding; Chemistry committed. Any further spend needed?
 3. Cority smart notes — Quality PUG outcome (16 Jun) — next steps?
 4. James return 18 Jun — DSE feed issues hand back
 5. Marie return date — gates DPIA sign-off + Odyssey annual review
