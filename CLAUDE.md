@@ -20,11 +20,23 @@ Do NOT ask Kevin for a recap. Navigate to the relevant subfolder.
 ## Structure
 | Folder | Purpose |
 |---|---|
-| `Meeting Reviews/` | One-off meeting prep docs — roadmap briefs, catch-up agendas. YYYYMMDD named. |
+| `Meeting Reviews/` | One-off meeting prep docs. See naming convention below. |
 | `KPI Monthly Standing Agenda/` | Monthly standing agenda meeting + monthly KPI run |
 | `SK - Handover/` | Stephen Kirker handover materials |
 | `Meeting Archive/` | Archived meeting records |
 | `Team 1-1's/` | Team 1-1 records (Michael, Asta, James) |
+
+## File Naming Convention
+All meeting prep documents in `Meeting Reviews/` follow the Granola naming standard so files and meetings match:
+
+| Meeting | File name format | Example |
+|---|---|---|
+| FA Team morning catch-up | `FA Team Catch-up — DD-MM.md` | `FA Team Catch-up — 19-06.md` |
+| HR Systems Roadmap meeting | `HR Systems Roadmap — DD-MM.md` | `HR Systems Roadmap — 19-06.md` |
+| KPI Monthly Standing Agenda | `KPI Standing Agenda — MMM YYYY.md` | `KPI Standing Agenda — Jun 2026.md` |
+| Team 1-1 | `1-1 [Name] — DD-MM.md` | `1-1 Michael — 15-06.md` |
+
+This matches how Kevin names meetings in Granola — files and Granola meetings are always in sync and easy to cross-reference.
 
 ## Meeting Prep Workflow (Roadmap Fridays)
 Every Friday before the 10:00 HR Systems Roadmap meeting:
@@ -33,14 +45,15 @@ Every Friday before the 10:00 HR Systems Roadmap meeting:
 3. Check `begb0037admin/work-inbox/data/briefing.json` for inbox updates
 4. Check `begb0037admin/command-centre/data/tasks.json` for active tasks
 5. Produce two documents in `Meeting Reviews/`:
-   - `Morning_Catchup_Prep_YYYYMMDD.md` — FA morning catch-up agenda
-   - `Roadmap_Meeting_Prep_YYYYMMDD.md` — speaking brief for 10:00 roadmap meeting
+   - `FA Team Catch-up — DD-MM.md` — morning catch-up agenda before the roadmap meeting
+   - `HR Systems Roadmap — DD-MM.md` — speaking brief for 10:00 roadmap meeting
 
 ## Hard Rules
 - Never modify the HR Systems Roadmap — read only
 - Never commit personal email content verbatim
 - Always push prep documents directly to main
 - Always update relevant HANDOVER.md at end of session
+- File names MUST follow the Granola naming convention above
 
 ## Branch and Merge Protocol
 Every time files are pushed to a branch, immediately ask Kevin:
