@@ -5,7 +5,7 @@
 - **Purpose:** Prep, facilitation support, and note-keeping for regular 1-1 meetings with Michael, Asta, and James. All meeting transcripts live in Granola.
 - **Owner:** Kevin Lelitte — HR Systems Manager/Director
 - **Status:** Active
-- **Repository:** `meeting-records/Team 1-1's`
+- **Repository:** https://github.com/begb0037admin/meeting-records/tree/main/Team%201-1's
 
 ---
 
@@ -159,18 +159,21 @@ Execute in order. Do not present anything until Granola has been queried.
 
 ---
 
-## Git Convention
-Commit all work directly to `main`. Do not create branches. Do not raise PRs. If the session harness creates a branch automatically:
-1. Merge it to `main` immediately.
-2. Tell Kevin: "Branch merged to main — please delete `[branch-name]` on GitHub."
-3. Do not close the session until Kevin confirms the branch is deleted.
-
----
-
 ## Failover Chain
 Kevin → Hope → Adam → Work → Admin
 
 ---
 
 ## Last updated
-2026-06-15
+2026-06-18
+
+## Branch and Merge Protocol
+Every time files are pushed to a branch, immediately ask Kevin:
+> "I've pushed to a branch — are you happy with this? Shall I merge to main now?"
+
+Recurring triggers throughout every session:
+- **On every push** — ask immediately, without waiting
+- **When Kevin signals satisfaction** — phrases like "good", "happy with that", "that's great", "okay", "done", "let's move on" — check if anything is on a branch and ask to merge
+- **When the topic shifts** — before starting a new subject, check if anything is on a branch
+
+Never leave files on a branch without Kevin's explicit sign-off.
