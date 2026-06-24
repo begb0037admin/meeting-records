@@ -25,12 +25,24 @@
 
 ---
 
-### 3. Flex points — hard 29 June deadline
+### 3. Flex points — quote received, approve by 26 June (case 69001638)
 
-**Practical issue — may need peer support.** 2,935 flex points expire on 29 June (6 days). Chemistry bulk deletion (£525) is committed. Holiday Records Reports quote is in progress but not yet received (AG case 69001638, requested 15 June).
+**Action needed today or tomorrow.** Quote received 24 June from Access Group (Alan Quirke, V1.0 dated 12 Jun) for Holiday Records - 3 Reports Created.
 
-- Kevin needs to commit the remaining balance before expiry or the points are lost.
-- **If blocked:** Any advice on pushing Access Group to turnaround a quote in under a week?
+**Quote breakdown:**
+- Annual Leave Record by Person and Leave Year
+- Holiday Pay and Accrual Record for Variable-Hours and Casual Arrangements
+- Holiday Pay in Lieu on Termination
+- Payroll Consultant: 2.5 days = 1,750 flex points
+- WFM Consultant: 1.5 days = 1,050 flex points
+- **Total: 2,800 flex points** (£4,400)
+- **Quote expires 26 June** — approval must be given by Thursday
+
+**Key T&C:** Access Group T&Cs state that where FlexPoints expire, the customer has 3 months to utilise them from the date of expiry. So the 29 June nominal expiry is not a hard cliff — Oxford has until ~29 September to use committed points. The **quote deadline (26 Jun)** is the live constraint, not the flex point expiry.
+
+- Chemistry bulk deletion (£525) already committed and in flight.
+- Marie Cooksey sign-off on Holiday Records spend was sought 17 June.
+- **If blocked:** Any advice on expediting FlexPoints approval through Access Group?
 
 ---
 
@@ -74,4 +86,4 @@ Use this space for anything the group wants to table:
 
 ---
 
-*Prepared: 23 June 2026 | Sources: Command Centre tasks.json, Work Inbox briefing.json (refreshed 17:31 Tue 23 Jun), Granola (FA Catch-up 18/06, HR Systems Roadmap 19/06)*
+*Prepared: 23 June 2026 | Updated: 24 June 2026 (flex points quote received) | Sources: Command Centre tasks.json, Work Inbox briefing.json (refreshed 17:31 Tue 23 Jun), Granola (FA Catch-up 18/06, HR Systems Roadmap 19/06), Access Group Project Scope Document case 69001638 V1.0*
