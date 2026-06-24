@@ -25,65 +25,69 @@
 
 ---
 
-### 3. Flex points — quote received, approve by 26 June (case 69001638)
+### 3. Holiday Records reports — approved, scheduling discussion
 
-**Action needed today or tomorrow.** Quote received 24 June from Access Group (Alan Quirke, V1.0 dated 12 Jun) for Holiday Records - 3 Reports Created.
+**Update and ask.** Flex points have been approved for case 69001638 — Holiday Records - 3 Reports Created (2,800 flex points, Alan Quirke/Access Group). Access Group will make contact within 3 weeks to agree delivery timelines.
 
-**Quote breakdown:**
+**Reports in scope:**
 - Annual Leave Record by Person and Leave Year
 - Holiday Pay and Accrual Record for Variable-Hours and Casual Arrangements
 - Holiday Pay in Lieu on Termination
-- Payroll Consultant: 2.5 days = 1,750 flex points
-- WFM Consultant: 1.5 days = 1,050 flex points
-- **Total: 2,800 flex points** (£4,400)
-- **Quote expires 26 June** — approval must be given by Thursday
 
-**Key T&C:** Access Group T&Cs state that where FlexPoints expire, the customer has 3 months to utilise them from the date of expiry. So the 29 June nominal expiry is not a hard cliff — Oxford has until ~29 September to use committed points. The **quote deadline (26 Jun)** is the live constraint, not the flex point expiry.
-
-- Chemistry bulk deletion (£525) already committed and in flight.
-- Marie Cooksey sign-off on Holiday Records spend was sought 17 June.
-- **If blocked:** Any advice on expediting FlexPoints approval through Access Group?
+**Ask of the group:** Given the July capacity picture (Kevin on phased return, Michael and Emma absent w/c 1 July, SHSMS evaluation starting), when should this be scheduled? Kevin's preference would be to push delivery to after July if possible. Is that feasible given the flex point timeline (3-month grace period from 29 June expiry = use by ~29 September)?
 
 ---
 
-### 4. OSM / Self-Service major incident — resolved
+### 4. REF attributes via ESS — new Roadmap item, end of July deadline
 
-**For awareness.** The IT major incident affecting Oxford Service Manager and Self-Service (raised w/c 17 June) has been fully resolved. The temporary change approval process put in place during the incident has now been reversed — normal approvals resumed (Sarah Warne confirmed 23 Jun).
+**New item flagged by Sarah Rowles.** Sarah has added an item to the HR Systems Roadmap: sharing specific REF attributes with staff via Employee Self-Service (ESS) by end of July 2026, to enable the REF appeals process. Simon Burford and Kevin Lelitte are named.
+
+**Background from the thread:**
+- Nathan (Sarah's team) is looking at it from the technical side.
+- Anne is sharing last time's guidance — but Sarah has been clear this is **NOT a like-for-like** repeat.
+- Kevin's question in the thread: will this require a new UDF to be set up and data loaded, or re-use an existing UDF?
+- Athena Artuso noted UDFs were set up in advance for future REF cycles so that stage may already be done — but it depends on which specific REF attributes are needed. If it's just a data load, it should be straightforward.
+
+**Sarah's explicit concern:** The team is thin on the ground in July. This will need FA input, testing time, and business change support for user instructions.
+
+**Ask of the group:**
+- Is anyone already across what the specific REF attributes are?
+- How are other managers handling July capacity for this?
+- What does the UDF position look like — can Kevin confirm with Asta or Athena whether existing UDFs cover the requirement?
+
+---
+
+### 5. OSM / Self-Service major incident — resolved
+
+**For awareness.** The IT major incident affecting Oxford Service Manager and Self-Service (raised w/c 17 June) has been fully resolved. Normal approvals resumed (Sarah Warne confirmed 23 Jun).
 
 - If any changes were queued or deferred because of the incident, now is the time to resubmit.
 - Kevin has an outstanding change (20020472 — COREPORTAL_ADMIN org hierarchy options) that may have been affected.
 
 ---
 
-### 5. DTP1092 College Staff in PXD — multi-company setup progress
+### 6. DTP1092 College Staff in PXD — multi-company setup progress
 
-**Update to share.** Meeting held 23 June (Kevin, Simon, and project team) to review the post-design position on FP 68261303. Simon updated Conor O'Brien (Access Group) with the team's proposal. This is a significant piece of configuration work — multi-company setup for colleges and halls.
-
-- If any other managers are tracking this project: design phase is concluding, Access Group involvement continuing.
-- Kevin still needs to complete the 40 REF2029 Pay Administered By codes in UOXU once the Division Code blocker is resolved.
+**Update to share.** Meeting held 23 June. Simon updated Conor O'Brien (Access Group) with the team's post-design proposal on FP 68261303. Design phase is concluding.
 
 ---
 
-### 6. UKVI requirement for Skilled Workers — new item
+### 7. UKVI requirement for Skilled Workers — new item
 
-**Heads up / discussion point.** An email from the CoreHR HEI Group (23 Jun) raised UKVI requirements for Skilled Workers. Context: other HEIs in conversation with colleagues about implications for HR systems.
+**Heads up / discussion point.** An email from the CoreHR HEI Group (23 Jun) raised UKVI requirements for Skilled Workers.
 
 - Kevin hasn't acted on this yet. Worth a conversation: is this already on someone's radar? Any system changes expected?
 
 ---
 
-### 7. Open floor — issues and problems to work through together
-
-Use this space for anything the group wants to table:
-- Problems needing a fresh pair of eyes
-- Escalations where peer support would help
-- Planning items — anything coming up in July that would benefit from shared thinking
+### 8. Open floor — issues and problems to work through together
 
 **Kevin's heads-up items for July:**
 - DPIA Stage 7 sign-off: sitting with Marie. 30 June deadline approaching.
 - Annual Leave Carryover rollout (Michael's workstream) — October 2026 deadline.
 - H&S Modular System evaluation window opens mid-July.
+- REF attributes via ESS — end of July.
 
 ---
 
-*Prepared: 23 June 2026 | Updated: 24 June 2026 (flex points quote received) | Sources: Command Centre tasks.json, Work Inbox briefing.json (refreshed 17:31 Tue 23 Jun), Granola (FA Catch-up 18/06, HR Systems Roadmap 19/06), Access Group Project Scope Document case 69001638 V1.0*
+*Prepared: 23 June 2026 | Updated: 24 June 2026 | Sources: Command Centre tasks.json, Work Inbox briefing.json (refreshed 17:31 Tue 23 Jun), Granola (FA Catch-up 18/06, HR Systems Roadmap 19/06), Access Group Project Scope Document case 69001638 V1.0, Sarah Rowles REF ESS Roadmap item 24 Jun*
