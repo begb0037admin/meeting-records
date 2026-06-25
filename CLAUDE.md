@@ -13,7 +13,8 @@
 ## Bootstrap Order
 1. This file (orientation)
 2. Navigate to the relevant subfolder and read its CLAUDE.md
-3. For meeting prep documents: check `Meeting Reviews/` for the most recent prep file
+3. For meeting prep documents: read `Meeting Reviews/docs/reference/meeting-prep-formats.md` — this defines the exact format for every prep document type
+4. Then check `Meeting Reviews/` for the most recent prep file of the same type as context
 
 Do NOT ask Kevin for a recap. Navigate to the relevant subfolder.
 
@@ -71,8 +72,9 @@ Document structure:
 - Never modify the HR Systems Roadmap — read only
 - Never commit personal email content verbatim
 - Always push prep documents directly to main
-- Always update relevant HANDOVER.md at end of session
+- Always update `Meeting Reviews/docs/HANDOVER.md` at end of session
 - File names MUST follow the Granola naming convention above
+- **Approval gate:** Never push a prep document without first showing the full content to Kevin in chat and receiving his explicit approval. Show → approve → push. No exceptions.
 
 ## Branch and Merge Protocol
 Always push directly to main. If a branch must be used, merge it to main immediately upon completion — never leave files on a branch.
