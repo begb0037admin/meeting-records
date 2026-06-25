@@ -45,6 +45,23 @@ All meeting prep documents in `Meeting Reviews/` follow the Granola naming stand
 | SK | Simon (Kevin's manager) | Director-level; Kevin's 1-1 is with Simon. Granola titles: `SK 1-1 DD/MM`. File names: `1-1 Simon — DD-MM.md` in `Meeting Reviews/`. |
 | FA team | Kevin, Michael, Asta, James | Functional Analysis team |
 
+## Meeting Cadence
+| Meeting | Day | Frequency |
+|---|---|---|
+| FA Team Catch-up | Wednesday + Friday | Twice weekly |
+| HR Systems Roadmap | Friday | Weekly |
+| H&S Roadmap | Monday | Weekly |
+| Simon 1-1 (SK) | Wednesday | Fortnightly |
+| Team 1-1 — Michael / Asta / James | Varies | Rotating weekly (one per week) |
+| KPI Monthly Standing Agenda | 2nd–3rd week | Monthly |
+
+## Meeting Prep Workflow (FA Catch-up Wednesdays)
+Every Wednesday FA team check-in (Kevin, Michael, Asta, James):
+1. Check Granola for the most recent FA catch-up and any relevant meetings since
+2. Check `begb0037admin/work-inbox/data/briefing.json` for inbox updates
+3. Check `begb0037admin/command-centre/data/tasks.json` for active tasks
+4. Produce one document in `Meeting Reviews/`: `FA Team Catch-up — DD-MM.md`
+
 ## Meeting Prep Workflow (Roadmap Fridays)
 Every Friday before the 10:00 HR Systems Roadmap meeting:
 1. Read live roadmap from `begb0037admin/hr-projects/HR Systems Roadmap/HR Systems Roadmap MASTER.xlsm` (read-only, openpyxl via base64 decode)
@@ -68,8 +85,14 @@ Document structure:
 - Funding and blockers
 - Source footer
 
+## Meeting Prep Workflow (Simon 1-1)
+Fortnightly, every Wednesday. Granola title: `SK 1-1 DD/MM`. File: `1-1 Simon — DD-MM.md` in `Meeting Reviews/`.
+1. Pull Granola — most recent SK 1-1 and any relevant meetings since
+2. Check `begb0037admin/work-inbox/data/briefing.json` and `begb0037admin/command-centre/data/tasks.json`
+3. Produce `1-1 Simon — DD-MM.md` — show to Kevin, get approval, then push to main
+
 ## Meeting Prep Workflow (Team 1-1s — Michael, Asta, James)
-Fortnightly cadence. Detailed workflow in `Team 1-1's/CLAUDE.md`.
+Rotating weekly — one person per week, cycling through Michael, Asta, James. Detailed workflow in `Team 1-1's/CLAUDE.md`.
 1. Pull Granola — most recent 1-1 with this person
 2. Read `Team 1-1's/[Name]/docs/reference/open-actions.md` — overdue items first
 3. Read `Team 1-1's/[Name]/docs/HANDOVER.md`
@@ -78,7 +101,7 @@ Fortnightly cadence. Detailed workflow in `Team 1-1's/CLAUDE.md`.
 6. Surface new actions for Kevin to confirm — do NOT auto-write to open-actions.md
 
 ## Meeting Prep Workflow (KPI Monthly Standing Agenda)
-Monthly cadence. Detailed context in `KPI Monthly Standing Agenda/CLAUDE.md`.
+Monthly — typically 2nd or 3rd week. Detailed context in `KPI Monthly Standing Agenda/CLAUDE.md`.
 1. Read `KPI Monthly Standing Agenda/docs/HANDOVER.md` and most recent session file
 2. Pull Granola for any relevant discussions since last meeting
 3. Check `begb0037admin/command-centre/data/tasks.json` for relevant actions

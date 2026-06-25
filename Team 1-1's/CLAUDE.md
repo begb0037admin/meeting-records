@@ -13,9 +13,9 @@
 
 | Person | Folder | Cadence |
 |---|---|---|
-| Michael | `Michael/` | Fortnightly |
-| Asta | `Asta/` | Fortnightly |
-| James | `James/` | Fortnightly |
+| Michael | `Michael/` | Rotating weekly (one per week, cycling through all three) |
+| Asta | `Asta/` | Rotating weekly |
+| James | `James/` | Rotating weekly |
 
 Each person is tracked independently. Their history, open actions, standing agenda, and session notes do not bleed into each other.
 
