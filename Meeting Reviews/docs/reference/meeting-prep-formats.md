@@ -175,4 +175,151 @@ Remove entirely when Kevin is at full capacity.]
 
 ---
 
+## Team 1-1 — Michael, Asta, James
+
+Session files live in `Team 1-1's/[Name]/docs/sessions/YYYY-MM-DD-[name]-1on1.md`.
+
+**Pre-meeting brief (written before the 1-1):**
+
+```
+# [Name] — 1-1 — [DD Month YYYY]
+
+## Pre-Meeting Prep
+
+**Last formal 1-1:** [date] — [1-sentence recap, or "No recent session in Granola"]
+
+---
+
+### 1. [Topic]
+
+**Background:** [2–4 sentences: context, history, current state.]
+
+**What to raise:** [What Kevin wants to say or surface in this meeting.]
+
+**Suggested words:**
+> "[Suggested script — first person, conversational.]"
+
+---
+
+[Repeat for each topic]
+
+---
+
+### Tone Notes
+[Short note on style/dynamic for this person and this meeting. Optional but encouraged.]
+
+---
+
+## Meeting Notes — [DD Month YYYY]
+
+[Leave blank — completed post-meeting]
+```
+
+**Post-meeting notes (appended to the same file after the 1-1):**
+
+```
+## Meeting Notes — [DD Month YYYY]
+
+**Summary:** [2–3 sentences covering what was discussed and outcome.]
+
+**Decisions made:**
+- [bullet]
+
+**Actions agreed:**
+
+| Owner | Action | Due |
+|---|---|---|
+| [Name] | [Action] | [Date] |
+
+**Carry forward to next time:**
+- [bullet]
+```
+
+**Rules:**
+- Pre and post-meeting notes live in the same session file
+- Open actions are surfaced to Kevin but NOT auto-written to `open-actions.md` — Kevin confirms first
+- Pull Granola before writing — check most recent session and open actions first
+- If Granola returns nothing, say so and work from local files only
+- Each person's files are self-contained — never mix actions across people
+
+---
+
+## KPI Monthly Standing Agenda
+
+Two distinct document types — keep them as separate session files.
+
+**1. Standing Agenda meeting prep (before the monthly meeting):**
+
+```
+# Monthly Standing Agenda — [Month YYYY]
+
+**Date:** [Weekday DD Month YYYY]
+**Attendees:** [Names]
+
+---
+
+## Actions from last meeting
+
+| # | Action | Owner | Status |
+|---|---|---|---|
+| 1 | [Action] | [Owner] | [Done / In progress / Overdue] |
+
+---
+
+## Standing agenda items
+
+### 1. [Standing item]
+[Brief context on current position. Any update since last month.]
+
+### 2. [Standing item]
+[...]
+
+---
+
+## New items this month
+
+### [Item title]
+[What it is and why it's on this month's agenda.]
+
+---
+
+*Prepared: DD Month YYYY | Sources: [Granola, tasks.json, briefing.json, prior session file]*
+```
+
+**2. KPI run output (when producing the monthly KPI figures):**
+
+```
+# KPI Run — [Month YYYY]
+
+**Run date:** [DD Month YYYY]
+**Produced by:** Kevin
+
+---
+
+## KPI outputs
+
+| KPI | Value | Source | Notes |
+|---|---|---|---|
+| [KPI name] | [Figure] | [Data source] | [Any anomaly or caveat] |
+
+---
+
+## Commentary
+
+[2–4 sentences: notable movements, anything that needs flagging to the group.]
+
+---
+
+## Distribution
+
+[Who receives this output and how.]
+```
+
+**Rules:**
+- KPI run output and meeting prep are always separate files — name them clearly: `YYYY-MM-standing-agenda.md` and `YYYY-MM-KPI-run.md`
+- Every KPI figure must reference its data source — no undocumented numbers
+- Action items from the meeting must have a named owner and due date
+
+---
+
 *Last updated: 26 June 2026*

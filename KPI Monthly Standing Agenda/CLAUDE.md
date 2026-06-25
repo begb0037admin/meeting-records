@@ -40,13 +40,6 @@ Kevin -> Hope -> Adam -> Work -> Admin
 ## Last updated
 2026-06-18
 
-## Branch and Merge Protocol
-Every time files are pushed to a branch, immediately ask Kevin:
-> "I've pushed to a branch — are you happy with this? Shall I merge to main now?"
-
-Recurring triggers throughout every session:
-- **On every push** — ask immediately, without waiting
-- **When Kevin signals satisfaction** — phrases like "good", "happy with that", "that's great", "okay", "done", "let's move on" — check if anything is on a branch and ask to merge
-- **When the topic shifts** — before starting a new subject, check if anything is on a branch
-
-Never leave files on a branch without Kevin's explicit sign-off.
+## Approval Gate and Branch Protocol
+- Always push directly to main — never leave files on a branch
+- **Never push any meeting document or KPI output without first showing the content to Kevin in chat and receiving his explicit approval. Show → approve → push. No exceptions.**

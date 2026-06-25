@@ -68,6 +68,23 @@ Document structure:
 - Funding and blockers
 - Source footer
 
+## Meeting Prep Workflow (Team 1-1s — Michael, Asta, James)
+Fortnightly cadence. Detailed workflow in `Team 1-1's/CLAUDE.md`.
+1. Pull Granola — most recent 1-1 with this person
+2. Read `Team 1-1's/[Name]/docs/reference/open-actions.md` — overdue items first
+3. Read `Team 1-1's/[Name]/docs/HANDOVER.md`
+4. Produce pre-meeting brief — show to Kevin, get approval, then save to `Team 1-1's/[Name]/docs/sessions/`
+5. Post-meeting: pull Granola transcript, append notes to same session file — show to Kevin, get approval, then push
+6. Surface new actions for Kevin to confirm — do NOT auto-write to open-actions.md
+
+## Meeting Prep Workflow (KPI Monthly Standing Agenda)
+Monthly cadence. Detailed context in `KPI Monthly Standing Agenda/CLAUDE.md`.
+1. Read `KPI Monthly Standing Agenda/docs/HANDOVER.md` and most recent session file
+2. Pull Granola for any relevant discussions since last meeting
+3. Check `begb0037admin/command-centre/data/tasks.json` for relevant actions
+4. Produce meeting prep document — show to Kevin, get approval, then save to `KPI Monthly Standing Agenda/docs/sessions/`
+5. KPI run output is a separate file from meeting prep — same approval gate applies
+
 ## Meeting Prep Workflow (Ad Hoc)
 Any meeting Kevin asks to prepare for — one-off reviews, supplier meetings, evaluation sessions, escalation meetings, or any meeting not covered by the scheduled workflows above.
 1. Ask Kevin what data sources are relevant (Granola, inbox, tasks, roadmap, emails, prior notes)
