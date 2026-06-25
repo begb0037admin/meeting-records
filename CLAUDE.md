@@ -8,7 +8,7 @@
 - **Owner:** Kevin Lelitte, Manager/Director HR Systems, University of Oxford
 - **Status:** Active
 - **Repo:** https://github.com/begb0037admin/meeting-records
-- **Last updated:** 2026-06-22
+- **Last updated:** 2026-06-26
 
 ## Bootstrap Order
 1. This file (orientation)
@@ -36,6 +36,13 @@ All meeting prep documents in `Meeting Reviews/` follow the Granola naming stand
 | H&S Roadmap meeting | `H&S Roadmap — DD-MM.md` | `H&S Roadmap — 22-06.md` | `H&S Roadmap DD/MM` |
 | KPI Monthly Standing Agenda | `KPI Standing Agenda — MMM YYYY.md` | `KPI Standing Agenda — Jun 2026.md` | |
 | Team 1-1 | `1-1 [Name] — DD-MM.md` | `1-1 Michael — 15-06.md` | |
+| Simon 1-1 | `1-1 Simon — DD-MM.md` | `1-1 Simon — 26-06.md` | Granola title: `SK 1-1 DD/MM` |
+
+## People & Abbreviations
+| Abbreviation | Person | Role |
+|---|---|---|
+| SK | Simon (Kevin's manager) | Director-level; Kevin's 1-1 is with Simon. Granola titles: `SK 1-1 DD/MM`. File names: `1-1 Simon — DD-MM.md` in `Meeting Reviews/`. |
+| FA team | Kevin, Michael, Asta, James | Functional Analysis team |
 
 ## Meeting Prep Workflow (Roadmap Fridays)
 Every Friday before the 10:00 HR Systems Roadmap meeting:
