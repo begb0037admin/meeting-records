@@ -68,13 +68,22 @@ Document structure:
 - Funding and blockers
 - Source footer
 
+## Meeting Prep Workflow (Ad Hoc)
+Any meeting Kevin asks to prepare for — one-off reviews, supplier meetings, evaluation sessions, escalation meetings, or any meeting not covered by the scheduled workflows above.
+1. Ask Kevin what data sources are relevant (Granola, inbox, tasks, roadmap, emails, prior notes)
+2. Gather those sources
+3. Produce one document in `Meeting Reviews/` following the naming convention
+4. For meeting types not yet in `docs/reference/meeting-prep-formats.md`: use the closest existing format as a base, note the adaptation, and add the new format to the reference doc after Kevin approves it
+
+The approval gate applies equally to ad hoc documents. Show → approve → push. No exceptions.
+
 ## Hard Rules
 - Never modify the HR Systems Roadmap — read only
 - Never commit personal email content verbatim
 - Always push prep documents directly to main
 - Always update `Meeting Reviews/docs/HANDOVER.md` at end of session
 - File names MUST follow the Granola naming convention above
-- **Approval gate:** Never push a prep document without first showing the full content to Kevin in chat and receiving his explicit approval. Show → approve → push. No exceptions.
+- **Approval gate:** Never push any meeting document — scheduled or ad hoc — without first showing the full content to Kevin in chat and receiving his explicit approval. Show → approve → push. No exceptions.
 
 ## Branch and Merge Protocol
 Always push directly to main. If a branch must be used, merge it to main immediately upon completion — never leave files on a branch.

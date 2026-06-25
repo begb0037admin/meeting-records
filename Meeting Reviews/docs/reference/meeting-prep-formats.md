@@ -1,7 +1,8 @@
 # Meeting Prep Formats — Reference
 
-> Read this before writing any meeting prep document. These formats are fixed.
-> Do not invent structure. Do not check the previous document first — this is the specification.
+> Read this before writing any meeting prep document — scheduled or ad hoc.
+> Defined formats are fixed. For a meeting type not listed here, use the closest format as a base,
+> note the adaptation in the document footer, and add the new format here after Kevin approves it.
 
 ---
 
