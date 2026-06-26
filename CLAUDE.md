@@ -62,15 +62,32 @@ Every Wednesday FA team check-in (Kevin, Michael, Asta, James):
 3. Check `begb0037admin/command-centre/data/tasks.json` for active tasks
 4. Produce one document in `Meeting Reviews/`: `FA Team Catch-up — DD-MM.md`
 
-## Meeting Prep Workflow (Roadmap Fridays)
-Every Friday before the 10:00 HR Systems Roadmap meeting:
+## Friday Roadmap Weekly Cycle
+Every Friday — FA morning catch-up followed by 10:00 HR Systems Roadmap meeting. One data pull serves all four steps.
+
+**Step 1 — Prep (before the meeting)**
 1. Read live roadmap from `begb0037admin/hr-projects/HR Systems Roadmap/HR Systems Roadmap MASTER.xlsm` (read-only, openpyxl via base64 decode)
-2. Check Granola for recent FA team catch-ups (Kevin, Michael, Asta, James)
-3. Check `begb0037admin/work-inbox/data/briefing.json` for inbox updates
+2. Check Granola for recent FA team catch-ups and any relevant meetings since last Friday
+3. Check `begb0037admin/work-inbox/data/briefing.json` for inbox updates — include anything relevant to Kevin, Michael, Asta, or James
 4. Check `begb0037admin/command-centre/data/tasks.json` for active tasks
 5. Produce two documents in `Meeting Reviews/`:
-   - `FA Team Catch-up — DD-MM.md` — morning catch-up agenda before the roadmap meeting
-   - `HR Systems Roadmap — DD-MM.md` — speaking brief for 10:00 roadmap meeting
+   - `FA Team Catch-up — DD-MM.md` — morning catch-up agenda
+   - `HR Systems Roadmap — DD-MM.md` — speaking brief, including a **`Progress updates to log`** section with a draft `DD/MM/YY — [update text]` entry for each FA-led roadmap item
+6. Show both documents to Kevin. Wait for explicit approval before proceeding.
+
+**Step 2 — Meeting**
+Kevin uses the speaking brief. Notes any corrections or additions during the meeting.
+
+**Step 3 — Post-meeting**
+1. Pull Granola transcript for the roadmap meeting
+2. Revise the draft progress entries based on what was actually discussed or decided
+3. Show revised entries to Kevin. Wait for explicit approval.
+
+**Step 4 — Update roadmap progress entries**
+Record the approved `DD/MM/YY — [update text]` entries — one per FA-led roadmap item discussed. Format:
+- `DD/MM/YY — [update text]. (Source: HR Systems Roadmap DD/MM)`
+- Scope: FA team items only (Kevin, Michael, Asta, James as Lead or Team)
+- Do not write to the .xlsm — present entries to Kevin; Kevin updates the spreadsheet manually
 
 ## Meeting Prep Workflow (H&S Roadmap Mondays)
 Every Monday before the H&S Roadmap meeting (attendees: Kevin, James, Chris):
