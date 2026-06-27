@@ -117,6 +117,9 @@ Any meeting Kevin asks to prepare for — one-off reviews, supplier meetings, ev
 
 The approval gate applies equally to ad hoc documents. Show → approve → push. No exceptions.
 
+## Effort Level Governance
+Before any task where higher effort is warranted, signal to Kevin: what the task is, why higher effort is needed, and an explicit request to raise the effort level. Wait — do not proceed until Kevin raises it. Signal when the high-effort phase is done; Kevin decides when to return to normal. Never change effort level unilaterally. See CONSTITUTION.md Section 10 (v2.0, 2026-06-27).
+
 ## Hard Rules
 - Never modify the HR Systems Roadmap — read only
 - Never commit personal email content verbatim
