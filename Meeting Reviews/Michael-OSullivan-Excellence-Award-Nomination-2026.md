@@ -9,12 +9,12 @@
 
 ## Summary of main duties from job description
 
-- Configure and maintain PeopleXD to support University-wide HR processes including leave and absence, workforce management, pay, and organisational hierarchy
-- Lead functional analysis on HR system projects and change requests, translating business requirements into system solutions
-- Manage and resolve complex HR system support cases, liaising with Access Group and other third-party suppliers
-- Deliver system changes aligned to University pay and reward cycles, including pay awards, pension rate changes, and cost-of-living uplifts
-- Produce and maintain the HR reporting suite (TIMDEP, CoreTime) to support operational HR decision-making
-- Provide expert guidance to HR colleagues, departments, and University stakeholders on PeopleXD functionality and HR systems processes
+- Take ownership of second-line support incidents that cannot be resolved by the service desk; carry out analysis and testing to identify solutions or workarounds, escalating to the supplier where required
+- Act as Change Coordinator to plan, test and implement configuration changes and enhancements to PeopleXD, working to the University's change management and testing procedures
+- Analyse and implement system solutions to ensure the University's ongoing compliance with changes to legislation, policy and statutory requirements (including pay awards, pension rates, and absence policy)
+- Work with colleagues across HR Systems and the wider University to identify downstream impacts and dependencies of system changes, assessing risk and business impact
+- Develop and maintain HR data reports to meet University-wide reporting requirements, using the system's established reporting tools including SQL and SSRS
+- Contribute to HR Systems project teams and act as subject matter expert in governance and user-representation groups (including the Product Ownership Group), advising on system implications of proposed changes
 
 ---
 
