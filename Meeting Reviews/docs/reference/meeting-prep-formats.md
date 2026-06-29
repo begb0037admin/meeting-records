@@ -6,6 +6,19 @@
 
 ---
 
+## Spoken-word standard (applies to ALL formats)
+
+Every prep document must include scripted spoken sections — **"Say this:"** — written in natural first-person conversational English. These are not summaries; they are words Kevin can read verbatim in the meeting without sounding like he's reading a document. Rules:
+
+- Write in the first person as Kevin
+- Use natural spoken contractions and rhythm — "I want us to" not "it is recommended that"
+- Each major agenda item gets a **Say this:** block
+- Opening and closing always get a **Say this:** block
+- Background sections are for Kevin's eyes only (context before he speaks) — keep them brief
+- If there is a decision to make or a question to ask, script the exact words
+
+---
+
 ## FA Team Catch-up — DD-MM.md
 
 ```
@@ -17,14 +30,23 @@
 
 ---
 
+## Opening
+
+**Say this:**
+*"[Natural spoken intro — set the agenda for the catch-up.]"*
+
+---
+
 ## Items to raise
 
 ---
 
 ### 1. [Title — person responsible or topic]
-**Ask:** [One or two sentences: what Kevin needs to know or confirm in this meeting.]
 
 **Background:** [2–5 sentences: what is this, why it matters, current state, any blockers or dependencies.]
+
+**Say this:**
+*"[Natural spoken words — what Kevin actually says to raise or confirm this item.]"*
 
 ---
 
@@ -44,9 +66,9 @@ Priority actions after this call:
 ```
 
 **Rules:**
-- Numbered items, each with **Ask:** and **Background:** exactly as shown
-- Ask is what Kevin needs to raise or confirm in the meeting
-- Background is context for Kevin — he runs the conversation himself
+- Every item has **Background:** (Kevin's context) and **Say this:** (Kevin's spoken words)
+- Background is brief — 2–5 sentences max
+- Say this is natural spoken English, first person
 - Note for Kevin lists Kevin's own post-meeting actions, not team actions
 - Time needed is always ~25 minutes unless Kevin specifies otherwise
 
@@ -144,6 +166,9 @@ Remove entirely when Kevin is at full capacity.]
 
 - **Ask of Simon:** [Specific ask or decision needed from Simon.]
 
+**Say this:**
+*"[Natural spoken words — how Kevin raises this with Simon.]"*
+
 ---
 
 [Repeat, numbered sequentially]
@@ -168,7 +193,7 @@ Remove entirely when Kevin is at full capacity.]
 ```
 
 **Rules:**
-- Every priority item must have a clear **Ask of Simon** — specific, not just context
+- Every priority item must have a clear **Ask of Simon** and a **Say this:** block
 - Items Kevin owes Simon = commitments Kevin has not yet delivered
 - The awareness table is forward-looking risks Simon should know about
 - Health section only included when relevant
@@ -194,10 +219,8 @@ Session files live in `Team 1-1's/[Name]/docs/sessions/YYYY-MM-DD-[name]-1on1.md
 
 **Background:** [2–4 sentences: context, history, current state.]
 
-**What to raise:** [What Kevin wants to say or surface in this meeting.]
-
-**Suggested words:**
-> "[Suggested script — first person, conversational.]"
+**Say this:**
+*"[Suggested script — first person, conversational.]"*
 
 ---
 
@@ -271,6 +294,9 @@ Two distinct document types — keep them as separate session files.
 ### 1. [Standing item]
 [Brief context on current position. Any update since last month.]
 
+**Say this:**
+*"[How Kevin introduces or updates this item at the meeting.]"*
+
 ### 2. [Standing item]
 [...]
 
@@ -280,6 +306,9 @@ Two distinct document types — keep them as separate session files.
 
 ### [Item title]
 [What it is and why it's on this month's agenda.]
+
+**Say this:**
+*"[How Kevin introduces this.]"*
 
 ---
 
@@ -322,4 +351,77 @@ Two distinct document types — keep them as separate session files.
 
 ---
 
-*Last updated: 26 June 2026*
+## Ad hoc internal resolution meeting
+
+Used when Kevin needs to resolve an operational issue with internal stakeholders before responding externally. See `WFM Rostering — 30-06.md` as the reference example.
+
+```
+# [Meeting title] — DD/MM
+
+**Date:** [Weekday DD Month YYYY]
+**Meeting type:** Internal resolution — [topic]
+**Attendees:** [Names]
+**Time needed:** ~[N] minutes
+
+---
+
+## Purpose
+
+[2–4 bullet points: what needs to be resolved and what the outputs are.]
+
+---
+
+## Background
+
+[Short factual summary — what happened, what's outstanding, why this meeting is needed.]
+
+---
+
+## Opening — set the agenda
+
+**Say this:**
+*"[Natural spoken intro covering the two or three things to get through. Name who Kevin will turn to first.]"*
+
+---
+
+## [N]. [Agenda item title]
+
+**Background:** [2–4 sentences: context Kevin needs before speaking.]
+
+**Say this:**
+*"[Kevin's exact spoken words for this item — question, position, or ask.]"*
+
+---
+
+[Repeat for each item]
+
+---
+
+## Closing — agree outputs
+
+**Say this:**
+*"[Kevin's closing script — run through the outputs one by one and confirm ownership before leaving the room.]"*
+
+---
+
+## Note for Kevin
+
+Outputs needed by end of meeting:
+- [Output 1]
+- [Output 2]
+
+---
+
+*Prepared: DD Month YYYY | Sources: [List]*
+*Format: Ad hoc internal resolution meeting — [first use reference]*
+```
+
+**Rules:**
+- Always includes an Opening and Closing with Say this scripts
+- Every agenda item has Background (context) and Say this (spoken words)
+- Note for Kevin lists the concrete outputs — not actions, outputs
+- If the meeting exists to pre-agree an external response, that response must be one of the listed outputs
+
+---
+
+*Last updated: 29 June 2026*
