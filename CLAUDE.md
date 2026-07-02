@@ -127,6 +127,7 @@ Before any task where higher effort is warranted, signal to Kevin: what the task
 - Always update `Meeting Reviews/docs/HANDOVER.md` at end of session
 - File names MUST follow the Granola naming convention above
 - **Approval gate:** Never push any meeting document — scheduled or ad hoc — without first showing the full content to Kevin in chat and receiving his explicit approval. Show → approve → push. No exceptions.
+- All mockups and visual designs are produced as Claude Artifacts — never committed to the repository (see CONSTITUTION.md Section 11)
 
 ## Branch and Merge Protocol
 Always push directly to main. If a branch must be used, merge it to main immediately upon completion — never leave files on a branch.
