@@ -6,7 +6,7 @@
 
 ## Opening
 
-**Say this:** *"Morning Michael. Today is mainly about handover — I've got your open tickets in front of me and I want to go through each one so I know exactly where everything sits while you're away. Then I want to spend a bit of time on WFM because you're the only one who holds that picture. Let's go."*
+**Say this:** *"Morning Michael. Today is the formal handover before Monday. I've got your tickets in front of me and I want to go through each one, then pick up the WFM items from Wednesday. Let's go."*
 
 ---
 
@@ -17,95 +17,95 @@
 ### 1. CR 20020453 — OSPS DB and DC Employer Rate Contributions
 **Tasks:** 50959921 (Update) + 50959922 (Test) | **Status:** Assigned | **Days open:** 20
 
-**Say this:** *"CR 20020453 — the OSPS employer rate contributions. Both tasks have been sitting at Assigned for 20 days. Where are you up to on this — is the update done and waiting on testing, or is it earlier than that?"*
+**Say this:** *"CR 20020453 — OSPS employer rate contributions. Both tasks still at Assigned, 20 days in. Where are you up to — is the update done and waiting on testing, or not started yet?"*
 
-**Say this (follow-up):** *"What needs to happen before you go, and if it's not done by Monday — who should be holding this?"*
+**Say this (follow-up):** *"If it's not going to be done by Monday — who's holding it while you're away and what do they need to know?"*
 
 ---
 
 ### 2. Inc 11685389 — Request for New Academic Holiday Balance
 **Task:** 50961819 | **Status:** Accepted | **Days open:** 10 | **Raised by:** Anna Carter-Windle
 
-**Say this:** *"Academic holiday balance — raised by Anna, 10 days open. Can you close this before Monday, or does it need someone to hold it? What does whoever picks it up need to know?"*
+**Say this:** *"Academic holiday balance, raised by Anna, 10 days open. Can you get this closed before Monday, or does it need a cover owner? What's the state of it?"*
 
 ---
 
 ### 3. Inc 11690364 — Employee Dashboard Co-workers Calendar Error (AG Case 69040395)
 **Task:** 50964022 | **Status:** Accepted | **Days open:** 5 | **Raised by:** Anna Carter-Windle
 
-**Say this:** *"The co-workers calendar error — Access Group case 69040395. Is there a fix in progress, or is it waiting on Access Group to come back? Is there anything someone needs to chase while you're away, or is it just a case of waiting?"*
+**Say this:** *"The co-workers calendar error — Access Group case 69040395. Where is this with Access Group? Is it with them to fix, or is there something outstanding on our side?"*
 
 ---
 
-### 4. Inc 11691062 + CR 20020517 — New NHS AVC Pension Scheme and Pay Codes
-**Tasks:** 50964407 (Accepted, 3 days) + 50964825 (Assigned, 2 days) | **Raised by:** Emma Fitz-Gibbon
+### 4. CR 20020517 — New NHS AVC Pension Scheme and Pay Codes
+**Tasks:** 50964407 (Inc 11691062, Accepted, 3 days) + 50964825 (Assigned, 2 days) | **Raised by:** Emma Fitz-Gibbon
 
-**Say this:** *"NHS AVC pension scheme — CR 20020517, two tasks, both very recent. Give me a quick state of play — what's been done, what's outstanding? Can this park safely until you're back, or does something need to move before Friday?"*
+**Say this:** *"NHS AVC pension scheme — CR 20020517. Two tasks, both very recent. Athena acknowledged the work on this today. What's the current state — can it park until you're back, or does something need to move before Friday?"*
 
 ---
 
 ## WFM Handover
 
-**Say this:** *"Right, WFM. You hold all of this and I want to make sure I've got enough of the picture to keep things moving while you're away. Let me go through the open items from the meeting on Monday."*
+**Say this:** *"Right, WFM. You covered the main points on Wednesday so I don't need you to repeat all of it — I just want to confirm where things land before you go."*
 
 ---
 
 ### Upload 2 — Mel's backdated sickness batch
 
-**Background:** ~600–700 rows prepared by Mel but not sent before her contract ended. Date formatting, sickness reason codes, and employee ID issues mean it's not in a loadable state. Needs checking against Mel's guide before it can go to Michael for upload.
+**What Michael said Wednesday:** Not handed over and not in a state to be handed over. Still needs significant work — date formatting, sickness reason codes, employee ID issues. Around 600–700 rows. Mel may be the fastest person to fix it but there's a cost implication.
 
-**Say this:** *"Upload 2 — Mel's sickness data. We know it's not in a state to load. Is there anything you can do with it before Monday, or is it parking until you're back? And if someone needed to pick it up — where does the file sit and what would they need to know?"*
-
----
-
-### GLAM collective call
-
-**Background:** Agreed approach from the 30 Jun meeting — one call with Kathy, Harriet Webb (Botanical Gardens), Sarah Mann and the Ashmolean security manager. Present what rostering can and can't do; let them decide whether to proceed.
-
-**Say this:** *"The GLAM call — has any groundwork been done on setting it up? If not, who should be driving that while you're away?"*
+**Say this:** *"Upload 2 — we know it can't be loaded as-is. Is there any chance of getting it into shape before Monday, or is it parking? And if we need to go back to Mel to clean it — is there anything you can tell me that would make that conversation easier?"*
 
 ---
 
-### SBS and PEDS
+### S1P Quality Upload — extract specs and review meeting
 
-**Background:** Both told to supply their own data at project close. Michelle to confirm whether contact has been made.
+**What Michael said Wednesday:** Production upload failing due to formatting (timestamps, quote marks). Fix is to extract directly from PeopleXD reporting tool rather than clean the spreadsheet. Michael to send Simon an email with the exact specifications, and to send a calendar invite for a file review meeting.
 
-**Say this:** *"SBS and PEDS — do you know if Michelle has confirmed contact has been made with them? Or is that still outstanding?"*
+**Say this:** *"The S1P upload — you said Wednesday you were going to send Simon the exact extract specs and book a meeting to review the test file against production. Has the email gone? Is there a meeting in the diary?"*
 
 ---
 
 ### Unrostered booking workaround (Inc 11681780 / Task 50958836)
 
-**Background:** Anna proposed this to Michael as a fix for variable hours absence recording in GLAM. Added to FA roadmap. Not yet tested or documented.
+**What Michael said Wednesday:** Originally came in as an incident, closed off as new functionality requiring testing. Added to the FA roadmap rather than left as a live incident with a ticking clock.
 
-**Say this:** *"The unrostered booking workaround — it's on the roadmap but not tested. Brief me on where it is so I can field anything that comes in from Anna while you're away."*
+**Say this:** *"The unrostered booking workaround — you've got it on the roadmap. If Anna comes back on this while you're away, what do I need to know to hold the line until you're back?"*
+
+---
+
+### GLAM collective call
+
+**What Michael said Wednesday:** Nobody in GLAM is actively using rostering. Two teams identified — Botanical Gardens ticketing (Harriet Webb) and Ashmolean security (Sarah Mann). Approach: bring them together on one call, present what rostering can and can't do, let them decide.
+
+**Say this:** *"The GLAM call — has anything moved on setting that up since Wednesday? If not, who should be driving it while you're away?"*
 
 ---
 
 ### Sarah Rowles — UC dashboards
 
-**Background:** Sarah's UC dashboards are blocked pending GLAM rostering data resolution.
+**Background:** Blocked on GLAM rostering data. Needs either a resolution date or a clear explanation of what's outstanding.
 
-**Say this:** *"Sarah Rowles is still blocked on her dashboards. What should I be telling her — is there a date I can give her, or is it dependent on the GLAM call happening first?"*
+**Say this:** *"Sarah Rowles is still blocked. What do I tell her while you're away — is there a date I can give her, or is it dependent on the GLAM call first?"*
 
 ---
 
 ## Cover and Escalation
 
-**Say this:** *"Across everything — tickets and WFM — is there anything that absolutely cannot wait until you're back? Asta will be first line, but if something moves that she can't handle, is there anything you'd want escalated to me directly?"*
+**Say this:** *"Across all of that — is there anything that can't wait until you're back? Asta's first line while you're away. Is there anything ticket-wise you'd want escalated directly to me if it moves?"*
 
 ---
 
 ## Anything Else
 
-**Say this:** *"Anything else you're carrying that's not in the ticket system — anything informal, anything you want to flag before you go?"*
+**Say this:** *"Anything else you're carrying that's not in the system — anything informal, anything you want to flag?"*
 
 ---
 
 ## Close
 
-**Say this:** *"That's everything. Enjoy your break — you've earned it. I'll hold the fort."*
+**Say this:** *"That's everything. Have a great break — you've earned it."*
 
 ---
 
-*Sources: OSM ticket export 02-Jul-26 09:30; Granola — WFM Rostering Internal Review 30/06, FA Team Catch-up 01/07*
+*Sources: OSM ticket export 02-Jul-26 09:30; Granola — FA Team Catch-up 01/07, WFM Rostering Internal Review 30/06*
