@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>REF Qualification UDF — Knowledge Base Research Brief</title>
+<style>
+  :root {
+    --bg:           #F7F8FA;
+    --bg-raised:    #FFFFFF;
+    --ink:          #1C2333;
+    --ink-muted:    #5A6478;
+    --ink-faint:    #8B97A8;
+    --oxford:       #002147;
+    --oxford-dim:   #003570;
+    --accent:       #1A5FAB;
+    --accent-light: #EBF2FA;
+    --rule:         rgba(0,33,71,0.12);
+    --found-bg:     #EEF7F2;
+    --found-ink:    #1D7048;
+    --found-rule:   #1D7048;
+    --partial-bg:   #FDF4E7;
+    --partial-ink:  #8B4A00;
+    --partial-rule: #C87020;
+    --gap-bg:       #FEF0F0;
+    --gap-ink:      #922B2B;
+    --gap-rule:     #C43030;
+    --risk-bg:      #FDF4E7;
+    --risk-ink:     #7A3800;
+    --risk-rule:    #B85C00;
+    --code-bg:      #EEF1F6;
+    --shadow:       0 1px 3px rgba(0,33,71,0.10), 0 4px 12px rgba(0,33,71,0.06);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:           #111721;
+      --bg-raised:    #1A2232;
+      --ink:          #DDE5F0;
+      --ink-muted:    #8BA0B8;
+      --ink-faint:    #5C728A;
+      --oxford:       #2A6BAF;
+      --oxford-dim:   #1D4F7A;
+      --accent:       #6BA3DC;
+      --accent-light: #162030;
+      --rule:         rgba(107,163,220,0.15);
+      --found-bg:     #0D2018;
+      --found-ink:    #5CC490;
+      --found-rule:   #2A7A52;
+      --partial-bg:   #201608;
+      --partial-ink:  #DFA060;
+      --partial-rule: #A06020;
+      --gap-bg:       #1E0A0A;
+      --gap-ink:      #E07070;
+      --gap-rule:     #8B2020;
+      --risk-bg:      #201308;
+      --risk-ink:     #E09060;
+      --risk-rule:    #A05020;
+      --code-bg:      #1E2A3A;
+      --shadow:       0 1px 4px rgba(0,0,0,0.40);
+    }
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .masthead {
+    background: var(--oxford);
+    color: #FFFFFF;
+    padding: 2rem 0 1.75rem;
+  }
+  .masthead-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+  .masthead-eyebrow {
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    font-weight: 500;
+    margin-bottom: 0.6rem;
+  }
+  .masthead h1 {
+    font-family: ui-serif, Georgia, 'Times New Roman', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1.25;
+    text-wrap: balance;
+    color: #FFFFFF;
+    margin-bottom: 1rem;
+  }
+  .masthead-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.5rem;
+    font-size: 0.8125rem;
+    color: rgba(255,255,255,0.65);
+  }
+  .masthead-meta span { white-space: nowrap; }
+  .masthead-meta strong { color: rgba(255,255,255,0.88); font-weight: 500; }
+
+  .page-body {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 4rem;
+  }
+
+  h2 {
+    font-family: ui-serif, Georgia, 'Times New Roman', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--oxford);
+    text-wrap: balance;
+    margin-bottom: 0.75rem;
+  }
+  h3 {
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 0.5rem;
+  }
+  p { margin-bottom: 0.85rem; }
+  p:last-child { margin-bottom: 0; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+  code, .field {
+    font-family: ui-monospace, 'Cascadia Mono', 'Fira Mono', monospace;
+    font-size: 0.825em;
+    background: var(--code-bg);
+    color: var(--ink);
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+  }
+
+  .section { margin-bottom: 2.75rem; }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1.5px solid var(--rule);
+    margin-bottom: 1.25rem;
+  }
+  .section-header h2 { margin-bottom: 0; }
+
+  .badge {
+    display: inline-block;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.2em 0.65em;
+    border-radius: 3px;
+    white-space: nowrap;
+    line-height: 1.6;
+  }
+  .badge-found    { background: var(--found-bg);   color: var(--found-ink);   }
+  .badge-partial  { background: var(--partial-bg); color: var(--partial-ink); }
+  .badge-notfound { background: var(--gap-bg);     color: var(--gap-ink);     }
+
+  .doc-list { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.25rem; }
+  .doc-card {
+    background: var(--bg-raised);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    border-radius: 4px;
+    padding: 0.85rem 1rem;
+    box-shadow: var(--shadow);
+  }
+  .doc-card-title { font-weight: 600; font-size: 0.9rem; color: var(--ink); margin-bottom: 0.2rem; }
+  .doc-card-meta {
+    font-size: 0.775rem;
+    color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+    margin-bottom: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.25rem;
+  }
+  .doc-card-summary { font-size: 0.875rem; color: var(--ink-muted); }
+  .doc-card-link {
+    display: inline-block;
+    margin-top: 0.4rem;
+    font-size: 0.775rem;
+    color: var(--accent);
+    word-break: break-all;
+  }
+  .doc-card .extract {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    background: var(--accent-light);
+    border-left: 2px solid var(--accent);
+    padding: 0.5rem 0.75rem;
+    border-radius: 0 3px 3px 0;
+    color: var(--ink);
+  }
+  .doc-card .extract strong { color: var(--accent); }
+
+  .callout {
+    border-left: 3px solid;
+    border-radius: 0 4px 4px 0;
+    padding: 0.75rem 1rem;
+    margin: 1rem 0;
+    font-size: 0.875rem;
+  }
+  .callout-risk   { background: var(--risk-bg);  color: var(--risk-ink);  border-color: var(--risk-rule); }
+  .callout-gap    { background: var(--gap-bg);   color: var(--gap-ink);   border-color: var(--gap-rule); }
+  .callout-found  { background: var(--found-bg); color: var(--found-ink); border-color: var(--found-rule); }
+  .callout strong { display: block; margin-bottom: 0.25rem; font-size: 0.775rem; letter-spacing: 0.07em; text-transform: uppercase; }
+
+  .table-wrap { overflow-x: auto; margin-bottom: 1rem; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.875rem; font-variant-numeric: tabular-nums; }
+  thead th {
+    font-size: 0.6875rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    font-weight: 600;
+    padding: 0.5rem 0.75rem;
+    background: var(--bg-raised);
+    border-bottom: 1.5px solid var(--rule);
+    text-align: left;
+    white-space: nowrap;
+  }
+  tbody tr { border-bottom: 1px solid var(--rule); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody td {
+    padding: 0.65rem 0.75rem;
+    vertical-align: top;
+    color: var(--ink);
+    background: var(--bg-raised);
+  }
+  tbody tr:nth-child(even) td { background: var(--bg); }
+  .td-q { font-weight: 500; max-width: 300px; }
+  .td-a { color: var(--ink-muted); }
+  .td-status { white-space: nowrap; }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+  @media (max-width: 540px) { .summary-grid { grid-template-columns: 1fr; } }
+  .summary-cell {
+    background: var(--bg-raised);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 0.75rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.875rem;
+  }
+  .summary-cell-label { color: var(--ink-muted); }
+
+  .rec-list { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+  .rec-list li { display: flex; gap: 0.75rem; align-items: flex-start; font-size: 0.875rem; }
+  .rec-num {
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    background: var(--oxford);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.15rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
+    font-size: 0.775rem;
+    color: var(--ink-faint);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 2rem;
+    justify-content: space-between;
+  }
+  .divider { height: 1px; background: var(--rule); margin: 2rem 0; }
+
+  @media (max-width: 600px) {
+    .masthead h1 { font-size: 1.35rem; }
+    .page-body { padding: 1.75rem 1.25rem 3rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <p class="masthead-eyebrow">HR Systems &middot; PeopleXD &middot; REF 2029</p>
+    <h1>REF Qualification UDF &mdash; Knowledge Base Research Brief</h1>
+    <div class="masthead-meta">
+      <span><strong>Prepared:</strong> 6 July 2026</span>
+      <span><strong>Source:</strong> HR FA Knowledge Base (2,226 documents)</span>
+      <span><strong>Scope:</strong> Person-level UDF for REFQUALCON outcomes</span>
+      <span><strong>Environment:</strong> UOXU (test target)</span>
+    </div>
+  </div>
+</header>
+
+<main class="page-body">
+
+  <section class="section">
+    <div class="section-header"><h2>Purpose</h2></div>
+    <p>This brief reports on a structured search of the HR FA Knowledge Base to support assessment of the proposed approach of recording REF qualification outcomes (<code>REFQUALCON</code>) using a <strong>person-level UDF</strong> in PeopleXD, rather than an appointment-level UDF. The search covered seven research areas: UDF configuration, REF/HESA data, multiple appointments, data imports, reporting, and testing guidance.</p>
+    <p>The upload file is intended to cover Research Only, Teaching and Research Only, and Non-Atypical (Terms 1 or 2) contracts only. Population analysis indicates no individual currently holds more than four qualifying appointments, leading to a draft design with four <code>REFQUALCON</code> fields per person record. Initial testing is targeted at UOXU.</p>
+    <div class="callout callout-risk">
+      <strong>Important caveat</strong>
+      The knowledge base contains no documentation specific to REF qualification data, HESA Staff Returns, or research contract eligibility rules. All findings below are drawn from general PeopleXD UDF, import, and reporting documentation. Supplementary guidance from Access Group / PeopleXD support is strongly recommended before testing.
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header"><h2>Research Coverage at a Glance</h2></div>
+    <div class="summary-grid">
+      <div class="summary-cell"><span class="summary-cell-label">User Defined Fields</span><span class="badge badge-found">Found</span></div>
+      <div class="summary-cell"><span class="summary-cell-label">REF Qualification Data</span><span class="badge badge-notfound">Not Found</span></div>
+      <div class="summary-cell"><span class="summary-cell-label">HESA Staff Returns</span><span class="badge badge-notfound">Not Found</span></div>
+      <div class="summary-cell"><span class="summary-cell-label">Multiple Appointments</span><span class="badge badge-partial">Partial</span></div>
+      <div class="summary-cell"><span class="summary-cell-label">Data Imports</span><span class="badge badge-found">Found</span></div>
+      <div class="summary-cell"><span class="summary-cell-label">Reporting</span><span class="badge badge-partial">Partial</span></div>
+      <div class="summary-cell"><span class="summary-cell-label">Testing Guidance</span><span class="badge badge-partial">Partial</span></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header"><h2>Area 1 &mdash; User Defined Fields (UDFs)</h2><span class="badge badge-found">Found</span></div>
+    <p>Three directly relevant documents were located. These provide the core technical basis for the proposed approach.</p>
+    <div class="doc-list">
+      <div class="doc-card">
+        <div class="doc-card-title">User Defined Fields (UDF) &mdash; Knowledge Article V0.3</div>
+        <div class="doc-card-meta"><span>Source: Change Management</span><span>Updated: 27 March 2025</span><span>310 KB</span></div>
+        <div class="doc-card-summary">Oxford FA team&rsquo;s internal knowledge article on the UDF change management process. Covers how to request a new UDF, the MASTER UDF Template (stored at <code>P:\PROJECTS\HRIS Programme\12. Support\Reference Data\UDFs</code>), and the approval workflow through HRSEG. This is the governance document &mdash; it does not contain configuration detail.</div>
+        <a class="doc-card-link" href="https://unioxfordnexus.sharepoint.com/sites/HumanResources-FATeam/Shared%20Documents/HR%20Knowledge%20Base/Change%20Management/User%20Defined%20Fields%20%28UDF%29%20Knowledge%20Article_V0.3.docx">SharePoint &mdash; User Defined Fields (UDF) Knowledge Article_V0.3.docx</a>
+      </div>
+      <div class="doc-card">
+        <div class="doc-card-title">HOW TO &mdash; Create and Edit UDFs in the Portal v1.0</div>
+        <div class="doc-card-meta"><span>Source: How To Guides / People Management</span><span>Updated: 10 December 2024</span><span>1,420 KB</span></div>
+        <div class="doc-card-summary">Oxford&rsquo;s primary step-by-step guide for creating and editing UDFs in the PeopleXD Portal. Most relevant document in the knowledge base for this project.</div>
+        <div class="extract"><strong>Key extract</strong> &ldquo;UDFs can be held at <strong>Appointment</strong>, <strong>Person (employee)</strong> or <strong>Recruitment</strong> level.&rdquo; &mdash; This is the only documentation in the knowledge base that explicitly names the three levels. All three are presented as equivalent supported options with no stated preference between them.</div>
+        <div class="extract" style="margin-top:0.5rem;"><strong>Reporting note (from same document)</strong> &ldquo;UDFs are reported on in a variety of reports. Some have bespoke reports.&rdquo; &mdash; Suggests UDF reporting is available but varies; bespoke reports may be needed for non-standard use.</div>
+        <a class="doc-card-link" href="https://unioxfordnexus.sharepoint.com/sites/HumanResources-FATeam/Shared%20Documents/HR%20Knowledge%20Base/How%20To%20Guides/PEOPLE%20MGT/HOW%20TO%20-%20Create%20and%20Edit%20UDFs%20in%20the%20Portal%20v1.0.docx">SharePoint &mdash; HOW TO - Create and Edit UDFs in the Portal v1.0.docx</a>
+      </div>
+      <div class="doc-card">
+        <div class="doc-card-title">PeopleXD People Management &mdash; User Defined Field Configuration V1.0</div>
+        <div class="doc-card-meta"><span>Source: Library / People Management</span><span>1,179 KB &middot; PDF</span></div>
+        <div class="doc-card-summary">Official PeopleXD/CoreHR product configuration guide for UDFs. The vendor-supplied reference document and most authoritative source available in the knowledge base for understanding the full scope of UDF configuration options, field types, and behaviour. Review this before testing.</div>
+        <a class="doc-card-link" href="https://github.com/begb0037admin/hr-fa-knowledge-base/blob/main/library/HR%20Knowledge%20Base/How%20To%20Guides/PEOPLE%20MGT/PeopleXD%20People%20Management-%20User%20Defined%20Field%20Configuration%20V1.0.pdf">GitHub library &mdash; PeopleXD People Management- User Defined Field Configuration V1.0.pdf</a>
+      </div>
+      <div class="doc-card">
+        <div class="doc-card-title">Organisational Structure &mdash; Knowledge Article V2.0</div>
+        <div class="doc-card-meta"><span>Source: Change Management</span><span>Updated: 24 February 2023</span></div>
+        <div class="doc-card-summary">Contains an Oxford precedent: a person-level UDF called <code>Roles in Department</code> is mentioned as an established use case. Demonstrates that role-related data has previously been stored at person level in this system.</div>
+        <a class="doc-card-link" href="https://unioxfordnexus.sharepoint.com/sites/HumanResources-FATeam/Shared%20Documents/HR%20Knowledge%20Base/Change%20Management/Organisational%20Structure%20Knowledge%20Article_V2.0.docx">SharePoint &mdash; Organisational Structure Knowledge Article_V2.0.docx</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header"><h2>Area 2 &mdash; REF Qualification Data</h2><span class="badge badge-notfound">Not Found</span></div>
+    <div class="callout callout-gap">
+      <strong>Gap</strong>
+      No documentation was found for: REFQUALCON, REF qualification outcomes, Research Excellence Framework, REF submission, REF outcome, research staff data, or REF reporting. The knowledge base contains no Oxford-specific precedent or guidance for recording REF data in PeopleXD.
+    </div>
+    <p>This is the most significant gap. Before testing in UOXU, seek guidance from Access Group / PeopleXD support, or the HESA submission team, on whether there is product-level documentation for REF qualification recording, including any standard field mappings or recommended data structures.</p>
+  </section>
+
+  <section class="section">
+    <div class="section-header"><h2>Area 3 &mdash; HESA Staff Returns</h2><span class="badge badge-notfound">Not Found</span></div>
+    <div class="callout callout-gap">
+      <strong>Gap</strong>
+      No guidance found covering the HESA Staff return, research staff eligibility rules, Terms 1/2, non-atypical contract definitions, or research-only / teaching and research contract classifications.
+    </div>
+    <p>One indirect reference: the <strong>Diversity and Disability Knowledge Article</strong> states that changes to diversity/disability data may arise from &ldquo;requirements for the HESA return&rdquo;. This confirms the HESA return is a recognised driver for PeopleXD data changes at Oxford, but provides no structural guidance on how person vs. appointment-level fields are treated in that extract.</p>
+  </section>
+
+  <section class="section">
+    <div class="section-header"><h2>Area 4 &mdash; Multiple Appointments</h2><span class="badge badge-partial">Partial</span></div>
+    <p>No dedicated guidance on multiple appointments in a REF or HESA context was found. However, the SQL reporting documentation confirms the underlying data model.</p>
+    <div class="doc-list">
+      <div class="doc-card">
+        <div class="doc-card-title">HOW TO &mdash; SQL Fundamentals for HR Reporting</div>
+        <div class="doc-card-meta"><span>Source: Library / Reporting</span><span>Added: 18 June 2026</span></div>
+        <div class="doc-card-summary">The data model is confirmed as: a person master record in <code>PRBI_HR_PERSON_MASTER</code> joined to appointment records in <code>APPOINTMENT_HISTORY</code> via <code>person_reference</code>. This one-to-many relationship is the structural reason why the choice between person-level and appointment-level UDFs matters.</div>
+        <div class="extract"><strong>Key extract &mdash; data model</strong> <code>SELECT pm.forename, pm.surname, ah.appointment_id FROM PRBI_HR_PERSON_MASTER pm INNER JOIN APPOINTMENT_HISTORY ah ON pm.person_reference = ah.person_reference</code><br><br>A person can have multiple rows in <code>APPOINTMENT_HISTORY</code>. A person-level UDF is stored once against the person record and is always a 1:1 read from the person master. An appointment-level UDF is stored per appointment row.</div>
+        <a class="doc-card-link" href="https://github.com/begb0037admin/hr-fa-knowledge-base/blob/main/library/HR%20Knowledge%20Base/How%20To%20Guides/REPORTING/HOW%20TO%20-%20SQL%20Fundamentals%20for%20HR%20Reporting.md">GitHub library &mdash; HOW TO - SQL Fundamentals for HR Reporting.md</a>
+      </div>
+      <div class="doc-card">
+        <div class="doc-card-title">HOW TO &mdash; Delete Contract (Appointment) within PeopleXD People Management</div>
+        <div class="doc-card-meta"><span>Source: How To Guides / People Management</span><span>Updated: 22 September 2022</span><span>300 KB</span></div>
+        <div class="doc-card-summary">Covers deletion and replacement of appointment records where a person has multiple concurrent appointments. Confirms PeopleXD supports multiple appointment sequences per person. Note: if an appointment is deleted or replaced, appointment-level UDF data attached to it is affected; person-level UDF data is not.</div>
+        <a class="doc-card-link" href="https://unioxfordnexus.sharepoint.com/sites/HumanResources-FATeam/Shared%20Documents/HR%20Knowledge%20Base/How%20To%20Guides/PEOPLE%20MGT/HOW%20TO%20-%20Delete%20Contract%20%28Appointment%29%20within%20PeopleXD%20PeopleManagement.docx">SharePoint &mdash; HOW TO - Delete Contract (Appointment) within PeopleXD PeopleManagement.docx</a>
+      </div>
+    </div>
+    <div class="callout callout-risk">
+      <strong>Risk &mdash; no linkage between person UDF values and specific appointments</strong>
+      The proposed design uses four numbered fields (<code>REFQUALCON1</code>&ndash;<code>REFQUALCON4</code>) on the person record. Because the fields are positional rather than linked to appointment IDs, there is no system-enforced relationship between a given outcome value and the specific appointment it relates to. This is a design constraint, not a technical barrier &mdash; but it must be documented for future maintainers and for any HESA extraction logic.
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header"><h2>Area 5 &mdash; Data Imports</h2><span class="badge badge-found">Found</span></div>
+    <p>Import documentation was found. The most important finding is the confirmed limit of 12 UDF columns per import record.</p>
+    <div class="doc-list">
+      <div class="doc-card">
+        <div class="doc-card-title">HOW TO &mdash; Prepare Data for the Data Migration Tool v2.1 (DRAFT Aug 2021)</div>
+        <div class="doc-card-meta"><span>Source: How To Guides / System Administration</span><span>Updated: 4 August 2021</span><span>6,852 KB</span></div>
+        <div class="doc-card-summary">Oxford&rsquo;s primary guide for preparing upload files for the Data Migration Tool.</div>
+        <div class="extract"><strong>Key extract &mdash; UDF column limit</strong> &ldquo;Your upload file must contain all of the columns shown on the template document even if they contain no data. The upload template will include a column for each possible data item so <strong>for a UDF, 12 fields can be added so there will be 12 columns in addition to the required fields</strong>. Once you have saved your upload file as a .CSV, DO NOT SAVE again when exiting as the formatting you have just completed will change back to the defaults.&rdquo;</div>
+        <p style="margin-top:0.6rem; font-size:0.875rem; color:var(--ink-muted);"><strong>Implication:</strong> Four <code>REFQUALCON</code> fields sits within the 12-field limit. There is headroom to expand to 12 if the population ever exceeds four qualifying appointments, without changing the import mechanism.</p>
+        <a class="doc-card-link" href="https://unioxfordnexus.sharepoint.com/sites/HumanResources-FATeam/Shared%20Documents/HR%20Knowledge%20Base/How%20To%20Guides/SYSTEM%20ADMIN/HOW%20TO%20-%20Prepare%20Data%20for%20the%20Data%20Migration%20Tool%20v2.1%20DRAFT%20Aug21.docx">SharePoint &mdash; HOW TO - Prepare Data for the Data Migration Tool v2.1 DRAFT Aug21.docx</a>
+      </div>
+      <div class="doc-card">
+        <div class="doc-card-title">Data Migration Update Facility v28 &mdash; User Guide V1.0</div>
+        <div class="doc-card-meta"><span>Source: Core PeopleXD Guides (Archive)</span><span>Updated: 13 October 2020</span><span>3,020 KB &middot; PDF</span></div>
+        <div class="doc-card-summary">Vendor guide for the Data Migration Update Facility widget &mdash; the mechanism for batch-updating existing person or contract records. Relevant for subsequent updates after initial upload (e.g. correcting or adding outcomes during the REF assessment period). Dependency on Insight reports for employee and contract updates is noted.</div>
+        <a class="doc-card-link" href="https://unioxfordnexus.sharepoint.com/sites/HumanResources-FATeam/Shared%20Documents/HR%20Knowledge%20Base/How%20To%20Guides/Core%20Guides/Archive/Data%20Migration%20Update%20Facility%20v28%20User%20Guide%20v1.0.pdf">SharePoint &mdash; Data Migration Update Facility v28 User Guide v1.0.pdf</a>
+      </div>
+      <div class="doc-card">
+        <div class="doc-card-title">Configuring the Data Migration Tool 1.0</div>
+        <div class="doc-card-meta"><span>Source: Core PeopleXD Guides (Archive)</span><span>Updated: 13 October 2020</span><span>659 KB &middot; PDF</span></div>
+        <div class="doc-card-summary">Vendor guide for configuring Data Migration Options and Data Migration Templates widgets. Relevant if template configuration is needed ahead of import. Archived &mdash; check whether a more current version exists via the PXD Portal.</div>
+        <a class="doc-card-link" href="https://unioxfordnexus.sharepoint.com/sites/HumanResources-FATeam/Shared%20Documents/HR%20Knowledge%20Base/How%20To%20Guides/Core%20Guides/Archive/Configuring%20the%20Data%20Migration%20Tool%201.0.pdf">SharePoint &mdash; Configuring the Data Migration Tool 1.0.pdf</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header"><h2>Area 6 &mdash; Reporting</h2><span class="badge badge-partial">Partial</span></div>
+    <p>General SQL and reporting infrastructure documentation is well-represented. No specific documentation for reporting UDFs in a HESA or REF context was found.</p>
+    <div class="doc-list">
+      <div class="doc-card">
+        <div class="doc-card-title">HOW TO &mdash; SQL Fundamentals for HR Reporting</div>
+        <div class="doc-card-meta"><span>Source: Library / Reporting</span><span>Added: 18 June 2026</span></div>
+        <div class="extract"><strong>Key extract &mdash; UDF retrieval in SQL</strong> &ldquo;Functions &mdash; used for pulling UDF information and salary data. You will encounter these in existing SQL queries.&rdquo; &mdash; UDF values are not exposed directly in views but via database functions. Any report consuming the <code>REFQUALCON</code> UDF fields will call a UDF function, not a direct column.</div>
+      </div>
+    </div>
+    <p>Additional reporting guides in the library relevant to building reports against the new UDF data:</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Document</th><th>Relevance</th></tr></thead>
+        <tbody>
+          <tr><td class="td-q">HOW TO &mdash; Create and edit Insight reports v1.0</td><td class="td-a">For building Portal-based UDF reports using Insight. Review if a Portal report is needed to check outcomes.</td></tr>
+          <tr><td class="td-q">HOW TO &mdash; Manage Reports &mdash; Shared Datasets</td><td class="td-a">For adding UDF columns to existing SSRS shared datasets used by the reporting suite.</td></tr>
+          <tr><td class="td-q">HOW TO &mdash; Manage Reports &mdash; SQL Developer Basics</td><td class="td-a">For writing ad hoc queries against UDF data in the Oracle database directly.</td></tr>
+          <tr><td class="td-q">HOW TO &mdash; Manage Reports &mdash; Release and Deployment</td><td class="td-a">Required if report changes are needed post-UDF creation &mdash; covers OSM change request through to LIVE deployment.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout callout-risk">
+      <strong>Reporting risk &mdash; person-level UDF and multi-appointment HESA extract</strong>
+      If the HESA staff return extract is built at appointment level (one row per eligible appointment), a person-level UDF with positional fields (<code>REFQUALCON1</code>&ndash;<code>REFQUALCON4</code>) introduces a mapping challenge: the extract logic must determine which outcome corresponds to which appointment. This logic is not documented in the knowledge base and would need to be designed and tested specifically. An appointment-level UDF would avoid this entirely.
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header"><h2>Area 7 &mdash; Testing Guidance</h2><span class="badge badge-partial">Partial</span></div>
+    <p>General testing and deployment guidance is available through the OSM Change Request process. No UDF-specific testing guide was found.</p>
+    <div class="doc-list">
+      <div class="doc-card">
+        <div class="doc-card-title">HOW TO &mdash; Raise a Change Request for HR Reporting (OSM)</div>
+        <div class="doc-card-meta"><span>Source: kevin-guides.json</span><span>Added: 18 June 2026</span></div>
+        <div class="doc-card-summary">Defines the deployment pipeline: TEST &rarr; LIVE, with OSM Change Request as the gate. A CR is required before promoting the UDF configuration from UOXU test to production. Sections 8 (Testing) and 14 (Back-Out Plan) are directly applicable.</div>
+        <div class="extract"><strong>Testing section requirement (Section 8)</strong> The test plan for the person-level UDF should specify: correct display on person record; successful import of a sample file with four UDF columns; UDF values visible in reporting; correct behaviour when fewer than four appointments exist (null/empty fields).</div>
+      </div>
+      <div class="doc-card">
+        <div class="doc-card-title">HOW TO &mdash; Create a Non-Payroll Company &amp; Link the Hierarchy (Colleges &amp; Halls &mdash; UOXU)</div>
+        <div class="doc-card-meta"><span>Source: Library / System Administration</span><span>Version: 1.0, 15 June 2026</span><span>UOXU (Company 90)</span></div>
+        <div class="doc-card-summary">Confirms UOXU as the active test environment with recent configuration work performed there. Access Group support contact is the PXD Portal.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="section">
+    <div class="section-header"><h2>Key Questions &mdash; Answers from Available Documentation</h2></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="min-width:260px">Question</th><th style="min-width:80px">Status</th><th style="min-width:280px">Finding</th></tr></thead>
+        <tbody>
+          <tr><td class="td-q">Is a person-level UDF the recommended approach for recording multiple REF qualification outcomes?</td><td class="td-status"><span class="badge badge-partial">Partial</span></td><td class="td-a">Person-level UDFs are a documented, supported option. No recommendation for or against their use for REF data specifically. No Oxford precedent for REF UDF found.</td></tr>
+          <tr><td class="td-q">Are there documented limitations on using person-level UDFs where multiple eligible appointments exist?</td><td class="td-status"><span class="badge badge-notfound">Not Found</span></td><td class="td-a">No documented limitations. The design constraint (positional fields with no appointment linkage) is architectural, not a system limitation.</td></tr>
+          <tr><td class="td-q">Are there examples of storing appointment-specific information against the person record?</td><td class="td-status"><span class="badge badge-partial">Partial</span></td><td class="td-a">The <code>Roles in Department</code> UDF (Organisational Structure article) is an Oxford precedent for role-related data at person level. No appointment-outcome-specific example found.</td></tr>
+          <tr><td class="td-q">How do HESA reports interpret person-level versus appointment-level data?</td><td class="td-status"><span class="badge badge-notfound">Not Found</span></td><td class="td-a">Not documented. This is the most critical unanswered question. The answer determines whether the person-level approach is viable for HESA submission.</td></tr>
+          <tr><td class="td-q">What are the implications if a future staff member has more than four qualifying appointments?</td><td class="td-status"><span class="badge badge-partial">Partial</span></td><td class="td-a">Import template supports up to 12 UDF columns. Design can expand to 12 without changing the import mechanism. A fifth outcome on the current four-field design would have nowhere to record.</td></tr>
+          <tr><td class="td-q">Are there documented best practices for handling multiple appointments in REF/HESA reporting?</td><td class="td-status"><span class="badge badge-notfound">Not Found</span></td><td class="td-a">No documentation found.</td></tr>
+          <tr><td class="td-q">Does PeopleXD provide an alternative design for recording multiple appointment outcomes?</td><td class="td-status"><span class="badge badge-notfound">Not Found</span></td><td class="td-a">Appointment-level UDFs are a supported alternative but no guidance on their use for this purpose was found.</td></tr>
+          <tr><td class="td-q">Are there import or reporting limitations when using multiple repeating UDF fields?</td><td class="td-status"><span class="badge badge-partial">Partial</span></td><td class="td-a">Import: 12-column limit confirmed &mdash; four fields is within limit. Reporting: UDF data retrieved via database functions. No performance or join limitations documented.</td></tr>
+          <tr><td class="td-q">Are there implementation guides or customer examples using this approach?</td><td class="td-status"><span class="badge badge-partial">Partial</span></td><td class="td-a">Official PeopleXD UDF Configuration Guide V1.0 is in the library. No Oxford-specific example for a comparable multi-value person-level UDF found.</td></tr>
+          <tr><td class="td-q">Are there known risks or support advisories relating to person-level UDFs for REF or HESA data?</td><td class="td-status"><span class="badge badge-notfound">Not Found</span></td><td class="td-a">None documented in the knowledge base.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="section">
+    <div class="section-header"><h2>Recommendations</h2></div>
+    <ul class="rec-list">
+      <li><span class="rec-num">1</span><span><strong>Read the PeopleXD UDF Configuration Guide before configuring in UOXU.</strong> The vendor guide (<code>PeopleXD People Management- User Defined Field Configuration V1.0.pdf</code>) is in the library and is the most authoritative reference for field types, storage behaviour, and configuration options.</span></li>
+      <li><span class="rec-num">2</span><span><strong>Raise a question with Access Group on HESA extraction behaviour.</strong> The single most important gap is how the HESA staff return extract handles person-level UDFs for staff with multiple appointments. If the extract produces one row per appointment, person-level positional fields create a mapping problem. Ask Access Group this directly before committing to the design.</span></li>
+      <li><span class="rec-num">3</span><span><strong>Document the appointment-to-field mapping rule explicitly.</strong> Whichever design is adopted, the rule for which appointment maps to <code>REFQUALCON1</code>, <code>REFQUALCON2</code>, etc. must be documented in the upload specification and in the UDF Knowledge Article before any data is entered.</span></li>
+      <li><span class="rec-num">4</span><span><strong>Consider appointment-level UDF as an alternative before testing.</strong> An appointment-level UDF stores the outcome directly against the contract it describes, eliminating the positional mapping problem and future-proofing against population changes. The tradeoff is a more complex data entry and reporting model. Formally assess this alternative before UOXU testing begins.</span></li>
+      <li><span class="rec-num">5</span><span><strong>Prepare a test import file with all four UDF columns before configuring the UDF.</strong> The Data Migration Tool requires the full template column set even for empty fields. Prepare the CSV with four <code>REFQUALCON</code> columns and a small sample of test records before the UOXU configuration session.</span></li>
+      <li><span class="rec-num">6</span><span><strong>Raise an OSM Change Request before promoting from UOXU to production.</strong> Category: Configuration; Justification: Enhancement. Section 8 (Testing) should specify the acceptance criteria. Section 14 (Back-Out Plan) should confirm UDF deletion and data re-import as the rollback path.</span></li>
+    </ul>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="section">
+    <div class="section-header"><h2>Complete Document Index</h2></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Document</th><th>Location</th><th>Area</th><th>Updated</th></tr></thead>
+        <tbody>
+          <tr><td class="td-q">User Defined Fields (UDF) Knowledge Article V0.3</td><td class="td-a">Change Management</td><td>UDF</td><td>Mar 2025</td></tr>
+          <tr><td class="td-q">HOW TO &mdash; Create and Edit UDFs in the Portal v1.0</td><td class="td-a">Library / People Mgt</td><td>UDF</td><td>Dec 2024</td></tr>
+          <tr><td class="td-q">PeopleXD People Management &mdash; User Defined Field Configuration V1.0</td><td class="td-a">Library / People Mgt</td><td>UDF</td><td>&mdash;</td></tr>
+          <tr><td class="td-q">Organisational Structure Knowledge Article V2.0</td><td class="td-a">Change Management</td><td>UDF (precedent)</td><td>Feb 2023</td></tr>
+          <tr><td class="td-q">HOW TO &mdash; Prepare Data for the Data Migration Tool v2.1</td><td class="td-a">Library / System Admin</td><td>Import</td><td>Aug 2021</td></tr>
+          <tr><td class="td-q">Data Migration Update Facility v28 User Guide V1.0</td><td class="td-a">Library / Core Guides (Archive)</td><td>Import</td><td>Oct 2020</td></tr>
+          <tr><td class="td-q">Configuring the Data Migration Tool 1.0</td><td class="td-a">Library / Core Guides (Archive)</td><td>Import</td><td>Oct 2020</td></tr>
+          <tr><td class="td-q">HOW TO &mdash; SQL Fundamentals for HR Reporting</td><td class="td-a">Library / Reporting</td><td>Reporting / Data model</td><td>Jun 2026</td></tr>
+          <tr><td class="td-q">HOW TO &mdash; Create and edit Insight reports v1.0</td><td class="td-a">Library / Reporting</td><td>Reporting</td><td>&mdash;</td></tr>
+          <tr><td class="td-q">HOW TO &mdash; Delete Contract (Appointment) within PeopleXD</td><td class="td-a">Library / People Mgt</td><td>Multiple appointments</td><td>Sep 2022</td></tr>
+          <tr><td class="td-q">HOW TO &mdash; Raise a Change Request for HR Reporting (OSM)</td><td class="td-a">kevin-guides.json</td><td>Testing / Deployment</td><td>Jun 2026</td></tr>
+          <tr><td class="td-q">HOW TO &mdash; Create Non-Payroll Company &amp; Hierarchy (UOXU)</td><td class="td-a">Library / System Admin</td><td>Testing environment</td><td>Jun 2026</td></tr>
+          <tr><td class="td-q">Diversity and Disability Knowledge Article</td><td class="td-a">Change Management</td><td>HESA (indirect)</td><td>Jul 2023</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span>HR FA Knowledge Base &mdash; 2,226 documents searched &middot; 6 July 2026</span>
+    <span>Gaps: REF/HESA-specific documentation not present in knowledge base</span>
+  </footer>
+
+</main>
+</body>
+</html>
