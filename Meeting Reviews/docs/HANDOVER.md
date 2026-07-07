@@ -2,9 +2,9 @@
 
 > Replace this file each session. Do not append.
 
-**Session date:** 3 July 2026
-**Written by:** Outgoing session — context compacted, this is the handover for the next session
-**Status:** Friday meeting prep complete and pushed. One major task approved and ready to execute: Dashboard Roadmap creation. Blocked on repo access — requires a new session with all repos added at launch.
+**Session date:** 7 July 2026
+**Written by:** Outgoing session
+**Status:** Leave handover document created, iterated, approved by Kevin, and pushed to main. Kevin is now on pre-surgery leave prep. Surgery is Friday 10 July; he returns Monday 27 July.
 
 ---
 
@@ -14,14 +14,13 @@ You have no memory of previous sessions. Do not guess context. Do not ask Kevin 
 
 You are working for **Kevin Lelitte**, Manager/Director HR Systems, University of Oxford. Kevin manages a team called the FA team (Kevin, Michael, Asta, James) and oversees all HR systems for the university. He operates through a network of GitHub repos that serve as his operational system — meeting prep, project tracking, dashboards, and tooling.
 
-The governance model is defined in `CONSTITUTION.md` (in this repo, root level). Read it. Key principles:
+The governance model is defined in `CONSTITUTION.md` (in this repo, root level). Key principles:
 - **Section 2:** A dispatch must be complete — the executor never makes architectural decisions. If you encounter something that requires a decision not covered here, stop and ask Kevin.
-- **Section 4:** Before any change, a restore point must be recorded. For file pushes to GitHub, the previous commit SHA is the restore point — note it before pushing.
 - **Section 5:** Conversation is temporary. Documentation is permanent. Update HANDOVER.md before this session ends.
-- **Section 6:** Source of truth hierarchy: Kevin's current preferences > CONSTITUTION.md > AGENT_MODEL.md > CLAUDE.md > HANDOVER.md. When documents conflict, the higher one wins.
-- **Section 10:** Effort level is Kevin's to set. Signal before beginning any high-effort task. Wait. Do not proceed until Kevin raises the effort level. Exception: if this HANDOVER.md explicitly states Kevin already approved a task, proceed — the signal was given in the previous session.
+- **Section 6:** Source of truth hierarchy: Kevin's current preferences > CONSTITUTION.md > AGENT_MODEL.md > CLAUDE.md > HANDOVER.md.
+- **Section 10:** Effort level is Kevin's to set. Signal before beginning any high-effort task. Wait for Kevin to raise it.
 
-**Approval gate (from `meeting-records/CLAUDE.md`):** Never push any meeting document without first showing it to Kevin in chat and receiving explicit approval. Show → approve → push. No exceptions. HANDOVER.md and CLAUDE.md updates are not meeting documents and do not require approval before pushing.
+**Approval gate (from `meeting-records/CLAUDE.md`):** Never push any meeting document without first showing it to Kevin in chat and receiving explicit approval. Show → approve → push. No exceptions. HANDOVER.md updates do not require approval before pushing.
 
 **Branch rule:** Always push directly to main. Never leave work on a branch.
 
@@ -33,101 +32,94 @@ The governance model is defined in `CONSTITUTION.md` (in this repo, root level).
 2. Read `meeting-records/CLAUDE.md` — project identity, workflows, naming conventions, people, hard rules
 3. Read `meeting-records/CONSTITUTION.md` — governing principles
 4. Read `Meeting Reviews/docs/reference/meeting-prep-formats.md` — exact format for every meeting document type
-5. Then read the CLAUDE.md of whichever repo the active task requires (see task section below)
+5. Then read the CLAUDE.md of whichever repo the active task requires
 
 Do not begin any task until steps 1–4 are complete.
 
 ---
 
-## The repo ecosystem
+## Kevin's leave status
 
-All repos are under the GitHub organisation `begb0037admin`. Kevin's operational system spans the following repos:
-
-### Core repos (governance, projects, meetings)
-
-| Repo | Purpose |
+| | |
 |---|---|
-| `meeting-records` | Meeting prep documents — FA catch-ups, roadmap briefs, 1-1s, H&S roadmap, KPI agenda |
-| `hr-projects` | HR Systems project workspaces + the live HR Systems Roadmap MASTER.xlsm (read-only, OneDrive-synced) |
+| **Surgery date** | Friday 10 July 2026 |
+| **Return date** | Monday 27 July 2026 |
+| **Leave duration** | 10 Jul – 26 Jul inclusive (13 working days absent) |
+| **Escalation chain** | Simon → Renu → Sarah |
+| **Handover audience** | Athena, Marie, Simon, Sarah |
 
-### Dashboard repos (ten dashboards, all under active development)
+**Note for the first session after 27 July:** Kevin will be back. Begin by checking Granola for any meetings Kevin may have had or that his team attended during his absence. Check command-centre tasks.json for any updates. Check work-inbox briefing.json for inbox state. Then ask Kevin what he wants to pick up first.
 
-| Repo | Dashboard name | Purpose |
+---
+
+## What was done in the session ending 7 July 2026
+
+### Leave handover document — created, approved, pushed
+
+**File:** `Meeting Reviews/Leave Handover — Jul 2026.md`
+**Commit SHA:** e6c556831d01125b29f2035cd67715db1a93f1a6
+**Status:** Pushed to main. Kevin approved before push.
+
+The document contains:
+1. **Team absence table** — 10 people (Kevin, Michael, Asta, James, Marie, Emma, Athena, Simon, Sarah, Julie Kimber), July dates, key overlap weeks identified
+2. **8 active workstreams** in first-person voice (Kevin is the author):
+
+| Workstream | Key coverage point |
+|---|---|
+| DTP1092 — Company 90 / College Staff in PXD | Crispin Poole leads; Nathan to raise OSM service request for Anna and Nick; test window TBC before 10 Jul |
+| DTP1334 — H&S System (Cority, IRIS, DSE) | Revised deadline Sep/Oct agreed in principle; evaluation panel session 14 Jul (James and Chris attending); Rachel Midgley is Cority supplier contact |
+| WFM / GLAM Rostering | Response from Cathy Hamer awaited (email sent 28 Jun); Michael to perform testing; no decisions needed during Kevin's absence |
+| Non-Clinical Pay Uplift | Live; Michael and Michelle owners; Michael back 21 Jul — no action needed |
+| Volunteering Absence Type | Oct/Nov rollout confirmed (option 2); email to Marie sent pre-leave; no action needed during absence |
+| REF Attributes ESS | Nathan to raise ISM request; Kevin to test on return; no decisions needed |
+| PFST / Sopra Steria | Kevin named SME; 8-week window from PFST meeting 9 Jul; Kevin picks up on return 27 Jul |
+| Julie Training Checks | Wed 22 Jul is uncovered (Asta on leave, Julie on leave, Chris on leave); flagged to Marie to confirm cover |
+
+### Absence calendar — produced and delivered
+
+An HTML Gantt-style absence calendar was produced covering 6–31 July 2026 (20 working days, 10 people). Colour-coded per person, with a daily count row and heat scale. Delivered to Kevin as a file. Not committed to the repo (visual design — per CLAUDE.md hard rule, all mockups and visual designs are produced as Claude Artifacts or local files, never committed).
+
+---
+
+## Pre-leave actions — status as of 7 July 2026
+
+These are Kevin's outstanding actions before surgery on Friday 10 July. They were identified during the leave prep session but may not all be complete. Check with Kevin if picking this up before 10 Jul.
+
+| Action | Status | Notes |
 |---|---|---|
-| `command-centre` | Command Centre Dashboard | Central hub — also stores shared data files (tasks.json, briefing.json, dashboard-roadmap.json will live here) |
-| `work-inbox` | Work Inbox Dashboard | Kevin's incoming work items and briefing data |
-| `meeting-records` | Meeting Dashboard | Meeting prep automation and records |
-| `hr-projects` | HR Projects Dashboard | HR Systems project tracking |
-| `hris-dashboard` | HRIS Team Dashboard | HRIS team operations view |
-| `hr-fa-knowledge-base` | Knowledge Base Dashboard | FA team knowledge base |
-| `AG-FlexPoints` | AG FlexPoint Dashboard | AG FlexPoints data and tooling |
-| `clockify` | Clockify Dashboard | Time tracking integration |
-| `hris-change-requests` | Change Request Dashboard | HR systems change request tracking |
-| `hris-launcher` | HRIS Launcher Dashboard | Launch hub for HRIS tools |
-
-Note: `meeting-records` and `hr-projects` serve dual roles — they are both functional repos and dashboard repos.
+| Email to James and Chris, cc Simon — PACS org structure | **Not yet sent (as of 7 Jul)** | Task them to complete H&S system impact assessment and report to Simon during Kevin's absence. Simon requested this on 29 Jun. |
+| Email to Marie (cc Simon) — volunteering absence type | **Not yet sent (as of 7 Jul)** | Confirm Oct/Nov timeline, option 2, POG backlog. |
+| Email to Rob (cc James) — task-per-incident requirement | **Not yet sent (as of 7 Jul)** | |
+| Chase Nathan — REF ISM request raised? | **Not confirmed** | Kevin to confirm before 10 Jul |
+| Julie training checks — Wed 22 Jul cover | **Flagged in handover** | Marie to confirm; Kevin to flag to Simon if unresolved |
+| Job description — October start | **Noted** | Needs posting by end of July; Kevin back 27 Jul is tight — may need Simon to act if deadline can't move |
 
 ---
 
-## What was done in the session ending 3 July 2026
+## Active task from previous session — Dashboard Roadmap (NOT YET DONE)
 
-### Meeting prep — both documents pushed to main
+This task was approved on 3 July 2026 and was not executed before this session ran out of context. It is still outstanding and should be picked up when Kevin returns on 27 July.
 
-**`Meeting Reviews/FA Team Catch-up — 03-07.md`** — pushed to main. Morning FA team catch-up agenda (before the 10:00 roadmap meeting). 7 items: SSO decision (Asta), DTP1334 debrief (James), PACS org structure (James), H&S Dashboards (James), WFM handover (Michael — note: Michael won't be in the Friday meeting, this is for a separate check-in), REF/HESA UDF (Asta), emergency Loop docs (all).
+### What this is
 
-**`Meeting Reviews/HR Systems Roadmap — 03-07.md`** — pushed to main. Full speaking brief for 10:00 HR Systems Roadmap meeting. Genuine updates this week: WFM resolution meeting outcome, REF/HESA approach confirmed, Evo/PeopleXD purchase confirmed, PACS org structure impact request, July cover planning. Items unchanged since 26 June: DPIA Stage 7, H&S Dashboards, SSO Migration.
-
-### Dashboard roadmap task — approved, not yet executed
-
-Kevin approved the creation of a central `dashboard-roadmap.json` in `command-centre`. Full specification is in the task section below. The session was blocked on repo access (only `meeting-records` and `hr-projects` were accessible). A new session with all repos added is required to execute.
-
----
-
-## ACTIVE TASK: Dashboard Roadmap — approved, ready to execute
-
-### What this is and why it exists
-
-Kevin's dashboard ecosystem has no central roadmap. Work items, planned features, open fixes, and blockers are scattered across repos or not tracked at all. `dashboard-roadmap.json` is the solution: a single JSON file in `command-centre/data/` that tracks all active work across all ten dashboard repos. It is the cross-repo equivalent of what `HR Systems Roadmap MASTER.xlsm` is for the HR Systems team.
-
-This is not limited to any single workstream or topic. Every ongoing item, planned feature, open fix, blocked task, or in-progress work across any of the ten repos belongs in this file.
+Create `command-centre/data/dashboard-roadmap.json` — a central JSON file tracking all active work across all ten dashboard repos. Full spec is reproduced below.
 
 **Kevin approved this task on 3 July 2026. No effort level signal is required. Proceed directly to execution.**
 
-### Step 1 — Read every repo's CLAUDE.md
+### Execution steps
 
-Before touching any files, read the CLAUDE.md in each of the ten dashboard repos. This tells you what each repo is for, what conventions it follows, and whether there are any rules that affect how you write to it. If a repo has no CLAUDE.md, note that and proceed.
-
+**Step 1** — Read every repo's CLAUDE.md (all ten dashboard repos) before touching any files.
 Also read:
-- `command-centre/data/tasks.json` (if it exists) — to understand the existing JSON schema conventions
-- `work-inbox/data/briefing.json` (if it exists) — same reason
+- `command-centre/data/tasks.json` — to match existing JSON schema conventions
+- `work-inbox/data/briefing.json` — same reason
 
-You are matching the schema style already in use, not inventing a new one.
+**Step 2** — Scan all ten repos for existing tracked work: HANDOVER.md, STATUS.md, any roadmap/backlog/tasks files, roadmap sections in CLAUDE.md, data/*.json tracking files. Record all finds before writing anything.
 
-### Step 2 — Scan all ten repos for existing tracked work
+**Step 3** — Propose the schema to Kevin before writing. Show: proposed schema, full list of seed entries, automation trigger entry. Wait for explicit approval.
 
-For each repo, look for:
-- Any HANDOVER.md or STATUS.md — open items and in-progress state
-- Any file named `roadmap`, `backlog`, `tasks`, or similar in the root or `data/` directory
-- Any roadmap or tracked-work sections inside CLAUDE.md
-- Any `data/*.json` files that contain work tracking
+**Step 4** — Push `data/dashboard-roadmap.json` to `command-centre` main.
 
-Record every find in full before writing anything. This is a read-only phase.
-
-### Step 3 — Propose the schema to Kevin before writing
-
-Once you have read `tasks.json`, `briefing.json`, and all existing content, draft the JSON schema for `dashboard-roadmap.json`. Show Kevin:
-1. The proposed schema (with field names, types, and a worked example)
-2. The full list of seed entries you found in Step 2, formatted as JSON
-3. The automation trigger entry (see below — this is always the first entry)
-
-Wait for Kevin's explicit approval before writing any file. This is the approval gate for the data design.
-
-### Step 4 — Push `data/dashboard-roadmap.json` to `command-centre` main
-
-Path: `command-centre/data/dashboard-roadmap.json`
-
-Minimum schema per entry (adjust to match existing conventions from Step 1):
-
+Minimum schema per entry:
 ```json
 {
   "id": "DASH-001",
@@ -136,14 +128,14 @@ Minimum schema per entry (adjust to match existing conventions from Step 1):
   "title": "Brief title",
   "status": "blocked | in-progress | planned | complete",
   "description": "What this is and why it matters.",
-  "blockers": ["Blocker 1", "Blocker 2"],
+  "blockers": ["Blocker 1"],
   "next_action": "The next concrete step.",
   "owner": "Kevin",
-  "last_updated": "2026-07-03"
+  "last_updated": "2026-07-07"
 }
 ```
 
-**First entry — always include this:**
+**First entry — always include this (DASH-001):**
 ```json
 {
   "id": "DASH-001",
@@ -162,7 +154,11 @@ Minimum schema per entry (adjust to match existing conventions from Step 1):
 }
 ```
 
-Trigger IDs (preserve — do not delete):
+**Step 5** — Update every repo's CLAUDE.md with the Dashboard Roadmap reference block and mockup rule (see 3 July HANDOVER.md for exact text). These additions do not require Kevin's approval before pushing.
+
+**Step 6** — Update HANDOVER.md to mark this task complete.
+
+**Automation trigger IDs (preserve — do not delete):**
 - FA Catch-up: `trig_01QZYRrgfaUBgxPpuhVP719x`
 - HR Roadmap: `trig_01QUr1UThQjgsA8SC32LRUnC`
 - H&S Roadmap: `trig_01Qj16eCt3czyZGMTKrqeGAw`
@@ -170,111 +166,9 @@ Trigger IDs (preserve — do not delete):
 - HR Managers Meeting: `trig_013GXDAQs5QUUkAhRgExjmm5`
 - KPI Monthly: `trig_01JDNnv6ag6NzUVsoPA9L5fH`
 
-### Step 5 — Update every repo's CLAUDE.md
-
-Add the following two blocks to the CLAUDE.md in each of the ten dashboard repos. Find the most appropriate section (Hard Rules, or create a new section called `## Dashboard Roadmap`). Do not change any other content. Do not reformat or reorganise existing content.
-
-**Block 1 — Roadmap reference:**
-```
-## Dashboard Roadmap
-All roadmap items for this dashboard are tracked centrally:
-- Repo: `begb0037admin/command-centre`
-- File: `data/dashboard-roadmap.json`
-
-Do not maintain a local roadmap in this repo. All roadmap entries go to the central file.
-```
-
-**Block 2 — Mockup rule (add to Hard Rules or equivalent section):**
-```
-- Mockups and visual prototypes always use Claude Artifacts. Never create HTML files for mockups. All visual work is presented as a live Artifact so it can be iterated in-session.
-```
-
-If a repo has no CLAUDE.md, create a minimal one with these two blocks and the repo identity (name, purpose, owner). Surface it to Kevin before pushing.
-
-These CLAUDE.md additions do not require Kevin's approval before pushing — they are mechanical and non-ambiguous. However, if Step 2 surfaced any unexpected existing roadmap content in a repo, surface that to Kevin before overwriting or migrating it.
-
-### Step 6 — Update this HANDOVER.md
-
-Before ending the session, replace this file with an updated version that:
-- Marks the dashboard roadmap task as complete
-- Records what was found in each repo during Step 2
-- Updates the open items section with anything new
-- Follows the same cold-session-proof standard as this document
-
 ---
 
-## How to use the tools
-
-### GitHub operations
-All file reads and writes go through the GitHub MCP tools:
-- **Read a file:** `mcp__github__get_file_contents` with `owner: begb0037admin`, `repo: <repo-name>`, `path: <file-path>`
-- **Push one or more files:** `mcp__github__push_files` with `branch: main`. Always push to main directly.
-- **Check what's in a repo:** `mcp__github__get_file_contents` with `path: /` to list root contents
-
-If a push fails, check the error before retrying. Do not retry blind.
-
-### HR Systems Roadmap Excel (hr-projects only — read-only)
-The file `HR Systems Roadmap/HR Systems Roadmap MASTER.xlsm` is a binary Excel file. To read it:
-1. Call `mcp__github__get_file_contents` — the API returns it as base64-encoded text
-2. Extract the base64 content from the response
-3. `import base64; data = base64.b64decode(content); open('/tmp/roadmap.xlsm', 'wb').write(data)`
-4. `pip install openpyxl -q` then `import openpyxl; wb = openpyxl.load_workbook('/tmp/roadmap.xlsm', read_only=True)`
-5. Key sheet: `Work Tracker`. Key columns: ID(0), Activity(1), Lead(6), Team(7), Deadline(19), Progress(22), Next steps(23), Date last reviewed(24), Status(26), Status Details(27)
-6. FA team filter: Kevin, Michael, Asta, James
-
-NEVER modify this file. It is a senior management document that Kevin updates manually.
-
-### Granola (meeting transcripts)
-Use `mcp__Granola__list_meetings` to find recent meetings, then `mcp__Granola__get_meeting_transcript` to pull content. Match meetings by title using the Granola naming standard defined in `meeting-records/CLAUDE.md`.
-
----
-
-## Automation status — still broken
-
-Six CronCreate triggers fire at 07:00 UTC each relevant day but all fail silently. The fix is tracked as DASH-001 in `dashboard-roadmap.json` (once that file exists). Until then, all meeting prep is manual.
-
-Fix sequence (not yet actioned — do not attempt in the dashboard roadmap session unless Kevin explicitly asks):
-1. Re-authorise Claude_Code_Remote MCP: claude.ai → Settings → Connectors
-2. Disable all six triggers while broken
-3. Investigate MCP tool access in triggered sessions
-4. Fix or redesign trigger prompts
-5. Test with one trigger before re-enabling all six
-6. Add notification/verification so failures surface
-
----
-
-## Calendar context — July 2026
-
-| Date | Event |
-|---|---|
-| Fri 3 Jul | HR Roadmap 10:00 — SSO decision, DPIA chase, DTP1334 revised deadline |
-| Mon 6 Jul | Michael and Emma absent (annual leave) |
-| Mon 7 Jul | Marie absent (until 17 Jul) |
-| Fri 10 Jul | Kevin's surgery — approximately two weeks recovery. Kevin absent from 10 Jul. |
-| Sun 13 Jul | Sarah is the only remaining manager |
-
-Escalation chain while Kevin is out: Simon → Renu → Sarah.
-
----
-
-## Open items from 3 July roadmap meeting — check outcomes in next session
-
-These were live issues going into the 10:00 meeting on 3 July. The next session should check Granola for the meeting transcript to confirm outcomes.
-
-| Item | What was open | What to check |
-|---|---|---|
-| SSO Migration (179) | VS2022 licensing decision — proceed or park? | Did Asta confirm licensing? What was decided? |
-| DPIA Stage 7 (136) | Sitting with Marie Cooksey; deadline passed 30 June | Any response from Marie or Information Compliance Team? |
-| DTP1334 H&S System | 31 Jul deadline unachievable; Sep proposed | Did the group agree the revised deadline? Resourcing position formally noted? |
-| REF/HESA UDF (DTP1092) | Nathan to raise ISM request; Kevin to test before surgery | ISM request raised? Test window confirmed? |
-| WFM GLAM call (ITS1004) | Kevin to speak with Simon and Marie before setting date | Call date set? |
-| Evo/PeopleXD | Purchase confirmed; not yet on roadmap | Formal proposal for next roadmap meeting agreed? |
-| Volunteering absence email | Kevin to send to Marie — Oct/Nov timeline | Sent? |
-| Loop handover docs | Everyone to share links with Kevin by end of 3 Jul | Collected and embedded in HR Systems Management Team chat? |
-
----
-
-## How to start the new session
+## How to start the new session (post-27 July return)
 
 1. Add all ten repos to the session before sending the first message:
    - `begb0037admin/meeting-records`
@@ -289,10 +183,41 @@ These were live issues going into the 10:00 meeting on 3 July. The next session 
    - `begb0037admin/hris-launcher`
 
 2. Send this as the first message:
-   > Continue the dashboard roadmap task from the HANDOVER.md in meeting-records
+   > Kevin is back from surgery. Read HANDOVER.md in meeting-records and brief me on what needs picking up.
 
-3. The new session reads this file, completes the bootstrap order, then executes Steps 1–6 above.
+3. The new session reads this file, completes the bootstrap order, then presents Kevin with a prioritised list: (a) any urgent items from his absence, (b) the dashboard roadmap task, (c) pre-leave actions that may still be open.
 
 ---
 
-*Prepared: 3 July 2026 | Outgoing session: manual prep run (automation triggers broken) | Sources used this session: HR Systems Roadmap MASTER.xlsm (read-only, hr-projects, openpyxl via base64 decode), Granola (FA Catch-up 01/07, WFM Rostering Internal Review 30/06, Michael 1-1 Handover 02/07, Evo Implementation Meeting 01/07, Emergency Planning Meeting 01/07, HESA REF Meeting 01/07, HR Roadmap 26/06, FA Catch-up 26/06), briefing.json and tasks.json unavailable this session (work-inbox and command-centre not in session scope)*
+## Calendar context — July 2026
+
+| Date | Event |
+|---|---|
+| Mon 7 Jul | Marie absent (until 17 Jul) |
+| Thu 9 Jul | PFST meeting — Kevin attending |
+| Fri 10 Jul | Kevin's surgery — absent from here until 27 Jul |
+| Week 13–18 Jul | Most exposed week — 6 people absent simultaneously |
+| Wed 22 Jul | Julie training checks gap day — Asta on leave, Julie on leave, Chris on leave |
+| Thu 24 Jul | Julie returns |
+| Mon 27 Jul | Kevin returns |
+
+---
+
+## Repo ecosystem reference
+
+| Repo | Purpose |
+|---|---|
+| `meeting-records` | Meeting prep documents — FA catch-ups, roadmap briefs, 1-1s, H&S roadmap, KPI agenda |
+| `hr-projects` | HR Systems project workspaces + live HR Systems Roadmap MASTER.xlsm (read-only) |
+| `command-centre` | Central hub — tasks.json, dashboard-roadmap.json (pending creation) |
+| `work-inbox` | Inbox dashboard and briefing.json |
+| `hris-dashboard` | HRIS team operations view |
+| `hr-fa-knowledge-base` | FA team knowledge base |
+| `AG-FlexPoints` | AG FlexPoints data and tooling |
+| `clockify` | Time tracking integration |
+| `hris-change-requests` | Change request tracking |
+| `hris-launcher` | Launch hub for HRIS tools |
+
+---
+
+*Prepared: 7 July 2026 | Sources used this session: Granola (multiple meetings), work-inbox/data/briefing.json, command-centre/data/tasks.json, hr-projects HR Systems Roadmap MASTER.xlsm (read-only), email screenshots provided by Kevin (PFST/Marie Cooksey, Simon Teams message re PACS, Simon email re volunteering, Marie email re Julie training checks)*
