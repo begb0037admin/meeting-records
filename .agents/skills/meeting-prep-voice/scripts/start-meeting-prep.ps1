@@ -95,7 +95,10 @@ Authority and workflow:
 8. Do not turn this into an implementation plan. Produce the actual meeting-prep draft in the repository's approved style.
 9. If critical source coverage is missing, return status "blocked" instead of inventing content.
 
-Return only the structured result required by the supplied JSON schema.
+Return only one JSON object, without Markdown fences, with these keys:
+status (completed or blocked), meetingType, meetingDate, sourceManifest (array
+of source/status/freshnessDate/notes objects), spokenSummary, draftMarkdown,
+blockers (array), and nextStep.
 "@
 }
 
@@ -168,35 +171,6 @@ try {
         throw "GitHub clone failed with exit code $CloneExitCode."
     }
 
-    $Schema = @{
-        type = 'object'
-        additionalProperties = $false
-        properties = @{
-            status = @{ type = 'string'; enum = @('completed', 'blocked') }
-            meetingType = @{ type = 'string' }
-            meetingDate = @{ type = 'string' }
-            sourceManifest = @{
-                type = 'array'
-                items = @{
-                    type = 'object'
-                    additionalProperties = $false
-                    properties = @{
-                        source = @{ type = 'string' }
-                        status = @{ type = 'string'; enum = @('used', 'stale', 'unavailable', 'empty', 'contradictory', 'not-required') }
-                        freshnessDate = @{ type = @('string', 'null') }
-                        notes = @{ type = 'string' }
-                    }
-                    required = @('source', 'status', 'freshnessDate', 'notes')
-                }
-            }
-            spokenSummary = @{ type = 'string' }
-            draftMarkdown = @{ type = 'string' }
-            blockers = @{ type = 'array'; items = @{ type = 'string' } }
-            nextStep = @{ type = 'string' }
-        }
-        required = @('status', 'meetingType', 'meetingDate', 'sourceManifest', 'spokenSummary', 'draftMarkdown', 'blockers', 'nextStep')
-    } | ConvertTo-Json -Depth 20 -Compress
-
     $McpRoot = Join-Path $ClonePath 'mcp\meeting-context'
     $McpConfig = @{
         mcpServers = @{
@@ -225,7 +199,6 @@ try {
         $ClaudeArgs = @(
             '--print',
             '--output-format', 'json',
-            "--json-schema=$Schema",
             '--permission-mode', 'dontAsk',
             '--setting-sources', 'user,project,local',
             '--mcp-config', $McpConfigPath,
