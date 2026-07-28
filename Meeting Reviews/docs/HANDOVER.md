@@ -4,7 +4,7 @@
 
 **Session date:** 28 July 2026
 **Written by:** Codex
-**Status:** Windows Voice prototype now includes a validated meeting-context MCP. Historical Claude draft validation is the remaining proof-of-concept check.
+**Status:** Windows Voice + Claude + meeting-context MCP proof of concept validated against archived Managers Meeting material. No meeting brief was saved or published.
 
 ---
 
@@ -75,8 +75,15 @@ The prototype:
 - real Windows stdio MCP handshake and tool calls: PASS
 - archived proof-of-concept sources: Work Inbox `1dded7a99ed3`, Command Centre `019dd2497c69`, HR roadmap `f16a11ac3377`, existing 24 June Managers Meeting brief
 - archived source result: all four GitHub inputs available; Work Inbox snapshot dated 23 June; Outlook refresh not called; nothing published
+- Claude historical draft cycle: completed from a fresh GitHub checkout; workspace remained clean and was removed
+- Claude-to-MCP allow-list check: PASS with zero permission denials; `get_source_health` returned inbox/tasks/roadmap/meeting available and Outlook refresh false
+- the full repeat draft exceeded the wrapper time limit and its orphaned Claude/MCP processes were stopped; the shorter integration check then passed
 
-**Next action:** run Claude once against the archived 24 June sources and inspect the returned proof-of-concept draft. It must be labelled historical and draft-only, and must not be saved or published. Do not add revision, publication, scheduling, polling, or background refresh until that cycle is reviewed.
+**Historical POC findings (do not treat as current meeting information):**
+- prior 24 June brief labels the College Staff in PXD multi-company work as DTP1092, but the archived roadmap maps DTP1092 to research management data for REF/research quality; FP 68261303 is the matching Command Centre item
+- the archived roadmap's REF Self Service Dashboard date (31 March 2026) conflicts with the separate end-of-July REF attributes via ESS task; confirm whether these are distinct workstreams before reuse
+
+**Next action:** Kevin reviews the proof-of-concept outcome and decides whether to proceed to a current Managers Meeting cycle. Keep the show â†’ approve â†’ push gate. Outlook refresh remains a separate explicit action requiring both the launcher switch and exact confirmation; never schedule, poll, or run it in the background.
 
 ---
 
