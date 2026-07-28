@@ -1,0 +1,16 @@
+[project]
+name = "meeting-context-mcp"
+version = "0.1.0"
+description = "Read-only meeting context for the Managers Meeting Voice prototype"
+requires-python = ">=3.11"
+dependencies = [
+  "mcp>=1.27,<2",
+  "openpyxl>=3.1,<4",
+]
+
+[project.scripts]
+meeting-context-mcp = "meeting_context.server:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+

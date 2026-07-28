@@ -10,6 +10,10 @@ param(
 
     [string]$AdditionalContext = '',
 
+    [switch]$RefreshOutlook,
+
+    [string]$RefreshConfirmation = '',
+
     [switch]$DryRun,
 
     [switch]$KeepWorkspace
@@ -66,7 +70,9 @@ function New-DispatchPrompt {
     param(
         [Parameter(Mandatory)][string]$RequestedMeetingType,
         [Parameter(Mandatory)][string]$RequestedMeetingDate,
-        [string]$UserContext
+        [string]$UserContext,
+        [bool]$OutlookRefreshRequested,
+        [string]$OutlookRefreshConfirmation
     )
 
     return @"
@@ -76,6 +82,7 @@ Prepare a DRAFT ONLY for:
 - Meeting type: $RequestedMeetingType
 - Meeting date: $RequestedMeetingDate
 - Additional instruction from Kevin: $UserContext
+- Explicit Outlook refresh requested for this invocation: $OutlookRefreshRequested
 
 Authority and workflow:
 1. Read CLAUDE.md, CONSTITUTION.md, AGENT_MODEL.md, Meeting Reviews/docs/HANDOVER.md, and Meeting Reviews/docs/reference/meeting-prep-formats.md before drafting.
@@ -83,9 +90,10 @@ Authority and workflow:
 3. Read the most recent prep document of the same meeting type.
 4. Use the existing configured connectors and sources required by CLAUDE.md, including Granola where the workflow calls for it.
 5. Check source dates and report stale, unavailable, empty, or contradictory inputs explicitly.
-6. Do not edit any file. Do not commit, push, schedule, publish, send, rename, or delete anything.
-7. Do not turn this into an implementation plan. Produce the actual meeting-prep draft in the repository's approved style.
-8. If critical source coverage is missing, return status "blocked" instead of inventing content.
+6. Do not call refresh_outlook_work_inbox unless "Explicit Outlook refresh requested" above is True. If True, pass this user-supplied confirmation exactly: $OutlookRefreshConfirmation
+7. Do not edit any file. Do not commit, push, schedule, publish, send, rename, or delete anything.
+8. Do not turn this into an implementation plan. Produce the actual meeting-prep draft in the repository's approved style.
+9. If critical source coverage is missing, return status "blocked" instead of inventing content.
 
 Return only the structured result required by the supplied JSON schema.
 "@
@@ -105,7 +113,19 @@ try {
     $GhPath = Require-Command 'gh'
     $ClaudeAuth = Get-ClaudeAuthentication -ClaudePath $ClaudePath
 
-    $Prompt = New-DispatchPrompt -RequestedMeetingType $MeetingType -RequestedMeetingDate $MeetingDate -UserContext $AdditionalContext
+    if ($RefreshOutlook -and $RefreshConfirmation -cne 'REFRESH OUTLOOK AND PUBLISH WORK INBOX') {
+        throw 'Explicit Outlook refresh requires the exact confirmation: REFRESH OUTLOOK AND PUBLISH WORK INBOX'
+    }
+    if (-not $RefreshOutlook -and $RefreshConfirmation) {
+        throw 'RefreshConfirmation was supplied without -RefreshOutlook.'
+    }
+
+    $Prompt = New-DispatchPrompt `
+        -RequestedMeetingType $MeetingType `
+        -RequestedMeetingDate $MeetingDate `
+        -UserContext $AdditionalContext `
+        -OutlookRefreshRequested ([bool]$RefreshOutlook) `
+        -OutlookRefreshConfirmation $RefreshConfirmation
 
     if ($DryRun) {
         Write-Result @{
@@ -123,6 +143,7 @@ try {
             stripsAnthropicApiKeyForChild = [bool]($ClaudeAuth.authMethod -eq 'claude.ai' -and $ChildHadAnthropicApiKey)
             workspacePolicy = 'fresh-disposable-checkout'
             publicationAuthority = 'none'
+            outlookRefreshRequested = [bool]$RefreshOutlook
         }
         exit 0
     }
@@ -168,6 +189,21 @@ try {
         required = @('status', 'meetingType', 'meetingDate', 'sourceManifest', 'spokenSummary', 'draftMarkdown', 'blockers', 'nextStep')
     } | ConvertTo-Json -Depth 20 -Compress
 
+    $McpRoot = Join-Path $ClonePath 'mcp\meeting-context'
+    $McpConfig = @{
+        mcpServers = @{
+            'meeting-context' = @{
+                type = 'stdio'
+                command = 'python'
+                args = @('-m', 'meeting_context.server')
+                env = @{
+                    PYTHONPATH = $McpRoot
+                    MEETING_CONTEXT_ALLOW_OUTLOOK_REFRESH = if ($RefreshOutlook) { '1' } else { '0' }
+                }
+            }
+        }
+    } | ConvertTo-Json -Depth 10 -Compress
+
     Push-Location $ClonePath
     try {
         if ($ClaudeAuth.authMethod -eq 'claude.ai' -and $ChildHadAnthropicApiKey) {
@@ -182,6 +218,7 @@ try {
             '--json-schema', $Schema,
             '--permission-mode', 'dontAsk',
             '--setting-sources', 'user,project,local',
+            '--mcp-config', $McpConfig,
             '--effort', 'medium',
             '--name', "meeting-prep-$RunId",
             $Prompt

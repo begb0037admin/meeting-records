@@ -8,7 +8,7 @@
 - **Owner:** Kevin Lelitte, Manager/Director HR Systems, University of Oxford
 - **Status:** Active
 - **Repo:** https://github.com/begb0037admin/meeting-records
-- **Last updated:** 2026-06-26
+- **Last updated:** 2026-07-28
 
 ## Bootstrap Order
 1. This file (orientation)
@@ -24,6 +24,9 @@ Do NOT ask Kevin for a recap. Navigate to the relevant subfolder.
 - Codex is the conversational interface and dispatcher. Claude remains the reasoning engine and meeting-brief author.
 - The prototype is draft-only. It has no authority to write, commit, push, schedule, publish, send, rename, or delete anything.
 - Runtime checkouts are fresh and disposable. GitHub remains the sole source of truth.
+- The launcher supplies `mcp/meeting-context/` to Claude. Its normal tools read the published Work Inbox briefing, Command Centre tasks, HR roadmap, and previous Managers Meeting prep from GitHub.
+- Granola remains Claude's existing connector and is reported separately in source coverage; the meeting-context MCP does not replace it.
+- Outlook refresh is a separate consequential MCP action. It runs only when explicitly requested with the exact confirmation phrase. There is no schedule, polling, automatic refresh, or background worker.
 - `ANTHROPIC_API_KEY` is removed only from the child Claude process when Claude.ai authentication is active, so configured Claude.ai connectors such as Granola can load. The parent shell and persisted environment are not changed.
 - The normal show → approve → push gate remains unchanged. Revision and publication handoffs are deliberately deferred until the draft-only flow has been proven.
 

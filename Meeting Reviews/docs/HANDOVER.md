@@ -4,7 +4,7 @@
 
 **Session date:** 28 July 2026
 **Written by:** Codex
-**Status:** Windows draft-only Voice meeting-prep prototype implemented and validated. Kevin has returned from leave.
+**Status:** Windows Voice prototype now includes a validated meeting-context MCP. Historical Claude draft validation is the remaining proof-of-concept check.
 
 ---
 
@@ -50,6 +50,7 @@ The prototype:
 - clones `begb0037admin/meeting-records` fresh into a disposable temporary workspace
 - removes `ANTHROPIC_API_KEY` only from the child Claude process when Claude.ai authentication is active, allowing Claude.ai connectors such as Granola to load
 - launches Claude non-interactively with the repository governance and bootstrap order
+- supplies the repo-owned `mcp/meeting-context/` stdio server to Claude
 - requests a structured source manifest, spoken summary, and full Markdown meeting draft
 - blocks rather than inventing content when critical sources are stale or unavailable
 - verifies Claude did not change the draft-only checkout
@@ -57,13 +58,25 @@ The prototype:
 
 **Authority boundary:** draft-only. The prototype cannot write, commit, push, schedule, publish, send, rename, or delete. Codex must not replace Claude's draft with its own content. Revision and publication handoffs are future stages and must preserve the existing show → approve → push gate.
 
+**Meeting-context MCP:**
+- five normal tools read GitHub-published Work Inbox, Command Centre, HR roadmap, and prior Managers Meeting material, plus source health
+- the HR roadmap workbook is opened read-only and never saved
+- Granola remains Claude's existing connector; source health reports it as external rather than substituting another source
+- one separate `refresh_outlook_work_inbox` action invokes the established Work Inbox process only after the exact confirmation `REFRESH OUTLOOK AND PUBLISH WORK INBOX`
+- that refresh is consequential because the established process publishes the briefing and may update Command Centre tasks
+- no schedule, polling, automatic refresh, or background worker exists
+
 **Validation completed:**
 - official Codex skill validator: PASS
 - Windows PowerShell dry run for `HR Systems Managers Meeting`, dated `2026-08-05`: PASS
 - Claude 2.1.220 discovered and authenticated through Claude.ai
 - conflicting `ANTHROPIC_API_KEY` condition detected and handled only in the child process
+- MCP unit tests: 4 PASS
+- real Windows stdio MCP handshake and tool calls: PASS
+- archived proof-of-concept sources: Work Inbox `1dded7a99ed3`, Command Centre `019dd2497c69`, HR roadmap `f16a11ac3377`, existing 24 June Managers Meeting brief
+- archived source result: all four GitHub inputs available; Work Inbox snapshot dated 23 June; Outlook refresh not called; nothing published
 
-**Next action:** install the GitHub-backed skill as a Windows runtime copy, start a new Codex Voice chat, and run one real draft-only meeting-prep cycle. Do not add revision, publication, or scheduling until that cycle is reviewed.
+**Next action:** run Claude once against the archived 24 June sources and inspect the returned proof-of-concept draft. It must be labelled historical and draft-only, and must not be saved or published. Do not add revision, publication, scheduling, polling, or background refresh until that cycle is reviewed.
 
 ---
 
