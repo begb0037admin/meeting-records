@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Voice meeting preparation result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "status",
+    "workflowId",
+    "meetingType",
+    "meetingDate",
+    "draftState",
+    "sourceManifest",
+    "roadmapAssessment",
+    "spokenSummary",
+    "draftMarkdown",
+    "blockers",
+    "warnings",
+    "nextStep"
+  ],
+  "properties": {
+    "status": { "enum": ["completed", "blocked"] },
+    "workflowId": { "const": "managers-meeting-draft" },
+    "meetingType": { "type": "string", "minLength": 1 },
+    "meetingDate": { "type": "string", "format": "date" },
+    "draftState": { "const": "draft" },
+    "sourceManifest": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["sourceId", "source", "status", "recordDate", "retrievedAt", "notes"],
+        "properties": {
+          "sourceId": { "type": "string", "minLength": 1 },
+          "source": { "type": "string", "minLength": 1 },
+          "status": { "enum": ["used", "fresh", "stale", "unavailable", "empty", "contradictory", "not-required"] },
+          "recordDate": { "type": ["string", "null"] },
+          "retrievedAt": { "type": ["string", "null"] },
+          "commitSha": { "type": ["string", "null"] },
+          "blobSha": { "type": ["string", "null"] },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "roadmapAssessment": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["itemId", "itemName", "active", "included", "reason", "destination"],
+        "properties": {
+          "itemId": { "type": ["string", "number"] },
+          "itemName": { "type": "string", "minLength": 1 },
+          "active": { "type": "boolean" },
+          "included": { "type": "boolean" },
+          "reason": { "type": "string", "minLength": 1 },
+          "destination": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "spokenSummary": { "type": "string" },
+    "draftMarkdown": { "type": "string" },
+    "blockers": { "type": "array", "items": { "type": "string" } },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "nextStep": { "type": "string" },
+    "revision": {
+      "type": ["object", "null"],
+      "additionalProperties": true
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "fixtureId": "managers-meeting-2026-06-24",
+  "mode": "historical",
+  "workflowId": "managers-meeting-draft",
+  "meetingType": "HR Systems Managers Meeting",
+  "meetingDate": "2026-06-24",
+  "refs": {
+    "meetingRecordsRef": "1789a0f467d4c385665741b0eb5365dd6abeeaa8",
+    "workInboxRef": "1dded7a99ed32029ff5b3494b0bd7b60d89f47bc",
+    "commandCentreRef": "dcfd31cc5d0b069afab00eadd9f43d4f2159d7e0",
+    "roadmapRef": "f16a11ac33772caeb04acb5eb73cc32d58080387"
+  },
+  "requiredGranolaMeeting": {
+    "title": "HR Systems Roadmap — 22/06",
+    "meetingDate": "2026-06-22",
+    "required": true
+  },
+  "expectedBenchmark": {
+    "ref": "6d56b57f672482f7e07bdf4327e6353e257a990b",
+    "path": "Meeting Reviews/HR Systems Managers Meeting — 24-06.md",
+    "comparisonOnly": true
+  },
+  "generationRestrictions": {
+    "withholdBenchmark": true,
+    "noRepositoryWrites": true,
+    "noOutlookRefresh": true,
+    "noPublication": true
+  }
+}

@@ -19,6 +19,13 @@ Every prep document must include scripted spoken sections — **"Say this:"** �
 
 ---
 
+## HR Systems Managers Meeting — DD-MM.md
+
+Use the mandatory full specification in
+[`managers-meeting-format.md`](managers-meeting-format.md). It requires a source/freshness summary, scripted opening and closing, complete management-level agenda fields, an inclusion/exclusion decision for every active Roadmap item, explicit risks/decisions/conflicts, and draft-only safety controls.
+
+---
+
 ## FA Team Catch-up — DD-MM.md
 
 ```

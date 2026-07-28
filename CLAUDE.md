@@ -67,6 +67,18 @@ All meeting prep documents in `Meeting Reviews/` follow the Granola naming stand
 | Team 1-1 — Michael / Asta / James | Varies | Rotating weekly (one per week) |
 | KPI Monthly Standing Agenda | 2nd–3rd week | Monthly |
 
+## Meeting Prep Workflow (HR Systems Managers Meeting)
+Fortnightly Wednesday management speaking brief. Voice entry point:
+`.agents/skills/managers-meeting-voice/SKILL.md`.
+1. Resolve the intended meeting date; ask one concise question if materially unclear.
+2. Read the previous Managers brief, latest Roadmap prep, Roadmap master, Command Centre, and Work Inbox.
+3. Check Granola for the actual latest HR Systems Roadmap outcome. If it was not captured, fail closed unless Kevin explicitly supplies a manual recap.
+4. Assess every active Roadmap item and retain an inclusion or exclusion reason.
+5. Follow `Meeting Reviews/docs/reference/managers-meeting-format.md`.
+6. Return a validated draft to the originating conversation. The Voice workflow cannot refresh Outlook, write, commit, push, publish, send, or schedule.
+
+The existing show → approve → push gate still applies to any later publication.
+
 ## Meeting Prep Workflow (FA Catch-up Wednesdays)
 Every Wednesday FA team check-in (Kevin, Michael, Asta, James):
 1. Check Granola for the most recent FA catch-up and any relevant meetings since

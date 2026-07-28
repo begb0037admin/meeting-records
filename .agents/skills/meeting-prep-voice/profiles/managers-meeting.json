@@ -1,0 +1,131 @@
+{
+    "schemaVersion":  1,
+    "workflowId":  "managers-meeting-draft",
+    "displayName":  "Managers Meeting draft",
+    "canonicalMeetingType":  "HR Systems Managers Meeting",
+    "triggerPhrases":  [
+                           "Prepare my Managers Meeting draft",
+                           "Prepare my Managers Meeting brief"
+                       ],
+    "dateResolution":  {
+                           "timezone":  "Europe/London",
+                           "cadence":  "fortnightly Wednesday",
+                           "calendarRequiredForLiveRun":  true,
+                           "ambiguityPolicy":  "ask-one-concise-question"
+                       },
+    "requiredSources":  [
+                            "meeting-governance",
+                            "previous-managers-brief",
+                            "latest-roadmap-prep",
+                            "latest-roadmap-outcome-granola",
+                            "roadmap-master",
+                            "command-centre",
+                            "work-inbox"
+                        ],
+    "freshnessRules":  {
+                           "work-inbox":  {
+                                              "maximumAgeHours":  24,
+                                              "stalePolicy":  "block-live-warn-historical"
+                                          },
+                           "command-centre":  {
+                                                  "maximumAgeHours":  48,
+                                                  "stalePolicy":  "block-live-warn-historical"
+                                              },
+                           "latest-roadmap-outcome-granola":  {
+                                                                  "latestMeetingRequired":  true,
+                                                                  "stalePolicy":  "block"
+                                                              },
+                           "roadmap-master":  {
+                                                  "requireCommitDate":  true,
+                                                  "requirePerItemReviewDate":  true,
+                                                  "stalePolicy":  "warn"
+                                              }
+                       },
+    "roadmapSelection":  {
+                             "assessEveryActiveItem":  true,
+                             "promoteOn":  [
+                                               "blocked",
+                                               "overdue",
+                                               "materially-changed",
+                                               "delivery-risk",
+                                               "external-dependency",
+                                               "milestone-within-30-days",
+                                               "management-awareness",
+                                               "escalation",
+                                               "decision",
+                                               "strategic-importance"
+                                           ],
+                             "retainExclusionReason":  true
+                         },
+    "outputRequirements":  {
+                               "requiredHeadings":  [
+                                                        "Source and freshness summary",
+                                                        "Opening",
+                                                        "Agenda items",
+                                                        "Risks and dependencies",
+                                                        "Decisions and support required",
+                                                        "Unresolved conflicts",
+                                                        "Closing"
+                                                    ],
+                               "minimumAgendaItems":  6,
+                               "minimumDraftWords":  900,
+                               "requireSayThisForOpening":  true,
+                               "requireSayThisForEveryAgendaItem":  true,
+                               "requireSayThisForClosing":  true,
+                               "agendaItemFields":  [
+                                                        "Purpose",
+                                                        "Relevant history",
+                                                        "Owner and team",
+                                                        "Current position",
+                                                        "Management relevance",
+                                                        "Deadline or milestone",
+                                                        "Risk or dependency",
+                                                        "Kevin\u0027s position",
+                                                        "Ask of the room",
+                                                        "Likely questions",
+                                                        "Supported answers",
+                                                        "Proposed next step",
+                                                        "Sources and freshness"
+                                                    ]
+                           },
+    "allowedActions":  [
+                           "read-approved-sources",
+                           "create-temporary-draft",
+                           "return-draft-to-originating-conversation",
+                           "revise-current-draft"
+                       ],
+    "prohibitedActions":  [
+                              "refresh-outlook",
+                              "write-meeting-file",
+                              "change-roadmap",
+                              "change-work-inbox",
+                              "change-command-centre",
+                              "commit",
+                              "push",
+                              "publish",
+                              "send",
+                              "schedule"
+                          ],
+    "revisionRules":  {
+                          "preservePriorDraft":  true,
+                          "preserveUnrequestedSectionsWherePossible":  true,
+                          "requirePriorSourceManifest":  true,
+                          "revalidate":  true,
+                          "remainDraftOnly":  true
+                      },
+    "approval":  {
+                     "stateReturnedByWorkflow":  "draft",
+                     "casualAcknowledgementsAreNotApproval":  true,
+                     "publicationImplemented":  false
+                 },
+    "benchmark":  {
+                      "path":  "Meeting Reviews/HR Systems Managers Meeting — 24-06.md",
+                      "comparisonOnly":  true,
+                      "neverSupplyAsGenerationInput":  true
+                  },
+    "sourceAlternatives":  {
+                               "latest-roadmap-outcome-granola":  [
+                                                                      "manual-roadmap-recap"
+                                                                  ]
+                           }
+}
