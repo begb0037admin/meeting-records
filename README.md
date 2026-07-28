@@ -28,5 +28,6 @@ Container repo for Kevin Lelitte's recurring meeting prep and records — Univer
 | `SK - Handover/` | Stephen Kirker handover materials |
 | `Meeting Archive/` | Archived meeting records |
 | `Team 1-1's/` | Team 1-1 records (Michael, Asta, James) |
+| `.agents/skills/meeting-prep-voice/` | Codex Voice front end that launches the established Claude meeting-prep workflow on Windows (draft-only prototype) |
 
 Each folder has its own CLAUDE.md for AI context. For one-off prep docs, see `Meeting Reviews/`.

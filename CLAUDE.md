@@ -18,6 +18,15 @@
 
 Do NOT ask Kevin for a recap. Navigate to the relevant subfolder.
 
+## Codex Voice Front End (Prototype)
+- Shared skill: `.agents/skills/meeting-prep-voice/`
+- Purpose: let Kevin ask Codex Voice to start the existing Claude meeting-prep workflow on Windows.
+- Codex is the conversational interface and dispatcher. Claude remains the reasoning engine and meeting-brief author.
+- The prototype is draft-only. It has no authority to write, commit, push, schedule, publish, send, rename, or delete anything.
+- Runtime checkouts are fresh and disposable. GitHub remains the sole source of truth.
+- `ANTHROPIC_API_KEY` is removed only from the child Claude process when Claude.ai authentication is active, so configured Claude.ai connectors such as Granola can load. The parent shell and persisted environment are not changed.
+- The normal show → approve → push gate remains unchanged. Revision and publication handoffs are deliberately deferred until the draft-only flow has been proven.
+
 ## Structure
 | Folder | Purpose |
 |---|---|

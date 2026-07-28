@@ -2,9 +2,9 @@
 
 > Replace this file each session. Do not append.
 
-**Session date:** 7 July 2026
-**Written by:** Outgoing session
-**Status:** Leave handover document created, iterated, approved by Kevin, and pushed to main. Kevin is now on pre-surgery leave prep. Surgery is Friday 10 July; he returns Monday 27 July.
+**Session date:** 28 July 2026
+**Written by:** Codex
+**Status:** Windows draft-only Voice meeting-prep prototype implemented and validated. Kevin has returned from leave.
 
 ---
 
@@ -35,6 +35,35 @@ The governance model is defined in `CONSTITUTION.md` (in this repo, root level).
 5. Then read the CLAUDE.md of whichever repo the active task requires
 
 Do not begin any task until steps 1–4 are complete.
+
+---
+
+## Voice meeting-prep prototype — 28 July 2026
+
+Kevin approved a Windows-first prototype that preserves the established Claude meeting-prep process while using Codex Voice as its conversational front end.
+
+**Canonical skill path:** `.agents/skills/meeting-prep-voice/`
+
+The prototype:
+- accepts a meeting type, date, and optional instruction from Codex Voice
+- checks Claude, Git, GitHub CLI, and Claude authentication
+- clones `begb0037admin/meeting-records` fresh into a disposable temporary workspace
+- removes `ANTHROPIC_API_KEY` only from the child Claude process when Claude.ai authentication is active, allowing Claude.ai connectors such as Granola to load
+- launches Claude non-interactively with the repository governance and bootstrap order
+- requests a structured source manifest, spoken summary, and full Markdown meeting draft
+- blocks rather than inventing content when critical sources are stale or unavailable
+- verifies Claude did not change the draft-only checkout
+- removes a clean runtime workspace and preserves a dirty or failed one for inspection
+
+**Authority boundary:** draft-only. The prototype cannot write, commit, push, schedule, publish, send, rename, or delete. Codex must not replace Claude's draft with its own content. Revision and publication handoffs are future stages and must preserve the existing show → approve → push gate.
+
+**Validation completed:**
+- official Codex skill validator: PASS
+- Windows PowerShell dry run for `HR Systems Managers Meeting`, dated `2026-08-05`: PASS
+- Claude 2.1.220 discovered and authenticated through Claude.ai
+- conflicting `ANTHROPIC_API_KEY` condition detected and handled only in the child process
+
+**Next action:** install the GitHub-backed skill as a Windows runtime copy, start a new Codex Voice chat, and run one real draft-only meeting-prep cycle. Do not add revision, publication, or scheduling until that cycle is reviewed.
 
 ---
 

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Voice Meeting Prep"
+  short_description: "Launch Claude-backed meeting prep from Voice"
+  default_prompt: "Use $meeting-prep-voice to prepare my next weekly meeting with Claude."
