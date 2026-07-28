@@ -187,6 +187,16 @@ try {
     } | ConvertTo-Json -Depth 10 -Compress
     $McpConfigPath = Join-Path $Workspace 'mcp-config.json'
     [IO.File]::WriteAllText($McpConfigPath, $McpConfig, [Text.UTF8Encoding]::new($false))
+    $AllowedMcpTools = @(
+        'mcp__meeting-context__get_source_health',
+        'mcp__meeting-context__get_inbox_briefing',
+        'mcp__meeting-context__get_command_centre_tasks',
+        'mcp__meeting-context__get_roadmap_items',
+        'mcp__meeting-context__get_previous_meeting_prep'
+    )
+    if ($RefreshOutlook) {
+        $AllowedMcpTools += 'mcp__meeting-context__refresh_outlook_work_inbox'
+    }
 
     Push-Location $ClonePath
     try {
@@ -200,6 +210,7 @@ try {
             '--print',
             '--output-format', 'json',
             '--permission-mode', 'dontAsk',
+            '--allowedTools', ($AllowedMcpTools -join ','),
             '--setting-sources', 'user,project,local',
             '--mcp-config', $McpConfigPath,
             '--effort', 'medium',
