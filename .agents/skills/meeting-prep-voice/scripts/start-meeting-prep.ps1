@@ -152,12 +152,20 @@ try {
     $WorkspaceState = 'created'
 
     Write-Diagnostic "cloning $Repository into a disposable workspace"
-    $CloneOutput = & $GhPath repo clone $Repository $ClonePath -- --depth 1 2>&1
+    $SavedErrorActionPreference = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try {
+        $CloneOutput = & $GhPath repo clone $Repository $ClonePath -- --depth 1 2>&1
+        $CloneExitCode = $LASTEXITCODE
+    }
+    finally {
+        $ErrorActionPreference = $SavedErrorActionPreference
+    }
     foreach ($Line in $CloneOutput) {
         Write-Diagnostic ([string]$Line)
     }
-    if ($LASTEXITCODE -ne 0) {
-        throw "GitHub clone failed with exit code $LASTEXITCODE."
+    if ($CloneExitCode -ne 0) {
+        throw "GitHub clone failed with exit code $CloneExitCode."
     }
 
     $Schema = @{
@@ -223,8 +231,15 @@ try {
             '--name', "meeting-prep-$RunId",
             $Prompt
         )
-        $ClaudeRaw = & $ClaudePath @ClaudeArgs
-        $ClaudeExitCode = $LASTEXITCODE
+        $SavedErrorActionPreference = $ErrorActionPreference
+        $ErrorActionPreference = 'Continue'
+        try {
+            $ClaudeRaw = & $ClaudePath @ClaudeArgs
+            $ClaudeExitCode = $LASTEXITCODE
+        }
+        finally {
+            $ErrorActionPreference = $SavedErrorActionPreference
+        }
         if ($ClaudeExitCode -ne 0) {
             throw "Claude exited with code $ClaudeExitCode."
         }
