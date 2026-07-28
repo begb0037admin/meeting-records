@@ -225,7 +225,7 @@ try {
         $ClaudeArgs = @(
             '--print',
             '--output-format', 'json',
-            '--json-schema', $Schema,
+            "--json-schema=$Schema",
             '--permission-mode', 'dontAsk',
             '--setting-sources', 'user,project,local',
             '--mcp-config', $McpConfigPath,
