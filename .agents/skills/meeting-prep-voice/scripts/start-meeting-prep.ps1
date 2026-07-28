@@ -211,6 +211,8 @@ try {
             }
         }
     } | ConvertTo-Json -Depth 10 -Compress
+    $McpConfigPath = Join-Path $Workspace 'mcp-config.json'
+    [IO.File]::WriteAllText($McpConfigPath, $McpConfig, [Text.UTF8Encoding]::new($false))
 
     Push-Location $ClonePath
     try {
@@ -226,7 +228,7 @@ try {
             '--json-schema', $Schema,
             '--permission-mode', 'dontAsk',
             '--setting-sources', 'user,project,local',
-            '--mcp-config', $McpConfig,
+            '--mcp-config', $McpConfigPath,
             '--effort', 'medium',
             '--name', "meeting-prep-$RunId",
             $Prompt
