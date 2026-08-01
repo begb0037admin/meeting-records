@@ -150,12 +150,11 @@ CSS_BASE = r"""
   .cal-card { display: flex; flex-direction: column; padding: 1rem 1.1rem; overflow: hidden; }
   .cal-months { display: flex; flex-direction: column; justify-content: space-evenly; flex: 1; gap: 0.7rem; }
   .cal-month-label { font-size: 0.82rem; font-weight: 700; color: var(--ink); margin: 0 0 0.55rem; }
-  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+  .cal-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; }
   .cal-dow { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: var(--ink-faint); text-align: center; padding-bottom: 0.3rem; }
   .cal-day { font-size: 0.76rem; text-align: center; padding: 0.32rem 0; border-radius: 5px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
   .cal-day.blank { visibility: hidden; }
   .cal-day.today { background: var(--navy); color: #fff; font-weight: 700; }
-  .cal-day.weekend { color: var(--ink-faint); }
 
   @media (max-width: 1100px) {
     .top-grid { grid-template-columns: 1fr; }
@@ -169,6 +168,12 @@ CSS_BASE = r"""
 
   h2 { font-size: 0.95rem; font-weight: 700; letter-spacing: 0.01em; margin: 2.2rem 0 0.85rem; color: var(--ink); display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
   h2 .h2-sub { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint); }
+
+  /* Section headings that flag something needing attention (e.g. "Risks and
+     dependencies") get their own treatment — amber, larger, a left tab —
+     so they don't read as just another neutral section label. */
+  h2.h2-warn { color: var(--atrisk); font-size: 1.08rem; padding-left: 0.7rem; border-left: 3px solid var(--atrisk); }
+  h2.h2-warn .h2-sub { color: color-mix(in srgb, var(--atrisk) 65%, var(--ink-faint)); }
 
   /* "At a glance" as one card with an internal label, same pattern as .flag,
      so its box top lines up exactly with the calendar's box top. */
@@ -264,6 +269,18 @@ CSS_BASE = r"""
   p.body-loose { font-size: 0.92rem; line-height: 1.58; color: var(--ink-soft); max-width: 980px; }
   p.body-loose b { color: var(--ink); }
 
+  /* Reusable "risk block": a labelled sub-section (heading + body copy +
+     optional bullet list of IDs), so a Risks/dependencies section with
+     several distinct points reads as separated blocks, not one wall of text. */
+  .risk-block { max-width: 980px; margin-bottom: 1.4rem; padding-bottom: 1.4rem; border-bottom: 1px solid var(--line); }
+  .risk-block:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+  .risk-head { font-size: 0.95rem; font-weight: 700; color: var(--ink); margin: 0 0 0.5rem; }
+  .risk-block .body-loose { margin: 0 0 0.6rem; }
+  .risk-block .body-loose:last-child { margin-bottom: 0; }
+  ul.risk-list { list-style: none; margin: 0 0 0.6rem; padding: 0; display: flex; flex-direction: column; gap: 0.5rem; }
+  ul.risk-list li { font-size: 0.89rem; line-height: 1.5; color: var(--ink-soft); padding-left: 1rem; border-left: 2px solid var(--line-strong); }
+  ul.risk-list li b { color: var(--ink); font-variant-numeric: tabular-nums; }
+
   .footnote { margin-top: 2.4rem; padding: 1rem 1.2rem; font-size: 0.75rem; color: var(--ink-faint); line-height: 1.7; border-top: 1px solid var(--line); max-width: 980px; }
 
   @media (max-width: 560px) {
@@ -283,7 +300,7 @@ CSS_BASE = r"""
 
 SCRIPT_BASE = r"""
 (function () {
-  var DOW = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  var DOW = ['Mon','Tue','Wed','Thu','Fri']; // working-week calendar — no Sat/Sun
   var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   var DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 
@@ -297,20 +314,26 @@ SCRIPT_BASE = r"""
     if (dateEl) dateEl.textContent = DAY_NAMES[now.getDay()] + ' ' + now.getDate() + ' ' + MONTHS[now.getMonth()] + ' ' + now.getFullYear();
   }
 
+  // Working-week only (Mon-Fri) — Sat/Sun are skipped entirely, not just
+  // dimmed, per Kevin's instruction (1 Aug 2026): these are meeting-prep
+  // calendars, weekends aren't relevant. Since the 5-day grid divides evenly
+  // into a week, skipping weekend days mid-stream still keeps every Monday
+  // starting a fresh row with no extra bookkeeping.
   function buildMonth(year, month, todayY, todayM, todayD) {
     var first = new Date(year, month, 1);
     var daysInMonth = new Date(year, month + 1, 0).getDate();
-    var startOffset = (first.getDay() + 6) % 7; // Monday-first
+    var firstDow = (first.getDay() + 6) % 7; // Monday-first, 0=Mon .. 6=Sun
+    var leadBlanks = firstDow < 5 ? firstDow : 0; // month starting on a weekend collapses to the first Monday's row
 
     var html = '<p class="cal-month-label">' + MONTHS[month] + ' ' + year + '</p>';
     html += '<div class="cal-grid">';
-    for (var i = 0; i < 7; i++) html += '<span class="cal-dow">' + DOW[i] + '</span>';
-    for (var b = 0; b < startOffset; b++) html += '<span class="cal-day blank">&nbsp;</span>';
+    for (var i = 0; i < 5; i++) html += '<span class="cal-dow">' + DOW[i] + '</span>';
+    for (var b = 0; b < leadBlanks; b++) html += '<span class="cal-day blank">&nbsp;</span>';
     for (var d = 1; d <= daysInMonth; d++) {
+      var dow = (firstDow + d - 1) % 7;
+      if (dow >= 5) continue; // Saturday/Sunday
       var isToday = (year === todayY && month === todayM && d === todayD);
-      var dow = (startOffset + d - 1) % 7;
-      var weekend = (dow === 5 || dow === 6);
-      var cls = 'cal-day' + (isToday ? ' today' : '') + (weekend && !isToday ? ' weekend' : '');
+      var cls = 'cal-day' + (isToday ? ' today' : '');
       html += '<span class="' + cls + '">' + d + '</span>';
     }
     html += '</div>';

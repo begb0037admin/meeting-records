@@ -109,7 +109,7 @@ SECTIONS = f"""
 {ITEMS_HTML}
   </div>
 
-  <h2>Risks and dependencies</h2>
+  <h2 class="h2-warn">Risks and dependencies</h2>
   <p class="body-loose">The core risk is the same shape as the Roadmap brief: <b>three fortnightly cycles with no captured Managers Meeting outcome</b> (8 July, 22 July both missing before this 5 August sitting). Several of the items above were already thin on confirmation in June — five more weeks without a captured meeting means there's no record of whether they were even raised again, let alone resolved.</p>
   <p class="body-loose">Kevin's own 24&nbsp;June "open floor" heads-up list overlaps directly with tracked Roadmap items also flagged in the 7 Aug Roadmap brief: DPIA Stage&nbsp;7 sign-off (item 136, overdue since 30&nbsp;June), the H&amp;S Modular System evaluation window (item&nbsp;1 above), and REF attributes via ESS (item&nbsp;4 above, now overdue). The Annual Leave Carryover rollout (Michael's workstream, October 2026 deadline) has no update on record since 24&nbsp;June either.</p>
 

@@ -117,10 +117,31 @@ SECTIONS = f"""
 {ITEMS_HTML}
   </div>
 
-  <h2>Risks and dependencies</h2>
-  <p class="body-loose">No H&amp;S Roadmap meeting outcome has been captured in meeting-records since 22&nbsp;June &mdash; six weeks. Unlike the HR Systems Roadmap gap, the underlying backlog workbook itself has stayed live and current (comments logged as recently as 30&nbsp;July), so the item detail below is genuinely up to date &mdash; what's missing is a record of what was actually discussed and agreed <i>as a group</i> in that time.</p>
-  <p class="body-loose">Three Must Have Cority items (HSB002, HSB075, HSB076) are all blocked on the same thing: provisional funding secured 6&nbsp;July, still awaiting APC approval three weeks later. Worth raising as one blocker, not three.</p>
-  <p class="body-loose">HSB073 (Cardinus feed) and HSB085 (Safety Officers report) have both missed their Expected Delivery Date &mdash; 30&nbsp;July and 4&nbsp;July respectively &mdash; with HSB085 showing no comment logged at all since starting. Worth a direct check with Chris on HSB085's status.</p>
+  <h2 class="h2-warn">Risks and dependencies</h2>
+
+  <div class="risk-block">
+    <p class="risk-head">Six-week gap in captured meeting outcomes</p>
+    <p class="body-loose">No H&amp;S Roadmap meeting outcome has been captured in meeting-records since 22&nbsp;June. Unlike the HR Systems Roadmap gap, the underlying backlog workbook itself has stayed live and current &mdash; comments logged as recently as 30&nbsp;July &mdash; so the item detail below is genuinely up to date. What's missing is a record of what was actually discussed and agreed <i>as a group</i> in that time, not the data itself.</p>
+  </div>
+
+  <div class="risk-block">
+    <p class="risk-head">Three Must Have Cority items blocked on the same funding approval</p>
+    <p class="body-loose">Provisional funding was secured 6&nbsp;July; still awaiting APC approval three weeks later. All three are owned by Marie and have been open since late 2025 / January. Worth raising as <b>one</b> funding blocker, not three separate items:</p>
+    <ul class="risk-list">
+      <li><b>HSB002</b> &mdash; Health surveillance compliance reporting</li>
+      <li><b>HSB075</b> &mdash; Org structure missing for inactive clients</li>
+      <li><b>HSB076</b> &mdash; Org structure missing for active clients (sibling bug to HSB075 &mdash; both trace to the same Cority business-rule conflict around the "primary job position" flag)</li>
+    </ul>
+  </div>
+
+  <div class="risk-block">
+    <p class="risk-head">Two items past their Expected Delivery Date</p>
+    <ul class="risk-list">
+      <li><b>HSB073</b> &mdash; Cardinus feed &mdash; due 30&nbsp;July</li>
+      <li><b>HSB085</b> &mdash; Safety Officers report &mdash; due 4&nbsp;July, no comment logged at all since it started</li>
+    </ul>
+    <p class="body-loose">Worth a direct check with Chris on HSB085's status.</p>
+  </div>
 
   <h2>Unresolved conflicts</h2>
   <p class="body-loose">None between sources &mdash; this brief is built entirely from the live H&amp;S Systems Backlog workbook, which is self-consistent. The open question is process, not data: whether the funding approvals blocking HSB002/075/076 and the SEG-scope decision blocking HSB087 need this meeting to move, or are already progressing elsewhere.</p>

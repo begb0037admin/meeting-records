@@ -154,7 +154,7 @@ SECTIONS = f"""
 {ITEMS_HTML}
   </div>
 
-  <h2>Risks and dependencies</h2>
+  <h2 class="h2-warn">Risks and dependencies</h2>
   <p class="body-loose">The core risk is the same one the live front-door smoke test surfaced yesterday: <b>five straight Fridays with no captured Roadmap outcome.</b> Whatever the cause, real deadline slippage &mdash; six items now overdue &mdash; may be going into a second, third, or fourth cycle without anyone's explicit sign-off on record.</p>
   <p class="body-loose">Work Inbox (31 July) shows Simon off until 4 August and Sarah off until 3 August &mdash; a live capacity gap that plausibly explains missed captures, not necessarily missed meetings.</p>
   <p class="body-loose">Support cover, the Cority SFTP feed error, and the PACS org-structure impact assessment are all still open in Command Centre with no roadmap linkage resolved.</p>
