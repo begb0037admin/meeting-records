@@ -7,7 +7,7 @@ shared 3-column backbone; item-grid: card tiles below).
 Every meeting brief (Roadmap, Managers Meeting, H&S Roadmap, 1-1s, FA
 Catch-up, project meetings) imports this instead of redefining the chrome,
 so a fix or design change made once (e.g. the tile-alignment fix, the
-stopwatch) propagates to every brief automatically.
+stopwatch, the adaptive calendar) propagates to every brief automatically.
 """
 import base64, html
 
@@ -147,7 +147,8 @@ CSS_BASE = r"""
     .clock-half { border-right: none; border-bottom: 1px solid var(--line); }
   }
 
-  .cal-card { display: flex; flex-direction: column; justify-content: space-evenly; padding: 1rem 1.1rem; }
+  .cal-card { display: flex; flex-direction: column; padding: 1rem 1.1rem; overflow: hidden; }
+  .cal-months { display: flex; flex-direction: column; justify-content: space-evenly; flex: 1; gap: 0.7rem; }
   .cal-month-label { font-size: 0.82rem; font-weight: 700; color: var(--ink); margin: 0 0 0.55rem; }
   .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
   .cal-dow { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: var(--ink-faint); text-align: center; padding-bottom: 0.3rem; }
@@ -316,17 +317,38 @@ SCRIPT_BASE = r"""
     return html;
   }
 
+  // Fills whatever vertical space the calendar tile has been given (it's
+  // grid-stretched to match the "at a glance" tile's height, which grows as
+  // more items are added) with as many consecutive months as actually fit,
+  // starting from the current month — 1 when the tile is short, more as it
+  // grows, rather than a fixed count that leaves dead space or overflows.
   function buildCalendars() {
     var now = new Date();
     var y = now.getFullYear(), m = now.getMonth(), d = now.getDate();
-    var thisEl = document.getElementById('calThis');
-    var nextEl = document.getElementById('calNext');
-    if (thisEl) thisEl.innerHTML = buildMonth(y, m, y, m, d);
-    if (nextEl) {
-      var ny = m === 11 ? y + 1 : y;
-      var nm = m === 11 ? 0 : m + 1;
-      nextEl.innerHTML = buildMonth(ny, nm, y, m, d);
+    var container = document.getElementById('calMonths');
+    var card = container ? container.closest('.cal-card') : null;
+    if (!container || !card) return;
+
+    function monthHtml(offset) {
+      var total = m + offset;
+      var yy = y + Math.floor(total / 12);
+      var mm = ((total % 12) + 12) % 12;
+      return '<div class="cal-month">' + buildMonth(yy, mm, y, m, d) + '</div>';
     }
+
+    // Render one month to measure its natural height, then work out how
+    // many (plus inter-month gaps) fit inside the tile's actual height.
+    container.innerHTML = monthHtml(0);
+    var monthH = container.firstElementChild.offsetHeight;
+    var gapPx = parseFloat(getComputedStyle(container).rowGap || getComputedStyle(container).gap || '0') || 0;
+    var available = card.clientHeight - (parseFloat(getComputedStyle(card).paddingTop) || 0) - (parseFloat(getComputedStyle(card).paddingBottom) || 0);
+
+    var count = monthH > 0 ? Math.floor((available + gapPx) / (monthH + gapPx)) : 1;
+    count = Math.max(1, Math.min(count, 6));
+
+    var html = '';
+    for (var i = 0; i < count; i++) html += monthHtml(i);
+    container.innerHTML = html;
   }
 
   tickClock();
@@ -416,8 +438,7 @@ CLOCK_CARD = """<div class="clock-card card">
     </div>"""
 
 CAL_CARD = """<div class="cal-card card">
-      <div class="cal-month" id="calThis"></div>
-      <div class="cal-month" id="calNext"></div>
+      <div class="cal-months" id="calMonths"></div>
     </div>"""
 
 
