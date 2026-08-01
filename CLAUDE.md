@@ -8,7 +8,7 @@
 - **Owner:** Kevin Lelitte, Manager/Director HR Systems, University of Oxford
 - **Status:** Active
 - **Repo:** https://github.com/begb0037admin/meeting-records
-- **Last updated:** 2026-07-31
+- **Last updated:** 2026-08-01
 
 ## Bootstrap Order
 1. This file (orientation)
@@ -18,17 +18,37 @@
 
 Do NOT ask Kevin for a recap. Navigate to the relevant subfolder.
 
-## Codex Voice Front End (Prototype)
-- Shared skill: `.agents/skills/meeting-prep-voice/`
-- Purpose: let Kevin ask Codex Voice to start the existing Claude meeting-prep workflow on Windows.
-- Codex is the conversational interface and dispatcher. Claude remains the reasoning engine and meeting-brief author.
-- The prototype is draft-only. It has no authority to write, commit, push, schedule, publish, send, rename, or delete anything.
-- Runtime checkouts are fresh and disposable. GitHub remains the sole source of truth.
-- The launcher supplies `mcp/meeting-context/` to Claude. Its normal tools read the published Work Inbox briefing, Command Centre tasks, HR roadmap, and previous Managers Meeting prep from GitHub.
-- Granola remains Claude's existing connector and is reported separately in source coverage; the meeting-context MCP does not replace it.
-- Outlook refresh is a separate consequential MCP action. It runs only when explicitly requested with the exact confirmation phrase. There is no schedule, polling, automatic refresh, or background worker.
-- `ANTHROPIC_API_KEY` is removed only from the child Claude process when Claude.ai authentication is active, so configured Claude.ai connectors such as Granola can load. The parent shell and persisted environment are not changed.
-- The normal show → approve → push gate remains unchanged. Revision and publication handoffs are deliberately deferred until the draft-only flow has been proven.
+## Voice Front Door (Claude-native)
+- Shared skill: `.agents/skills/managers-meeting-voice/`
+- As of 1 August 2026, Claude is the approved voice/chat front door for this
+  programme — see `begb0037admin/voice-workflows`
+  `docs/decisions/2026-08-01-claude-voice-front-door.md`. There is no
+  dispatcher. Kevin talks or types directly into a Claude Code session; that
+  session runs the workflow itself via the skill above.
+- This supersedes the earlier "Codex Voice Front End (Prototype)" design,
+  which used Codex/ChatGPT as a conversational dispatcher shelling out to a
+  headless Claude process. That design is retired — see the decision doc for
+  why (a confirmed, unfixable upstream ChatGPT desktop Windows bug) — and its
+  plugin remains in `voice-workflows` marked superseded, not deleted.
+- The prototype is draft-only. It has no authority to write, commit, push,
+  schedule, publish, send, rename, or delete anything.
+- Runtime checkouts used by the launcher script are disposable. GitHub
+  remains the sole source of truth.
+- The launcher supplies `mcp/meeting-context/` to Claude. Its normal tools
+  read the published Work Inbox briefing, Command Centre tasks, HR roadmap,
+  and previous Managers Meeting prep from GitHub.
+- Granola remains Claude's existing connector and is reported separately in
+  source coverage; the meeting-context MCP does not replace it.
+- Outlook refresh is a separate consequential MCP action. It runs only when
+  explicitly requested with the exact confirmation phrase. There is no
+  schedule, polling, automatic refresh, or background worker.
+- `ANTHROPIC_API_KEY` is removed only from the child Claude process the
+  launcher spawns, when Claude.ai authentication is active, so configured
+  Claude.ai connectors such as Granola can load. The parent shell and
+  persisted environment are not changed.
+- The normal show → approve → push gate remains unchanged. Revision and
+  publication handoffs are deliberately deferred until the direct-Claude flow
+  has been proven (see `voice-workflows/PROGRAMME_STATUS.md` for phase status).
 
 ## Structure
 | Folder | Purpose |
