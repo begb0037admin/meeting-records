@@ -114,7 +114,14 @@ SECTIONS = f"""
   <p class="body-loose">Kevin's own 24&nbsp;June "open floor" heads-up list overlaps directly with tracked Roadmap items also flagged in the 7 Aug Roadmap brief: DPIA Stage&nbsp;7 sign-off (item 136, overdue since 30&nbsp;June), the H&amp;S Modular System evaluation window (item&nbsp;1 above), and REF attributes via ESS (item&nbsp;4 above, now overdue). The Annual Leave Carryover rollout (Michael's workstream, October 2026 deadline) has no update on record since 24&nbsp;June either.</p>
 
   <h2>Unresolved conflicts</h2>
-  <p class="body-loose">None between sources &mdash; the 24&nbsp;June Managers Meeting notes, the 3&nbsp;July Roadmap session, and Command Centre agree wherever they overlap. The unresolved issue is the same one flagged at the top: the absence of any captured Managers Meeting for two full fortnightly cycles, which this brief cannot responsibly fill in on your behalf.</p>
+  <div class="risk-block">
+    <p class="risk-head">Sources agree &mdash; no cross-source conflict</p>
+    <p class="body-loose">The 24&nbsp;June Managers Meeting notes, the 3&nbsp;July Roadmap session, and Command Centre agree wherever they overlap.</p>
+  </div>
+  <div class="risk-block">
+    <p class="risk-head">What's actually unresolved: two missing Managers Meeting cycles</p>
+    <p class="body-loose">The real gap is the same one flagged at the top &mdash; the absence of any captured Managers Meeting for two full fortnightly cycles, which this brief cannot responsibly fill in on your behalf.</p>
+  </div>
 """
 
 FOOTNOTE = """<div class="footnote">

@@ -7,7 +7,7 @@ shared 3-column backbone; item-grid: card tiles below).
 Every meeting brief (Roadmap, Managers Meeting, H&S Roadmap, 1-1s, FA
 Catch-up, project meetings) imports this instead of redefining the chrome,
 so a fix or design change made once (e.g. the tile-alignment fix, the
-stopwatch, the adaptive calendar) propagates to every brief automatically.
+stopwatch) propagates to every brief automatically.
 """
 import base64, html
 
@@ -148,13 +148,23 @@ CSS_BASE = r"""
   }
 
   .cal-card { display: flex; flex-direction: column; padding: 1rem 1.1rem; overflow: hidden; }
-  .cal-months { display: flex; flex-direction: column; justify-content: space-evenly; flex: 1; gap: 0.7rem; }
-  .cal-month-label { font-size: 0.82rem; font-weight: 700; color: var(--ink); margin: 0 0 0.55rem; }
-  .cal-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; }
-  .cal-dow { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: var(--ink-faint); text-align: center; padding-bottom: 0.3rem; }
-  .cal-day { font-size: 0.76rem; text-align: center; padding: 0.32rem 0; border-radius: 5px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .cal-months { display: flex; flex-direction: column; justify-content: space-evenly; flex: 1; gap: 1.15rem; }
+  /* Divider moved to the BOTTOM inset edge of every non-last month (was the
+     TOP edge of every non-first month). Visually it's the same single line
+     at each month boundary, but anchoring it to the top of the block above
+     means the .cal-months flex gap (already read live by the JS fit-
+     calculation via getComputedStyle().rowGap) is what sits between the
+     divider and the next label — so widening that gap buys breathing room
+     without adding any height to a specific month's own box. Still a
+     zero-height box-shadow, still doesn't touch the adaptive month-count
+     measurement (which renders/measures a single, divider-free month). */
+  .cal-month:not(:last-child) { box-shadow: inset 0 -1px 0 0 var(--line); }
+  .cal-month-label { font-size: 0.82rem; font-weight: 700; color: var(--ink); margin: 0 0 0.9rem; text-align: center; }
+  .cal-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; }
+  .cal-dow { font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: var(--ink-faint); text-align: center; padding: 2px 0 5px; }
+  .cal-day { font-size: 10.5px; text-align: center; padding: 4px 1px; color: var(--ink-soft); font-variant-numeric: tabular-nums; line-height: 1; }
   .cal-day.blank { visibility: hidden; }
-  .cal-day.today { background: var(--navy); color: #fff; font-weight: 700; }
+  .cal-day.today { background: var(--navy); color: #fff; font-weight: 700; border-radius: 4px; }
 
   @media (max-width: 1100px) {
     .top-grid { grid-template-columns: 1fr; }

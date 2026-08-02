@@ -174,7 +174,14 @@ SECTIONS = f"""
   </div>
 
   <h2>Unresolved conflicts</h2>
-  <p class="body-loose">None between sources &mdash; Command Centre, Work Inbox, and the 3 July prep agree with each other. The unresolved issue is the one flagged at the top: <b>absence</b> of any confirmed record for four Fridays' worth of meetings, which this brief cannot responsibly fill in without your input.</p>
+  <div class="risk-block">
+    <p class="risk-head">Sources agree &mdash; no cross-source conflict</p>
+    <p class="body-loose">Command Centre, Work Inbox, and the 3&nbsp;July prep agree with each other wherever they overlap.</p>
+  </div>
+  <div class="risk-block">
+    <p class="risk-head">What's actually unresolved: four missing meeting records</p>
+    <p class="body-loose">The real gap is the one flagged at the top &mdash; <b>absence</b> of any confirmed record for four Fridays' worth of meetings, which this brief cannot responsibly fill in without your input.</p>
+  </div>
 """
 
 FOOTNOTE = """<div class="footnote">

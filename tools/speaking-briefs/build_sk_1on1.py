@@ -215,9 +215,18 @@ SECTIONS = f"""
   <p class="body-loose">Granola was not reachable when this brief was built (connector not connected in that session) &mdash; the usual cross-check this template relies on to catch anything more recent than the last captured document could not be performed. Treat this brief as resting on repo documents only until Granola has been checked directly.</p>
 
   <h2>Unresolved conflicts</h2>
-  <p class="body-loose"><b>Resolved during the Work Inbox / Command Centre cross-reference:</b> the 24&nbsp;June SK 1-1 prep document (<code>SK - Handover/docs/sessions/2026-06-24-sk-1on1.md</code>) described the support-cover gap as w/c&nbsp;1&nbsp;July, while the 26&nbsp;June captured 1-1 outcome (<code>Meeting Reviews/1-1 Simon — 26-06.md</code>) described the same gap as w/c&nbsp;6&nbsp;July. Command Centre task t025 is sourced directly from Julie Hickman's original 23&nbsp;June email (not a meeting note, so a step closer to the primary source) and states <b>w/c 6&nbsp;July</b> &mdash; the same date the 26&nbsp;June review used. Treating the 24-06 prep doc's "w/c 1 July" as a slip rather than a second, real gap.</p>
-  <p class="body-loose">Still unresolved: the <code>SK - Handover</code> folder's own STATUS.md (last touched 1&nbsp;June) still describes itself as mid-migration, pointing at legacy Work-account documents ("Handover meeting preparation with Simon Burford", 28 Apr; "Kevin Lelitte leave handover w/c 4 May 2026", 29 Apr) that were never pulled into this repo. Those predate everything used in this brief and were not chased down &mdash; flagging in case either contains something still relevant.</p>
-  <p class="body-loose">One internal inconsistency worth naming rather than smoothing over: Command Centre marks t020, t021, t005, t027, and t032 as <b>done</b>, but for at least two of those (t020's own action list still ends on "awaiting Asta's comparison" / TODOs; t027's ends on "review thread" with no outcome recorded) the "done" flag isn't backed by a written resolution. Treat "done" in Command Centre as "someone closed this out," not as "the outcome is documented here."</p>
+  <div class="risk-block">
+    <p class="risk-head">Support-cover date resolved (Work Inbox / Command Centre cross-reference)</p>
+    <p class="body-loose">The 24&nbsp;June SK 1-1 prep document (<code>SK - Handover/docs/sessions/2026-06-24-sk-1on1.md</code>) described the support-cover gap as w/c&nbsp;1&nbsp;July, while the 26&nbsp;June captured 1-1 outcome (<code>Meeting Reviews/1-1 Simon — 26-06.md</code>) described the same gap as w/c&nbsp;6&nbsp;July. Command Centre task t025 is sourced directly from Julie Hickman's original 23&nbsp;June email (not a meeting note, so a step closer to the primary source) and states <b>w/c 6&nbsp;July</b> &mdash; the same date the 26&nbsp;June review used. Treating the 24-06 prep doc's "w/c 1 July" as a slip rather than a second, real gap.</p>
+  </div>
+  <div class="risk-block">
+    <p class="risk-head">Still unresolved: SK - Handover folder mid-migration, not fully pulled in</p>
+    <p class="body-loose">The <code>SK - Handover</code> folder's own STATUS.md (last touched 1&nbsp;June) still describes itself as mid-migration, pointing at legacy Work-account documents ("Handover meeting preparation with Simon Burford", 28 Apr; "Kevin Lelitte leave handover w/c 4 May 2026", 29 Apr) that were never pulled into this repo. Those predate everything used in this brief and were not chased down &mdash; flagging in case either contains something still relevant.</p>
+  </div>
+  <div class="risk-block">
+    <p class="risk-head">Command Centre &ldquo;done&rdquo; flags without a written resolution</p>
+    <p class="body-loose">Command Centre marks t020, t021, t005, t027, and t032 as <b>done</b>, but for at least two of those (t020's own action list still ends on "awaiting Asta's comparison" / TODOs; t027's ends on "review thread" with no outcome recorded) the "done" flag isn't backed by a written resolution. Treat "done" in Command Centre as "someone closed this out," not as "the outcome is documented here."</p>
+  </div>
 """
 
 FOOTNOTE_HTML = """<div class="footnote">
