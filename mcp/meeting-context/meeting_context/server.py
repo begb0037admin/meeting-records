@@ -58,7 +58,13 @@ def get_source_health(
 
 @mcp.tool()
 def get_inbox_briefing(ref: str = "main") -> dict[str, Any]:
-    """Read the already-published Work Inbox briefing from GitHub. Never opens or refreshes Outlook."""
+    """Read the already-published Work Inbox briefing from GitHub. Never opens or refreshes Outlook.
+
+    Returns the triage sections (urgent, needs, low, fyi), plus today's and
+    tomorrow's calendar (calToday, calTomorrow), the full multi-day calendar
+    breakdown (calFull), and any reported absences — all passed through with
+    the same time/title/sub/summary shape they have in briefing.json.
+    """
     repo, path = SOURCES["inbox"]
     payload, blob = reader.json_file(repo, path, ref)
     return compact_briefing(payload, blob)

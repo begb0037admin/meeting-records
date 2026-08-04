@@ -87,9 +87,44 @@ class GitHubReader:
         return json.loads(blob.content.decode("utf-8-sig")), blob
 
 
+def _compact_cal_items(values: Any) -> list[dict[str, Any]]:
+    """Pass through calToday/calTomorrow-shaped entries: time/title/sub/summary."""
+    if not isinstance(values, list):
+        return []
+    return [
+        {
+            "time": item.get("time"),
+            "title": item.get("title"),
+            "sub": item.get("sub"),
+            "summary": item.get("summary"),
+        }
+        for item in values
+        if isinstance(item, dict)
+    ]
+
+
+def _compact_cal_full(values: Any) -> list[dict[str, Any]]:
+    """Pass through calFull's per-day breakdown: date/label/isToday/items."""
+    if not isinstance(values, list):
+        return []
+    days = []
+    for day in values:
+        if not isinstance(day, dict):
+            continue
+        days.append(
+            {
+                "date": day.get("date"),
+                "label": day.get("label"),
+                "isToday": day.get("isToday"),
+                "items": _compact_cal_items(day.get("items")),
+            }
+        )
+    return days
+
+
 def compact_briefing(payload: dict[str, Any], blob: GitHubBlob) -> dict[str, Any]:
     sections: dict[str, list[dict[str, Any]]] = {}
-    for key in ("urgent", "needs", "waiting", "fyi"):
+    for key in ("urgent", "needs", "low", "fyi"):
         values = payload.get(key, [])
         if isinstance(values, list):
             sections[key] = [
@@ -102,6 +137,7 @@ def compact_briefing(payload: dict[str, Any], blob: GitHubBlob) -> dict[str, Any
                 }
                 for item in values
             ]
+    absences = payload.get("absences", [])
     return {
         "source": f"github:{OWNER}/{blob.repo}/{blob.path}@{blob.ref}",
         "blobSha": blob.sha,
@@ -109,6 +145,10 @@ def compact_briefing(payload: dict[str, Any], blob: GitHubBlob) -> dict[str, Any
         "subtitle": payload.get("subtitle"),
         "context": payload.get("context"),
         "sections": sections,
+        "calToday": _compact_cal_items(payload.get("calToday")),
+        "calTomorrow": _compact_cal_items(payload.get("calTomorrow")),
+        "calFull": _compact_cal_full(payload.get("calFull")),
+        "absences": absences if isinstance(absences, list) else [],
         "readOnly": True,
         "outlookRefreshed": False,
     }
