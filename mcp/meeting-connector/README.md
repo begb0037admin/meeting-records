@@ -1,4 +1,4 @@
-# Meeting Context MCP
+# Meeting Connector MCP
 
 Read-only source adapter for the Windows Managers Meeting Voice proof of concept.
 

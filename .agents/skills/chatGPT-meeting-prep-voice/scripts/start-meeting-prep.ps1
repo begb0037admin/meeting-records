@@ -24,14 +24,14 @@ $ErrorActionPreference = 'Stop'
 
 $Repository = 'begb0037admin/meeting-records'
 $RunId = '{0}_{1}' -f (Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmssZ'), ([guid]::NewGuid().ToString('N').Substring(0, 8))
-$RuntimeRoot = Join-Path ([IO.Path]::GetTempPath()) 'meeting-prep-voice'
+$RuntimeRoot = Join-Path ([IO.Path]::GetTempPath()) 'chatGPT-meeting-prep-voice'
 $Workspace = Join-Path $RuntimeRoot $RunId
 $ClonePath = Join-Path $Workspace 'meeting-records'
 $WorkspaceState = 'not-created'
 
 function Write-Diagnostic {
     param([Parameter(Mandatory)][string]$Message)
-    [Console]::Error.WriteLine("meeting-prep-voice: $Message")
+    [Console]::Error.WriteLine("chatGPT-meeting-prep-voice: $Message")
 }
 
 function Write-Result {
@@ -171,7 +171,7 @@ try {
         throw "GitHub clone failed with exit code $CloneExitCode."
     }
 
-    $McpRoot = Join-Path $ClonePath 'mcp\meeting-context'
+    $McpRoot = Join-Path $ClonePath 'mcp\meeting-connector'
     $McpConfig = @{
         mcpServers = @{
             'meeting-context' = @{

@@ -1,4 +1,4 @@
 interface:
   display_name: "Managers Meeting Draft"
   short_description: "Prepare and revise a validated Managers Meeting brief"
-  default_prompt: "Use $managers-meeting-voice to prepare my Managers Meeting draft."
+  default_prompt: "Use $claude-meeting-voice to prepare my Managers Meeting draft."

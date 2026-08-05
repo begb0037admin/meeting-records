@@ -1,5 +1,5 @@
 ---
-name: managers-meeting-voice
+name: claude-meeting-voice
 description: Prepare, revise, or historically test Kevin's draft-only HR Systems Managers Meeting speaker's brief. This IS the front door — Kevin talks or types directly into this Claude session, and this skill runs the workflow itself. Mandatory Roadmap assessment, source freshness, strict validation, no publication or Outlook refresh.
 ---
 
@@ -36,7 +36,7 @@ do not treat any local copy as a standing working checkout. Before each run,
 sync the read-only reference checkout at `C:\Users\admin\meeting-records` to
 `main` (`git -C C:\Users\admin\meeting-records pull --ff-only`; if that path
 does not exist, fetch the script fresh from
-`raw.githubusercontent.com/begb0037admin/meeting-records/main/.agents/skills/managers-meeting-voice/scripts/start-managers-meeting.ps1`
+`raw.githubusercontent.com/begb0037admin/meeting-records/main/.agents/skills/claude-meeting-voice/scripts/start-managers-meeting.ps1`
 into scratchpad instead) and run it from there. Never commit or push through
 this checkout — it is read-only reference.
 
@@ -86,7 +86,7 @@ convenience switch here — that lived only in the retired ChatGPT plugin):
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File "<skill-dir>\scripts\start-managers-meeting.ps1" `
   -MeetingDate "2026-06-24" `
-  -FixturePath "<meeting-records-checkout>\mcp\meeting-context\fixtures\managers-meeting-2026-06-24.json"
+  -FixturePath "<meeting-records-checkout>\mcp\meeting-connector\fixtures\managers-meeting-2026-06-24.json"
 ```
 
 The fixture deliberately withholds the benchmark and pins `-MeetingDate` to

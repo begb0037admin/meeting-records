@@ -15,7 +15,7 @@ from .core import (
 
 
 mcp = FastMCP(
-    "meeting-context",
+    "meeting-connector",
     instructions=(
         "Read-only context for meeting preparation. This server never refreshes Outlook, "
         "writes files, edits tasks, commits, pushes, sends, schedules, or publishes."

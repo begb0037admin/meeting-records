@@ -19,7 +19,7 @@
 Do NOT ask Kevin for a recap. Navigate to the relevant subfolder.
 
 ## Voice Front Door (Claude-native)
-- Shared skill: `.agents/skills/managers-meeting-voice/`
+- Shared skill: `.agents/skills/claude-meeting-voice/`
 - As of 1 August 2026, Claude is the approved voice/chat front door for this
   programme — see `begb0037admin/voice-workflows`
   `docs/decisions/2026-08-01-claude-voice-front-door.md`. There is no
@@ -34,11 +34,11 @@ Do NOT ask Kevin for a recap. Navigate to the relevant subfolder.
   schedule, publish, send, rename, or delete anything.
 - Runtime checkouts used by the launcher script are disposable. GitHub
   remains the sole source of truth.
-- The launcher supplies `mcp/meeting-context/` to Claude. Its normal tools
+- The launcher supplies `mcp/meeting-connector/` to Claude. Its normal tools
   read the published Work Inbox briefing, Command Centre tasks, HR roadmap,
   and previous Managers Meeting prep from GitHub.
 - Granola remains Claude's existing connector and is reported separately in
-  source coverage; the meeting-context MCP does not replace it.
+  source coverage; the meeting-connector MCP does not replace it.
 - Outlook refresh is a separate consequential MCP action. It runs only when
   explicitly requested with the exact confirmation phrase. There is no
   schedule, polling, automatic refresh, or background worker.
@@ -89,7 +89,7 @@ All meeting prep documents in `Meeting Reviews/` follow the Granola naming stand
 
 ## Meeting Prep Workflow (HR Systems Managers Meeting)
 Fortnightly Wednesday management speaking brief. Voice entry point:
-`.agents/skills/managers-meeting-voice/SKILL.md`.
+`.agents/skills/claude-meeting-voice/SKILL.md`.
 1. Resolve the intended meeting date; ask one concise question if materially unclear.
 2. Read the previous Managers brief, latest Roadmap prep, Roadmap master, Command Centre, and Work Inbox.
 3. Check Granola for the actual latest HR Systems Roadmap outcome. If it was not captured, fail closed unless Kevin explicitly supplies a manual recap.

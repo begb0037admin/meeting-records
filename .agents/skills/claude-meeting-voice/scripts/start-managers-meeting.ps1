@@ -35,13 +35,13 @@ $RunId = '{0}_{1}' -f (
     [guid]::NewGuid().ToString('N').Substring(0, 8)
 )
 $TaskName = "Managers Meeting draft - $MeetingDate"
-$RuntimeRoot = Join-Path ([IO.Path]::GetTempPath()) 'managers-meeting-voice'
+$RuntimeRoot = Join-Path ([IO.Path]::GetTempPath()) 'claude-meeting-voice'
 $Workspace = Join-Path $RuntimeRoot $RunId
 $ClonePath = Join-Path $Workspace 'meeting-records'
 $WorkspaceState = 'not-created'
 
 $GenericSkillRoot = [IO.Path]::GetFullPath(
-    (Join-Path $PSScriptRoot '..\..\meeting-prep-voice')
+    (Join-Path $PSScriptRoot '..\..\chatGPT-meeting-prep-voice')
 )
 $ProfilePath = Join-Path $GenericSkillRoot 'profiles\managers-meeting.json'
 $SchemaPath = Join-Path $GenericSkillRoot 'schemas\meeting-result.schema.json'
@@ -50,7 +50,7 @@ $ClaudeAdapterPath = Join-Path $PSScriptRoot 'invoke-claude.py'
 $RepositoryRoot = [IO.Path]::GetFullPath(
     (Join-Path $PSScriptRoot '..\..\..\..')
 )
-$McpRoot = Join-Path $RepositoryRoot 'mcp\meeting-context'
+$McpRoot = Join-Path $RepositoryRoot 'mcp\meeting-connector'
 $FormatPath = Join-Path $RepositoryRoot (
     'Meeting Reviews\docs\reference\managers-meeting-format.md'
 )

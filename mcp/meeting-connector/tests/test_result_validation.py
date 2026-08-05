@@ -6,11 +6,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 VALIDATOR_PATH = (
-    ROOT / ".agents" / "skills" / "meeting-prep-voice" /
+    ROOT / ".agents" / "skills" / "chatGPT-meeting-prep-voice" /
     "scripts" / "validate-meeting-result.py"
 )
 PROFILE_PATH = (
-    ROOT / ".agents" / "skills" / "meeting-prep-voice" /
+    ROOT / ".agents" / "skills" / "chatGPT-meeting-prep-voice" /
     "profiles" / "managers-meeting.json"
 )
 SPEC = importlib.util.spec_from_file_location("meeting_result_validator", VALIDATOR_PATH)

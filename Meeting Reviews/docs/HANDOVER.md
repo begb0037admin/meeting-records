@@ -42,7 +42,7 @@ Do not begin any task until steps 1–4 are complete.
 
 Kevin approved a Windows-first prototype that preserves the established Claude meeting-prep process while using Codex Voice as its conversational front end.
 
-**Canonical skill path:** `.agents/skills/meeting-prep-voice/`
+**Canonical skill path:** `.agents/skills/chatGPT-meeting-prep-voice/`
 
 The prototype:
 - accepts a meeting type, date, and optional instruction from Codex Voice
@@ -50,7 +50,7 @@ The prototype:
 - clones `begb0037admin/meeting-records` fresh into a disposable temporary workspace
 - removes `ANTHROPIC_API_KEY` only from the child Claude process when Claude.ai authentication is active, allowing Claude.ai connectors such as Granola to load
 - launches Claude non-interactively with the repository governance and bootstrap order
-- supplies the repo-owned `mcp/meeting-context/` stdio server to Claude
+- supplies the repo-owned `mcp/meeting-connector/` stdio server to Claude
 - requests a structured source manifest, spoken summary, and full Markdown meeting draft
 - blocks rather than inventing content when critical sources are stale or unavailable
 - verifies Claude did not change the draft-only checkout

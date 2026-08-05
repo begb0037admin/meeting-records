@@ -1,5 +1,5 @@
 ---
-name: meeting-prep-voice
+name: chatGPT-meeting-prep-voice
 description: Use Claude Code as the established reasoning engine for meeting-records while Codex acts as the Voice interface. Use when Kevin asks by voice or text to prepare, draft, start, or review an HR Systems meeting brief on Windows, including Managers Meeting, FA Team Catch-up, HR Systems Roadmap, H&S Roadmap, Simon 1-1, team 1-1, or KPI Monthly Standing Agenda.
 ---
 
