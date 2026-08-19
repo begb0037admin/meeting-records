@@ -1,0 +1,71 @@
+{
+  "_note": "Synthetic fixture -- shapes (top-level keys, note fields, pagination via cursor, detail response fields) match a live probe of the real Granola public API taken 19 Aug 2026, but every title/id/summary value below is invented, not real captured meeting content. meeting-records is a public repository; real Kevin meeting content must never be committed here.",
+  "page1": {
+    "notes": [
+      {
+        "id": "not_fixture_recent1",
+        "object": "note",
+        "title": "FA Team Catch-up — 19/08",
+        "owner": "kevin@example.invalid",
+        "created_at": "2026-08-19T08:36:44.832Z",
+        "updated_at": "2026-08-19T08:50:00.000Z"
+      },
+      {
+        "id": "not_fixture_recent2",
+        "object": "note",
+        "title": "Sickness Absence Survey working group",
+        "owner": "kevin@example.invalid",
+        "created_at": "2026-08-18T10:05:50.805Z",
+        "updated_at": "2026-08-18T10:20:00.000Z"
+      },
+      {
+        "id": "not_fixture_roadmap_recent",
+        "object": "note",
+        "title": "HR Systems Roadmap — 14/08",
+        "owner": "kevin@example.invalid",
+        "created_at": "2026-08-14T06:40:29.259Z",
+        "updated_at": "2026-08-14T07:10:00.000Z"
+      }
+    ],
+    "hasMore": true,
+    "cursor": "fixture-cursor-page2"
+  },
+  "page2": {
+    "notes": [
+      {
+        "id": "not_fixture_older_unrelated",
+        "object": "note",
+        "title": "Company 90 - Status Update",
+        "owner": "kevin@example.invalid",
+        "created_at": "2026-07-20T08:46:20.039Z",
+        "updated_at": "2026-07-20T09:00:00.000Z"
+      },
+      {
+        "id": "not_fixture_roadmap_typo_older",
+        "object": "note",
+        "title": "HR Systems Roadmpa 03/07",
+        "owner": "kevin@example.invalid",
+        "created_at": "2026-07-03T06:40:29.259Z",
+        "updated_at": "2026-07-03T07:10:00.000Z"
+      }
+    ],
+    "hasMore": false,
+    "cursor": null
+  },
+  "detail": {
+    "id": "not_fixture_roadmap_recent",
+    "object": "note",
+    "title": "HR Systems Roadmap — 14/08",
+    "web_url": "https://notes.granola.ai/fixture/not_fixture_roadmap_recent",
+    "owner": "kevin@example.invalid",
+    "created_at": "2026-08-14T06:40:29.259Z",
+    "updated_at": "2026-08-14T07:10:00.000Z",
+    "calendar_event": null,
+    "attendees": [],
+    "folder_membership": [],
+    "space_membership": [],
+    "transcript": [],
+    "summary_text": "Fixture summary text: sample Roadmap discussion placeholder, matches the real API's confirmed summary_text field with no bare summary key present.",
+    "summary_markdown": "**Fixture summary markdown:** sample Roadmap discussion placeholder."
+  }
+}

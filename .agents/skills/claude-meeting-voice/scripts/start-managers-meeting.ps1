@@ -178,10 +178,19 @@ Mandatory process:
 2. Follow the Managers format requirements embedded in the workflow profile.
 3. Use every Managers Meeting read tool supplied by the
    managers-meeting-context MCP as applicable.
-4. Call Granola for the actual latest HR Systems Roadmap meeting outcome.
-   If it is absent, a completed result is allowed only when the launcher supplied
-   a substantive Kevin-provided manual recap. Record Granola as unavailable and
-   the manual recap separately as sourceId manual-roadmap-recap with status used.
+4. Call the managers-meeting-context MCP's
+   get_latest_granola_meeting(title_pattern="HR Systems Roadmap") tool for
+   the actual latest HR Systems Roadmap meeting outcome -- a direct Granola
+   REST lookup, independent of any Claude connector. Treat the outcome as
+   genuinely captured only when status is "found" AND hasSummary is true --
+   a "found" result with hasSummary false means the note itself was located
+   but had no usable summary content, which is not the same as a captured
+   outcome. In any other case (unavailable, error, no_match,
+   no_match_incomplete_scan, or found-without-a-summary), a completed
+   result is allowed only when the launcher supplied a substantive
+   Kevin-provided manual recap. Record Granola as unavailable and the
+   manual recap separately as sourceId manual-roadmap-recap with status
+   used.
 5. Assess every active Roadmap item returned by the MCP and record every
    inclusion/exclusion decision in roadmapAssessment.
 6. Transform selected Roadmap items into management-level content.
@@ -331,7 +340,19 @@ try {
                 args = @('-m', 'meeting_context.managers_server_no_roadmap')
                 env = @{
                     PYTHONPATH = $McpRoot
-                    MEETING_CONTEXT_GRANOLA_STATUS = 'external-must-be-checked'
+                    # GRANOLA_API_KEY is deliberately NOT listed here. It is
+                    # a standing Windows User env var on this machine (same
+                    # tier as GITHUB_PAT) and reaches this child process via
+                    # normal process-tree inheritance -- the same mechanism
+                    # PATH, SYSTEMROOT and GITHUB_PAT already rely on
+                    # elsewhere in this exact launcher without ever being
+                    # listed explicitly here. A Codex review pass (19 Aug
+                    # 2026) flagged that writing it into this env block
+                    # would serialise it in plaintext into mcp-config.json
+                    # on disk, which a failed run's preserved workspace
+                    # (see the catch block below) could then leak -- live
+                    # verification of this launcher confirmed inheritance
+                    # alone is sufficient, so nothing further is needed.
                     MEETING_CONTEXT_INBOX_REF = if ($Fixture) {
                         [string]$Fixture.refs.workInboxRef
                     } else { 'main' }
@@ -412,7 +433,7 @@ try {
         'mcp__managers-meeting-context__get_command_centre_tasks',
         'mcp__managers-meeting-context__get_previous_managers_prep',
         'mcp__managers-meeting-context__get_latest_roadmap_prep',
-        'mcp__claude_ai_Granola__*'
+        'mcp__managers-meeting-context__get_latest_granola_meeting'
     )
 
     Write-ProgressEvent -Stage 'drafting' -Message 'Starting Claude Code'
@@ -436,8 +457,27 @@ try {
             '--prompt-file', $PromptPath,
             '--allowed-tools', ($AllowedTools -join ',')
         )
-        $ClaudeRaw = & $PythonPath @AdapterArgs 2> $ClaudeStderrPath
-        $ClaudeExitCode = $LASTEXITCODE
+        # Windows PowerShell 5.1's `2>` redirect on a native command converts
+        # each stderr LINE into a PowerShell ErrorRecord as it streams; with
+        # the script-wide $ErrorActionPreference = 'Stop' (set at the top of
+        # this file), the very first such line becomes an immediate
+        # terminating error, before the rest of the child process's stderr
+        # can be written to $ClaudeStderrPath -- so a real failure's full
+        # detail was silently lost, leaving only a 1-line "Traceback (most
+        # recent call last):" fragment (confirmed live 19 Aug 2026 while
+        # diagnosing an unrelated real bug in invoke-claude.py -- see that
+        # file's own fix). Relaxing EAP for just this one call lets the full
+        # stderr stream reach the file as originally intended by the
+        # `$ClaudeError = Get-Content ... $ClaudeStderrPath` line below.
+        $PrevEAP = $ErrorActionPreference
+        $ErrorActionPreference = 'Continue'
+        try {
+            $ClaudeRaw = & $PythonPath @AdapterArgs 2> $ClaudeStderrPath
+            $ClaudeExitCode = $LASTEXITCODE
+        }
+        finally {
+            $ErrorActionPreference = $PrevEAP
+        }
         if ($ClaudeExitCode -ne 0) {
             $ClaudeError = Get-Content -Raw -Encoding UTF8 -LiteralPath $ClaudeStderrPath
             throw "Claude exited with code $ClaudeExitCode. $ClaudeError"

@@ -37,6 +37,20 @@ def for_claude_schema(value: object) -> object:
 
 
 def main() -> int:
+    # Windows' default stdout/stderr encoding is the legacy system code page
+    # (e.g. cp1252) when not attached to a real UTF-8 console, even though
+    # this module's own docstring promises "lossless ... UTF-8 handling".
+    # subprocess.run() below correctly decodes the child `claude` process's
+    # output as UTF-8, but re-encoding it back out via a cp1252 sys.stdout
+    # then raises UnicodeEncodeError on any character outside that legacy
+    # code page (confirmed live 19 Aug 2026: a genuine "→" arrow
+    # character in a real drafted result crashed this exact write). Python
+    # 3.7+ supports reconfiguring the already-open stream's encoding
+    # in place, restoring the UTF-8 guarantee the docstring already claims.
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8", errors="replace")
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--claude", required=True)
     parser.add_argument("--schema", required=True, type=Path)

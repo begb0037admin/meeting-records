@@ -37,15 +37,26 @@ Do NOT ask Kevin for a recap. Navigate to the relevant subfolder.
 - The launcher supplies `mcp/meeting-connector/` to Claude. Its normal tools
   read the published Work Inbox briefing, Command Centre tasks, HR roadmap,
   and previous Managers Meeting prep from GitHub.
-- Granola remains Claude's existing connector and is reported separately in
-  source coverage; the meeting-connector MCP does not replace it.
+- As of 19 August 2026, the launcher's `managers-meeting-context` MCP calls
+  Granola directly via `get_latest_granola_meeting(title_pattern)` — a plain
+  Bearer-token REST call (`GRANOLA_API_KEY`) against Granola's own public
+  API, the same proven auth pattern as `work-inbox/fetch_inbox.py`'s Phase
+  3.7b (confirmed live in production since 4 July 2026). This is the primary
+  Granola path and does not depend on any Claude account connector.
+- The earlier claude.ai Granola connector (`mcp__claude_ai_Granola__*`)
+  remains documented here as a dormant fallback only, not deleted, in case
+  the REST tool is ever unavailable — it is not required for normal
+  operation. It was found live-broken on 19 August 2026 (ANTHROPIC_API_KEY
+  taking precedence over the cached claude.ai login disables account
+  connectors — see `begb0037admin/agent-commons` `MEMORY.md`) which is what
+  motivated building the direct REST tool in the first place.
 - Outlook refresh is a separate consequential MCP action. It runs only when
   explicitly requested with the exact confirmation phrase. There is no
   schedule, polling, automatic refresh, or background worker.
 - `ANTHROPIC_API_KEY` is removed only from the child Claude process the
-  launcher spawns, when Claude.ai authentication is active, so configured
-  Claude.ai connectors such as Granola can load. The parent shell and
-  persisted environment are not changed.
+  launcher spawns, when Claude.ai authentication is active, so any
+  configured Claude.ai connectors that are still in dormant-fallback use
+  can load. The parent shell and persisted environment are not changed.
 - The normal show → approve → push gate remains unchanged. Revision and
   publication handoffs are deliberately deferred until the direct-Claude flow
   has been proven (see `voice-workflows/PROGRAMME_STATUS.md` for phase status).

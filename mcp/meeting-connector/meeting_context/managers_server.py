@@ -5,6 +5,7 @@ from typing import Any
 
 from mcp.server.fastmcp import FastMCP
 
+from . import granola_source
 from .core import (
     GitHubReader, OWNER, SOURCES, compact_briefing, filter_tasks, read_roadmap,
     utc_now,
@@ -54,13 +55,25 @@ def get_source_health(
                 "ref": ref,
                 "error": str(exc),
             }
+    _granola_default_status = (
+        "live-rest-tool-available"
+        if granola_source.is_configured()
+        else "unavailable-no-api-key"
+    )
     checks["granola"] = {
         "status": os.getenv(
-            "MEETING_CONTEXT_GRANOLA_STATUS", "external-must-be-checked"
+            "MEETING_CONTEXT_GRANOLA_STATUS", _granola_default_status
         ),
+        "tool": "get_latest_granola_meeting",
         "notes": (
-            "Claude must call the approved Granola connector for the actual "
-            "latest Roadmap outcome. This MCP does not impersonate it."
+            "Call get_latest_granola_meeting(title_pattern) for the actual "
+            "latest Roadmap outcome -- a direct Granola REST call "
+            "(GRANOLA_API_KEY, same auth pattern as work-inbox's proven "
+            "Phase 3.7b), independent of any Claude connector. The "
+            "previously-relied-on claude.ai Granola connector "
+            "(mcp__claude_ai_Granola__*) remains a documented, currently "
+            "dormant fallback -- see meeting-records/CLAUDE.md -- and is "
+            "not required for this tool to work."
         ),
     }
     return {
@@ -168,6 +181,24 @@ def get_latest_roadmap_prep(
         "markdown": blob.content.decode("utf-8-sig"),
         "readOnly": True,
     }
+
+
+@mcp.tool()
+def get_latest_granola_meeting(
+    title_pattern: str,
+    lookback_days: int = granola_source.DEFAULT_LOOKBACK_DAYS,
+) -> dict[str, Any]:
+    """Direct Granola REST lookup (GRANOLA_API_KEY, same auth pattern as
+    work-inbox's proven Phase 3.7b) for the single latest meeting note
+    whose title matches `title_pattern` -- e.g. "HR Systems Roadmap".
+    Registered here too (not just in managers_server_no_roadmap.py) so
+    this server's own get_source_health advertisement of the tool above
+    is actually true when this module is run standalone -- a Codex review
+    pass (19 Aug 2026) correctly flagged the prior omission as a false
+    health contract."""
+    return granola_source.find_latest_meeting(
+        title_pattern, lookback_days=lookback_days
+    )
 
 
 def main() -> None:
