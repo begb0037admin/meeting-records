@@ -1,4 +1,4 @@
-from brief_chrome import SCRATCH, e, render_page
+from brief_chrome import SCRATCH, e, render_page, write_brief_output
 
 # ---- agenda items, carried forward from the last captured Managers Meeting
 #      (24 June 2026) and cross-checked against the 3 July HR Systems Roadmap
@@ -152,7 +152,4 @@ html_out = render_page(
     footnote_html=FOOTNOTE,
 )
 
-out_path = fr"{SCRATCH}\hr-managers-meeting-brief-05-08.html"
-with open(out_path, "w", encoding="utf-8") as f:
-    f.write(html_out)
-print("written", out_path, len(html_out), "chars")
+write_brief_output(html_out, "HR Systems Managers Meeting")
