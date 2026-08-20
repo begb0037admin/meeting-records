@@ -1,5 +1,5 @@
 import json
-from brief_chrome import SCRATCH, e, render_page
+from brief_chrome import SCRATCH, e, render_page, write_brief_output
 
 with open(fr"{SCRATCH}\hs-items.json", encoding="utf-8") as f:
     ITEMS = json.load(f)
@@ -175,7 +175,4 @@ html_out = render_page(
     footnote_html=FOOTNOTE,
 )
 
-out_path = fr"{SCRATCH}\hs-roadmap-brief-03-08.html"
-with open(out_path, "w", encoding="utf-8") as f:
-    f.write(html_out)
-print("written", out_path, len(html_out), "chars")
+write_brief_output(html_out, "H&S Roadmap")
