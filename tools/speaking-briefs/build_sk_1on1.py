@@ -1,4 +1,4 @@
-from brief_chrome import SCRATCH, e, render_page
+from brief_chrome import SCRATCH, e, render_page, write_brief_output
 
 # ---- SK 1-1 (Kevin / Simon Burford fortnightly 1-1), including leave
 #      handovers. First 1-1-style brief on this template — no tracked-items
@@ -260,7 +260,4 @@ html_out = render_page(
     footnote_html=FOOTNOTE_HTML,
 )
 
-out_path = fr"{SCRATCH}\sk-11-brief-draft.html"
-with open(out_path, "w", encoding="utf-8") as f:
-    f.write(html_out)
-print("written", out_path, len(html_out), "chars")
+write_brief_output(html_out, "SK 1-1")
