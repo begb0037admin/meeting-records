@@ -203,23 +203,34 @@ def select_latest_matching_note(
     with `title_pattern`, return the one with the latest `created_at` (ISO
     8601 strings sort correctly as plain strings).
 
-    Threshold: requires min(2, len(pattern keywords)) shared keywords, not
-    just >=1. A Codex review pass (19 Aug 2026) correctly flagged that a
-    bare >=1 threshold is too permissive once selection prioritises
-    RECENCY among matches rather than best score -- e.g. a newer "HR
-    Operations update" note would otherwise beat the actual older "HR
-    Systems Roadmap" note on the single shared "hr" token. Requiring 2
-    keywords for any multi-word pattern rejects that false positive while
-    still surviving the real observed Granola title typo ("HR Systems
-    Roadmpa 03/07" still shares "hr" and "systems" with "HR Systems
-    Roadmap" -- 2 keywords, still matches).
+    Threshold: requires at least (len(pattern keywords) - 1) shared
+    keywords, floored at 1 -- i.e. the note's title may miss at most ONE
+    of the pattern's words. A Codex review pass (19 Aug 2026, pass 1)
+    flagged that a bare >=1 threshold was too permissive once selection
+    prioritises RECENCY among matches rather than best score -- e.g. a
+    newer "HR Operations update" note would otherwise beat the actual
+    older "HR Systems Roadmap" note on the single shared "hr" token. The
+    fix shipped then was a flat min(2, len(pattern_kw)) floor, but that
+    was ITSELF found live-broken 20 Aug 2026: it let "HR Systems
+    Managers Meeting" (4 keywords: hr, systems, managers, meeting) wrongly
+    match "HR Systems Roadmpa 03/07" (shares only "hr"+"systems", 2
+    keywords -- meeting the flat floor of min(2,4)=2 despite being a
+    genuinely different, real, distinct Granola note series -- confirmed
+    live: "HR Systems Managers Meeting 24/06" and "29/04" and "15/04" all
+    exist as their own real notes). A flat floor of 2 can never scale with
+    how DISTINCTIVE a longer pattern is; "missing at most one word" does:
+    for the 3-keyword "HR Systems Roadmap" pattern it still requires 2
+    (surviving the real "Roadmpa" typo, which only drops one word), but
+    for the 4-keyword "HR Systems Managers Meeting" pattern it now
+    correctly requires 3, rejecting the "hr"+"systems"-only false-positive
+    match against the Roadmap note.
 
     Returns None if `title_pattern` normalises to nothing, or no note
     matches."""
     pattern_kw = _keywords(title_pattern)
     if not pattern_kw:
         return None
-    required_overlap = min(2, len(pattern_kw))
+    required_overlap = max(1, len(pattern_kw) - 1)
     candidates = []
     for note in notes:
         if not isinstance(note, dict) or not note.get("id") or not note.get("title"):

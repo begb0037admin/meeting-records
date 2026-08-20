@@ -64,6 +64,36 @@ class GranolaKeywordMatchingTests(unittest.TestCase):
         self.assertIsNotNone(result)
         self.assertEqual(result["id"], "roadmap_older")
 
+    def test_cross_meeting_type_false_positive_is_rejected(self):
+        # Real live bug, 20 Aug 2026: querying get_latest_granola_meeting
+        # with "HR Systems Managers Meeting" (a genuinely distinct,
+        # real Granola note series -- confirmed live: "HR Systems Managers
+        # Meeting 24/06", "29/04", "15/04" all exist) wrongly returned the
+        # 3 July "HR Systems Roadmap" note instead, because the flat
+        # min(2, len(pattern_kw)) floor let "hr"+"systems" alone satisfy a
+        # 4-keyword pattern. Caught by hand before it reached Kevin (the
+        # real answer was verified by pulling the raw note list directly),
+        # then fixed here: a 4-keyword pattern now requires 3 shared
+        # keywords, so "hr"+"systems" alone (2) is correctly rejected.
+        notes = [
+            {"id": "roadmap_note", "title": "HR Systems Roadmpa 03/07", "created_at": "2026-07-03T06:40:29Z"},
+            {"id": "real_managers_meeting", "title": "HR Systems Managers Meeting 24/06", "created_at": "2026-06-24T08:12:12Z"},
+        ]
+        result = select_latest_matching_note(notes, "HR Systems Managers Meeting")
+        self.assertIsNotNone(result)
+        self.assertEqual(result["id"], "real_managers_meeting")
+
+    def test_cross_meeting_type_false_positive_rejected_even_when_only_candidate(self):
+        # Same bug, isolated further: even with NO real Managers Meeting
+        # note present at all, the Roadmap note must not be returned as a
+        # false-positive match for a "HR Systems Managers Meeting" query --
+        # the correct result is no match, not a wrong match.
+        notes = [
+            {"id": "roadmap_note", "title": "HR Systems Roadmpa 03/07", "created_at": "2026-07-03T06:40:29Z"},
+        ]
+        result = select_latest_matching_note(notes, "HR Systems Managers Meeting")
+        self.assertIsNone(result)
+
     def test_missing_id_or_title_is_skipped_not_crashed_on(self):
         notes = [
             {"title": "HR Systems Roadmap — 14/08", "created_at": "2026-08-14T06:40:29Z"},  # no id
