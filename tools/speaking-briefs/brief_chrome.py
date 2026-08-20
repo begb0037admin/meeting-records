@@ -9,9 +9,17 @@ Catch-up, project meetings) imports this instead of redefining the chrome,
 so a fix or design change made once (e.g. the tile-alignment fix, the
 stopwatch) propagates to every brief automatically.
 """
-import base64, html
+import base64, html, os
+from datetime import datetime
 
 SCRATCH = r"C:\Users\admin\AppData\Local\Temp\claude\C--Users-admin\75a25187-c549-45b9-ab8d-623015c16c47\scratchpad"
+
+# Kevin's real Desktop -- NOT C:\Users\admin\Desktop (a known, confirmed
+# gotcha; that path is not where OneDrive syncs the visible Desktop folder
+# to). Every finished brief's HTML is written here as the durable, final
+# deliverable, per Kevin's instruction (20 Aug 2026) that these briefs must
+# not live only in scratchpad. See write_brief_output() below.
+DESKTOP = r"D:\OneDrive - lelitte.com\Desktop"
 
 
 def b64(path):
@@ -473,6 +481,53 @@ CLOCK_CARD = """<div class="clock-card card">
 CAL_CARD = """<div class="cal-card card">
       <div class="cal-months" id="calMonths"></div>
     </div>"""
+
+
+def write_brief_output(html_out, brief_name, date=None):
+    """Write a finished speaking-brief HTML page to disk under its final,
+    Kevin-facing name: "<brief_name> - DD-MM-YYYY.html" (matches the KPI
+    Presentation deck's own naming convention -- Lauren's call, 20 Aug 2026).
+    Called once from the bottom of every brief_chrome.py-based build script
+    instead of each script hand-rolling its own `open(...).write()` -- one
+    shared output point, so the Desktop-write policy only has to be right
+    in one place.
+
+    Always writes a SCRATCH copy first (unchanged prior behaviour -- still
+    useful in-session, e.g. for Artifact-tool prep), then writes the SAME
+    bytes to Kevin's real Desktop as the durable, final deliverable, per
+    Kevin's instruction that these briefs must not live only in scratchpad
+    (a per-session temp path that gets cleaned up and isn't visible in
+    Explorer). Same-day reruns overwrite in place, deliberately -- a brief
+    only exists for one meeting per day, so the latest rebuild is always the
+    one Kevin wants, not a timestamped pile of near-duplicates from
+    redrafting the same meeting's brief across a session.
+
+    If the Desktop path isn't reachable (e.g. a session running on a
+    machine/environment without that OneDrive mount), the SCRATCH copy still
+    exists and this prints a loud warning instead of silently losing the
+    "final" copy.
+    """
+    d = date or datetime.now()
+    fname = f"{brief_name} - {d.strftime('%d-%m-%Y')}.html"
+
+    os.makedirs(SCRATCH, exist_ok=True)
+    scratch_path = os.path.join(SCRATCH, fname)
+    with open(scratch_path, "w", encoding="utf-8") as f:
+        f.write(html_out)
+    print(f"written {scratch_path} ({len(html_out)} chars)")
+
+    try:
+        os.makedirs(DESKTOP, exist_ok=True)
+        desktop_path = os.path.join(DESKTOP, fname)
+        with open(desktop_path, "w", encoding="utf-8") as f:
+            f.write(html_out)
+        print(f"written {desktop_path} ({len(html_out)} chars) -- final output")
+        return desktop_path
+    except OSError as ex:
+        print(f"WARNING: could not write to Desktop ({DESKTOP}): {ex}")
+        print(f"Desktop path not reachable this session -- only the scratchpad copy exists: {scratch_path}")
+        print("Copy it to the real Desktop manually, or rerun from a session where that OneDrive path is mounted.")
+        return scratch_path
 
 
 def render_page(title, app_name, kicker, h1, meta_spans, flag_label, flag_paragraphs,
