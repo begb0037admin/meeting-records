@@ -175,4 +175,4 @@ html_out = render_page(
     footnote_html=FOOTNOTE,
 )
 
-write_brief_output(html_out, "H&S Roadmap")
+write_brief_output(html_out, "Health and Safety Roadmap")
