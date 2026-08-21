@@ -25,3 +25,11 @@ Kevin reviews the four cards in the desktop HTML brief (wording, not just facts)
 - [x] STATUS.md (refreshed)
 - [x] ADR-0001 — Health items lead every 1-1 brief (new)
 - [x] Session log — docs/sessions/2026-08-18-simon-1on1-prep.md (new)
+
+---
+
+## Addendum — 21 Aug 2026: commit-message correction (`build_sk_1on1.py`, commit `c4a56b9`)
+
+During a 21 Aug 2026 session, agenda item 5 in `tools/speaking-briefs/build_sk_1on1.py` was updated (commit `c4a56b9`) with a live DTP1092/UOXU status update, on the mistaken premise that the live discussion prompting it was happening in the SK 1-1 meeting itself. It was not — the live meeting was actually Kevin's HR Systems Roadmap meeting. The same update was subsequently and correctly pushed to `build_roadmap.py` (commit `c737180`).
+
+**The content of commit `c4a56b9` is factually accurate** (independently verified against command-centre) and has not been reverted — item 5 genuinely is a live, relevant cross-reference for this brief regardless of which meeting the update was first raised in. **Only the commit message is wrong**: it states the update was "approved live during the SK 1-1," which did not happen. Git commit messages are not rewritten after the fact in this project (no history rewrites/force-pushes) — this addendum is the durable correction of record instead. Full account of that evening: `Meeting Pipeline Review - Handover/docs/HANDOVER.md`, same repo.
