@@ -26,7 +26,7 @@ Kevin went into his 21 Aug 2026 HR Systems Roadmap meeting under-prepared — re
 - Was told directly by Kevin mid-session that responses were "over complicating" a simple request — a process/communication failure worth remembering going into the review session: be direct, don't over-narrate.
 
 ## Next Concrete Action
-1. Kevin books the review session (date not yet set).
+1. **Booked: Saturday 22 Aug 2026, 10:00-11:00.** Created on Kevin's primary Outlook calendar by Drew (via Outlook COM, same night this handover was written) after checking for conflicts on that date using work-inbox's confirmed direct-iteration calendar pattern — none found, event created and independently re-verified live afterward. No other attendees added (single-person working session).
 2. Whoever runs it starts from `docs/STATUS.md` (one page), then this file, then `tools/speaking-briefs/PIPELINE_RELIABILITY_REVIEW.md`.
 3. Decisions the session needs to actually make: which of Drew's 3 pipeline options (or a variant) to build; whether/how to correct the SK 1-1 commit message; when to build the real FA Catch-up brief; whether to extend the H&S naming fix into code/output.
 
