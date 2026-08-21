@@ -1,0 +1,36 @@
+# HANDOVER — Meeting Pipeline Review
+**Session date:** 21 Aug 2026
+**Written by:** Lauren
+
+## TL;DR
+Kevin went into his 21 Aug 2026 HR Systems Roadmap meeting under-prepared — real, available information wasn't reaching the brief. He asked to book dedicated time to review the whole meeting-briefs pipeline in detail, and said this cannot happen again ("meetings play 80% of my day to day work"). This area is the cold-start point for that review — everything found and done the night it was raised, so a future session (or Kevin directly) can pick this up without reconstructing it from chat history.
+
+## How the evening unfolded (chronological, for context)
+1. Lauren was dispatched to give a status update on the SK 1-1 brief. Live, mid-task, Kevin fed in a real update ("configured in UOXU, now in integration testing") which Lauren correctly traced to command-centre task `t005`/`t2608031500570` (DTP1092/College Data in PXD) and pushed into `build_sk_1on1.py` (commit `c4a56b9`).
+2. Kevin then revealed the live discussion had actually been happening in his **Roadmap** meeting the whole time, not SK 1-1 — the SK 1-1 push was on the wrong premise. Content is accurate; the commit message's claim ("approved live during the SK 1-1") is not. **Not yet corrected** — see STATUS.md.
+3. The same DTP1092 update was then correctly pushed into `build_roadmap.py` (commit `c737180`) and the Desktop HTML regenerated (`D:\OneDrive - lelitte.com\Desktop\Meetings\HR Systems Roadmap - 21-08-2026.html`).
+4. Kevin pasted the actual live DTP1092 card from his own Roadmap tool, exposing that the card's own "Last logged update" history (in `roadmap-items.json`, not committed to GitHub) contained an ORCID-onboarding thread going back to Oct 2024 that had been silently dropped from every rewrite of this card, and isn't tracked in command-centre/work-inbox either.
+5. Kevin gave the core complaint plainly: the Roadmap dashboard "is really not good," information he needed wasn't there, he wasn't prepared for his meeting, and there's enough information in Granola/Outlook/work-inbox/command-centre to keep it current. Concrete example: the **Organisational Structure Update — August 2026** item (Simon Burford's 3-management-unit reorg proposal) — fully drafted 18 Aug 2026 as an SK 1-1 `PREP_ITEMS` card, verified live against command-centre `task-1787072363309` and work-inbox `HANDOVER.md` commit `91ce237b` — was **never present in the Roadmap brief at all**, because it was only ever drafted for one brief and never propagated.
+6. Kevin asked to book dedicated time to review this in detail and said not to make further ad hoc content changes to the Roadmap pipeline until then.
+7. Kevin asked whether a handover area exists for HR Systems Roadmap (it didn't) — created it (`HR Systems Roadmap - Handover`), logging the feedback above.
+8. Kevin extended the instruction: every meeting gets its own separated handover area, no exceptions — high priority. Gaps found and filled: `Health and Safety Roadmap - Handover` and `HR Systems Managers Meeting - Handover` created (SK 1-1 and Team 1-1's already had theirs).
+9. Drew was dispatched in parallel (visible subagent) to scope root cause and fix options on the engineering side — diagnosis only, no code changed, per Kevin's "no ad hoc changes" instruction. Delivered `tools/speaking-briefs/PIPELINE_RELIABILITY_REVIEW.md` (commit `a28ac0d`).
+10. Kevin asked about FA Catch-up and Team 1-1's. Team 1-1's already covered. FA Catch-up has no real brief — a Desktop file named "FA Catch-up Companion - 18-08-2026.html" turned out, on inspection, to actually be Standing Agenda companion material (its own `<h1>` reads "Standing Agenda companion"), mislabeled. Kevin then said "create this like the other meetings" (i.e. build the real FA Catch-up brief) — Lauren pulled source material (last captured Meeting Review, 3 July 2026; cross-referenced command-centre tasks; reused prior 18 Aug FA Catch-up research on Asta-framing and Pay Uplift conflation corrections) but **had not yet pushed anything** when Kevin redirected: hold this for the dedicated session too.
+11. Kevin corrected a naming convention: "H&S" must always be spelled out as "Health and Safety"; "Roadmap" alone must always be qualified. Fixed the just-created handover folder name (`H&S Roadmap - Handover` → `Health and Safety Roadmap - Handover`, old path deleted, commit `983a581` delete / `1ec256e` create). **Not yet extended** to `build_hs_roadmap.py`'s own output filename or the older dated `Meeting Reviews/H&S Roadmap — *.md` notes — flagged as a decision for Kevin (fix now vs. hold for the session).
+12. Kevin asked whether KPI Presentation and Standing Agenda have separate meeting areas — they didn't, one combined `KPI Monthly Standing Agenda` folder covered both. Kevin said split it now, keep the format/pipeline intact. Done: `KPI Presentation - Handover` and `Standing Agenda - Handover`, fully self-contained (own `AGENT_MODEL.md`/`CLAUDE.md`/`PROJECT_OS.md`/`ROLLOVER_SOP.md`/`docs/`), old combined folder deleted, binary `.pptx` template copy verified byte-identical via git blob SHA before deletion. `build_kpi_presentation.py` untouched.
+13. This area (`Meeting Pipeline Review - Handover`) created as the cold-start point for the review session itself.
+
+## What This Session Got Wrong (own errors, recorded plainly)
+- Misattributed a live Roadmap-meeting discussion to the SK 1-1 brief (step 2 above) — real content pushed to the wrong file, wrong commit-message framing, not yet corrected.
+- Rewrote the DTP1092 card twice without ever reading the Roadmap Master's own full update-history log first — missed the ORCID thread entirely until Kevin surfaced it by pasting the live card back.
+- Was told directly by Kevin mid-session that responses were "over complicating" a simple request — a process/communication failure worth remembering going into the review session: be direct, don't over-narrate.
+
+## Next Concrete Action
+1. Kevin books the review session (date not yet set).
+2. Whoever runs it starts from `docs/STATUS.md` (one page), then this file, then `tools/speaking-briefs/PIPELINE_RELIABILITY_REVIEW.md`.
+3. Decisions the session needs to actually make: which of Drew's 3 pipeline options (or a variant) to build; whether/how to correct the SK 1-1 commit message; when to build the real FA Catch-up brief; whether to extend the H&S naming fix into code/output.
+
+## Watch Out For
+- Do not resume ad hoc content pushes to any `build_*.py` script before the session — structural/naming work on non-code files is the only carve-out exercised tonight, and even that should be treated as exceptional, not a precedent for more scope creep.
+- The "FA Catch-up Companion" Desktop file is not what its name says — don't build against it as if it were real FA Catch-up content.
+- `roadmap-items.json`/`hs-items.json` are session-local, not committed — don't assume a future session's copy is fresh without checking.
