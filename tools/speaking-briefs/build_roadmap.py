@@ -22,10 +22,10 @@ OVERLAY = {
     },
     "DTP1092": {
         "title": "Research management data for REF and research quality",
-        "owner": "Nathan / Marie C, Kevin",
-        "status_pill": "overdue",
-        "current": "Command Centre's REF-via-ESS task (Sarah Rowles) is still open past its end-July deadline.",
-        "say": "REF via ESS — the end-of-July deadline has now passed with this task still open. I need a status check before I can tell the room whether we're on track or slipping.",
+        "owner": "Nathan / Marie C, Kevin &middot; Simon Burford (College data workstream)",
+        "status_pill": "info",
+        "current": "Two workstreams under this project code. (1) REF via ESS (Nathan/Sarah Rowles): the person-level UDF was actually built and activated 7&nbsp;Jul, before this overlay entry was last refreshed &mdash; Command Centre's task may be stale-open rather than genuinely blocked; needs a fresh check before repeating \"overdue\" to the room. (2) College/Halls data &rarr; PXD (Simon Burford/Crispin Muncaster/Guy Williams): confirmed live 21&nbsp;Aug &mdash; the 40 REF2029 Pay Administered By codes are fully configured in UOXU, and the project has moved into integrations testing (target completion was 14&nbsp;Aug, Command Centre t2608031500570). Testing is running in Company&nbsp;90, a PeopleXD company code Simon set up only as a temporary WFM workgroup-attachment shell (17&nbsp;Aug), not the permanent target &mdash; and the UOXP&rarr;UOXC environment clone (not UOXU) was confirmed complete 18&ndash;19&nbsp;Aug by Michael O'Sullivan. Live risk: PeopleXD maintenance window Fri&nbsp;28&nbsp;Aug, 8&ndash;10pm, could land mid-test.",
+        "say": "DTP1092 — two threads here. REF via ESS: the UDF actually went live back on 7 July, so I want to check whether Command Centre's task is just stale before we call it overdue again. And the College data / PXD workstream: REF2029 codes are configured in UOXU, we're in integration testing now, running in Company 90 — which is Simon's temporary WFM shell, not the permanent setup. One flag for the room: PeopleXD maintenance on the 28th, 8 to 10pm, could land mid-test.",
     },
     "ITS1004": {
         "title": "WFM Rollout",
@@ -139,7 +139,7 @@ GLANCE_TABLE = """<table>
           <tbody>
             <tr><td class="idcell">136</td><td>PeopleXD DPIA</td><td>Kevin</td><td class="datecell">30 Jun</td><td><span class="pill pill-overdue">Overdue</span></td></tr>
             <tr><td class="idcell">DTP1334</td><td>H&amp;S Management System</td><td>Kevin</td><td class="datecell">31 Jul</td><td><span class="pill pill-overdue">Overdue</span></td></tr>
-            <tr><td class="idcell">DTP1092</td><td>REF via ESS</td><td>Nathan</td><td class="datecell">end-Jul</td><td><span class="pill pill-overdue">Overdue</span></td></tr>
+            <tr><td class="idcell">DTP1092</td><td>REF/research data &amp; College-PXD (Company 90 testing)</td><td>Nathan / Simon</td><td class="datecell">end-Jul / 14 Aug</td><td><span class="pill pill-info">Update</span></td></tr>
             <tr><td class="idcell">ITS1004</td><td>WFM Rollout</td><td>Michael</td><td class="datecell">29 May</td><td><span class="pill pill-overdue">Overdue</span></td></tr>
             <tr><td class="idcell">179</td><td>SSO Migration</td><td>Kevin</td><td class="datecell">30 Apr</td><td><span class="pill pill-overdue">Overdue</span></td></tr>
             <tr><td class="idcell">174_b</td><td>H&amp;S Dashboards</td><td>David</td><td class="datecell">31 Mar</td><td><span class="pill pill-overdue">Overdue</span></td></tr>
@@ -166,7 +166,7 @@ SECTIONS = f"""
       <tbody>
         <tr><td class="idcell">136</td><td>PeopleXD DPIA</td><td>No update since 03/07; Stage 7 sign-off still outstanding with Marie Cooksey. (Source: HR Systems Roadmap 07/08)</td></tr>
         <tr><td class="idcell">DTP1334</td><td>H&amp;S Management System</td><td>31 Jul deadline passed without a confirmed revised date on record since 03/07. (Source: HR Systems Roadmap 07/08)</td></tr>
-        <tr><td class="idcell">DTP1092</td><td>REF via ESS / research management data</td><td>End-July deadline (REF via ESS) passed, Command Centre task still open. (Source: HR Systems Roadmap 07/08)</td></tr>
+        <tr><td class="idcell">DTP1092</td><td>REF via ESS / research management data</td><td>College-PXD workstream (Company 90): REF2029 codes now configured in UOXU, into integration testing (target was 14 Aug); Company 90 confirmed a temporary WFM shell only, not permanent; UOXP&rarr;UOXC clone done 18-19 Aug; PeopleXD maintenance window 28 Aug 8-10pm may collide with testing. (Confirmed live, 21 Aug Roadmap meeting)</td></tr>
         <tr><td class="idcell">ITS1004</td><td>WFM Rollout</td><td>GLAM resolution call still not confirmed as held. (Source: HR Systems Roadmap 07/08)</td></tr>
         <tr><td class="idcell">179</td><td>SSO Migration</td><td>03/07 decision-day outcome not recorded anywhere available. (Source: HR Systems Roadmap 07/08)</td></tr>
       </tbody>
