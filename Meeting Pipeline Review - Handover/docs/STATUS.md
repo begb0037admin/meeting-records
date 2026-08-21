@@ -16,9 +16,14 @@
 
 ## Unconfirmed / needs Kevin
 - When the review session itself will happen.
-- Whether the SK 1-1 brief commit (`c4a56b9`, `build_sk_1on1.py`) should have its commit message corrected — it inaccurately states the DTP1092 update was "approved live during the SK 1-1," when the live discussion was actually happening in the Roadmap meeting. Content is factually accurate; only the attribution/message is wrong.
 - Whether/when to build the FA Team Catch-up brief (no real brief exists yet — the "FA Catch-up Companion - 18-08-2026.html" file on Kevin's Desktop is mislabeled; its actual content is Standing Agenda companion material, not an FA Catch-up brief).
 - Whether to extend the "H&S" → "Health and Safety" naming fix into `build_hs_roadmap.py`'s own output filename (`"H&S Roadmap - DD-MM-YYYY.html"`) and the older `Meeting Reviews/H&S Roadmap — *.md` dated notes — flagged, not yet done, since it touches committed code/output not just a folder name.
+
+## Resolved (21 Aug 2026, same night)
+- SK 1-1 commit-message misattribution (`c4a56b9`) — content was always accurate, only the "approved live during the SK 1-1" framing was wrong. Corrected via durable addendum in `SK - Handover/docs/HANDOVER.md` (commit `b26cb18`), not a history rewrite. Closed.
+
+## Related, separate initiative: begb0037admin/kevin-work-hub
+Same night, Kevin escalated this into a bigger ask: a standing, cross-repo "issues and improvements" dashboard — not a meeting brief, a living backlog of what's broken/needs fixing/could be improved across meetings, work-inbox, command-centre, knowledge base, and HRIS, fed by any agent noticing something while doing other work. Repo: renamed from the dormant `clockify` (legacy content archived intact under `Archive/clockify-project-2026-08-21/`). Live at https://begb0037admin.github.io/kevin-work-hub/, built and owned by Drew, content-fed by Lauren/Adam. As of this update: v1 was rejected twice (too much on one page, needed tabs; used the wrong visual style instead of `command-centre/BRANDING.md`; then the whole data model was wrong — it mirrored live counts instead of being an issues/improvements backlog) — v2 rework in progress. This is a distinct, ongoing initiative from the meeting-pipeline review above, though they share root findings (e.g. the "no persistent registry" problem is exactly the kind of item that belongs on kevin-work-hub's own backlog once it's built correctly).
 
 ## Known Gaps
 - `build_roadmap.py` has not been refactored to use the shared `write_brief_output()` (unlike `build_sk_1on1.py`, `build_hs_roadmap.py`, `build_managers_meeting.py`, refactored 20 Aug) — tonight's Roadmap Desktop output was written by an ad hoc one-off script. Flagged to Drew, not yet actioned.
