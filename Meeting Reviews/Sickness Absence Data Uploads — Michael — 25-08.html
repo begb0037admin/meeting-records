@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sickness Absence Data Uploads — Michael — 25 August 2026</title>
+  <style>
+    :root { --navy:#002147; --navy-soft:#1b3a63; --bg:#f5f7fb; --card:#fff; --ink:#1a2430; --soft:#56607a; --faint:#8791a6; --line:#e2e6f0; --red:#a3271f; --red-bg:#fbe9e7; --amber:#92600a; --amber-bg:#fbf0dc; --green:#14663f; --green-bg:#e2f3ea; --blue-bg:#e6ecf5; --shadow:0 1px 2px rgba(0,33,71,.05),0 6px 20px rgba(0,33,71,.06); }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink); font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    .brandbar { background:var(--navy); color:#fff; padding:18px clamp(20px,3vw,48px) 16px; }
+    .brand { display:flex; flex-direction:column; }
+    .university { font-size:9px; letter-spacing:.3em; text-transform:uppercase; color:rgba(255,255,255,.7); }
+    .oxford { font-size:22px; font-weight:800; letter-spacing:.03em; text-transform:uppercase; line-height:1.1; }
+    .app { margin-top:3px; font-size:10.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:rgba(255,255,255,.85); }
+    .page { max-width:1680px; margin:0 auto; padding:1.8rem clamp(16px,3vw,48px) 4rem; }
+    .kicker { margin:0 0 .4rem; font-size:11px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--navy-soft); }
+    h1 { margin:0 0 .6rem; font-size:clamp(1.5rem,1.6vw + 1rem,1.9rem); line-height:1.2; letter-spacing:-.01em; }
+    .meta { display:flex; flex-wrap:wrap; gap:.35rem 1.4rem; color:var(--soft); font-size:.85rem; font-weight:500; }
+    .meta b { color:var(--ink); }
+    .top-grid,.item-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1.6rem; }
+    .top-grid { margin-top:1.4rem; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:10px; box-shadow:var(--shadow); }
+    .flag { grid-column:span 2; padding:1rem 1.3rem; border:1px solid color-mix(in srgb,var(--red) 35%,transparent); border-left:4px solid var(--red); background:var(--red-bg); border-radius:8px; }
+    .flag-label,.eyebrow { margin:0 0 .45rem; font-size:10px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; }
+    .flag-label { color:var(--red); }
+    .flag p:last-child { margin-bottom:0; }
+    .timer { padding:1rem 1.25rem; display:flex; flex-direction:column; justify-content:center; }
+    .timer strong { font-size:1.75rem; color:var(--navy); font-variant-numeric:tabular-nums; }
+    .timer span { margin-top:.35rem; font-size:.72rem; font-weight:600; color:var(--faint); letter-spacing:.04em; text-transform:uppercase; }
+    .glance { grid-column:span 2; padding:1rem 1.3rem; }
+    .glance .eyebrow { color:var(--navy-soft); }
+    .glance table { width:100%; border-collapse:collapse; font-size:.86rem; }
+    th { padding:.45rem 0 .6rem; text-align:left; color:var(--faint); font-size:10px; letter-spacing:.07em; text-transform:uppercase; border-bottom:1px solid var(--line); }
+    td { padding:.65rem .6rem .65rem 0; vertical-align:top; border-bottom:1px solid var(--line); }
+    tr:last-child td { border-bottom:0; }
+    .key { color:var(--navy-soft); font-weight:700; }
+    .status { display:inline-block; padding:.26rem .58rem; border-radius:999px; font-size:10px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; white-space:nowrap; }
+    .raise { background:var(--red-bg); color:var(--red); } .risk { background:var(--amber-bg); color:var(--amber); } .ready { background:var(--green-bg); color:var(--green); }
+    h2 { margin:2.2rem 0 .85rem; font-size:1.05rem; }
+    .item { padding:1.1rem 1.25rem 1.25rem; }
+    .item h3 { margin:.3rem 0 .8rem; font-size:1.05rem; line-height:1.3; }
+    .item p,.item li { color:var(--soft); font-size:.88rem; line-height:1.5; }
+    .item ul,.item ol { margin:.4rem 0 0; padding-left:1.15rem; }
+    .item li { margin-bottom:.4rem; }
+    .say { margin:.9rem 0 0; padding:.75rem .95rem; background:color-mix(in srgb,var(--navy) 5%,var(--bg)); border-left:3px solid var(--navy); border-radius:6px; color:var(--ink); font-size:.89rem; font-style:italic; line-height:1.48; }
+    .say b { display:block; margin-bottom:.3rem; color:var(--navy-soft); font-size:9.5px; font-style:normal; letter-spacing:.08em; text-transform:uppercase; }
+    .warning { border-left:3px solid var(--amber); padding-left:.75rem; }
+    .footer { max-width:980px; margin-top:2.4rem; padding:1rem 1.2rem; border-top:1px solid var(--line); color:var(--faint); font-size:.75rem; line-height:1.7; }
+    @media (max-width:1100px) { .top-grid,.item-grid { grid-template-columns:1fr; } .flag,.glance { grid-column:span 1; } }
+    @media print { body { background:#fff; } .card { box-shadow:none; } }
+  </style>
+</head>
+<body>
+  <header class="brandbar"><div class="brand"><span class="university">University of</span><span class="oxford">Oxford</span><span class="app">HR Systems — Meeting Brief</span></div></header>
+  <main class="page">
+    <p class="kicker">Focused fact-finding catch-up</p>
+    <h1>Sickness Absence Data Uploads — Michael</h1>
+    <div class="meta"><span><b>Date:</b> Tuesday 25 August 2026</span><span><b>Time needed:</b> 15 minutes</span><span><b>Purpose:</b> resource estimate for Marie today</span></div>
+
+    <section class="top-grid" aria-label="At a glance">
+      <div class="flag"><p class="flag-label">Today’s required outcome</p><p>Get a defensible, caveated estimate of the effort and capacity to upload sickness-absence data. This is not a delivery commitment.</p><p>Kevin has already asked Michael for a time to catch up today. Await his reply; do not send a duplicate follow-up.</p></div>
+      <div class="timer card"><strong>15 min</strong><span>Focused catch-up</span></div>
+      <div class="glance card"><p class="eyebrow">At a glance</p><table><thead><tr><th>Fact</th><th>Why it matters</th></tr></thead><tbody>
+        <tr><td class="key">3 departments</td><td>SBS, Paediatrics and GLAM are not yet migrated to People XD.</td></tr>
+        <tr><td class="key">Upload 2</td><td>Historic/backdated data was not sent to Michael or loaded; actual status must be verified.</td></tr>
+        <tr><td class="key">~2,859 rows</td><td>Master template exists, but scope and per-template volumes are not yet confirmed.</td></tr>
+        <tr><td class="key">Working date</td><td>Around 25 September for data readiness; exact date still for Kevin and Sarah to confirm.</td></tr>
+      </tbody></table></div>
+      <div class="timer card"><span>Next working group</span><strong>8 Sep</strong></div>
+    </section>
+
+    <h2>Conversation plan</h2>
+    <section class="item-grid">
+      <article class="item card"><span class="status raise">1 min</span><h3>1. Set the outcome</h3><div class="say"><b>Say this</b>“I need to give Marie a realistic resource picture today. I don’t want to turn an early estimate into a commitment, so can we separate loading from data cleaning and validation?”</div></article>
+      <article class="item card"><span class="status ready">4 min</span><h3>2. Establish the scope</h3><ol><li>Which files/templates are in scope, and what are the approximate row counts?</li><li>Can we first confirm whether Upload 2 was loaded wholly, partly or not at all?</li><li>Which quality issues prevent loading, and which can be corrected repeatably?</li></ol></article>
+      <article class="item card"><span class="status ready">5 min</span><h3>3. Estimate effort and capacity</h3><ol><li>For a representative template, how long for format checks, ID/reference matching, loading, reconciliation, corrections and QA?</li><li>What is the estimate per template or 1,000 rows, and what assumptions change it?</li><li>What can Michael do today and what is the realistic completion range/date?</li></ol></article>
+      <article class="item card"><span class="status ready">3 min</span><h3>4. Test the resource model</h3><ol><li>Could a BA/administrator safely complete any steps using a tested SOP?</li><li>Which steps require Michael’s technical validation or sign-off?</li><li>What training, sample check and reconciliation are required before delegation?</li></ol></article>
+      <article class="item card"><span class="status raise">2 min</span><h3>5. Close with an answer Marie can use</h3><div class="say"><b>Say this</b>“I’ll report this as a range with the assumptions and dependencies attached. Before we make a firm commitment, we need a representative template checked and the historic-load status confirmed. What is the clearest one-line position I can use today?”</div></article>
+      <article class="item card"><span class="status risk">Capture before ending</span><h3>Minimum output</h3><ul><li>Estimate, basis and confidence level.</li><li>Michael’s capacity and realistic range/date.</li><li>Delegable steps, controls and sign-off.</li><li>Dependencies/blockers and owner.</li><li>Provisional one-line update for Marie.</li></ul></article>
+    </section>
+
+    <h2 class="warning">Risks and no-promise guardrails</h2>
+    <section class="item-grid">
+      <article class="item card"><h3>Data quality changes the estimate</h3><p>Templates contain date issues, names instead of IDs, invalid date ranges, incomplete rows and unexplained colour coding. Cleaning, validation and rework may take longer than the technical load.</p></article>
+      <article class="item card"><h3>Validate, don’t infer</h3><p>45 departments excluding SBS and GLAM show zero sickness absence, but that is an anomaly rather than proof of missing data. Do not state that the master template is entirely un-loaded until People XD/data-warehouse checks confirm it.</p></article>
+      <article class="item card"><h3>Do not promise</h3><ul><li>Do not commit to 25 September before a representative sample and Michael’s capacity are assessed.</li><li>Do not delegate uploads without a tested SOP, sample reconciliation and technical sign-off.</li><li>Potential data-governance/GDPR concern is not a proven breach.</li><li>Survey participation is for senior leadership to decide from the facts.</li></ul></article>
+    </section>
+
+    <h2>If Michael cannot meet today</h2>
+    <section class="item-grid"><article class="item card"><h3>Fallback position</h3><p>Do not invent an estimate. Tell Marie only that the technical estimate is being validated with Michael today and that known constraints are data quality, unknown historic-load status and unconfirmed scope. Escalate only for a decision on whether to proceed with a provisional BA request without a validated technical estimate.</p></article></section>
+
+    <footer class="footer"><b>Sources:</b> Granola <em>Sickness Absence Survey working group</em> (25 Aug 2026, 11:01 BST; ID <code>f5153451-83e8-494c-9999-47d772969f5d</code>); Granola <em>Sickness Absence Data Catch-up</em> (21 Aug 2026; ID <code>36ed0f5d-0234-4039-92c2-1dcbe7ab1be2</code>); Kevin’s current message to Michael, supplied in this session. Prepared 25 August 2026.</footer>
+  </main>
+</body>
+</html>
