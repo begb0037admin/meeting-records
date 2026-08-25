@@ -51,25 +51,13 @@
 - Potential data-governance/GDPR concern: supplied data may have remained unprocessed. Escalate through the proper route; do not state it as proven.
 - Survey participation is a senior-leadership decision; the group will present facts to Renu rather than pre-judge it.
 
-### Draft-only email for Marie — unsent
+### Outlook draft for Marie — unsent
 
 **Subject:** Sickness absence data uploads — resource position
 
-> Hi Marie,
->
-> I’ve checked the upload position with Michael. A standard upload is five minutes or less once the data has been validated and formatted; there is no fixed record cap, and files only need splitting where it makes error review more manageable.
->
-> The material workload is preparation and error resolution — checking types, dates, leading zeroes, consistency and the correct appointment. IDs, dates and inconsistencies need to be corrected by the preparer and re-uploaded.
->
-> We could use BA/FA capacity to prepare the data and potentially carry out the upload, provided the person has enough People XD and underlying-data knowledge to interpret errors. We still need named ownership for review, UCEA reason mapping and formatting, plus clarity on Melanie Furness’s spreadsheet and any gaps.
->
-> Could you and Marcos confirm the appropriate resource/owner for that preparation work, and whether Business Change has already picked up the Melanie point?
->
-> Thanks,
->
-> Kevin
+**External state confirmed after the prior checkpoint:** An Outlook draft has been created for **Marie Cooksey** with subject **“Sickness absence data uploads — resource position.”** It remains unsent. Its message body, credentials, Outlook link and draft ID are not recorded here; no safe identifier was supplied in this session.
 
-**Draft status:** Unsent. No Outlook access, send action or external communication was performed.
+**Exact next action:** Kevin reviews/edits the draft in Outlook and decides whether to send it. No agent sends it.
 
 ### Exact next safe action
 
