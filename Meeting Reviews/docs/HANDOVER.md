@@ -4,7 +4,7 @@
 
 **Session date:** 25 August 2026
 **Written by:** Lauren (meeting-preparation lead)
-**Status:** Same-day preparation complete. The usable standalone prep deliverable is `Meeting Reviews/Sickness Absence Data Uploads — Michael — 25-08.html`; a Markdown source companion exists at the same basename. Both are based only on verified Granola records and Kevin’s current communication fact.
+**Status:** Same-day preparation complete. The usable standalone prep deliverable is `Meeting Reviews/Sickness Absence Data Uploads — Michael — 25-08.html`; a Markdown source companion exists at the same basename. Its above-fold section, **“Teams conversation — final position for Marie,”** is the concise visible answer: Michael has answered all operational questions; no further questions are needed; standard upload is five minutes or less absent errors; no fixed record cap; a competent BA/FA can prepare and potentially upload; resource is preparation and error resolution.
 
 ---
 
