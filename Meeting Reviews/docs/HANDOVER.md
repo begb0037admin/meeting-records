@@ -19,6 +19,7 @@
 ### Facts to take into the Michael catch-up
 
 - The immediate request is an estimate of average time to load each template and whether the load can be performed by a less-technical resource using an SOP. This is required to determine Michael’s workload and whether extra resource is needed.
+- **Michael’s supplied response (25 August):** the upload is low effort only once data is validated and correctly formatted. Investigation of failures is variable. His scope is upload only — not source review, UCEA reason mapping or formatting — so the main resource need is preparation before handoff.
 - Three departments are not migrated to People XD: SBS, Paediatrics and GLAM. An historic/backdated “Upload 2” was never sent to Michael or loaded. A master template contains about 2,859 rows; validate its actual load status against People XD/data warehouse before making a categorical statement.
 - Template quality is poor: inconsistent date formats, names rather than IDs, future start dates paired with past end dates, incomplete rows and unexplained colour coding. The number of templates and exact per-template row counts are not yet established.
 - 45 departments (excluding SBS and GLAM) show zero sickness absence. This is an anomaly, not proof their data is missing; a BA-led departmental validation exercise is proposed.
@@ -33,6 +34,14 @@
 4. Dependencies: source-file ownership/meaning of colours, access, reference data, confirmation whether Upload 2 was loaded, and a named acceptance approver.
 5. A one-line update Kevin can give Marie today, marked provisional until the template sample has been inspected.
 
+### Outstanding checks/actions added after Michael’s response
+
+1. Confirm whether Business Change has contacted Melanie Furness; establish status, ownership and gaps in her spreadsheet.
+2. Appoint a named owner/resource for source review, UCEA reason mapping and required-format preparation.
+3. After a clean dataset is available, quantify volume and whether file splitting is needed.
+4. Agree controlled handoff, reconciliation/QA evidence and acceptance sign-off.
+5. Define failed-record triage: ownership, correction route and re-presentation for upload.
+
 ### Key risks
 
 - Do not turn the estimated 25 September target into a commitment before the template sample and Michael’s capacity are assessed.
@@ -43,7 +52,7 @@
 
 ### Exact next safe action
 
-When Michael replies, open `Meeting Reviews/Sickness Absence Data Uploads — Michael — 25-08.html` for the focused fact-finding catch-up. Send Marie only a caveated resource estimate and current constraints; then capture agreed actions/owners/dates in a draft for Kevin’s review before publishing it.
+Use `Meeting Reviews/Sickness Absence Data Uploads — Michael — 25-08.html` as the current prep. First resolve the listed ownership/preparation checks, then send Marie the confirmed conditional position: upload is low effort only after validated/formatted data, while preparation and failed-record investigation need ownership/resource. Capture agreed actions/owners/dates in a draft for Kevin’s review before publishing it.
 
 ### Verification performed
 
