@@ -19,7 +19,8 @@
 ### Facts to take into the Michael catch-up
 
 - The immediate request is an estimate of average time to load each template and whether the load can be performed by a less-technical resource using an SOP. This is required to determine Michael’s workload and whether extra resource is needed.
-- **Michael’s supplied response (25 August):** the upload is low effort only once data is validated and correctly formatted. Investigation of failures is variable. His scope is upload only — not source review, UCEA reason mapping or formatting — so the main resource need is preparation before handoff.
+- **Michael’s supplied response (25 August) — five confirmed answers:** (1) a standard load takes five minutes or less absent investigation; (2) no fixed maximum record count; (3) split files only pragmatically to make error review manageable; (4) prechecks cover data types, dates, leading zeroes, consistency and the correct appointment, while common errors are IDs, dates and inconsistencies — the preparer corrects and re-uploads; (5) no technical qualification is required, but the uploader needs reasonable system and underlying-data knowledge to interpret errors.
+- **Resource conclusion:** Michael’s scope is upload only — not source review, UCEA reason mapping or formatting. A BA or FA can prepare data and can potentially upload it if capable of interpreting errors. Effort/resource is primarily preparation and error resolution, not the standard upload.
 - Three departments are not migrated to People XD: SBS, Paediatrics and GLAM. An historic/backdated “Upload 2” was never sent to Michael or loaded. A master template contains about 2,859 rows; validate its actual load status against People XD/data warehouse before making a categorical statement.
 - Template quality is poor: inconsistent date formats, names rather than IDs, future start dates paired with past end dates, incomplete rows and unexplained colour coding. The number of templates and exact per-template row counts are not yet established.
 - 45 departments (excluding SBS and GLAM) show zero sickness absence. This is an anomaly, not proof their data is missing; a BA-led departmental validation exercise is proposed.
@@ -52,7 +53,7 @@
 
 ### Exact next safe action
 
-Use `Meeting Reviews/Sickness Absence Data Uploads — Michael — 25-08.html` as the current prep. First resolve the listed ownership/preparation checks, then send Marie the confirmed conditional position: upload is low effort only after validated/formatted data, while preparation and failed-record investigation need ownership/resource. Capture agreed actions/owners/dates in a draft for Kevin’s review before publishing it.
+Use `Meeting Reviews/Sickness Absence Data Uploads — Michael — 25-08.html` as the current prep. First resolve the listed ownership/preparation checks, then send Marie the confirmed position: a standard clean-data upload takes five minutes or less, without a fixed record maximum; the main resource need is preparation/error resolution, and a capable BA/FA can potentially upload. Capture agreed actions/owners/dates in a draft for Kevin’s review before publishing it.
 
 ### Verification performed
 
