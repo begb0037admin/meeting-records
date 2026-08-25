@@ -51,6 +51,26 @@
 - Potential data-governance/GDPR concern: supplied data may have remained unprocessed. Escalate through the proper route; do not state it as proven.
 - Survey participation is a senior-leadership decision; the group will present facts to Renu rather than pre-judge it.
 
+### Draft-only email for Marie — unsent
+
+**Subject:** Sickness absence data uploads — resource position
+
+> Hi Marie,
+>
+> I’ve checked the upload position with Michael. A standard upload is five minutes or less once the data has been validated and formatted; there is no fixed record cap, and files only need splitting where it makes error review more manageable.
+>
+> The material workload is preparation and error resolution — checking types, dates, leading zeroes, consistency and the correct appointment. IDs, dates and inconsistencies need to be corrected by the preparer and re-uploaded.
+>
+> We could use BA/FA capacity to prepare the data and potentially carry out the upload, provided the person has enough People XD and underlying-data knowledge to interpret errors. We still need named ownership for review, UCEA reason mapping and formatting, plus clarity on Melanie Furness’s spreadsheet and any gaps.
+>
+> Could you and Marcos confirm the appropriate resource/owner for that preparation work, and whether Business Change has already picked up the Melanie point?
+>
+> Thanks,
+>
+> Kevin
+
+**Draft status:** Unsent. No Outlook access, send action or external communication was performed.
+
 ### Exact next safe action
 
 Use `Meeting Reviews/Sickness Absence Data Uploads — Michael — 25-08.html` as the current prep. First resolve the listed ownership/preparation checks, then send Marie the confirmed position: a standard clean-data upload takes five minutes or less, without a fixed record maximum; the main resource need is preparation/error resolution, and a capable BA/FA can potentially upload. Capture agreed actions/owners/dates in a draft for Kevin’s review before publishing it.
