@@ -2,6 +2,15 @@
 > AI bootstrap entry point. Read this first.
 > Keep this file under 200 lines. Push details to linked docs.
 
+## Bootstrap Order
+0. **Accountable leads** (`agent-commons/AGENT_DIRECTORY.md`): **Lauren** for meeting-prep content, briefing, and source curation — dispatch to her for any of the workflows below. **Drew** for non-trivial pipeline/infrastructure engineering touching this repo (e.g. the launcher, MCP tooling, automation). Any local session should dispatch to the matching lead immediately rather than operating as a generic session.
+1. This file (orientation)
+2. Navigate to the relevant subfolder and read its CLAUDE.md
+3. For meeting prep documents: read `Meeting Reviews/docs/reference/meeting-prep-formats.md` — this defines the exact format for every prep document type
+4. Then check `Meeting Reviews/` for the most recent prep file of the same type as context
+
+Do NOT ask Kevin for a recap. Navigate to the relevant subfolder.
+
 ## Identity
 - **Project:** Meeting Records — container repo for Kevin's recurring meeting prep and records
 - **Purpose:** Stores prep documents, agendas, notes, and handover materials for Kevin's recurring meetings and team management activities.
@@ -9,14 +18,6 @@
 - **Status:** Active
 - **Repo:** https://github.com/begb0037admin/meeting-records
 - **Last updated:** 2026-08-01
-
-## Bootstrap Order
-1. This file (orientation)
-2. Navigate to the relevant subfolder and read its CLAUDE.md
-3. For meeting prep documents: read `Meeting Reviews/docs/reference/meeting-prep-formats.md` — this defines the exact format for every prep document type
-4. Then check `Meeting Reviews/` for the most recent prep file of the same type as context
-
-Do NOT ask Kevin for a recap. Navigate to the relevant subfolder.
 
 ## Voice Front Door (Claude-native)
 - Shared skill: `.agents/skills/claude-meeting-voice/`
