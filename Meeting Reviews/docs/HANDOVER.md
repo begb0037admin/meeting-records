@@ -51,13 +51,13 @@
 - Potential data-governance/GDPR concern: supplied data may have remained unprocessed. Escalate through the proper route; do not state it as proven.
 - Survey participation is a senior-leadership decision; the group will present facts to Renu rather than pre-judge it.
 
-### Outlook draft for Marie — unsent
+### Outlook drafts for Marie — unsent
 
-**Subject:** Sickness absence data uploads — resource position
+**Revised draft external state:** An Outlook draft has been created for **Marie Cooksey** with subject **“Sickness absence data uploads — resource position (revised).”** It remains unsent. Its message body, credentials, Outlook link and draft ID are not recorded here; no safe identifier was supplied in this session.
 
-**External state confirmed after the prior checkpoint:** An Outlook draft has been created for **Marie Cooksey** with subject **“Sickness absence data uploads — resource position.”** It remains unsent. Its message body, credentials, Outlook link and draft ID are not recorded here; no safe identifier was supplied in this session.
+**Prior draft:** The broader draft with subject **“Sickness absence data uploads — resource position”** may still exist unless safely superseded. It must not be deleted or sent by an agent.
 
-**Exact next action:** Kevin reviews/edits the draft in Outlook and decides whether to send it. No agent sends it.
+**Exact next action:** Kevin reviews the revised Outlook draft and decides which draft, if any, to send. No agent deletes or sends either draft.
 
 ### Exact next safe action
 
