@@ -4,7 +4,7 @@
 
 **Session date:** 25 August 2026
 **Written by:** Lauren (meeting-preparation lead)
-**Status:** Read-only, same-day preparation complete for Kevin’s follow-up with Michael O’Sullivan on sickness-absence data uploads. No meeting-prep document was created or published: Kevin has not reviewed/approved one.
+**Status:** Same-day preparation complete. The usable standalone prep note is `Meeting Reviews/Sickness Absence Data Uploads — Michael — 25-08.md`; it is based only on verified Granola records and Kevin’s current communication fact.
 
 ---
 
@@ -43,7 +43,7 @@
 
 ### Exact next safe action
 
-When Michael replies, hold the focused fact-finding catch-up using the five outputs above. Send Marie only a caveated resource estimate and current constraints; then capture agreed actions/owners/dates in a draft for Kevin’s review before publishing it.
+When Michael replies, use `Meeting Reviews/Sickness Absence Data Uploads — Michael — 25-08.md` for the focused fact-finding catch-up. Send Marie only a caveated resource estimate and current constraints; then capture agreed actions/owners/dates in a draft for Kevin’s review before publishing it.
 
 ### Verification performed
 
