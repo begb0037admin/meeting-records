@@ -53,11 +53,11 @@
 
 ### Outlook drafts for Marie — unsent
 
-**Revised draft external state:** An Outlook draft has been created for **Marie Cooksey** with subject **“Sickness absence data uploads — resource position (revised).”** It remains unsent. Its message body, credentials, Outlook link and draft ID are not recorded here; no safe identifier was supplied in this session.
+**Latest draft external state:** An Outlook draft has been created for **Marie Cooksey** with subject **“Sickness absence data uploads — process and resource estimate.”** It remains unsent. Its message body, credentials, Outlook link and draft ID are not recorded here; no safe identifier was supplied in this session.
 
-**Prior draft:** The broader draft with subject **“Sickness absence data uploads — resource position”** may still exist unless safely superseded. It must not be deleted or sent by an agent.
+**Prior drafts:** The broader draft **“Sickness absence data uploads — resource position”** and revised draft **“Sickness absence data uploads — resource position (revised)”** may still exist unless safely superseded. Preserve both; no agent deletes or sends them.
 
-**Exact next action:** Kevin reviews the revised Outlook draft and decides which draft, if any, to send. No agent deletes or sends either draft.
+**Exact next action:** Kevin reviews/selects the Outlook draft and decides whether to send it. No agent sends or deletes any draft.
 
 ### Exact next safe action
 
