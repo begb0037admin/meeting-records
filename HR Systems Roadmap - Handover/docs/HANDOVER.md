@@ -14,7 +14,13 @@ No meeting this cycle, no speaking brief. Marie asked Kevin to update the live H
 6. **DTP1092** — ORCID sub-action ("Kevin to take forward") has no progress since 30 Jul; invalid deadline text `31/09/2026`.
 7. New "New"-status rows **198 / 199** (WFM remaining depts; Botanic Gardens rostering) — decision needed on scope/ownership.
 
-**Next concrete action:** Kevin reviews `ALIGNMENT-2026-08-27.md` §3–§4 and hand-enters approved rows into the OneDrive master for Friday.
+**Follow-ups added later on 27 Aug (§8–§11 of the deliverable):**
+- **§8 — when the roadmap was genuinely last updated:** it is a *rolling* document (per-row `Date last reviewed`, no sheet-wide date). Last worked on **today, 27 Aug** — a ~10-row batch of dashboard/HESA/REF/FA items (file saved 16:24). Last full cycle before that: **21 Aug meeting** (14 rows). **The Friday 22 Aug cycle was skipped** — nothing in the sheet is dated 22–24 Aug. ~25 active rows still carry a blank/pre-July review date. Data-entry errors flagged: row 180 review date `2026-12-18` (future), CA120_2526 progress line `29/05/2029`, DTP1092 deadline `31/09/2026` (invalid).
+- **§9 — full before/after table:** verbatim current cell content (Owner/Status/Status details/Date last reviewed/Progress-top) vs proposed, for every proposed row.
+- **§10 — owner-coverage sweep of all 268 rows** for Kevin/Simon/Marie/Michael/James/Asta. Findings: **Kevin leads 3 active rows, all in the proposal. Michael and Asta lead ZERO active rows** — their live work sits under 208/CA102_2526/CA104_2526/CA138_a/179 (all already proposed) — not a filtering error, structural. Simon/Marie C carry most other-owner active load; overlooked ones now flagged: **181, UOX008** (Simon — empty/stale), **202, 149, 193** (Marie C), **94** (James), **191** (Nathan).
+- **§11 — 3 rows added to the proposal from the sweep:** **204** (REF Appeal ESS — deadline 28 Aug tomorrow; REF2029 UDF promotion to UOXP), **183** (Sickness Absence Dashboard — data-model blocker, reviewed 3 Jul, heavy Granola coverage), **ITS960** (DSE — Granola *James 1-1 21/08* says "delivered and closed"; confirm, don't close unilaterally).
+
+**Next concrete action:** Kevin reviews `ALIGNMENT-2026-08-27.md` §3–§4 and §9–§11 and hand-enters approved rows into the OneDrive master for Friday.
 
 **Gaps flagged:** Sarah Rowles' HESA-timing question and the H&S-dashboard org-mapping risk (both named in the 21 Aug handover) are **not corroborated** in this cycle's sources — Kevin to confirm if real.
 
