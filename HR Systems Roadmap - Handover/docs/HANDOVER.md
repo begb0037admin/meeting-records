@@ -1,3 +1,27 @@
+# HANDOVER — 2026-08-27 (latest)
+
+## TL;DR — 27 Aug 2026 alignment pass
+No meeting this cycle, no speaking brief. Marie asked Kevin to update the live HR Systems Roadmap master **directly**, ready for **Friday 28 Aug**. Kevin hand-enters every change himself. Lauren produced a verified, source-cited **per-row change proposal** — **nothing written to the roadmap or `hr-projects`**. Deliverable: **`HR Systems Roadmap - Handover/docs/ALIGNMENT-2026-08-27.md`** (read that, not this TL;DR, for the full list).
+
+**Verified live:** the authoritative master is the **local OneDrive copy** (`C:\Users\admin\OneDrive - Nexus365\HR Systems Roadmap Master\HR Systems Roadmap MASTER.xlsm`, modified 27 Aug 16:24, actively maintained). The `hr-projects` repo copy is **~12 weeks stale** (commit `f16a11a`, 6 Jun) — do not use it. Cross-referenced against `work-inbox` (briefing.json / inbox_suggestions.json, 27 Aug refresh), `command-centre` tasks.json (83 tasks), and 10 Granola notes since 10 Aug (Granola API reachable this session).
+
+**Headline proposals (priority order):**
+1. Empty **CA104_2526 "August update"** (Hierarchy Restructuring, deadline 9 Sept) — populate from Granola SK/Michael 1-1s + command-centre task-1787072363309: PACS level 2→3 college move + three new PACS management units via the Portal. *This is the "Organisational Structure Update" gap the 21 Aug handover raised — now has a clear home.*
+2. Empty **Row 208** (38-day balances) — populate from the 19 Aug planning meeting + Michael 1-1 + Chemistry's 131 work groups (Michael, 27 Aug). Kevin updates holiday scheme per work group from 5 Oct.
+3. **Row 179** (SSO migration, Lead: Kevin) — add 3 Aug Entra ID groups milestone + 25 Aug OSM auth issue; confirm the VS2022-licence blocker still holds.
+4. **Row 136** (DPIA, Lead: Kevin) — add 27 Aug v0.5 share; deadline 31 Aug at risk.
+5. **DTP1334** (H&S Management System, Lead: Kevin) — roll stale 27 Aug checkpoint forward.
+6. **DTP1092** — ORCID sub-action ("Kevin to take forward") has no progress since 30 Jul; invalid deadline text `31/09/2026`.
+7. New "New"-status rows **198 / 199** (WFM remaining depts; Botanic Gardens rostering) — decision needed on scope/ownership.
+
+**Next concrete action:** Kevin reviews `ALIGNMENT-2026-08-27.md` §3–§4 and hand-enters approved rows into the OneDrive master for Friday.
+
+**Gaps flagged:** Sarah Rowles' HESA-timing question and the H&S-dashboard org-mapping risk (both named in the 21 Aug handover) are **not corroborated** in this cycle's sources — Kevin to confirm if real.
+
+**Pipeline freeze unchanged:** `tools/speaking-briefs/build_roadmap.py` and `roadmap-items.json` were **not** used or touched — the 21 Aug freeze still stands. This pass read the master directly.
+
+---
+
 # HANDOVER — 2026-08-21
 
 ## TL;DR
