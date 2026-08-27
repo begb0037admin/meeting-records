@@ -4,11 +4,58 @@
 Marie asked Kevin to update the live HR Systems Roadmap master directly, ready for **Friday 28 Aug 2026**.
 Kevin hand-enters every approved change into the `.xlsm` himself. Nothing in this document has been written to the roadmap.
 
-> **Follow-up sections added 27 Aug (later):** §8 when the roadmap was genuinely last updated (evidence, not assumption) · §9 full before/after table (verbatim current cell content vs proposed) · §10 owner-coverage sweep of all 268 rows for Kevin / Simon / Marie / Michael / James / Asta · §11 rows added to the proposal from that sweep (204, 183, ITS960) plus owner flags.
+> **Primary deliverable is the consolidated change table in §1.** Sections §2–§8 are the working detail behind it (sources, per-row proposals, candidates, no-change list, gaps). Sections §9–§12 are the 27 Aug follow-ups: §9 evidence of when the roadmap was genuinely last updated · §10 full before/after table · §11 owner-coverage sweep of all 268 rows · §12 net additions from that sweep.
 
 ---
 
-## 1. Source of truth — verified live
+## 1. Consolidated change table (primary deliverable)
+
+> **This table layout is the standard for every future HR Systems Roadmap alignment pass.** Columns, sort order, and the "verbatim last update / proposed text / action" split are reusable as-is next cycle — replace the rows, keep the shape.
+
+One row per roadmap item that needs Kevin's attention this cycle. **Nothing here has been written to the master** — Kevin hand-enters each approved change into `HR Systems Roadmap MASTER.xlsm` (local OneDrive copy) himself, for Friday 28 Aug 2026.
+
+**Columns:** Row ID · Title · Owner (col G, real name) · Last update (verbatim from the master: newest Progress-column line + Status + Date last reviewed) · Proposed update (exact text to type, in the roadmap's own style) · Action for Kevin.
+**Sort:** Owner — Kevin, Simon, Marie C, Marie K, Michael, James, Asta, then blank / other — then Row ID.
+
+| Row ID | Title | Owner | Last update (verbatim) | Proposed update | Action for Kevin |
+|---|---|---|---|---|---|
+| 179 | Migration of HR Reporting Users to SSO | Kevin | Status: `On Hold` / `On Target` · Reviewed: `2026-07-03` · Progress top: `03/07/26 - Migration has been placed on hold until Visual Studio 2022 licences become available, as there is a compatability issue with older versions of Visual Studio. Main poijnt of contact in IT is Svetlana Kuznetsova.` | Prepend 2 Progress lines: `25/08/26 - IT Services (Louise Piper) notified OSM users of authentication issues affecting login; may affect migration testing.` / `03/08/26 - Nexus team confirmed the six PeopleXD data access groups populated in Entra ID with the user lists Asta provided on 16 July, advancing SSO migration work.` — set Date last reviewed `2026-08-27`. | Confirm VS2022 blocker still holds, then enter |
+| 136 | PeopleXD Data Protection Impact Assessment | Kevin | Status: `In Progress` / `On Target` · Reviewed: `2026-08-21` · Progress top: `21/08/26 - Pilot of Soundcloud now in place.` | Prepend: `27/08/26 - Kevin shared updated DPIA v0.5 for Marie's review / Stage 7 sign-off.` — set Date last reviewed `2026-08-27`. Deadline is 31 Aug and still awaiting Marie's signature. | Enter progress line; decide status (`At risk`?) |
+| DTP1334 | Health & Safety Management System | Kevin | Status: `In Progress` / `On Target` · Reviewed: `2026-08-21` · Next checkpoint: `2026-08-27` · Progress top: `21/08/26 - Kevin and Marie have reviewed  6  supplier questionnaires and forwarded their findings and feedback to the project team. Project team have extended this phase (identifying a software supplier) to end of September.` | No Progress change needed. Roll Next checkpoint `2026-08-27` → ~`2026-09-11` (board shortlisting, early Sept). Deadline `2026-09-25` already correct. | Roll checkpoint date forward |
+| 181 | Salary and Allowance Data in DWH | Simon | Status: `Planning` / `On Target` · Reviewed: `2026-07-01` · Next checkpoint: `2026-08-28` · Progress top: `01/07/26 - Jasmin has approached us to begin discussions around the data she needs access to in the warehouse.` | No content change. Refresh Date last reviewed; confirm still parked to the 2026-27 dashboard roadmap (per Next-steps note `07/08/26 - This is going onto the dashboard roadmap for 2026-27, needs sign off by SLG`). | Simon to refresh review date / confirm parked |
+| UOX008 | Data Platform Project | Simon | Status: `In Progress` / `On Target` · Reviewed: `2026-07-31` · Progress: `(blank — no prior update)` · Next steps: `- All to review Fabric documentation` | Simon to add a Progress line for the current Fabric-POC state and confirm scope vs row 200 (DWH Fabric Migration). Deadline `2026-12-31` is Fixed–compulsory against an empty log. | Simon to add progress line / confirm scope vs 200 |
+| 149 | Support ACRF consultation mailing | Marie C | Status: `On Hold` / `On Hold - Waiting for internal team` · Reviewed: `2026-01-30` · Progress top: `01/07/25 Annalisa confirmed delay in send out timetime, now not likely required until HT2026.` | No content change. Hilary Term 2026 has passed — confirm still live or move to Complete/Removed. | Marie C to confirm live or close |
+| 180 | Entra ID groups | Marie C | Status: `Complete` / `On Target` · Reviewed: `2026-12-18` *(future date)* · Deadline: `2025-12-19` · Progress top: `22/12/2025 - Identity Improvement Programme (IIP) Team has invited people to start submitting requests for the creation of Entra ID groups via a Microsoft Form.` | Fix Date last reviewed `2026-12-18` → `2025-12-18` (typo — item completed Dec 2025). No other change. | Fix date typo |
+| 193 | Pay & Conditions Modelling | Marie C | Status: `Pending/Expected` / `Pending` · Reviewed: `(blank)` · Progress: `(blank — no prior update)` · Next steps: `- Sara Willis to provide more details on requirements and timelines` | No content change. Add a review date; confirm still expected. | Marie C to date-stamp / confirm expected |
+| 202 | Fire Risk Assessment Dashboards | Marie C | Status: `In Progress` / `On Target` · Reviewed: `2026-07-31` · Progress: `(blank — no prior update)` · Next steps: `- Chris to review reporting requirements and pull together user stories` | Add a Progress line, e.g. `11/08/26 - MarieC met with Kate Vickers and Alex Gray to discuss resourcing to further develop the H&S dashboard, with specific focus on fire safety.` (currently only recorded under row 174_b). | Marie C to add progress line |
+| 94 | Biohazardous Materials Management | James *(col G: Chris, James)* | Status: `On Hold` / `On Hold - Waiting for funding` · Reviewed: `(blank)` · Progress: `(blank — no prior update)` | No content change. H&S funds approved 21 Aug covered DSE / Quality / IRIS, **not** Biohazardous — confirm the funding blocker is unchanged and add a review date. | Confirm blocker, then date-stamp |
+| 176 | Rollout of ER Case Management to Departments | *(blank — assign Marie C or Kevin)* | Status: `On Hold` / `On Hold - Waiting for strategic decision` · Reviewed: `2026-06-19` · Next checkpoint: `2026-06-26` · Progress top: `26/06/26 - Dawn not happy to rollout further until backlog is cleared.` | Assign an Owner. Add the outcome of the 30 Jul support-model review Kevin was due to attend (Progress line `19/06/2026` says "support model due to be reviewed on 30/07, Kevin will be attending"). Roll checkpoint + review date forward. | Assign owner; add 30 Jul review outcome |
+| 183 | Sickness Absence Dashboard (Executive Summary) | Sarah | Status: `In Progress` / `On Target` · Reviewed: `2026-07-03` · Progress top: `07/08/26 - Chris has shared user stories with Sarah this week.` | Prepend 2 Progress lines: `25/08/26 - UCR calculations nearly complete in test workbook; divisional slicing broke again after adding the division field; FTE values corrected; star schema not yet loaded into Power BI.` / `21/08/26 - Dashboard mostly green but FTE-dependent calculations unreliable; Sarah reworking the data model (Simon's approach as reference), blocking ~1 day/week alongside HESA. Executive dashboard on hold until the data model is fixed.` — set Date last reviewed `2026-08-27`. | Enter progress lines; decide status (`At risk`?) |
+| 191 | REF Strategy, People, Research Environment (SPRE) data requirements | Nathan | Status: `In Progress` / `On Target` · Reviewed: `2026-06-19` · Deadline: `2026-08-31` · Progress top: `19/06/26 - no movement on SPRE at present as focus is currently on DTP1092.` | Review is 10 weeks old and the deadline is in 3 days with "no movement" on record. Extend the deadline or update the status; refresh the review date. | Nathan/Kevin to extend deadline or update status |
+| 192_a | New annual leave duty from 6 April 2026 (report build) | Athena | Status: `In Progress` / `On Target` · Reviewed: `2026-08-21` · Progress top: `21/08/26 - Kevin has reached out to AG this week to ask them to arrange a scoping call to discuss the report build. He has suggested a few dates, awaiting response. Marie to chase KFJ to confirm what the University's retention policy is for holiday data...` | **No change** — already current and captures the Holiday Records / Access Group report build end to end. Optional: add AG case number `69001638` to the existing `12/06/26` line for precision. | No change (optional case-ref tidy) |
+| 198 | WFM Remaining departments go live | *(blank — assign)* | Status: `New` · Reviewed: `(blank)` · Progress: `(blank — no prior update)` | Only if Kevin confirms this belongs on the roadmap: assign Owner; Status → `In Progress`; Description `Complete WFM go-live for the departments still outside PeopleXD / WFM: SBS, Paediatrics, GLAM.`; Progress `25/08/26 - 3 departments still to migrate: SBS, Paediatrics, GLAM. Outstanding backdated-sickness data loads ("Upload 2") tied to this.` / `20/08/26 - Managers meeting: confirmation needed all departments on board for Oct go-live; Kevin to be invited to the next WFM meeting.`; Next steps `- Kevin to attend the next WFM project meeting.` / `- Resolution meeting to be set up (Kevin, Simon, Marie, Michelle, +/- Julie) on outstanding loads for SBS / PEDS / GLAM.` | Decide if on roadmap; assign owner; populate |
+| 199 | Botanic Gardens Rostering set up | *(blank — assign)* | Status: `New` · Reviewed: `(blank)` · Progress: `(blank — no prior update)` | Only if Kevin confirms scope (not a duplicate of 198): assign Owner; Status → `On Hold` / `On Hold - Work Deprioritised`; Description `Set up WFM rostering for GLAM Botanic Gardens Ticket Office and Ashmolean Security, where annual leave via WFM does not work for concentrated / non-standard shift patterns.`; Progress `19/08/26 - Raised via Anna Carter-Windle (GLAM). Considered during 38-day balance planning; significant BA and implementation effort. Team capacity stretched — position is that GLAM rostering waits. Separate, larger piece of work from the 38-day balance change.`; Next steps `- Requirements gathering with the GLAM Gardens team when resource allows.` | Confirm scope; assign owner; populate |
+| 203 | IP Rights employment checking dashboard/tool | *(blank — assign)* | Status: `Pending/Expected` / `Pending` · Reviewed: `(blank)` · Progress: `(blank — no prior update)` · Next steps: `- needs requirements gathering with Research Services (AnneM)` | No content change. Assign an Owner; leave `Pending` until requirements gathering with Research Services (Anne Mortimer) begins. | Assign owner |
+| 204 | REF Appeal Process Self Service (ESS) | Nathan | Status: `In Progress` / `On Target` · Reviewed: `2026-08-07` · Deadline: `2026-08-28` · Progress top: `07/08/26 - Nathan undertook testing in UOXU using one of the test profiles. Demonstrated to Anne Mortimer.` | Prepend: `27/08/26 - REF2029 UDF being promoted to UOXP production (Nathan flagged 26 Aug; Kevin confirmed promotion to live 27 Aug). This UDF carries the REF-status values the ESS appeal screen displays.` — set Date last reviewed `2026-08-27`. Deadline is **tomorrow**. | Enter progress line; set deadline position (met / slipping / extend) |
+| 208 | Migrating departments onto 38 day balances | Julie *(Team: Kevin, Simon, Michael, Marie C)* | Status: `In Progress` / `On Target` · Reviewed: `2026-07-30` · Progress: `(blank — no prior update)` · Next steps: `- Julie to ocntact departments who have requested this to run through what it will mean and the work required.` / `- Kevin to update balance/workgroup configuration` / `- Kevin to discuss what steps need to take place with Michael` | Progress (newest first): `27/08/26 - Chemistry (first to request) compiling its work-group list; 131 work groups identified for amendment (Michael, 27 Aug). Marie reviewing effort with Kevin in Julie's absence.` / `20/08/26 - Michael 1-1: target update window 1-2 Oct, ahead of 7 Oct rollover; work-group holiday-scheme swap is a single field update per work group (~1-2 min each), can only run after leave-year end.` / `19/08/26 - Planning meeting (Julie / Kevin / Simon / Michael). Chemistry proceeding; Maths advised to pause until next leave year; Biology declined (too late this year); GLAM (large, complex rosters) on hold pending Chemistry's work-group count. Treated as a pilot, not a standard service. Departments to submit work-group lists by 28 Aug; Kevin to update the holiday scheme per confirmed work group from 5 Oct.` — Next steps: `- Departments to submit work-group lists (code + description) by 28 Aug.` / `- Kevin to update the holiday scheme attached to each confirmed work group from 5 Oct, priority order by submission date, liaising with Michael on mechanics.` / `- Brief first-line support (Emma) ahead of the Oct rollover.` / `- Julie to send a summary email to all departments (cc Kevin, Simon) as the shared thread.` / `- Revisit a charging mechanism for future years.` — set Date last reviewed `2026-08-27`; Next checkpoint `2026-10-02`. | Enter as-is |
+| CA102_2526 | Annual Leave Year End Rollover 2026 | FA, BC, Tracy *(propose: Michael)* | Status: `Scheduled` / `Pending` · Reviewed: `(blank)` · Progress: `October` | Progress: `20/08/26 - ~80 balance calendars being manually extended per environment (U done, Z in progress, then C, then live). Rollover runs from Mon 5 Oct once the prior leave year is locked; run in one test env first, then live, then remaining test envs.` — set Date last reviewed `2026-08-27`. | Enter progress line; consider naming Michael as Lead |
+| CA104_2526 *(phase: August update)* | Hierarchy Restructuring | FA, HRA *(propose: Kevin for the PXD/Portal part)* | Status: `Scheduled` / `Pending` · Reviewed: `(blank)` · Next checkpoint: `2026-08-28` · Progress: `(blank — no prior update)` · Next steps: `(blank)` | Progress: `27/08/26 - To be actioned via the Portal (first time; previously back office). U environment confirmed safe to use; C environment cloned/replicated. Documentation to be updated alongside. Team catch-up planned w/c 1 Sept.` / `19/08/26 - Draft University PACS Organisational Structure update circulated (orgstructure@admin.ox.ac.uk, 12 Aug; forwarded by Simon 18 Aug): wholesale move of College / Society entities from PACS level 2 to level 3, plus a Subsidiary Companies correction. Separately, three new PACS management units to be created for the HR Systems reorg.` — Next steps: `- Kevin to review the PACS level 2 -> 3 draft for HR Systems implications.` / `- Create the three new PACS management units via the Portal.` / `- Update related guidance / documentation.` / `- Team catch-up w/c 1 Sept.` — set Date last reviewed `2026-08-27`; Status → `In Progress` once Portal work starts. | Enter as-is; confirm this row covers both the reorg and the PACS L2→L3 move; consider naming Kevin as Lead |
+| CA120_2526 | Arts Council England (ACE) Museum NPO Survey | Ant | Status: `Complete` / `On Target` · Reviewed: `2026-05-29` · Progress top: `29/05/29 - Ant has completed the work and is doing one last check before sending it today` | Fix the Progress-line date `29/05/29` → `29/05/26` (year typo — item is Complete, reviewed May 2026). No other change. | Fix date typo |
+| CA138_a | UCEA Main Pay Uplift | Athena *(Team: Michael)* | Status: `Pending/Expected` / `Pending` · Reviewed: `(blank)` · Progress top: `16/07/2026 - Planning meeting with all involved teams, sketched out timeframe for Sept implementation (as August implementation already too late). Relevant HRS deadlines UCEA instruction 3/8 latest, HRA to provide rates to FA by 7/8, for UAT by 13/8, load deadline for LIVE 24/8, NOTE need to plan contingency cover as MOS on leave 24/8 and no-one else in FA has experience loading rates.` | Prepend: `20/08/26 - Non-clinical (main) uplift delayed pending union decision; October implementation ruled out (payroll increments that month); November or later now more likely. September decision point flagged by Jessica Oldershaw.` — set Date last reviewed `2026-08-27`. | Enter progress line |
+| DTP1092 | Research management data for REF and research quality | Nathan *(Team: Marie C, Kevin)* | Status: `In Progress` / `On Target` · Reviewed: `2026-08-27` · Deadline: `31/09/2026` *(invalid date)* · Progress top: `27/08/26 - SB and MC met with DRAM to discuss Data Warehouse restrictions. Ewan confirmed it was too complex to remove the data before it hits the data warehouse...` · X block `====ORCID====`: `- Research Services have provided requirments for how they want the ORCID page to be updated. Kevin to take this forward.` | (1) Fix Deadline `31/09/2026` → `30/09/2026`. (2) ORCID sub-thread: add a `27/08/26 -` Progress line stating the true current state of the ORCID page update (open action on Kevin since `30/07/26 - ORCID requirements have been passed back to Kevin to take forward`), or confirm at FA Catch-up it is still open / un-started. Rest of the row is current. | Fix date typo; add ORCID progress line or confirm still open |
+| ITS214 | ORCID via onboarding | Grace | Status: `Complete` / `Delayed` · Reviewed: `2025-02-14` · Progress top: `21/02/2025 - may actually be finished; need an update from FA to confirm. A tile has been created - is this live?` | **No change** — do not un-complete (carry-over rule). Awareness only: the live ORCID tile work is now tracked inside DTP1092. | No change (noted for awareness) |
+| ITS960 | DSE Online Assessment | Grace, Nik | Status: `In Progress` / `Delayed` · Reviewed: `2026-08-07` · Progress top: `07/08/26 - Feed updated and James has tested` · Next steps: `- James / Marie to confirm if it's gone live` | Granola *James 1-1 21/08* states DSE is "delivered and closed (~£2,000 for a filter)". Confirm at FA Catch-up and, if confirmed, close it (do **not** close unilaterally — carry-over rule). Set Date last reviewed `2026-08-27`; confirm current owner (Grace / Nik may no longer be it). | Confirm status (likely complete), then close; confirm owner |
+
+### Coverage note
+
+- **90 rows are active** (On Hold 26 · In Progress 33 · Not Delivered 2 · Pending/Expected 12 · Planning 5 · Scheduled 9 · New 3). This table covers **23 active rows** plus **3 Complete rows** (180, CA120_2526, ITS214 — data-error fixes / awareness).
+- The other **67 active rows were checked** — against col Y (Date last reviewed), every dated `DD/MM/YY -` line in col W, and the `work-inbox` / `command-centre` / Granola cross-reference — and need **no change this cycle**. The bulk are aligned to the 21 Aug meeting or were touched on 27 Aug; the rest are long-dormant On Hold items and future-dated seasonal Scheduled/Pending rows with no new activity in any source. Full list in §6.
+- The **~178 Complete / Removed rows** were not in scope for change (data-error fixes aside).
+- **Owner sweep result:** Kevin leads 3 active rows (all above). **Michael and Asta lead zero active rows** — Michael's live work sits under 208 / CA102_2526 / CA104_2526 / CA138_a and Asta's under 179 (all above); this is structural, not a filtering gap. Simon and Marie C carry most other-owner active load and are swept in §11 (owner-coverage sweep).
+
+---
+
+## 2. Source of truth — verified live
 
 | | Detail |
 |---|---|
@@ -24,7 +71,7 @@ Sheet read: **`Work Tracker`** (A1:AC269, 268 data rows). Column map: A ID · B 
 
 ---
 
-## 2. What was cross-referenced (mandatory 1 Aug 2026 rule)
+## 3. What was cross-referenced (mandatory 1 Aug 2026 rule)
 
 | Source | Read | Notes |
 |---|---|---|
@@ -38,11 +85,11 @@ Granola notes used: *HR Systems Roadmap 21/08*, *Planning for depts move to 38 d
 
 **Verified directly:** the master's cell contents; the cross-reference source files above; Granola summaries.
 **Taken from documentation (not primary email):** `command-centre` action-log wording (it paraphrases emails). Flagged inline where a proposal rests on it.
-**Could not check:** the *original emails* behind command-centre entries (no mailbox access — Lauren never touches Outlook); some 21 Aug handover concerns (see §6).
+**Could not check:** the *original emails* behind command-centre entries (no mailbox access — Lauren never touches Outlook); some 21 Aug handover concerns (see §7).
 
 ---
 
-## 3. Per-row change proposals
+## 4. Per-row change proposals
 
 Format: **Current** = verbatim from the live master. **Proposed** = for Kevin to review, adapt to house phrasing, and hand-enter. Progress lines follow the master's own `DD/MM/YY - …` newest-first style.
 
@@ -178,7 +225,7 @@ This row was reviewed today (Y = `2026-08-27`) and its multi-company content is 
 - Progress (W): `25/08/26 - 3 departments still to migrate: SBS, Paediatrics, GLAM. Outstanding backdated-sickness data loads ("Upload 2") are tied to this. / 20/08/26 - Managers meeting: confirmation needed that all departments are on board for October go-live; Kevin to be invited to the next WFM meeting.`
 - Next steps (X): `- Kevin to attend the next WFM project meeting. / - Resolution meeting to be set up (Kevin, Simon, Marie, Michelle, +/- Julie) on outstanding loads for SBS / PEDS / GLAM.`
 
-**FLAG:** WFM go-live may be owned by a separate project outside the HR Systems Roadmap — Kevin to confirm whether row 198 should be populated or removed. Overlaps with the sickness-absence data-gap work (see §4).
+**FLAG:** WFM go-live may be owned by a separate project outside the HR Systems Roadmap — Kevin to confirm whether row 198 should be populated or removed. Overlaps with the sickness-absence data-gap work (see §5).
 
 ---
 
@@ -207,7 +254,7 @@ This row was reviewed today (Y = `2026-08-27`) and its multi-company content is 
 
 ---
 
-## 4. New candidate items — proposals only, not decided
+## 5. New candidate items — proposals only, not decided
 
 Surfaced from cross-reference; **not** presented as agreed additions. Kevin decides whether any becomes a roadmap row.
 
@@ -218,17 +265,17 @@ Surfaced from cross-reference; **not** presented as agreed additions. Kevin deci
 
 ---
 
-## 5. Explicitly NO CHANGE — already aligned
+## 6. Explicitly NO CHANGE — already aligned
 
 The following active items carry `Date last reviewed = 2026-08-21` or `2026-08-27` and their content matches the 21 Aug Roadmap meeting / current cross-reference data. **No change proposed:**
 
-`196_a` EVO · `197_a` Eploy · `174_b` H&S dashboards · `187` REF Substantive link dataset · `173` Workforce Profile Dashboard · `48` Applicant cleardown · `133` FTC Monitoring by person Dashboard · `172_a`/`172_b` Athena Swan redevelopment · `143_a`/`143_b` Resourcing Dashboard migration · `177` ER Case Management Institutional Reporting · `178` HESA Staff Consultation Outcomes (correctly shows review resuming late Nov) · `183` Sickness Absence Dashboard · `191` REF SPRE · `192_b` annual leave insight report (Henry) · `148_b` UCEA Sickness Absence Survey (has 25 Aug note) · `200` DWH Fabric Migration · `202` Fire Risk Assessment Dashboards · `207` Volunteering leave → employee-bookable (reviewed today, "ready for UAT") · `CA105_d_2526` HESA Staff Return 2025/26 · `CA108`/`CA112`/`CA129` year-end HRA items · `DTP1211` ORMS · `DTP1092` multi-company content (ORCID sub-point excepted, §3) · `UOX008` Data Platform · `211` EDI leadership-training analysis (added today).
+`196_a` EVO · `197_a` Eploy · `174_b` H&S dashboards · `187` REF Substantive link dataset · `173` Workforce Profile Dashboard · `48` Applicant cleardown · `133` FTC Monitoring by person Dashboard · `172_a`/`172_b` Athena Swan redevelopment · `143_a`/`143_b` Resourcing Dashboard migration · `177` ER Case Management Institutional Reporting · `178` HESA Staff Consultation Outcomes (correctly shows review resuming late Nov) · `183` Sickness Absence Dashboard · `191` REF SPRE · `192_b` annual leave insight report (Henry) · `148_b` UCEA Sickness Absence Survey (has 25 Aug note) · `200` DWH Fabric Migration · `202` Fire Risk Assessment Dashboards · `207` Volunteering leave → employee-bookable (reviewed today, "ready for UAT") · `CA105_d_2526` HESA Staff Return 2025/26 · `CA108`/`CA112`/`CA129` year-end HRA items · `DTP1211` ORMS · `DTP1092` multi-company content (ORCID sub-point excepted, §4) · `UOX008` Data Platform · `211` EDI leadership-training analysis (added today).
 
 Long-dormant `On Hold` items (rows 5, 36, 40, 53, 67, 79, 83, 94, 110, 119, 120, 130, 149, 151, 18_g, 22_c/d, 23_c, 68_b, 80_b, 86_a, etc.) — no new evidence of movement in any cross-reference source; **no change**.
 
 ---
 
-## 6. Gaps / could not verify
+## 7. Gaps / could not verify
 
 | Item | Status |
 |---|---|
@@ -242,9 +289,9 @@ Long-dormant `On Hold` items (rows 5, 36, 40, 53, 67, 79, 83, 94, 110, 119, 120,
 
 ---
 
-## 7. Next action & checkpoint
+## 8. Next action & checkpoint
 
-**Exact next action:** Kevin reviews §3–§4 above and hand-enters the approved rows into
+**Exact next action:** Kevin works straight down the **consolidated change table in §1** (supporting detail in §4–§5 and §9–§12) and hand-enters the approved rows into
 `C:\Users\admin\OneDrive - Nexus365\HR Systems Roadmap Master\HR Systems Roadmap MASTER.xlsm`,
 ready for Friday 28 Aug 2026. Nothing here has been written to the roadmap or to `hr-projects`.
 
@@ -256,7 +303,7 @@ ready for Friday 28 Aug 2026. Nothing here has been written to the roadmap or to
 
 ---
 
-## 8. When was the roadmap genuinely last updated?
+## 9. When was the roadmap genuinely last updated?
 
 Determined from evidence, not assumption. Three signals checked: every row's `Date last reviewed` (col Y), every dated `DD/MM/YY -` line in the Progress column (col W), and the file's modified time.
 
@@ -295,7 +342,7 @@ There is no single "last updated" date for the sheet. Rows are stamped **individ
 
 ---
 
-## 9. Before / after — verbatim current cell content vs proposed
+## 10. Before / after — verbatim current cell content vs proposed
 
 `W-top` = the current newest line in the Progress column (col W), quoted verbatim; full histories stay in the master. "Prepend" = add above that line, keeping everything below. Nothing here is written — Kevin types it.
 
@@ -456,7 +503,7 @@ Source: Granola *Michael 1-1 20/08*.
 | Status (AA) / details | `Complete` / `Delayed` | **no change — do not propose un-completing** (carry-over rule) |
 | Progress W-top | `21/02/2025 - may actually be finished; need an update from FA to confirm. A tile has been created - is this live?` | none — noted for awareness only; the live ORCID tile work is now tracked inside DTP1092 |
 
-### Rows added from the owner sweep (§10, §11)
+### Rows added from the owner sweep (§11, §12)
 
 **Row 204 — REF Appeal Process Self Service (ESS)  ·  deadline 2026-08-28 — tomorrow**
 
@@ -495,7 +542,7 @@ Source: Granola *James 1-1 21/08*.
 
 ---
 
-## 10. Owner-coverage sweep — all 268 Work Tracker rows
+## 11. Owner-coverage sweep — all 268 Work Tracker rows
 
 Ownership read from **col G (Lead)**. Active = Status is one of On Hold / In Progress / Not Delivered / Pending/Expected / Planning / Scheduled / New.
 
@@ -504,11 +551,11 @@ Ownership read from **col G (Lead)**. Active = Status is one of On Hold / In Pro
 | Owner | Active rows they LEAD | In this proposal? | Overlooked (with update) |
 |---|---|---|---|
 | **Kevin** | 3 — `179`, `136`, `DTP1334` | **All 3** | none |
-| **Simon** | ~12 — `133`, `200`, `207` (reviewed 27 Aug, current), `173`, `48`, `UOX008`, `181`, `36`, `53`, `22_d`, `23_c`, `80_b` | via §5 no-change | `181`, `UOX008` — flags below |
-| **Marie C** | ~9 — `196_a`, `197_a`, `177`, `178`, `148_b` (reviewed 21 Aug), `202`, `149`, `193`, `79` | via §5 no-change | `202`, `149`, `193` — flags below |
+| **Simon** | ~12 — `133`, `200`, `207` (reviewed 27 Aug, current), `173`, `48`, `UOX008`, `181`, `36`, `53`, `22_d`, `23_c`, `80_b` | via §6 no-change | `181`, `UOX008` — flags below |
+| **Marie C** | ~9 — `196_a`, `197_a`, `177`, `178`, `148_b` (reviewed 21 Aug), `202`, `149`, `193`, `79` | via §6 no-change | `202`, `149`, `193` — flags below |
 | **Marie K** | 3 — `CA121_2526`, `CA123_2526`, `CA134_2526` (all `Pending/Expected`, future-dated seasonal surveys) | no | none — genuinely not due |
 | **Michael** | **0** — leads no active row (`ITS1004` WFM Rollout is `Complete`) | n/a | **not an omission — structural** |
-| **James** | 1 — `94` Biohazardous Materials Management (`On Hold - Waiting for funding`, blank review) | `94` flagged below | `ITS960` (James-driven, added §9); Cority/Quality funded work (§4 candidate 1) |
+| **James** | 1 — `94` Biohazardous Materials Management (`On Hold - Waiting for funding`, blank review) | `94` flagged below | `ITS960` (James-driven, added §10); Cority/Quality funded work (§5 candidate 1) |
 | **Asta** | **0** — leads no active row | n/a | **not an omission — structural** |
 
 ### Michael and Asta — why zero, and where their live work actually sits
@@ -531,7 +578,7 @@ Ownership read from **col G (Lead)**. Active = Status is one of On Hold / In Pro
 | `196_a` EVO / `197_a` Eploy | Marie C | In Progress / 2026-08-21 | **No change** — 21 Aug; Granola *Roadmap 21/08* Evo/Eploy section matches |
 | `177` ER Case Mgmt Institutional Reporting | Marie C | In Progress / 2026-08-21 | **No change** — 21 Aug; deadline 2026-08-31 but no new evidence |
 | `178` HESA Staff Consultation Outcomes | Marie C | In Progress / 2026-08-21 | **No change** — correctly parked, review resumes late Nov (matches Granola) |
-| `148_b` UCEA Sickness Absence Survey 25-26 | Marie C | In Progress / 2026-08-21 | **No change to this row** — `25/08/26` line already present. (Related dashboard work is `183`, added §9.) |
+| `148_b` UCEA Sickness Absence Survey 25-26 | Marie C | In Progress / 2026-08-21 | **No change to this row** — `25/08/26` line already present. (Related dashboard work is `183`, added §10.) |
 | `202` Fire Risk Assessment Dashboards | Marie C | In Progress / 2026-07-31 | **Overlooked — flag.** Progress column **empty**. Granola *Roadmap 21/08*: "MarieC met with Kate Vickers and Alex Gray on 11/8 to discuss resourcing to further develop H&S dashboard with specific focus on fire safety" — currently recorded only under `174_b`; may belong here too. |
 | `149` Support ACRF consultation mailing | Marie C | On Hold / 2026-01-30 | **Overlooked — flag.** "Annalisa to confirm requirements in HT2026" — Hilary Term 2026 has passed; W last real entry 01/07/25. Confirm still live or close. |
 | `193` Pay & Conditions Modelling | Marie C | Pending/Expected / **blank** | **Flag.** All date fields blank on an active row; only content is "Sara Willis to provide requirements". Confirm still expected. |
@@ -547,23 +594,23 @@ Ownership read from **col G (Lead)**. Active = Status is one of On Hold / In Pro
 | Row | Lead (G) verbatim | Status | Note |
 |---|---|---|---|
 | `40` Payroll reports review · `67` Experian Work Report · `119` TSS ePloy integration · `103_a` year-end processes · `68_b` Apprenticeship form | *(blank)* | On Hold | all dormant since 2024–early 2026 — need an owner only if reactivated |
-| `176` Rollout of ER Case Management | *(blank)* | On Hold | **in proposal §9** — assign Marie C / Kevin |
-| `198` WFM Remaining departments go live · `199` Botanic Gardens Rostering | *(blank)* | New | **in proposal §9** — need owner + decision |
+| `176` Rollout of ER Case Management | *(blank)* | On Hold | **in proposal §10** — assign Marie C / Kevin |
+| `198` WFM Remaining departments go live · `199` Botanic Gardens Rostering | *(blank)* | New | **in proposal §10** — need owner + decision |
 | `203` IP Rights employment checking tool | *(blank)* | Pending/Expected | needs requirements gathering with Research Services (AnneM) — needs owner |
 | `5` FTC End Date Reminders | `Lee` | On Hold | Lee no longer in team — reassign or leave dormant |
 | `83`, `18_g` | `Michelle` | On Hold | not one of the six — dormant |
 | `110`, `120`, `22_c` | `Tonya` | On Hold | not one of the six — dormant |
 | `130`, `139`, `172_a-d`, `86_a`, `211`, `CA137_2526` | `Athena` / `Susan` | mixed | HRA/reporting-team; `172_a`, `211` reviewed 27 Aug (current); `172_c/d` blank (Pending); `CA137_2526` on track to 30 Sept |
 | `186` TUPE Transfer improvements | `Ant` | On Hold | deprioritised 27/03/26 |
-| `151`, `183`, `209` | `Sarah` / `SarahR` | On Hold / In Progress / Scheduled | `183` added §9; `151` on hold waiting HESA; `209` future-dated |
-| `187`, `191`, `204`, `DTP1092` | `Nathan` | In Progress | `187` & `DTP1092` current; `204` added §9; **`191` flag** (reviewed 2026-06-19, deadline 2026-08-31, "no movement… focus on DTP1092" — Nathan/Kevin to extend or update) |
+| `151`, `183`, `209` | `Sarah` / `SarahR` | On Hold / In Progress / Scheduled | `183` added §10; `151` on hold waiting HESA; `209` future-dated |
+| `187`, `191`, `204`, `DTP1092` | `Nathan` | In Progress | `187` & `DTP1092` current; `204` added §10; **`191` flag** (reviewed 2026-06-19, deadline 2026-08-31, "no movement… focus on DTP1092" — Nathan/Kevin to extend or update) |
 | `190`, `205`, `206`, `210`, `CA125_2425`, `CA125_2627` | `TBC` | Pending/Planning/On Hold | genuinely not yet owned — future / awaiting-trigger |
 | `184`, `CA102_2526`, `CA103_2526`, `CA104_2526` | `FA` / `FA, BC, Tr` / `FA, HRA` | Not Delivered / Scheduled | FA-team; `CA102_2526` & `CA104_2526` in proposal |
 | `CA105_c/d`, `CA108_2526`, `CA112_2526`, `CA113_2526`, `CA117_a/b/d_2526`, `CA128_2526`, `CA129_2526` | `HRA` / `BC, HRA` / `Sarah` | In Progress / Scheduled / Planning | HRA year-end seasonal block; `CA105_d`, `CA112`, `CA129` reviewed 27 Aug (current); rest scheduled future work |
-| `ITS960` DSE | `Grace, Nik` | In Progress | **added §9** — Grace/Nik may no longer be the owners |
+| `ITS960` DSE | `Grace, Nik` | In Progress | **added §10** — Grace/Nik may no longer be the owners |
 | `94` Biohazardous | `Chris, James` | On Hold | flag above |
 
-### Data-entry / date errors (also in §8)
+### Data-entry / date errors (also in §9)
 
 - `180` Entra ID groups — `Date last reviewed = 2026-12-18` (future date, typo).
 - `CA120_2526` — Progress line dated `29/05/2029` (typo for 2025).
@@ -571,9 +618,9 @@ Ownership read from **col G (Lead)**. Active = Status is one of On Hold / In Pro
 
 ---
 
-## 11. Net additions to the proposal from the sweep
+## 12. Net additions to the proposal from the sweep
 
-Rows now added to the change list (full before/after in §9): **`204`** (REF Appeal ESS — deadline tomorrow, REF2029 UDF promotion), **`183`** (Sickness Absence Dashboard — data-model blocker from two Granola notes), **`ITS960`** (DSE — Granola says delivered/closed; confirm, do not close unilaterally).
+Rows now added to the change list (full before/after in §10): **`204`** (REF Appeal ESS — deadline tomorrow, REF2029 UDF promotion), **`183`** (Sickness Absence Dashboard — data-model blocker from two Granola notes), **`ITS960`** (DSE — Granola says delivered/closed; confirm, do not close unilaterally).
 
 Owner/date flags only — no content proposed, for the named owner (not Kevin) unless he chooses to enter them: **`181`**, **`UOX008`** (Simon); **`202`**, **`149`**, **`193`** (Marie C); **`94`** (James); **`191`** (Nathan); **`176`** (unassigned — assign Marie C / Kevin); date fixes **`180`**, **`CA120_2526`**, **`DTP1092`**.
 
