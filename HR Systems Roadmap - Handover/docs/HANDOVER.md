@@ -1,14 +1,18 @@
 # HANDOVER — 2026-08-27 (latest)
 
 ## TL;DR — 27 Aug 2026 alignment pass
-No meeting this cycle, no speaking brief. Marie asked Kevin to update the live HR Systems Roadmap master **directly**, ready for **Friday 28 Aug**. Kevin hand-enters every change himself. Lauren produced a verified, source-cited change proposal — **nothing written to the roadmap or `hr-projects`**. Deliverable: **`HR Systems Roadmap - Handover/docs/ALIGNMENT-2026-08-27.md`**. **The primary artefact is the consolidated change table at §1** (one row per item: Row ID · Title · Owner · Last update verbatim · Proposed update · Action for Kevin — sorted by owner). §2–§8 are the working detail; §9–§12 are the 27 Aug follow-ups. This §1 table layout is the standard for every future roadmap alignment pass.
+No meeting this cycle, no speaking brief. Marie asked Kevin to update the live HR Systems Roadmap master **directly**, ready for **Friday 28 Aug**. Kevin hand-enters every change himself. Lauren produced a verified, source-cited change proposal — **nothing written to the roadmap or `hr-projects`**.
+
+**The primary artefact Kevin opens is the lean worksheet: `HR Systems Roadmap - Handover/docs/ROADMAP-WORKSHEET-2026-08-27.html`** (`.md` twin alongside). Item-by-item only — `Row ID · Title · Owner · Currently (verbatim) · Change to · Action` — grouped by owner, no evidence/method prose. Desktop copy: `D:\OneDrive - lelitte.com\Desktop\Meetings\HR Systems Roadmap - Alignment - 27-08-2026.html`.
+
+**Backing detail: `ALIGNMENT-2026-08-27.md`** — sources, the full before/after table (§10), the owner-coverage sweep (§11), gaps (§7), and evidence of when the roadmap was last genuinely updated (§9). §1 there is the same change table plus a column. **Standard shape for future cycles: lean worksheet + separate detail doc — not one 12-section monolith.**
 
 **Verified live:** the authoritative master is the **local OneDrive copy** (`C:\Users\admin\OneDrive - Nexus365\HR Systems Roadmap Master\HR Systems Roadmap MASTER.xlsm`, modified 27 Aug 16:24, actively maintained). The `hr-projects` repo copy is **~12 weeks stale** (commit `f16a11a`, 6 Jun) — do not use it. Cross-referenced against `work-inbox` (briefing.json / inbox_suggestions.json, 27 Aug refresh), `command-centre` tasks.json (83 tasks), and 10 Granola notes since 10 Aug (Granola API reachable this session).
 
 **Headline proposals (priority order):**
 1. Empty **CA104_2526 "August update"** (Hierarchy Restructuring, deadline 9 Sept) — populate from Granola SK/Michael 1-1s + command-centre task-1787072363309: PACS level 2→3 college move + three new PACS management units via the Portal. *This is the "Organisational Structure Update" gap the 21 Aug handover raised — now has a clear home.*
 2. Empty **Row 208** (38-day balances) — populate from the 19 Aug planning meeting + Michael 1-1 + Chemistry's 131 work groups (Michael, 27 Aug). Kevin updates holiday scheme per work group from 5 Oct.
-3. **Row 179** (SSO migration, Lead: Kevin) — add 3 Aug Entra ID groups milestone + 25 Aug OSM auth issue; confirm the VS2022-licence blocker still holds.
+3. **Row 179** (SSO migration, Lead: Kevin) — add the **28/07/26** milestone (Simon Burford email, pulled by Drew: **only 2 of the 6** Entra ID data access groups populated by Nexus from Asta's 16/07 lists — `people_management.users`, `recruitment.users`; Simon populated 2 HR Systems Team groups; payroll + E&D groups still to do) + the 25 Aug OSM auth issue; confirm the VS2022-licence blocker still holds. *(Corrects an earlier inaccurate "03/08 / six groups" paraphrase — no 3 Aug email exists.)*
 4. **Row 136** (DPIA, Lead: Kevin) — add 27 Aug v0.5 share; deadline 31 Aug at risk.
 5. **DTP1334** (H&S Management System, Lead: Kevin) — roll stale 27 Aug checkpoint forward.
 6. **DTP1092** — ORCID sub-action ("Kevin to take forward") has no progress since 30 Jul; invalid deadline text `31/09/2026`.
