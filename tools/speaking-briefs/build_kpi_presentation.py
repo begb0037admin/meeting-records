@@ -385,6 +385,37 @@ def find_table(slide, name):
     raise RuntimeError(f"table {name!r} not found")
 
 
+# Canonical name of the slides 8/9/10 chart-image shape on a hand-made deck.
+CHART_PICTURE_NAME = "Picture 2"
+
+
+def find_chart_picture(slide):
+    """Return the large chart-image Picture on a slides-8/9/10-style slide.
+
+    Historically this shape was looked up by the literal name "Picture 2",
+    which only exists on hand-made decks. python-pptx's add_picture()
+    auto-assigns names ("Picture 13", "Picture 11", ...), so once a deck has
+    itself been produced by this pipeline a name-only lookup breaks and the
+    build stops being idempotent month-over-month. First month to hit this:
+    August 2026, the first ever built on a pipeline-generated base deck.
+
+    Resolution order:
+      1. a Picture literally named "Picture 2" (unchanged behaviour on the
+         hand-made May/June self-test bases), else
+      2. the largest-area Picture on the slide - the chart image dwarfs the
+         only other pictures present (the small Oxford crest / header logo).
+
+    Returns None only if the slide carries no Picture shapes at all.
+    """
+    pics = [sh for sh in slide.shapes if sh.shape_type == 13]
+    if not pics:
+        return None
+    for sh in pics:
+        if sh.name == CHART_PICTURE_NAME:
+            return sh
+    return max(pics, key=lambda sh: (sh.width or 0) * (sh.height or 0))
+
+
 def fmt_delta(cur, prev):
     d = cur - prev
     pct = f" ({d/prev*100:+.0f}%)" if prev else ""
@@ -708,15 +739,21 @@ def populate_deck(base_deck_path, pxd, hs_current, hs_prev, month_label, chart_d
     }
     for si, (img_path, new_top, new_left) in picture_swaps.items():
         slide = prs.slides[si]
-        target = next(
-            (sh for sh in slide.shapes if sh.shape_type == 13 and sh.name == "Picture 2"), None
-        )
+        target = find_chart_picture(slide)
         if target is None:
-            raise RuntimeError(f"slide {si + 1}: Picture 2 not found - layout may have changed")
+            raise RuntimeError(
+                f"slide {si + 1}: no chart picture found - layout may have changed"
+            )
         width, height = target.width, target.height
         sp = target._element
         sp.getparent().remove(sp)
-        slide.shapes.add_picture(img_path, new_left, new_top, width, height)
+        new_pic = slide.shapes.add_picture(img_path, new_left, new_top, width, height)
+        # Normalise the name so the swap stays idempotent month-over-month:
+        # next month's build uses this deck as its base and must be able to
+        # find this shape again. Without this, add_picture() would leave it
+        # auto-named ("Picture 13" etc) and the following month would fall
+        # back to the largest-area heuristic instead of a clean name match.
+        new_pic.name = CHART_PICTURE_NAME
 
     prs.save(out_path)
     print("written", out_path)

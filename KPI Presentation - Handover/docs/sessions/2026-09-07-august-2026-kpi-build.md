@@ -36,3 +36,21 @@
 
 ## Notes / Reflections
 The 7 Aug independent verification could not have caught this — July was built on June's hand-made real deck, and the June self-test builds on May's hand-made real deck, so both bases carry `Picture 2`. Once Drew fixes the naming, the self-test should be strengthened to chain two consecutive months (build N, then build N+1 on that output) so month-over-month idempotency is actually gated, not assumed.
+
+---
+
+## Addendum — 2026-09-07 — Drew (pipeline engineering)
+
+**Scope:** fix only the picture-swap idempotency bug in `tools/speaking-briefs/build_kpi_presentation.py`. Not building or saving the August deck (Lauren's step).
+
+**Fix (commit `b2772e5`):**
+- Added module-level `CHART_PICTURE_NAME = "Picture 2"` and helper `find_chart_picture(slide)`.
+- `find_chart_picture` resolves the slides 8/9/10 chart image by: (1) a Picture named `"Picture 2"` — identical to the old behaviour on the hand-made May/June self-test bases; (2) else the largest-area Picture on the slide. The chart image is far larger than the only other pictures present (Oxford crest / header logo), so area is a stable, layout-independent discriminator. Returns `None` only if the slide has no Picture shapes.
+- `populate_deck()`'s `picture_swaps` loop now calls `find_chart_picture(slide)` instead of the inline `sh.name == "Picture 2"` generator, and — per Lauren's suggested minimal fix — sets `new_pic.name = CHART_PICTURE_NAME` after `add_picture()`. Result: every deck this pipeline emits carries a clean name-matched chart shape, so the following month's build resolves by name again → idempotent month-over-month. Lauren's name-set alone was insufficient because August's own July base was *already* renamed (`Picture 13`/`Picture 11`) before this fix existed — hence the name-independent lookup as well.
+- Error text on a genuine layout change: `slide N: no chart picture found - layout may have changed`.
+
+**Verification (Drew):**
+- `python build_kpi_presentation.py` → `ALL PASS`. 9/9 extraction vs known June; every table cell across all 11 slides matches the real June deck; 9/9 chart-value checks. Known 0.01pp slide-7 "LESS THAN 5 DAYS" rounding NOTE printed as expected (not a failure). Unchanged from pre-fix.
+- Diagnostic `build_month(2026, 8, out_path=<scratch>, chart_dir=<scratch>)`: completes, no `RuntimeError`. Returned deck's slides 8/9/10 each contain exactly two pictures — the regenerated chart image now named `Picture 2`, and the untouched crest (`Picture 12` / `Picture 6` / `Picture 4`), confirming the largest-area heuristic removed the correct (chart) shape, not the crest. Scratch `.pptx` and charts dir deleted immediately after. No write to the OneDrive archive; no canonical deck produced.
+
+**Handed back to Lauren:** run the real `build_month(2026, 8)` per "Next Concrete Action" in HANDOVER.md.
