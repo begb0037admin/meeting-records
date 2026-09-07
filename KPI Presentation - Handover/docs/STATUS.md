@@ -1,6 +1,6 @@
 # STATUS — KPI Presentation
-**Last updated:** 7 Sep 2026 — deck delivered, then a **speaker-notes process gap found**: Slides 2–10 were still carrying June's notes verbatim (through July and August). August notes drafted, cross-checked, and committed to `notes/speaker-notes-2026-08.md`; writing them into the live deck is **paused — the canonical file is open in PowerPoint (Kevin) and locked**, and has already been re-saved once since delivery (md5 changed). `KPI_RUN_SOP.md` updated so speaker notes are now an explicit mandatory step, not an implicit one.
-**Current phase:** Active — standing monthly responsibility. August 2026 run: tables/charts delivered and complete; **speaker notes drafted, not yet written in — blocked on file lock.**
+**Last updated:** 7 Sep 2026 — **August 2026 run complete, speaker notes written in.** Canonical `...\2026\08 Aug\KPI presentation - August 2026.pptx` md5 `38d68fa2…` / 2,275,746 B. Slides 2–10 carry August speaker notes; before/after data diff = 0; `validate_deck()` PASS. Notes were written into the verified build (`dcb3e67e`), not the caption-stripped on-disk file — PowerPoint dropped the Slide 4 caption when Kevin opened/closed the deck (handed to Drew). `KPI_RUN_SOP.md` §2 now makes speaker notes an explicit mandatory step.
+**Current phase:** Active — standing monthly responsibility. August 2026: complete.
 
 ## Confirmed
 - SOP current: `docs/KPI_RUN_SOP.md`. Canonical naming: `KPI presentation - <Month> <Year>.pptx`.
@@ -26,11 +26,12 @@ Codex confirmed the blocking wiring, `pct2` half-up, and the June 68→77 oracle
 4. **Chart-image value chain** — `populate_deck` records the arrays fed to `make_trend_chart`/`make_combo_chart` on `prs._kpi_chart_series`; gate asserts source == chart array == table cell for Slides 8/9/10. `allow_no_chart_series=True` when auditing a reloaded .pptx (identity links noted-and-skipped, source==table still enforced).
 5. **Emitter/validator rounding parity** — Slide 6/7 combined-band cells + pie now use `pct2` (same helper as the gate). No-op for Jun/Jul/Aug.
 
-## Blocked — speaker-notes gap (found 7 Sep 2026, after delivery)
-The delivered deck's Slides 2–10 speaker notes were still **June's**, carried forward verbatim through July and August (`populate_deck()` never touches `notes_slide`). Kevin reads these aloud when presenting. Fix in progress:
-- **Lauren (done):** read established voice/structure from March–June 2026 decks (not just July, which was itself already stale); drafted, cross-checked against the built August deck + source data, and committed `notes/speaker-notes-2026-08.md` (9 sections, Slides 2–10). Slide 5's note reflects the corrected Incident-Other picture (Total 61 / "Other" row / Slide 4-vs-5 scope note), not the pre-fix "68 tasks" framing.
-- **Blocked writing into the deck:** the canonical file is open in PowerPoint (Kevin) and locked — confirmed live (process running, exclusive-read fails). Its on-disk md5/size have already changed once since delivery (auto-save/re-save), so the live file is no longer identical to what Lauren built. Per standing instruction: not forcing the write, not saving a copy under another name. Will write in, diff-verify (table/chart cells must be unchanged, notes-only), and re-run `validate_deck()` once the lock clears.
-- **Drew (in progress, uncommitted):** wiring `load_month_notes()` into `populate_deck()`/`build_month()` so the pipeline refuses to build without an approved notes file for future months, plus a gate check. SOP wording (`KPI_RUN_SOP.md` §2) written to match Drew's loader contract — re-confirm against his implementation once it lands.
+## Speaker-notes gap — CLOSED for August (found 7 Sep 2026, after delivery)
+The delivered deck's Slides 2–10 notes were still **June's**, carried verbatim through July and August (`populate_deck()` never touches `notes_slide`). Kevin reads these aloud presenting.
+- **Lauren (done):** read established voice/structure from March–June 2026 decks (not just July, itself already stale); drafted, cross-checked against the built August deck + source, committed `notes/speaker-notes-2026-08.md` (9 sections, Slides 2–10). Slide 5's note reflects the ADR-0001 Incident-Other picture (Total 61 / "Other" row / scope note), not "68 tasks".
+- **Written into the canonical deck 7 Sep 2026** (into the verified build `dcb3e67e`, then saved over the on-disk file). Before/after data diff = 0; `validate_deck()` PASS; both captions present; md5 `38d68fa2…`.
+- **Known issue → Drew:** PowerPoint strips the run-time `add_textbox` scope captions on open/save — the Slide 4 caption was lost when Kevin opened/closed the delivered deck. Until Drew makes them survive a round-trip, Kevin opening the deck before presenting risks dropping the Slide 4 caption.
+- **Drew (in progress, uncommitted):** wiring `load_month_notes()` into `populate_deck()`/`build_month()` + a gate check requiring an approved notes file for future months. `KPI_RUN_SOP.md` §2 written to his loader contract — re-confirm once it lands.
 
 ## Awaiting Kevin
 - Send the August deck to Michael O'Sullivan for the monthly team meeting (Kevin's action) — once notes are written in.
@@ -48,6 +49,6 @@ The delivered deck's Slides 2–10 speaker notes were still **June's**, carried 
 3. **DONE (Drew, 7 Sep 2026):** Codex-audit follow-up — 5 `validate_deck()` hardening gaps closed, coverage-only, delivered deck unchanged (see "Gate hardening pass" above).
 4. **DONE (Lauren, 7 Sep 2026):** canonical `KPI presentation - August 2026.pptx` (md5 `dcb3e67e…`) built on `503e274` (`validate_deck()` PASS inline) and saved into `...\2026\08 Aug\`; `docs/sessions/2026-08-KPI-run.md` written.
 5. **DONE (Lauren, 7 Sep 2026):** speaker-notes gap found; `notes/speaker-notes-2026-08.md` drafted, cross-checked, committed. `KPI_RUN_SOP.md` updated so notes are now an explicit mandatory step.
-6. **BLOCKED (Lauren):** write the notes into the canonical deck — file is open/locked in PowerPoint (Kevin). Waiting for the lock to clear; will diff-verify + re-run `validate_deck()` once written.
-7. **IN PROGRESS (Drew, uncommitted):** wire `load_month_notes()` into `populate_deck()`/`build_month()` + a gate check requiring the notes file for future months.
+6. **DONE (Lauren, 7 Sep 2026):** 9 speaker notes written into the canonical deck (via the verified build `dcb3e67e` — figures proven identical to the on-disk file, both captions intact). Before/after data diff = 0; `validate_deck()` PASS. Canonical md5 `38d68fa2502b5fcdbb54f5ae411a315f` / 2,275,746 B.
+7. **IN PROGRESS (Drew, uncommitted):** wire `load_month_notes()` into `populate_deck()`/`build_month()` + gate check requiring an approved notes file for future months. **Plus:** make the run-time scope captions survive a PowerPoint open/save round-trip (they don't today — Slide 4 caption was stripped when Kevin opened the delivered deck).
 5. **Kevin:** send the deck to Michael O'Sullivan; decide the July-deck reissue vs written-reply question (Michael raised it 13 Aug — a reply is owed).

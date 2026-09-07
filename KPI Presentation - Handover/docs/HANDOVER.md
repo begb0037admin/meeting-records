@@ -1,9 +1,11 @@
-# HANDOVER — 2026-09-07 (August 2026 delivered; speaker-notes process gap found and being closed)
+# HANDOVER — 2026-09-07 (August 2026 delivered incl. speaker notes; two known issues handed to Drew)
 
 ## TL;DR
-The August 2026 KPI Presentation was delivered as canonical (`meeting-records` `fcde319`) after Drew's Slide 5 fix, scope captions, and hardened `validate_deck()` gate (`b9826fd` → `503e274`). **A separate, real process gap then surfaced: the delivered deck's speaker notes for Slides 2–10 were still June's, carried forward verbatim through July and August** — `populate_deck()` never touched `notes_slide`, and the hardened gate only checks tables/charts/reconciliation, not notes, so this was invisible to it. Kevin reads these notes aloud when presenting. Fixed process going forward: notes are now an explicit, authored, cross-checked step (see `KPI_RUN_SOP.md` §2) with their own repo home, `KPI Presentation - Handover/notes/speaker-notes-<YYYY>-<MM>.md`. Drew is separately wiring the pipeline to load and require this file (`load_month_notes()`, uncommitted WIP as of this entry) and refuse to build without it.
+August 2026 KPI Presentation delivered as canonical (`fcde319`) after Drew's Slide 5 fix + scope captions + hardened `validate_deck()` (`b9826fd` → `503e274`). **A process gap then surfaced: the deck's Slides 2–10 speaker notes were still June's, carried verbatim through July and August** — `populate_deck()` never touched `notes_slide`; the gate only checks tables/charts, so it was invisible. Kevin reads these aloud presenting. **Now fixed for August:** Lauren authored `notes/speaker-notes-2026-08.md` (voice/structure matched to March–June decks, every figure cross-checked), and wrote the 9 notes into the canonical deck — before/after data diff = 0, `validate_deck()` PASS. **Final canonical: md5 `38d68fa2502b5fcdbb54f5ae411a315f` / 2,275,746 B.** Process is now an explicit mandatory SOP step (`KPI_RUN_SOP.md` §2).
 
-**Current blocker: the canonical August file is open in PowerPoint (Kevin) and locked.** Lauren drafted, cross-checked, and committed `notes/speaker-notes-2026-08.md`; writing it into the live `.pptx` is paused until the lock clears — per standing instruction, no copy is saved under a different name and no write is forced through the lock.
+**Two issues handed to Drew:**
+1. Wire `load_month_notes()` into `populate_deck()`/`build_month()` + a gate check requiring an approved notes file for future months (WIP, uncommitted).
+2. **PowerPoint strips the run-time scope captions on open/save.** When Kevin opened and closed the delivered deck, the Slide 4 `IncidentOtherPointer` caption was dropped (Slide 5 one survived this time). The notes write was therefore based on Lauren's verified build `dcb3e67e` (both captions, figures proven identical to the on-disk file, gate passes), not the caption-stripped on-disk version. Until Drew makes the captions round-trip-safe, Kevin opening the deck before presenting risks losing the Slide 4 caption again with no rebuild before the meeting.
 
 ## State of Play
 - **Delivered canonical:** `...\2026\08 Aug\KPI presentation - August 2026.pptx`, built on `503e274`, `validate_deck()` PASS inline, all figures verified (see `docs/sessions/2026-08-KPI-run.md`).
@@ -14,15 +16,16 @@ The August 2026 KPI Presentation was delivered as canonical (`meeting-records` `
 - **Pipeline wiring (Drew, in progress, uncommitted as of this entry):** `NOTES_DIR`, `NOTES_REQUIRED_SLIDES` (0-based 1–9 = Slides 2–10), `notes_path_for()`, `load_month_notes()`, and a `notes=` parameter on `populate_deck()` are present in the working tree; the actual `notes_slide` write and the `build_month()` hard-stop-if-missing wiring are not yet finished/committed. Lauren has not edited this file — it is Drew's in-progress work.
 
 ## Next Concrete Action
-1. Wait for the canonical file to unlock (Kevin's PowerPoint session). Do not force-close it, do not save a copy under another name.
-2. Once unlocked: open the **current on-disk** file (not Lauren's earlier `dcb3e67e` build — preserve whatever Kevin has open/changed), write the 9 notes from `notes/speaker-notes-2026-08.md` into `notes_slide` for Slides 2–10 only, save in place.
-3. Re-verify: diff every table cell and chart series between the notes-only save and the pre-notes file — must be **zero** differences (notes-only change). Re-run `validate_deck()` against the saved file to confirm no table/chart/reconciliation regression.
-4. Update `docs/sessions/2026-08-KPI-run.md` to record notes were written in, and commit + push (meeting-records + lauren memory).
-5. Coordinate with Drew once his notes-handling + gate check lands (committed) — confirm the SOP wording here still matches his actual implementation (loader path, required-slides set, hard-stop behaviour) and adjust if it changed while this was mid-flight.
+The August KPI run is complete (deck + notes). Remaining items are all "Kevin's call" or "Drew":
+1. **Codex** independently verifies every note's figures against its slide + source (coordinator to run).
+2. **Kevin:** send the deck to Michael O'Sullivan.
+3. **Kevin:** decide the July 2026 deck question (see Watch Out For).
+4. **Drew:** (a) finish the notes-handling pipeline wiring + gate check; (b) make the run-time scope captions survive a PowerPoint open/save round-trip.
+5. **Backlog:** populate `docs/reference/kpi-definitions.md` (still a stub) using ADR-0001 + the reconciliation reference.
 
 ## Watch Out For
-- **Do not overwrite Kevin's live changes to the canonical file.** Its md5 changed since delivery; treat the current on-disk version as authoritative, not Lauren's original build.
-- Do not save a differently-named copy while the file is locked — wait for the lock to clear.
+- **PowerPoint strips the run-time scope captions on open/save** (Slide 4 `IncidentOtherPointer` was lost when Kevin opened the delivered deck). The final canonical (`38d68fa2…`) has both captions because notes were written into the verified build `dcb3e67e`, not the stripped on-disk file. If Kevin opens the deck again before presenting, the Slide 4 caption may drop again — no rebuild is scheduled before the meeting. Drew owns the fix.
+- Final canonical md5: `38d68fa2502b5fcdbb54f5ae411a315f`, 2,275,746 B. Figures byte-identical to the delivered `dcb3e67e` build (verified); the only adds are the 9 speaker notes.
 - July 2026 deck already sent to Michael O'Sullivan still has the old Slide 5 numbers (Total 62) **and** stale (June's) speaker notes. **Kevin's call, still open:** reissue the deck, or a written explanation citing ADR-0001. He raised the Slide 5 discrepancy 13 Aug — a reply is owed. The July deck's notes issue wasn't separately raised by Michael but exists.
 - "Interfaces" is folded into "Other" on Slide 5 (ADR-0001 §2) — an 11th row to keep both is a layout change, Drew's, deferred.
 - Do not "fix" the Slide 7 "LESS THAN 5 DAYS" 0.01 pp cell — registered D4.
