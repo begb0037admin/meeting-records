@@ -7,3 +7,6 @@ charts_selftest_august/
 charts_selftest_p3/
 charts_[0-9][0-9][0-9][0-9]_[0-9][0-9]/
 *.pptx.REJECTED
+
+# stray KPI skill/eval review harness, moved out of the team OneDrive folder 2026-09-07 — kept local, not team-visible
+dev/
