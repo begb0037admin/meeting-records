@@ -3,7 +3,7 @@
 ## TL;DR
 Kevin asked for the August 2026 KPI Presentation. Source data is present and verified (local OneDrive, not GitHub) and the mandatory self-test gate passes `ALL PASS`. The picture-swap idempotency bug that blocked `build_month(2026, 8)` (`RuntimeError: slide 8: Picture 2 not found`) is **fixed** by Drew, 7 Sep 2026 — see "Drew's fix" below. Self-test still `ALL PASS`; a diagnostic `build_month(2026, 8)` now completes with no `RuntimeError` (built to scratch, not saved, scratch deleted). **Next: Lauren runs the real August build.** No clean August deck exists yet; nothing has been saved to the OneDrive archive.
 
-## Drew's fix — 7 Sep 2026 (`tools/speaking-briefs/build_kpi_presentation.py`, commit `b2772e5`)
+## Drew's fix — 7 Sep 2026 (`tools/speaking-briefs/build_kpi_presentation.py`, commit `b13afe5`)
 - New module-level helper `find_chart_picture(slide)` replaces the inline `sh.name == "Picture 2"` lookup in `populate_deck()`'s `picture_swaps` loop. Resolution order: (1) a Picture named `"Picture 2"` — byte-identical behaviour on the hand-made May/June self-test bases; (2) otherwise the largest-area Picture on the slide (the chart image dwarfs the small Oxford crest / header logo, the only other pictures on slides 8/9/10).
 - After `add_picture()`, the new shape's `.name` is set back to `"Picture 2"` (module constant `CHART_PICTURE_NAME`). Every deck this pipeline emits is therefore a clean name-matched base for the following month → idempotent month-over-month. This is Lauren's suggested minimal fix plus a name-independent lookup so August itself (whose July base was already renamed `Picture 13`/`Picture 11`) resolves.
 - Error message on genuine layout change is now `slide N: no chart picture found - layout may have changed`.

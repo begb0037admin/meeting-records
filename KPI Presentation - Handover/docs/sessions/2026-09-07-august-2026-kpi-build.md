@@ -43,7 +43,7 @@ The 7 Aug independent verification could not have caught this — July was built
 
 **Scope:** fix only the picture-swap idempotency bug in `tools/speaking-briefs/build_kpi_presentation.py`. Not building or saving the August deck (Lauren's step).
 
-**Fix (commit `b2772e5`):**
+**Fix (commit `b13afe5`):**
 - Added module-level `CHART_PICTURE_NAME = "Picture 2"` and helper `find_chart_picture(slide)`.
 - `find_chart_picture` resolves the slides 8/9/10 chart image by: (1) a Picture named `"Picture 2"` — identical to the old behaviour on the hand-made May/June self-test bases; (2) else the largest-area Picture on the slide. The chart image is far larger than the only other pictures present (Oxford crest / header logo), so area is a stable, layout-independent discriminator. Returns `None` only if the slide has no Picture shapes.
 - `populate_deck()`'s `picture_swaps` loop now calls `find_chart_picture(slide)` instead of the inline `sh.name == "Picture 2"` generator, and — per Lauren's suggested minimal fix — sets `new_pic.name = CHART_PICTURE_NAME` after `add_picture()`. Result: every deck this pipeline emits carries a clean name-matched chart shape, so the following month's build resolves by name again → idempotent month-over-month. Lauren's name-set alone was insufficient because August's own July base was *already* renamed (`Picture 13`/`Picture 11`) before this fix existed — hence the name-independent lookup as well.
