@@ -1,6 +1,6 @@
 # STATUS — KPI Presentation
-**Last updated:** 7 Sep 2026 (Lauren rebuilt August 2026 clean on `b9826fd`; Codex audited `validate_deck()` and its 5 hardening findings are now fixed by Drew (the gate-hardening commit right after `b9826fd`) with **no change to any figure** — delivered-deck ⇄ fresh-rebuild cell diff empty, `validate_deck()` passes vs the delivered deck, self-test `ALL PASS`. Awaiting Kevin's approval, then canonical save.)
-**Current phase:** Active — standing monthly responsibility. August 2026 run: rebuilt + self-validated + verified + gate hardened; not yet approved or saved.
+**Last updated:** 7 Sep 2026 — **DELIVERED.** Canonical `KPI presentation - August 2026.pptx` (md5 `dcb3e67e…`) saved to `...\2026\08 Aug\`, built on `503e274` with `validate_deck()` PASS inline. Session log `docs/sessions/2026-08-KPI-run.md` written. Kevin opens the file himself. Sending to Michael O'Sullivan is Kevin's action; the July-deck reissue question is still his to decide.
+**Current phase:** Active — standing monthly responsibility. August 2026 run: **complete and saved.**
 
 ## Confirmed
 - SOP current: `docs/KPI_RUN_SOP.md`. Canonical naming: `KPI presentation - <Month> <Year>.pptx`.
@@ -26,8 +26,8 @@ Codex confirmed the blocking wiring, `pct2` half-up, and the June 68→77 oracle
 4. **Chart-image value chain** — `populate_deck` records the arrays fed to `make_trend_chart`/`make_combo_chart` on `prs._kpi_chart_series`; gate asserts source == chart array == table cell for Slides 8/9/10. `allow_no_chart_series=True` when auditing a reloaded .pptx (identity links noted-and-skipped, source==table still enforced).
 5. **Emitter/validator rounding parity** — Slide 6/7 combined-band cells + pie now use `pct2` (same helper as the gate). No-op for Jun/Jul/Aug.
 
-## Awaiting Kevin (after Drew's fix + rebuild)
-- Approval of the corrected August visual before the canonical OneDrive save.
+## Awaiting Kevin
+- Send the August deck to Michael O'Sullivan for the monthly team meeting (Kevin's action).
 - **Separate decision:** July 2026 deck already sent to Michael has the old Slide 5 numbers (Total 62). Corrected = Total 65 / add "Other 7" / caption. Reissue the deck, or send Michael a written explanation citing ADR-0001. A reply is owed (he raised it 13 Aug).
 - Optional: keep "Interfaces" as its own named row (needs an 11th row = layout change, Drew) instead of folding it into "Other".
 - Still open: whether a June/July 2026 KPI run was circulated during Kevin's absence (now partly answered — July deck exists and went to Michael).
@@ -40,5 +40,5 @@ Codex confirmed the blocking wiring, `pct2` half-up, and the June 68→77 oracle
 1. **DONE (Drew):** HANDOVER Parts A + B + C in `build_kpi_presentation.py` (`b9826fd`); self-test `ALL PASS`; gate proven to block a broken figure.
 2. **DONE (Lauren, 7 Sep 2026):** rebuilt August 2026 clean on `b9826fd` to a non-canonical scratch path; `validate_deck()` passed inline; self-test `ALL PASS`; all 11 slides rendered and verified (Slide 5 Table 4 Total 61 / Other 2 / caption; Slide 4 pointer; R1/R2 reconcile; headers; layout parity).
 3. **DONE (Drew, 7 Sep 2026):** Codex-audit follow-up — 5 `validate_deck()` hardening gaps closed, coverage-only, delivered deck unchanged (see "Gate hardening pass" above).
-4. On **Kevin's explicit approval of the visual:** Lauren saves canonical `KPI presentation - August 2026.pptx` into `...\2026\08 Aug\`; logs `docs/sessions/2026-08-KPI-run.md`; confirms distribution to Michael O'Sullivan.
-5. Kevin decides the July-deck reissue vs written-reply question (Michael raised it 13 Aug — a reply is owed).
+4. **DONE (Lauren, 7 Sep 2026):** canonical `KPI presentation - August 2026.pptx` (md5 `dcb3e67e…`) built on `503e274` (`validate_deck()` PASS inline) and saved into `...\2026\08 Aug\`; `docs/sessions/2026-08-KPI-run.md` written. Kevin opens the file himself.
+5. **Kevin:** send the deck to Michael O'Sullivan; decide the July-deck reissue vs written-reply question (Michael raised it 13 Aug — a reply is owed).
