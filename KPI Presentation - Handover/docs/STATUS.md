@@ -1,26 +1,32 @@
 # STATUS — KPI Presentation
-**Last updated:** 7 Sep 2026 (August 2026 build complete — awaiting Kevin's approval of the visual before the canonical save)
-**Current phase:** Active — standing monthly responsibility (Lauren's `AGENT.md`, 7 Aug 2026). August 2026 run: built, self-tested, rendered; pending sign-off.
+**Last updated:** 7 Sep 2026 (August 2026 build: two content defects found post-render — fix spec issued for Drew, deck NOT going to Kevin yet)
+**Current phase:** Active — standing monthly responsibility. August 2026 run blocked on the Slide 5 fix + hardened gate.
 
 ## Confirmed
-- SOP current: `docs/KPI_RUN_SOP.md`
-- Last confirmed KPI run: May 2026 (sent to Michael O'Sullivan 9 Jun 2026; presented 10 Jun 2026).
-- July 2026 KPI Presentation independently verified end-to-end, 7 Aug 2026. Drew's `KPI presentation - July 2026.pptx` is the official July deck.
-- Canonical naming: `KPI presentation - <Month> <Year>.pptx`.
-- **7 Sep 2026 — August 2026 source data present and verified.** Local OneDrive `...\Functional Analysis Team Monthly Statistics\2026\08 Aug\Source Data\`, landed 7 Sep 2026 from the 1 Sep 2026 export (= August month-end): Excel `HR_Systems_Functional_Team_Monthly_Report_Excel - 202609010715.xlsx`, H&S `Health and Safety Systems Support Statistics - 202609010600.docx`. Not a GitHub file. Base deck: `...\07 Jul\KPI presentation - July 2026.pptx`.
-- **7 Sep 2026 — pipeline picture-swap idempotency bug fixed by Drew** (`build_kpi_presentation.py`, commit `b13afe5`): slides 8/9/10 chart-image lookup is now name-independent (falls back to largest-area Picture) and normalises the shape name to `Picture 2` on write, so it is idempotent month-over-month.
-- **7 Sep 2026 — self-test gate PASS on the fixed script.** `python build_kpi_presentation.py` → `ALL PASS` (9/9 extraction vs known June, every table cell across all 11 slides matches the real June deck, 9/9 chart-value checks). The known disclosed 0.01pp rounding NOTE on slide 7 "LESS THAN 5 DAYS" prints as expected — not a failure.
-- **7 Sep 2026 — August 2026 deck built CLEAN** (no local patch) via `build_month(2026, 8)` to a non-canonical scratchpad file. 11 slides; slide 1 title → "AUGUST 2026 KPI STATISTICS |"; 134 table cells across slides 2–10 updated vs July; all native pie charts recomputed; all three chart images regenerated at the carried-forward positions; slides 8/9/10 pictures correctly re-normalised to `Picture 2`. All 11 slides rendered to PNG and visually confirmed — Oxford / People Department chrome intact, crest untouched.
+- SOP current: `docs/KPI_RUN_SOP.md`. Canonical naming: `KPI presentation - <Month> <Year>.pptx`.
+- Last confirmed KPI run: May 2026. July 2026 deck was built and sent to Michael O'Sullivan (carries the Slide 5 defect below — see follow-up).
+- **7 Sep 2026 — August source data verified live** (`...\2026\08 Aug\Source Data\`, 1 Sep 2026 export). Base deck: `...\07 Jul\KPI presentation - July 2026.pptx`.
+- **7 Sep 2026 — pipeline picture-swap idempotency bug fixed by Drew** (`b13afe5`). Clean `build_month(2026, 8)` works; June self-test `ALL PASS` on the fixed script.
+- **7 Sep 2026 — clean August deck built + all 11 slides rendered** (scratchpad, evidence only). Design/layout parity vs July clean; all slides except Slide 5 `Table 4` verify accurate vs source (Codex).
 
-## Awaiting Kevin
-- Approval of the rendered August visual. On his explicit go-ahead only: save canonical `KPI presentation - August 2026.pptx` into `...\2026\08 Aug\`, then log `docs/sessions/2026-08-KPI-run.md` and confirm distribution to Michael O'Sullivan.
-- Still open (carried forward): whether a June and/or July 2026 KPI run was actually circulated during Kevin's Jul/Aug absence.
+## Blocked — fix spec issued, awaiting Drew
+Independent review (Codex) + Michael O'Sullivan's 13 Aug email found two defects on the "Incident – Other" figures, and Kevin directed the self-test gate be hardened. All three are specced for Drew in `docs/HANDOVER.md` (Parts A/B/C), with the decision in **ADR-0001** and the reconciliation registry in **`docs/reference/incident-other-reconciliation.md`**:
+- **A — Slide 5 `Table 4` arithmetic:** displayed rows didn't sum to the Total; % base appeared on no row (new tail category "Payroll Costing Report" counted but not shown). Fix: 9 named FA rows + an "Other" row; Total & % base = the full source month total (Jun 77 / Jul 65 / Aug 61), which also makes Slide 5 reconcile exactly to Slide 7. Row 10 "Interfaces" → "Other".
+- **B — Scope captions:** run-time text boxes on Slide 5 and Slide 4 explaining that Slide 4's Incident–Other trend uses a different Ivanti grouping/window and won't match Slide 5/7 (which do match each other).
+- **C — Hardened gate:** `validate_deck()` run against the *freshly built* month (not just the June reference) — row-sum == Total, % == count/Total, % column sums to 100 (±0.10 pp), chart series == table cells, and the cross-slide reconciliation registry (R1 Slide 5↔Slide 7 exact; R2 Slide 4 SR ↔ Slide 5 `Table 6` exact; D1–D4 registered as differ-by-design). Build exits non-zero and writes no deck on any failure. Also add August as a second known-good self-test month.
+
+## Awaiting Kevin (after Drew's fix + rebuild)
+- Approval of the corrected August visual before the canonical OneDrive save.
+- **Separate decision:** July 2026 deck already sent to Michael has the old Slide 5 numbers (Total 62). Corrected = Total 65 / add "Other 7" / caption. Reissue the deck, or send Michael a written explanation citing ADR-0001. A reply is owed (he raised it 13 Aug).
+- Optional: keep "Interfaces" as its own named row (needs an 11th row = layout change, Drew) instead of folding it into "Other".
+- Still open: whether a June/July 2026 KPI run was circulated during Kevin's absence (now partly answered — July deck exists and went to Michael).
 
 ## Known Gaps
-- `docs/reference/kpi-definitions.md` still a stub — no KPI names/sources/methods documented.
-- Minor pre-existing cosmetic (not a regression, present in prior months): slides 8 & 9's matplotlib "Total:" annotation slightly overlaps the final bar's data label.
-- Self-test still builds only single months on hand-made base decks. Worth strengthening to chain two consecutive months (build N, then N+1 on that output) now that idempotency matters — flagged to Drew.
+- `docs/reference/kpi-definitions.md` still a stub — populate using ADR-0001 + the reconciliation reference.
+- Minor pre-existing cosmetic (not a regression): Slides 8 & 9 matplotlib "Total:" annotation slightly overlaps the last bar label.
 
 ## Up Next
-1. Kevin reviews the visual and approves (or requests changes).
-2. On approval: Lauren saves canonical `KPI presentation - August 2026.pptx` into `...\2026\08 Aug\`, logs the session file, confirms the deck goes to Michael O'Sullivan.
+1. Drew implements HANDOVER Parts A + B + C as one change; hardened gate green on June (updated `Table 4` oracle) and a fresh August build.
+2. Lauren re-runs `build_month(2026, 8)` clean, re-renders, checks Slide 5 (Total 61 / Other 2 / caption) + Slide 4 pointer, puts visual to Kevin.
+3. On approval: save canonical `KPI presentation - August 2026.pptx` into `...\2026\08 Aug\`; log `docs/sessions/2026-08-KPI-run.md`; confirm distribution to Michael O'Sullivan.
+4. Kevin decides the July-deck reissue vs written-reply question.
