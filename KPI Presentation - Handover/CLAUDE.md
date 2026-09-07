@@ -1,7 +1,7 @@
 # KPI Presentation — Claude Bootstrap
 ## Identity
 - **Project:** KPI Presentation (monthly KPI run)
-- **Purpose:** Producing, reviewing, and distributing HR KPI outputs for the monthly team meeting to Michael O'Sullivan. Split out from the former combined "KPI Monthly Standing Agenda" area, 21 Aug 2026, per Kevin's instruction that these are two separate meetings — format and pipeline kept intact, area split only.
+- **Purpose:** Producing and reviewing the HR KPI figures/statistics deck for the monthly team meeting. Split out from the former combined "KPI Monthly Standing Agenda" area, 21 Aug 2026, per Kevin's instruction that these are two separate meetings — format and pipeline kept intact, area split only.
 - **Owner:** Kevin Lelitte — HR Systems Manager/Director
 - **Status:** Active
 - **Repository:** https://github.com/begb0037admin/meeting-records/tree/main/KPI%20Presentation%20-%20Handover

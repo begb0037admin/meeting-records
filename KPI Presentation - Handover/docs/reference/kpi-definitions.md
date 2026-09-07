@@ -1,22 +1,22 @@
 # KPI Definitions — HR Systems
 
-> Living reference. Update when a KPI definition, source, or recipient changes.
+> Living reference. Update when a KPI definition or source changes.
 > Last updated: 2026-06-16
 
 ## Monthly KPI Run — Overview
 
 The monthly KPI run produces HR Systems performance data for the People Department. Output is shared with the team and presented at the monthly team meeting.
 
-**Run by:** Kevin Lelitte (currently — support from Michael O'Sullivan)
+**Run by:** Kevin Lelitte
 **Frequency:** Monthly
-**Distribution:** HR Systems team; team meeting presentation (Simon Burford chairs)
-**Latest run:** May 2026 — sent to Michael O'Sullivan 9 Jun 2026; presented at team meeting 10 Jun 2026
+**Audience:** HR Systems team; presented at the monthly team meeting (Simon Burford chairs). The deck is Kevin's to present.
+**Latest run:** May 2026 — circulated 9 Jun 2026; presented at the team meeting 10 Jun 2026
 
 ---
 
 ## KPIs in Scope
 
-> To be populated. For each KPI, confirm: name, data source, calculation method, who receives it, and any known issues.
+> To be populated. For each KPI, confirm: name, data source, calculation method, its audience, and any known issues.
 
 | KPI | Data Source | Calculation | Recipients | Notes |
 |-----|------------|-------------|------------|-------|
