@@ -55,7 +55,7 @@ A small text box on Slide 5, below `Table 4`, built at run time:
 > "Incident – Other (this table): non-self-service Incident tasks completed last month, by service category — total {N}. Slide 4's Incident – Other trend groups by HRIS parent ticket type over a rolling 15-month window and will not match this total. Slide 7 breaks down this same {N}-task population by time to complete."
 
 A short pointer on Slide 4 near `Table 5`:
-> "Incident – Other = tasks completed by HRIS parent ticket type (15-month window). Slide 5 shows last month's service-category breakdown."
+> "Incident – Other = tasks completed by HRIS parent ticket type (rolling 15-month window). Slide 5 shows last month's service-category breakdown."
 
 ### 5. Cross-slide reconciliation is enforced by the build
 See `docs/reference/incident-other-reconciliation.md` for the registry. In brief:
