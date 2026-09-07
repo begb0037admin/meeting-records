@@ -39,6 +39,20 @@ The 7 Aug independent verification could not have caught this — July was built
 
 ---
 
+## Continuation — same day, ~11:28-11:35 (after Drew's fix)
+
+- Pulled `b13afe5` (Drew's picture-swap idempotency fix — name-independent lookup + name normalisation on write). Cleared all diagnostic artifacts.
+- Re-ran `build_month(2026, 8)` **CLEAN, no local patch** → `Lauren Rebuilt Tests August 2026 (NOT canonical - pending Kevin approval).pptx` in scratchpad. Completed with no RuntimeError. Slides 8/9/10 pictures correctly re-named to `Picture 2` at the swapped positions.
+- Re-ran the bundled self-test on the fixed script → `ALL PASS` (identical to before; known slide-7 0.01pp NOTE prints as expected).
+- Diffed the clean Aug deck vs the July real deck: 134 table cells changed across slides 2–10 (exactly the data tables). Slide 1 subtitle = "AUGUST 2026 KPI STATISTICS | ".
+- Exported all 11 slides to PNG (`aug_png\Slide1.PNG … Slide11.PNG`, 2200x1238) via PowerPoint COM. Visually checked every slide — chrome intact, correct Aug 26 / Jul 26 / Aug 25 columns, native pie charts recomputed, chart images regenerated, crest untouched, closing slide unchanged.
+- Updated STATUS.md + HANDOVER.md. Nothing saved to OneDrive — canonical save waits for Kevin's approval of the visual.
+
+**Files changed (continuation):** STATUS.md, HANDOVER.md (replaced), this session log.
+**Commits:** meeting-records checkpoint + lauren memory update (SHAs in the commit messages).
+
+---
+
 ## Addendum — 2026-09-07 — Drew (pipeline engineering)
 
 **Scope:** fix only the picture-swap idempotency bug in `tools/speaking-briefs/build_kpi_presentation.py`. Not building or saving the August deck (Lauren's step).
