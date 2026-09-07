@@ -1,6 +1,6 @@
 # STATUS — KPI Presentation
-**Last updated:** 7 Sep 2026 (August 2026 build: two content defects found post-render — fix spec issued for Drew, deck NOT going to Kevin yet)
-**Current phase:** Active — standing monthly responsibility. August 2026 run blocked on the Slide 5 fix + hardened gate.
+**Last updated:** 7 Sep 2026 (Drew implemented HANDOVER Parts A + B + C in `build_kpi_presentation.py`; self-test green on June + a fresh August build; deck NOT yet rebuilt/rendered/approved — that is Lauren's next step)
+**Current phase:** Active — standing monthly responsibility. August 2026 run: pipeline fix landed, awaiting Lauren's clean rebuild + render + Kevin's approval.
 
 ## Confirmed
 - SOP current: `docs/KPI_RUN_SOP.md`. Canonical naming: `KPI presentation - <Month> <Year>.pptx`.
@@ -9,11 +9,13 @@
 - **7 Sep 2026 — pipeline picture-swap idempotency bug fixed by Drew** (`b13afe5`). Clean `build_month(2026, 8)` works; June self-test `ALL PASS` on the fixed script.
 - **7 Sep 2026 — clean August deck built + all 11 slides rendered** (scratchpad, evidence only). Design/layout parity vs July clean; all slides except Slide 5 `Table 4` verify accurate vs source (Codex).
 
-## Blocked — fix spec issued, awaiting Drew
-Independent review (Codex) + Michael O'Sullivan's 13 Aug email found two defects on the "Incident – Other" figures, and Kevin directed the self-test gate be hardened. All three are specced for Drew in `docs/HANDOVER.md` (Parts A/B/C), with the decision in **ADR-0001** and the reconciliation registry in **`docs/reference/incident-other-reconciliation.md`**:
-- **A — Slide 5 `Table 4` arithmetic:** displayed rows didn't sum to the Total; % base appeared on no row (new tail category "Payroll Costing Report" counted but not shown). Fix: 9 named FA rows + an "Other" row; Total & % base = the full source month total (Jun 77 / Jul 65 / Aug 61), which also makes Slide 5 reconcile exactly to Slide 7. Row 10 "Interfaces" → "Other".
-- **B — Scope captions:** run-time text boxes on Slide 5 and Slide 4 explaining that Slide 4's Incident–Other trend uses a different Ivanti grouping/window and won't match Slide 5/7 (which do match each other).
-- **C — Hardened gate:** `validate_deck()` run against the *freshly built* month (not just the June reference) — row-sum == Total, % == count/Total, % column sums to 100 (±0.10 pp), chart series == table cells, and the cross-slide reconciliation registry (R1 Slide 5↔Slide 7 exact; R2 Slide 4 SR ↔ Slide 5 `Table 6` exact; D1–D4 registered as differ-by-design). Build exits non-zero and writes no deck on any failure. Also add August as a second known-good self-test month.
+## Done — HANDOVER Parts A + B + C implemented (Drew, 7 Sep 2026)
+Landed as one change to `tools/speaking-briefs/build_kpi_presentation.py` (+ `.gitignore`). Decision in **ADR-0001**, registry in **`docs/reference/incident-other-reconciliation.md`**. Nothing saved to OneDrive; no canonical deck built.
+- **A — Slide 5 `Table 4` arithmetic (done):** `INCIDENT_OTHER_EXCLUDE` blacklist deleted. Table now built from a 9-row whitelist (`INCIDENT_OTHER_NAMED`) + a computed `Other` row = source month total − sum(named); Total row and every % base = the sheet's own month total row (Jun 77 / Jul 65 / Aug 61). Row 10 "Interfaces" → "Other" (Kevin confirmed, no 11th row). Source-sanity assert added: build fails if the source sheet's own category rows don't sum to its own total. Percentages emitted round-half-up (Decimal) so they equal the source sheet's own "Category %" column exactly — small, deliberate deviation from the spec's literal `:.2f`, see HANDOVER note.
+- **B — Scope captions (done):** run-time `add_textbox` boxes — `IncidentOtherScopeCaption` on Slide 5 below `Table 4`, `IncidentOtherPointer` on Slide 4 below `Table 5`. 9 pt, deck grey, wrapped, idempotent (found by name and updated in place on re-runs). Text per ADR-0001 §4 with `{N}` = source month total.
+- **C — Hardened blocking gate (done):** new `validate_deck(prs, pxd, hs_current, hs_prev, year, month)`, called by `build_month` after `populate_deck` and **before save**. On any failure it prints every failure, raises `DeckValidationError`, writes **no** deck at `out_path` (a `.REJECTED` copy is saved for inspection) and `__main__` exits non-zero. Checks: row-sum == displayed Total (exact, every table); single-category % == count/Total (±0.001); % column sums to 100 (±0.10 pp, documented); combined-band cells on Slides 6 & 7 (exact except registered D4 ≤ 0.01 pp); delta cells (MoM/YoY/Variance) arithmetically correct; pie chart series == table cell values; trend/combo chart source arrays == table cells. Cross-slide registry encoded in code: **R1** Slide 5 `Table 4` Total == Slide 7 current-month band total (exact); **R2** Slide 5 `Table 6` Total == Slide 4 "Service Request" cur == SR source total (exact); **R-cur** Slide 4 Total cur == Analy3 Completed Tasks cur (exact); **D1–D4** registered differ-by-design; unregistered repeated metric that mismatches → fail. Self-test now also builds a fresh **August 2026** and runs the gate against it; `IO_ORACLE` carries both June (Total 77) and August (Total 61) known-good `Table 4` columns; the June-reference cell-diff skips `Table 4` and checks it against the corrected oracle instead (68 → 77).
+
+**Self-test result (7 Sep 2026, `python build_kpi_presentation.py` → `ALL PASS`, exit 0):** Part 1 + 1b green (June extraction + full `Table 4` mapping vs oracle); Part 2 green (every table cell matches the real June deck, `Table 4` vs ADR-0001 oracle); Part 3 green (`validate_deck` on freshly built June); Part 4 green (fresh August build, gate passed inline, `Table 4` = Total 61 / Other 2, captions present). Gate proven to block: injecting one wrong figure → `DeckValidationError`, no deck written, `.REJECTED` copy only, non-zero exit.
 
 ## Awaiting Kevin (after Drew's fix + rebuild)
 - Approval of the corrected August visual before the canonical OneDrive save.
@@ -26,7 +28,7 @@ Independent review (Codex) + Michael O'Sullivan's 13 Aug email found two defects
 - Minor pre-existing cosmetic (not a regression): Slides 8 & 9 matplotlib "Total:" annotation slightly overlaps the last bar label.
 
 ## Up Next
-1. Drew implements HANDOVER Parts A + B + C as one change; hardened gate green on June (updated `Table 4` oracle) and a fresh August build.
-2. Lauren re-runs `build_month(2026, 8)` clean, re-renders, checks Slide 5 (Total 61 / Other 2 / caption) + Slide 4 pointer, puts visual to Kevin.
-3. On approval: save canonical `KPI presentation - August 2026.pptx` into `...\2026\08 Aug\`; log `docs/sessions/2026-08-KPI-run.md`; confirm distribution to Michael O'Sullivan.
-4. Kevin decides the July-deck reissue vs written-reply question.
+1. **DONE (Drew, 7 Sep 2026):** HANDOVER Parts A + B + C implemented in `build_kpi_presentation.py`; self-test `ALL PASS` on June (updated `Table 4` oracle 68 → 77) and a fresh August build; R1/R2/R-cur exact; gate proven to block a broken figure.
+2. **Lauren (next):** re-run `build_month(2026, 8)` clean to the canonical location, re-render all 11 slides, check Slide 5 `Table 4` (Total 61 / Other 2 / scope caption present), the Slide 4 pointer, and overall layout parity vs July, then put the visual to Kevin. The build now self-validates before it writes — if `validate_deck` fails, no deck is produced.
+3. On Kevin's explicit approval: save canonical `KPI presentation - August 2026.pptx` into `...\2026\08 Aug\`; log `docs/sessions/2026-08-KPI-run.md`; confirm distribution to Michael O'Sullivan.
+4. Kevin decides the July-deck reissue vs written-reply question (Michael raised it 13 Aug — a reply is owed).

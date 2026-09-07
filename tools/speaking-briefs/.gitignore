@@ -1,5 +1,8 @@
 # build_kpi_presentation.py self-test / build outputs — regenerated on every run, never committed
 __pycache__/
 assembly_selftest_v2.pptx
+assembly_selftest_august.pptx
 charts_selftest/
+charts_selftest_august/
 charts_[0-9][0-9][0-9][0-9]_[0-9][0-9]/
+*.pptx.REJECTED

@@ -10,6 +10,22 @@ Decision + rationale: **ADR-0001** (`docs/decisions/0001-incident-other-table-sc
 
 ---
 
+## IMPLEMENTATION STATUS — Parts A + B + C DONE (Drew, 7 Sep 2026)
+
+All three parts landed as one change to `tools/speaking-briefs/build_kpi_presentation.py` (+ its `.gitignore`). No canonical deck built; nothing written to OneDrive.
+
+- **A** — `INCIDENT_OTHER_EXCLUDE` deleted. `extract_pxd` now reads the sheet's own month-total row (shape `(<int>, 0, None)`), asserts the source's own category rows sum to it, builds 9 whitelist rows (`INCIDENT_OTHER_NAMED`) + a computed `Other` = `io_total − sum(named)` (asserts `>= 0`), and emits `slide5_incident_other` / `slide5_incident_other_total`. `populate_deck` writes rows 1–10 + Total (`str(io_total)`) + Total-% cell `"100%"`. Row 10 label is "Other" (Kevin confirmed "fold into Other", no 11th row).
+- **B** — `_upsert_textbox()` helper; `IncidentOtherScopeCaption` on Slide 5 below `Table 4`, `IncidentOtherPointer` on Slide 4 below `Table 5`. 9 pt, deck grey `#595959`, wrapped, positioned from the table shape's geometry at run time, idempotent by shape name. Text is ADR-0001 §4 verbatim with `{N}` = `io_total`.
+- **C** — `validate_deck(prs, pxd, hs_current, hs_prev, year, month)` + `DeckValidationError`. Called by `build_month` after `populate_deck`, before save. Failure ⇒ prints all failures, raises, **no deck at `out_path`** (`.REJECTED` copy only), `__main__` exits non-zero. Implements every C1 check, the C2 registry (`RECONCILIATION_MUST_EQUAL` R1/R2/R-cur exact; `RECONCILIATION_DIFFER_BY_DESIGN` D1–D4; un-registered repeated-metric backstop), and C3 (June extraction oracle 68 → 77; June-reference diff skips `Table 4` and checks it against `IO_ORACLE[(2026,6)]`; fresh August build + gate; `IO_ORACLE[(2026,8)]` = Total 61 as the second known-good month).
+
+**Self-test:** `python build_kpi_presentation.py` → `ALL PASS`, exit 0. June (updated `Table 4` oracle) and a fresh August build both green; R1/R2/R-cur exact on both. Gate proven to block: one injected wrong figure ⇒ `DeckValidationError`, no deck written.
+
+**One deliberate deviation from the literal spec (A2/C1.2):** percentages are computed with `Decimal` + `ROUND_HALF_UP` (helper `pct2`), not Python's `f"{x:.2f}"` / `round(x, 2)`. Python uses round-half-to-even and hits float-repr edge cases (`round(40.625, 2) == 40.62`), which would make the new gate reject percentages that are actually correct against the source. ROUND_HALF_UP is what the Ivanti / H&S reports use, so Slide 5's percentages now equal the source sheet's own "Category %" column exactly (verified Jun/Jul/Aug) — this is what ADR-0001 §1 asks for. The emitter and the gate use the same function, so they stay self-consistent.
+
+**Next step is Lauren's** (see "Next concrete action" below): clean `build_month(2026, 8)` → render → Kevin approval. Parts A/B/C spec text is kept below unchanged for the audit trail.
+
+---
+
 ## State of play
 - Data source verified live (7 Sep 2026): `...\2026\08 Aug\Source Data\` — `HR_Systems_Functional_Team_Monthly_Report_Excel - 202609010715.xlsx`, `Health and Safety Systems Support Statistics - 202609010600.docx`. Base deck `...\07 Jul\KPI presentation - July 2026.pptx`.
 - Picture-swap idempotency bug: fixed, `b13afe5`. Clean `build_month(2026, 8)` works.
@@ -126,7 +142,7 @@ Encode the registry as an in-code structure (`RECONCILIATION_MUST_EQUAL`, `RECON
 ---
 
 ## Next concrete action
-Route Parts A / B / C to Drew as one change. He implements, runs the hardened gate (June reference cell-oracle updated per A4; new `validate_deck` green on both June and the freshly built August; R1/R2/R-cur exact). Then Lauren re-runs `build_month(2026, 8)` clean, re-renders all 11 slides, checks Slide 5 `Table 4` (Total 61, Other 2, caption present) and the Slide 4 pointer, and only then puts the visual to Kevin. Canonical `KPI presentation - August 2026.pptx` saved into `...\2026\08 Aug\` only on Kevin's explicit go-ahead.
+Parts A / B / C are implemented and self-test-green (see "IMPLEMENTATION STATUS" above; `build_kpi_presentation.py`, commit on `main`). **Lauren:** re-run `build_month(2026, 8)` clean to the canonical location, re-render all 11 slides, check Slide 5 `Table 4` (Total 61, Other 2, scope caption present), the Slide 4 pointer, and layout parity vs July, then put the visual to Kevin. The build now self-validates before it writes — a `validate_deck` failure produces no deck (only an `out_path + ".REJECTED"` copy), so a green build is a passed gate. Canonical `KPI presentation - August 2026.pptx` saved into `...\2026\08 Aug\` only on Kevin's explicit go-ahead.
 
 **Separate, Kevin's call:** July 2026 deck already sent to Michael O'Sullivan has the old Slide 5 numbers (Total 62, no Other row, no caption). Corrected would be Total 65 / Other 7 / caption. Decide: reissue the July deck, or send Michael a written explanation citing ADR-0001 + the reconciliation reference. A reply is owed — he raised it on 13 Aug.
 

@@ -34,6 +34,8 @@ for the rare case it isn't.
 """
 from pptx import Presentation
 from pptx.chart.data import CategoryChartData
+from pptx.util import Pt
+from pptx.dml.color import RGBColor
 import openpyxl
 from docx import Document
 import matplotlib
@@ -41,22 +43,75 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 import numpy as np
+from decimal import Decimal, ROUND_HALF_UP
 import glob
 import re
 import os
+import sys
 
 ORANGE = "#ED7D31"
 GREEN = "#70AD47"
 DARKRED = "#843C0C"
 
-# Categories the real deck excludes from the Incident-Other breakdown
-# (slide 5, Table 4) - discovered 2 Aug 2026 by diffing raw vs. real deck,
-# not documented anywhere in the source. See memory/
-# kpi-presentation-source-and-rebuild-poc.md.
-INCIDENT_OTHER_EXCLUDE = {
-    "My Development", "Applications/Software", "Applicant", "Pensions",
-    "Biztalk, SSIS & Azure",
+# --- Slide 5, Table 4 "Incident - Other Type" ------------------------------
+# ADR-0001 (2026-09-07, docs/decisions/0001-incident-other-table-scope.md):
+# the table is 9 fixed named FA categories + one "Other" row that absorbs
+# every source category not in the named set. Its Total row and every
+# percentage base = the source sheet's own month total (NOT a sum of a
+# trimmed subset). This makes Slide 5 Table 4 reconcile EXACTLY to Slide 7's
+# band-count total every month (reconciliation registry R1) and makes each
+# percentage equal the source sheet's own "Category %" column.
+#
+# The former hard-coded INCIDENT_OTHER_EXCLUDE blacklist is deleted. It was
+# inherently reactive - a wrong deck shipped first, then the missing name
+# was found - which is exactly how the July 2026 deck shipped with visible
+# rows that did not sum to the displayed Total (Codex review + Michael
+# O'Sullivan's 13 Aug 2026 email). Row 10 (was "Interfaces") is now "Other".
+#
+# (display_label, source Service Category name) - order is the row order.
+INCIDENT_OTHER_NAMED = [
+    ("People Management",        "People Management"),
+    ("Time and Attendance",      "Time and Attendance"),
+    ("Payroll",                  "Payroll"),            # exact - NOT "Payroll Costing Report", NOT "X5 - Costing Maintenance"
+    ("HR Reporting",             "HR Reporting"),
+    ("Data Protection Request",  "Data Protection Request"),
+    ("Staff Requests",           "Staff Requests"),
+    ("Work Groups & Managers",   "Work Groups and Managers"),
+    ("Recruitment",              "Recruitment"),
+    ("Roster (WFM)",             "Roster (WFM)"),
+]
+
+# Known-good Slide 5 Table 4 figures (post-ADR-0001) used as self-test
+# oracles. June's circulated deck carried the pre-ADR-0001 defect (Total 68,
+# no "Other" row), so it is NOT valid ground truth - these corrected values
+# are (HANDOVER Part A4: "the June self-test oracle changes 68 -> 77").
+IO_ORACLE = {
+    (2026, 6): {"People Management": 28, "Time and Attendance": 18, "Payroll": 1,
+                "HR Reporting": 5, "Data Protection Request": 7, "Staff Requests": 2,
+                "Work Groups & Managers": 3, "Recruitment": 2, "Roster (WFM)": 0,
+                "Other": 11, "__total__": 77},
+    (2026, 8): {"People Management": 31, "Time and Attendance": 18, "Payroll": 2,
+                "HR Reporting": 0, "Data Protection Request": 3, "Staff Requests": 1,
+                "Work Groups & Managers": 3, "Recruitment": 0, "Roster (WFM)": 1,
+                "Other": 2, "__total__": 61},
 }
+
+
+def pct2(n, d):
+    """n/d as a percentage, 2 dp, ROUND_HALF_UP - the convention the Ivanti
+    and H&S source reports use for their own "Category %" columns. Python's
+    round() uses round-half-to-even and is also subject to float-repr
+    surprises at the .xx5 boundary (e.g. round(40.625, 2) -> 40.62), which
+    would make the hardened gate reject percentages that are actually
+    correct against the source. Returns a Decimal."""
+    if not d:
+        return Decimal("0.00")
+    return (Decimal(int(n)) / Decimal(int(d)) * 100).quantize(
+        Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+
+def pct_str(n, d):
+    return f"{pct2(n, d):.2f}%"
 
 # --- Month / folder conventions (7 Aug 2026 extension) -----------------
 # Confirmed OneDrive layout: Functional Analysis Team Monthly Statistics\
@@ -211,18 +266,50 @@ def extract_pxd(excel_path):
             sr_breakdown[label_map[r[0]]] = (r[1] or 0, r[2] or "0.00%")
     out["slide5_service_request"] = sr_breakdown
 
-    # Slide 5, Table 4: Incident-Other type breakdown, filtered
+    # Slide 5, Table 4: "Incident - Other Type" service-category breakdown,
+    # last month only. Per ADR-0001 (see INCIDENT_OTHER_NAMED comment above):
+    # 9 fixed named rows + one "Other" row (= source month total - sum of
+    # named), Total & percentage base = the sheet's own month total row.
     ws = wb["Non-HR Self Service Incident T"]
-    rows = [r for r in ws.iter_rows(values_only=True) if r and r[0] not in (None, "Description") and not str(r[0]).startswith("Total")]
-    io_breakdown = {}
-    for r in rows[1:]:
-        if r[0] and r[0] not in INCIDENT_OTHER_EXCLUDE:
-            io_breakdown[r[0]] = r[1] or 0
-    filtered_total = sum(io_breakdown.values())
-    out["slide5_incident_other"] = {
-        k: (v, f"{v/filtered_total*100:.2f}%") for k, v in io_breakdown.items()
-    }
-    out["slide5_incident_other_total"] = filtered_total
+    io_counts = {}          # source Service Category name -> count
+    io_total = None         # the sheet's own month total row, shaped (<int>, 0, None)
+    for r in ws.iter_rows(values_only=True):
+        if not r:
+            continue
+        if isinstance(r[0], int) and r[1] == 0 and r[2] is None:
+            io_total = r[0]
+            continue
+        if (isinstance(r[0], str) and r[0] != "Description"
+                and not r[0].startswith("Total") and r[0].strip()
+                and isinstance(r[1], int)):
+            io_counts[r[0]] = r[1]
+    if io_total is None:
+        raise ValueError(
+            "Non-HR Self Service Incident T: could not find the sheet's own "
+            "month-total row (expected shape (<int>, 0, None))"
+        )
+    src_sum = sum(io_counts.values())
+    if src_sum != io_total:
+        raise ValueError(
+            f"Non-HR Self Service Incident T: source does not add up - category "
+            f"rows sum to {src_sum} but the sheet's own total row is {io_total}. "
+            f"Refusing to build on inconsistent source data."
+        )
+    named_sum = 0
+    io_display = {}
+    for display_label, src_name in INCIDENT_OTHER_NAMED:
+        c = io_counts.get(src_name, 0)
+        named_sum += c
+        io_display[display_label] = (c, pct_str(c, io_total))
+    other_count = io_total - named_sum
+    if other_count < 0:
+        raise ValueError(
+            f"Non-HR Self Service Incident T: the 9 named categories sum to "
+            f"{named_sum}, which exceeds the month total {io_total}"
+        )
+    io_display["Other"] = (other_count, pct_str(other_count, io_total))
+    out["slide5_incident_other"] = io_display          # {display_label: (count, "NN.NN%")}
+    out["slide5_incident_other_total"] = io_total
 
     # Slides 6/7: completion-time % bands, monthly rolling
     _, sr_time = monthly_by_category("Time To Complete Service Requ1")
@@ -383,6 +470,35 @@ def find_table(slide, name):
         if shape.has_table and shape.name == name:
             return shape.table
     raise RuntimeError(f"table {name!r} not found")
+
+
+def _table_shape(slide, name):
+    """The GraphicFrame shape (not the .table) for a named table - needed
+    for its geometry when positioning a caption relative to it."""
+    for shape in slide.shapes:
+        if shape.has_table and shape.name == name:
+            return shape
+    raise RuntimeError(f"table shape {name!r} not found")
+
+
+def _upsert_textbox(slide, name, text, left, top, width, height, size_pt=9):
+    """Add a named text box, or update it in place if one with this name
+    already exists (so month-over-month re-runs from a prior pipeline deck
+    don't stack duplicates). Body-sized, deck grey, left-aligned, wrapped."""
+    box = next((sh for sh in slide.shapes if sh.name == name), None)
+    if box is None:
+        box = slide.shapes.add_textbox(left, top, width, height)
+        box.name = name
+    tf = box.text_frame
+    tf.word_wrap = True
+    tf.clear()
+    para = tf.paragraphs[0]
+    run = para.add_run()
+    run.text = text
+    run.font.size = Pt(size_pt)
+    run.font.bold = False
+    run.font.color.rgb = RGBColor(0x59, 0x59, 0x59)
+    return box
 
 
 # Canonical name of the slides 8/9/10 chart-image shape on a hand-made deck.
@@ -580,19 +696,21 @@ def populate_deck(base_deck_path, pxd, hs_current, hs_prev, month_label, chart_d
         slide4_pie, "PXD Task Category %",
     )
 
-    # Slide 5: Table 4 (incident-other) + Table 6 (service request)
+    # Slide 5: Table 4 (incident - other) + Table 6 (service request)
     slide5 = prs.slides[4]
     io = pxd["slide5_incident_other"]
     t4_5 = find_table(slide5, "Table 4")
-    io_order = ["People Management", "Time and Attendance", "Payroll", "HR Reporting",
-                "Data Protection Request", "Staff Requests", "Work Groups and Managers",
-                "Recruitment", "Roster (WFM)", "Interfaces"]
-    for ri, cat in enumerate(io_order, start=1):
-        count, pct = io.get(cat, (0, "0.00%"))
-        set_cell(t4_5.rows[ri].cells[0], cat.replace("Work Groups and Managers", "Work Groups & Managers"))
+    # ADR-0001: 9 named rows + "Other" (row 10, formerly "Interfaces") + Total.
+    # `io` is already keyed by display label with source-equivalent
+    # percentages (pct_str), so no per-row relabelling / recompute here.
+    io_order = [display_label for display_label, _ in INCIDENT_OTHER_NAMED] + ["Other"]
+    for ri, label in enumerate(io_order, start=1):
+        count, pct = io.get(label, (0, "0.00%"))
+        set_cell(t4_5.rows[ri].cells[0], label)
         set_cell(t4_5.rows[ri].cells[1], str(count))
         set_cell(t4_5.rows[ri].cells[2], pct)
     set_cell(t4_5.rows[11].cells[1], str(pxd["slide5_incident_other_total"]))
+    set_cell(t4_5.rows[11].cells[2], "100%")   # percentage base is now a visible row
 
     sr = pxd["slide5_service_request"]
     t6_5 = find_table(slide5, "Table 6")
@@ -631,6 +749,39 @@ def populate_deck(base_deck_path, pxd, hs_current, hs_prev, month_label, chart_d
             break
 
     set_cell(t6_5.rows[len(t6_5.rows) - 1].cells[1], str(sum(v[0] for v in sr.values())))
+
+    # PART B (ADR-0001 section 4): run-time scope captions. Text boxes only -
+    # no table / row / layout change. The three "Incident - Other" figures on
+    # Slides 4, 5 and 7 come from three different Ivanti queries and are not
+    # all meant to match (registry D1); these captions are the on-slide
+    # explanation. Idempotent: on a re-run the boxes are found by name and
+    # updated in place rather than stacked.
+    n_io = pxd["slide5_incident_other_total"]
+    s5_tbl = _table_shape(slide5, "Table 4")
+    _upsert_textbox(
+        slide5, "IncidentOtherScopeCaption",
+        (f"Incident – Other (this table): non-self-service Incident tasks "
+         f"completed last month, by service category — total {n_io}. "
+         f"Slide 4's Incident – Other trend groups by HRIS parent ticket "
+         f"type over a rolling 15-month window and will not match this total. "
+         f"Slide 7 breaks down this same {n_io}-task population by time to "
+         f"complete."),
+        left=s5_tbl.left,
+        top=s5_tbl.top + s5_tbl.height + 80000,
+        width=s5_tbl.width,
+        height=1300000,
+    )
+    s4_tbl = _table_shape(prs.slides[3], "Table 5")
+    _upsert_textbox(
+        prs.slides[3], "IncidentOtherPointer",
+        ("Incident – Other = tasks completed by HRIS parent ticket type "
+         "(rolling 15-month window). Slide 5 shows last month's service-"
+         "category breakdown."),
+        left=s4_tbl.left,
+        top=s4_tbl.top + s4_tbl.height + 80000,
+        width=s4_tbl.width,
+        height=760000,
+    )
 
     # Slides 6/7: SR/OI time-to-complete bands. Table 5 is a combined
     # KPI-threshold summary (SAME OR NEXT DAY / LESS THAN 5 DAYS, both
@@ -755,8 +906,376 @@ def populate_deck(base_deck_path, pxd, hs_current, hs_prev, month_label, chart_d
         # back to the largest-area heuristic instead of a clean name match.
         new_pic.name = CHART_PICTURE_NAME
 
-    prs.save(out_path)
-    print("written", out_path)
+    # NOTE: no longer saves here. build_month() runs validate_deck(prs, ...)
+    # against this in-memory Presentation and only then writes it to disk, so
+    # a deck that fails an internal or cross-slide check is never left at
+    # out_path (HANDOVER Part C).
+    return prs
+
+
+# =====================================================================
+# HARDENED SELF-TEST GATE (HANDOVER Part C)
+# =====================================================================
+# The pre-existing gate diffed a freshly built month against a hand-made
+# reference deck for the SAME month. That cannot catch an error that is
+# present in both (the reference June deck carried the very Slide 5 Table 4
+# arithmetic defect this change fixes, and the gate still said ALL PASS).
+# validate_deck() checks the freshly built month against itself and against
+# the cross-slide reconciliation registry, independently of any reference
+# deck. It is BLOCKING: build_month() calls it before saving and writes no
+# deck on failure.
+
+class DeckValidationError(Exception):
+    """Raised by validate_deck() when the freshly built deck fails an
+    internal-consistency or cross-slide reconciliation check."""
+
+
+# Percentage-column-sum tolerance. Worst case accumulated half-up rounding
+# error is 0.005 pp per displayed row; the widest table here has 10 category
+# rows (Slide 5 Table 4) -> <=0.05 pp, so 0.10 pp is a safe ceiling that
+# still catches a wrong percentage base or a dropped row (whole-point shift).
+PCT_SUM_TOL = Decimal("0.10")
+# Single-cell percentage tolerance (spec: abs diff <= 0.001).
+PCT_CELL_TOL = Decimal("0.001")
+
+# Cross-slide reconciliation registry, encoded from
+# docs/reference/incident-other-reconciliation.md. Kept as data so the
+# "reason" text ships with the failure message and so an un-registered
+# repeated metric that mismatches can be named as such.
+RECONCILIATION_MUST_EQUAL = [
+    ("R1", "Slide 5 Table 4 Total == Slide 7 current-month band-count total"),
+    ("R2", "Slide 5 Table 6 Total == Slide 4 Table 5 'Service Request' (cur) "
+           "== Service-Request source total"),
+    ("R-cur", "Slide 4 Table 5 'Total' (cur) == 'Tasks Completed by HRIS "
+              "Analy3' Completed Tasks for the current month"),
+]
+RECONCILIATION_DIFFER_BY_DESIGN = [
+    ("D1", "Slide 4 'Incident - Other' (cur) vs Slide 5 Table 4 Total vs "
+           "Slide 7 band total - different Ivanti queries (Parent Ticket "
+           "Type HRIS / rolling 15-month created window vs Service Category, "
+           "last-month completed). Captions (Part B) are the resolution."),
+    ("D2", "Slide 4 Table 5 'Total' (cur) vs Slide 10 Table 3 'Completed' "
+           "(cur) - Slide 10 'Completed' is the broader "
+           "Completed/Cancelled/Rejected disposition set."),
+    ("D3", "Slide 4 Table 5 'Total' (yr/prev) vs Analy3 for those months - "
+           "export-timing / late reclassification; +/-1 tolerated on "
+           "historical columns, only the current month is asserted exact."),
+    ("D4", "Slide 7 Table 5 'LESS THAN 5 DAYS' (cur) vs exact count "
+           "division - documented sub-0.01 pp rounding-methodology "
+           "ambiguity in the source; <=0.01 pp permitted on this cell only."),
+]
+
+
+def _dec2(x):
+    """Round any float/int to 2 dp as a Decimal, ROUND_HALF_UP (same
+    convention as pct2 - keeps chart-vs-table comparisons consistent)."""
+    return Decimal(str(x)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+
+def _cint(table, ri, ci):
+    return int(table.rows[ri].cells[ci].text.strip())
+
+
+def _cpct(table, ri, ci):
+    return Decimal(table.rows[ri].cells[ci].text.strip().rstrip("%").strip())
+
+
+def _ctxt(table, ri, ci):
+    return table.rows[ri].cells[ci].text.strip()
+
+
+def _band_counts(series_map, idx):
+    return {lab: parse_count_pct(s[idx])[0] for lab, s in series_map.items()}
+
+
+def validate_deck(prs, pxd, hs_current, hs_prev, year, month):
+    """BLOCKING gate. Runs against the freshly built Presentation `prs`
+    (not a reference deck) plus the same extracted inputs populate_deck
+    used. Collects every failure, prints them, and raises
+    DeckValidationError if there is at least one. Checks:
+      * every Total row: category rows sum to the displayed Total (exact int)
+      * every single-category % cell == count / displayed Total (<=0.001)
+      * every % column sums to 100 (<=0.10 pp)
+      * combined-band cells (Slides 6 & 7) exact except registered D4
+      * delta cells arithmetically correct (MoM / YoY / Variance)
+      * pie chart series values == the matching table cell values
+      * cross-slide registry: R1, R2, R-cur exact; D1-D4 registered as
+        differ-by-design; any un-registered repeated metric that
+        mismatches -> fail.
+    """
+    cur, prev_i, yr_i = -1, -2, -13
+    failures = []
+
+    def chk(cond, msg):
+        if not cond:
+            failures.append(msg)
+
+    def check_pie(slide_i, exp_map, label):
+        """exp_map: {chart_category_label: (count, denominator)}."""
+        chart = next(sh.chart for sh in prs.slides[slide_i].shapes if sh.has_chart)
+        plot = chart.plots[0]
+        cats = list(plot.categories)
+        vals = list(plot.series[0].values)
+        series_sum = sum(float(v or 0) for v in vals)
+        if any(d for _, d in exp_map.values()):
+            chk(abs(Decimal(str(series_sum)) - 100) <= PCT_SUM_TOL,
+                f"{label} pie: series values sum to {series_sum:.4f}, not 100 "
+                f"(tol {PCT_SUM_TOL} pp)")
+        seen = set()
+        for cat, val in zip(cats, vals):
+            if cat not in exp_map:
+                continue
+            seen.add(cat)
+            n, d = exp_map[cat]
+            want = pct2(n, d)
+            got = _dec2(val or 0)
+            chk(abs(got - want) <= PCT_CELL_TOL,
+                f"{label} pie {cat!r}: chart shows {got}, table-derived value "
+                f"is {want} (count {n}/{d})")
+        missing = set(exp_map) - seen
+        chk(not missing,
+            f"{label} pie: expected categories not found on the chart: {sorted(missing)}")
+
+    # ---- Slide 2 Table 5: H&S system volumes ----------------------------
+    t = find_table(prs.slides[1], "Table 5")
+    s2_prev = [_cint(t, ri, 1) for ri in range(1, 5)]
+    s2_cur = [_cint(t, ri, 2) for ri in range(1, 5)]
+    s2_pt, s2_ct = _cint(t, 5, 1), _cint(t, 5, 2)
+    chk(sum(s2_prev) == s2_pt, f"Slide 2 Table 5: prev rows sum {sum(s2_prev)} != Total {s2_pt}")
+    chk(sum(s2_cur) == s2_ct, f"Slide 2 Table 5: cur rows sum {sum(s2_cur)} != Total {s2_ct}")
+    for ri, pv, cv in zip(range(1, 5), s2_prev, s2_cur):
+        chk(_ctxt(t, ri, 3) == plain_delta(cv - pv),
+            f"Slide 2 Table 5 row {ri} MoM: {_ctxt(t, ri, 3)!r} != {plain_delta(cv - pv)!r}")
+    chk(_ctxt(t, 5, 3) == fmt_delta(s2_ct, s2_pt),
+        f"Slide 2 Table 5 Total MoM: {_ctxt(t, 5, 3)!r} != {fmt_delta(s2_ct, s2_pt)!r}")
+    check_pie(1, {"Cority": (s2_cur[0], s2_ct), "Odyssey": (s2_cur[1], s2_ct),
+                  "IRIS": (s2_cur[2], s2_ct), "DSE": (s2_cur[3], s2_ct)}, "Slide 2")
+
+    # ---- Slide 3 Table 5: H&S time to resolve --------------------------
+    t = find_table(prs.slides[2], "Table 5")
+    s3 = [("Same Day", 1), ("Next Day", 2), ("3 - 5 days", 3), ("6+ days", 4)]
+    s3_prev = [_cint(t, ri, 1) for _, ri in s3]
+    s3_cur = [_cint(t, ri, 3) for _, ri in s3]
+    s3_pt, s3_ct = _cint(t, 5, 1), _cint(t, 5, 3)
+    chk(sum(s3_prev) == s3_pt, f"Slide 3 Table 5: prev rows sum {sum(s3_prev)} != Total {s3_pt}")
+    chk(sum(s3_cur) == s3_ct, f"Slide 3 Table 5: cur rows sum {sum(s3_cur)} != Total {s3_ct}")
+    for (_, ri), pv, cv in zip(s3, s3_prev, s3_cur):
+        chk(abs(_cpct(t, ri, 2) - pct2(pv, s3_pt)) <= PCT_CELL_TOL,
+            f"Slide 3 Table 5 row {ri} prev %: {_cpct(t, ri, 2)} != {pct2(pv, s3_pt)}")
+        chk(abs(_cpct(t, ri, 4) - pct2(cv, s3_ct)) <= PCT_CELL_TOL,
+            f"Slide 3 Table 5 row {ri} cur %: {_cpct(t, ri, 4)} != {pct2(cv, s3_ct)}")
+        chk(_ctxt(t, ri, 5) == plain_delta(cv - pv),
+            f"Slide 3 Table 5 row {ri} MoM: {_ctxt(t, ri, 5)!r} != {plain_delta(cv - pv)!r}")
+    chk(abs(sum(_cpct(t, ri, 2) for _, ri in s3) - 100) <= PCT_SUM_TOL,
+        f"Slide 3 Table 5: prev % column sums to {sum(_cpct(t, ri, 2) for _, ri in s3)}, not 100")
+    chk(abs(sum(_cpct(t, ri, 4) for _, ri in s3) - 100) <= PCT_SUM_TOL,
+        f"Slide 3 Table 5: cur % column sums to {sum(_cpct(t, ri, 4) for _, ri in s3)}, not 100")
+    chk(_ctxt(t, 5, 5) == plain_delta(s3_ct - s3_pt),
+        f"Slide 3 Table 5 Total MoM: {_ctxt(t, 5, 5)!r} != {plain_delta(s3_ct - s3_pt)!r}")
+    check_pie(2, {"Same Day": (s3_cur[0], s3_ct), "Next Day": (s3_cur[1], s3_ct),
+                  "3-5 Day": (s3_cur[2], s3_ct), "6+ Days": (s3_cur[3], s3_ct)}, "Slide 3")
+
+    # ---- Slide 4 Table 5: PXD categories ------------------------------
+    t = find_table(prs.slides[3], "Table 5")
+    s4 = [("Service Request", 1), ("Incident - Other", 2), ("HR Self Service", 3), ("Change", 4)]
+    s4_yr = [_cint(t, ri, 1) for _, ri in s4]
+    s4_prev = [_cint(t, ri, 2) for _, ri in s4]
+    s4_cur = [_cint(t, ri, 3) for _, ri in s4]
+    s4_yt, s4_pt, s4_ct = _cint(t, 5, 1), _cint(t, 5, 2), _cint(t, 5, 3)
+    chk(sum(s4_yr) == s4_yt, f"Slide 4 Table 5: yr rows sum {sum(s4_yr)} != Total {s4_yt}")
+    chk(sum(s4_prev) == s4_pt, f"Slide 4 Table 5: prev rows sum {sum(s4_prev)} != Total {s4_pt}")
+    chk(sum(s4_cur) == s4_ct, f"Slide 4 Table 5: cur rows sum {sum(s4_cur)} != Total {s4_ct}")
+    for (_, ri), yv, pv, cv in zip(s4, s4_yr, s4_prev, s4_cur):
+        chk(_ctxt(t, ri, 4) == fmt_delta(cv, pv),
+            f"Slide 4 Table 5 row {ri} MoM: {_ctxt(t, ri, 4)!r} != {fmt_delta(cv, pv)!r}")
+        chk(_ctxt(t, ri, 5) == fmt_delta(cv, yv),
+            f"Slide 4 Table 5 row {ri} YoY: {_ctxt(t, ri, 5)!r} != {fmt_delta(cv, yv)!r}")
+    chk(_ctxt(t, 5, 4) == fmt_delta(s4_ct, s4_pt),
+        f"Slide 4 Table 5 Total MoM: {_ctxt(t, 5, 4)!r} != {fmt_delta(s4_ct, s4_pt)!r}")
+    chk(_ctxt(t, 5, 5) == fmt_delta(s4_ct, s4_yt),
+        f"Slide 4 Table 5 Total YoY: {_ctxt(t, 5, 5)!r} != {fmt_delta(s4_ct, s4_yt)!r}")
+    check_pie(3, {"Service Request": (s4_cur[0], s4_ct), "Incident - Other": (s4_cur[1], s4_ct),
+                  "HR Self Service": (s4_cur[2], s4_ct), "Change": (s4_cur[3], s4_ct)}, "Slide 4")
+
+    # ---- Slide 5 Table 4: Incident - Other (ADR-0001) ----------------
+    t = find_table(prs.slides[4], "Table 4")
+    io_counts = [_cint(t, ri, 1) for ri in range(1, 11)]
+    io_total_cell = _cint(t, 11, 1)
+    chk(sum(io_counts) == io_total_cell,
+        f"Slide 5 Table 4: category rows sum {sum(io_counts)} != displayed Total {io_total_cell}")
+    chk(io_total_cell == pxd["slide5_incident_other_total"],
+        f"Slide 5 Table 4: displayed Total {io_total_cell} != source month total "
+        f"{pxd['slide5_incident_other_total']}")
+    for i, ri in enumerate(range(1, 11)):
+        chk(abs(_cpct(t, ri, 2) - pct2(io_counts[i], io_total_cell)) <= PCT_CELL_TOL,
+            f"Slide 5 Table 4 row {ri} %: {_cpct(t, ri, 2)} != {pct2(io_counts[i], io_total_cell)} "
+            f"(count {io_counts[i]}/{io_total_cell})")
+    io_pct_sum = sum(_cpct(t, ri, 2) for ri in range(1, 11))
+    chk(abs(io_pct_sum - 100) <= PCT_SUM_TOL,
+        f"Slide 5 Table 4: % column sums to {io_pct_sum}, not 100 (tol {PCT_SUM_TOL} pp)")
+    chk(_ctxt(t, 11, 2) in ("100%", "100.00%"),
+        f"Slide 5 Table 4 Total % cell is {_ctxt(t, 11, 2)!r}, expected '100%'")
+
+    # ---- Slide 5 Table 6: Service Request breakdown -----------------
+    t = find_table(prs.slides[4], "Table 6")
+    last6 = len(t.rows) - 1
+    sr_counts = [_cint(t, ri, 1) for ri in range(1, last6)]
+    sr_total_cell = _cint(t, last6, 1)
+    chk(sum(sr_counts) == sr_total_cell,
+        f"Slide 5 Table 6: category rows sum {sum(sr_counts)} != displayed Total {sr_total_cell}")
+    for i, ri in enumerate(range(1, last6)):
+        chk(abs(_cpct(t, ri, 2) - pct2(sr_counts[i], sr_total_cell)) <= PCT_CELL_TOL,
+            f"Slide 5 Table 6 row {ri} %: {_cpct(t, ri, 2)} != {pct2(sr_counts[i], sr_total_cell)}")
+    sr_pct_sum = sum(_cpct(t, ri, 2) for ri in range(1, last6))
+    chk(abs(sr_pct_sum - 100) <= PCT_SUM_TOL,
+        f"Slide 5 Table 6: % column sums to {sr_pct_sum}, not 100")
+    chk(_ctxt(t, last6, 2) in ("100%", "100.00%"),
+        f"Slide 5 Table 6 Total % cell is {_ctxt(t, last6, 2)!r}, expected '100%'")
+
+    # ---- Slides 6 & 7 Table 5: combined KPI-threshold bands ----------
+    for slide_i, key, is_d4 in ((5, "slide6_bands", False), (6, "slide7_bands", True)):
+        t = find_table(prs.slides[slide_i], "Table 5")
+        cc, pc = _band_counts(pxd[key], cur), _band_counts(pxd[key], prev_i)
+        ct, pt = sum(cc.values()), sum(pc.values())
+
+        def comb(counts, total, labels):
+            return pct2(sum(counts.get(l, 0) for l in labels), total)
+
+        same_next = ["Same Day", "Next Day"]
+        less5 = ["Same Day", "Next Day", "3 - 5 days"]
+        chk(abs(_cpct(t, 1, 4) - comb(pc, pt, same_next)) <= PCT_CELL_TOL,
+            f"Slide {slide_i + 1} Table 5 'SAME OR NEXT DAY' prev: {_cpct(t, 1, 4)} != {comb(pc, pt, same_next)}")
+        chk(abs(_cpct(t, 1, 5) - comb(cc, ct, same_next)) <= PCT_CELL_TOL,
+            f"Slide {slide_i + 1} Table 5 'SAME OR NEXT DAY' cur: {_cpct(t, 1, 5)} != {comb(cc, ct, same_next)}")
+        chk(abs(_cpct(t, 2, 4) - comb(pc, pt, less5)) <= PCT_CELL_TOL,
+            f"Slide {slide_i + 1} Table 5 'LESS THAN 5 DAYS' prev: {_cpct(t, 2, 4)} != {comb(pc, pt, less5)}")
+        l5_tol = Decimal("0.01") if is_d4 else PCT_CELL_TOL   # registry D4
+        chk(abs(_cpct(t, 2, 5) - comb(cc, ct, less5)) <= l5_tol,
+            f"Slide {slide_i + 1} Table 5 'LESS THAN 5 DAYS' cur: {_cpct(t, 2, 5)} != "
+            f"{comb(cc, ct, less5)} (tol {l5_tol} pp)")
+        check_pie(slide_i, {"Same Day": (cc.get("Same Day", 0), ct),
+                            "Next Day": (cc.get("Next Day", 0), ct),
+                            "3-5 Days": (cc.get("3 - 5 days", 0), ct),
+                            "6+ Days": (cc.get("6+ days", 0), ct)}, f"Slide {slide_i + 1}")
+
+    # ---- Slides 8 & 9: average-days KPI tables ----------------------
+    # The trend chart is a matplotlib PNG generated directly from the same
+    # value array, so its last 3 bars equal these source values by
+    # construction - the table-cell check is the verifiable form of R8 here.
+    for slide_i, tname, key in ((7, "Table 11", "slide8_values"), (8, "Table 10", "slide9_values")):
+        t = find_table(prs.slides[slide_i], tname)
+        vals = pxd[key]
+        for ci, idx in ((0, yr_i), (1, prev_i), (2, cur)):
+            chk(_ctxt(t, 3, ci) == f"{vals[idx]:.1f}",
+                f"Slide {slide_i + 1} {tname} value col {ci}: {_ctxt(t, 3, ci)!r} != {vals[idx]:.1f}")
+
+    # ---- Slide 10 Table 3: created vs completed --------------------
+    t = find_table(prs.slides[9], "Table 3")
+    cr, cp = pxd["slide10_created"], pxd["slide10_completed"]
+    for ci, idx in ((1, yr_i), (2, prev_i), (3, cur)):
+        chk(_ctxt(t, 1, ci) == str(cr[idx]),
+            f"Slide 10 Table 3 Created col {ci}: {_ctxt(t, 1, ci)!r} != {cr[idx]}")
+        chk(_ctxt(t, 2, ci) == str(cp[idx]),
+            f"Slide 10 Table 3 Completed col {ci}: {_ctxt(t, 2, ci)!r} != {cp[idx]}")
+        chk(_ctxt(t, 3, ci) == plain_delta(cp[idx] - cr[idx]),
+            f"Slide 10 Table 3 Variance col {ci}: {_ctxt(t, 3, ci)!r} != {plain_delta(cp[idx] - cr[idx])!r} "
+            f"(Completed {cp[idx]} - Created {cr[idx]})")
+    chk(_ctxt(t, 1, 4) == fmt_delta(cr[cur], cr[prev_i]), "Slide 10 Table 3 Created MoM wrong")
+    chk(_ctxt(t, 1, 5) == fmt_delta(cr[cur], cr[yr_i]), "Slide 10 Table 3 Created YoY wrong")
+    chk(_ctxt(t, 2, 4) == fmt_delta(cp[cur], cp[prev_i]), "Slide 10 Table 3 Completed MoM wrong")
+    chk(_ctxt(t, 2, 5) == fmt_delta(cp[cur], cp[yr_i]), "Slide 10 Table 3 Completed YoY wrong")
+    v_cur, v_prev, v_yr = cp[cur] - cr[cur], cp[prev_i] - cr[prev_i], cp[yr_i] - cr[yr_i]
+    chk(_ctxt(t, 3, 4) == plain_delta(v_cur - v_prev), "Slide 10 Table 3 Variance MoM wrong")
+    chk(_ctxt(t, 3, 5) == plain_delta(v_cur - v_yr), "Slide 10 Table 3 Variance YoY wrong")
+
+    # ================= CROSS-SLIDE RECONCILIATION =================
+    s5t4_total = _cint(find_table(prs.slides[4], "Table 4"), 11, 1)
+    s7_band_total = sum(_band_counts(pxd["slide7_bands"], cur).values())
+    s5t6 = find_table(prs.slides[4], "Table 6")
+    s5t6_total = _cint(s5t6, len(s5t6.rows) - 1, 1)
+    s4t5 = find_table(prs.slides[3], "Table 5")
+    s4_sr_cur = _cint(s4t5, 1, 3)
+    s4_io_cur = _cint(s4t5, 2, 3)
+    s4_total_cur = _cint(s4t5, 5, 3)
+    sr_src_total = sum(v[0] for v in pxd["slide5_service_request"].values())
+    analy3 = pxd["slide9_completed_tasks"]
+    s10_completed_cur = _cint(find_table(prs.slides[9], "Table 3"), 2, 3)
+
+    # R1 (exact)
+    chk(s5t4_total == s7_band_total,
+        f"R1 FAILED: Slide 5 Table 4 Total ({s5t4_total}) != Slide 7 current-month "
+        f"band-count total ({s7_band_total}). These are the same task population "
+        f"shown two ways and must be identical every month.")
+    # R2 (exact, three-way)
+    chk(s5t6_total == s4_sr_cur == sr_src_total,
+        f"R2 FAILED: Slide 5 Table 6 Total ({s5t6_total}), Slide 4 'Service Request' "
+        f"cur ({s4_sr_cur}), Service-Request source total ({sr_src_total}) must all be equal.")
+    # R-cur (exact)
+    chk(s4_total_cur == analy3[cur],
+        f"R-cur FAILED: Slide 4 Table 5 Total cur ({s4_total_cur}) != 'Tasks Completed "
+        f"by HRIS Analy3' Completed Tasks for the current month ({analy3[cur]}).")
+    # D3 (registered differ-by-design, but bounded to +/-1 on historical cols)
+    for ci, idx, name in ((1, yr_i, "yr"), (2, prev_i, "prev")):
+        s4v = _cint(s4t5, 5, ci)
+        chk(abs(s4v - analy3[idx]) <= 1,
+            f"D3 EXCEEDED: Slide 4 Table 5 Total ({name}) {s4v} vs Analy3 {analy3[idx]} "
+            f"differ by more than the registered +/-1 tolerance.")
+
+    # Backstop: enumerate every repeated metric on the deck. A group whose
+    # values disagree must be governed by a registry entry (R = must-equal
+    # and already checked above; D = differ-by-design). A disagreeing group
+    # with governed_by=None means a repeated figure was added to the deck
+    # without being registered -> fail and name it. (Generic "any equal
+    # number across 11 slides" discovery is deliberately not attempted: it
+    # false-positives on incidental collisions. New repeated metrics are
+    # added here AND to docs/reference/incident-other-reconciliation.md.)
+    known_d = {d[0] for d in RECONCILIATION_DIFFER_BY_DESIGN}
+    repeated_metrics = {
+        "Incident - Other (current month)": {
+            "governed_by": "D1",
+            "values": {"Slide 4 trend": s4_io_cur, "Slide 5 Table 4": s5t4_total,
+                       "Slide 7 bands": s7_band_total},
+        },
+        "Service Request (current month)": {
+            "governed_by": "R2",
+            "values": {"Slide 4 trend": s4_sr_cur, "Slide 5 Table 6": s5t6_total,
+                       "SR source": sr_src_total},
+        },
+        "Completed PXD tasks (current month)": {
+            "governed_by": "R-cur",
+            "values": {"Slide 4 Total": s4_total_cur, "Analy3": analy3[cur]},
+        },
+        "Current-month PXD disposition count": {
+            "governed_by": "D2",
+            "values": {"Slide 4 Total (completed)": s4_total_cur,
+                       "Slide 10 Completed (incl. cancelled/rejected)": s10_completed_cur},
+        },
+    }
+    for name, meta in repeated_metrics.items():
+        distinct = set(meta["values"].values())
+        gb = meta["governed_by"]
+        if len(distinct) > 1 and gb is None:
+            chk(False,
+                f"BACKSTOP FAILED: repeated metric {name!r} has disagreeing values "
+                f"{meta['values']} and no reconciliation-registry entry governs it. "
+                f"Add an R (must-equal) or D (differ-by-design) entry to "
+                f"docs/reference/incident-other-reconciliation.md and this dict.")
+        if len(distinct) > 1 and gb not in known_d and not gb.startswith("R"):
+            chk(False,
+                f"BACKSTOP FAILED: repeated metric {name!r} disagrees {meta['values']} "
+                f"and its registry code {gb!r} is not a recognised R/D entry.")
+
+    if failures:
+        head = f"validate_deck: {len(failures)} FAILURE(S) for {MONTH_FULL[month - 1]} {year}"
+        print("\n" + "!" * len(head))
+        print(head)
+        print("!" * len(head))
+        for f in failures:
+            print("  - " + f)
+        raise DeckValidationError(head)
+    print(f"validate_deck: PASS ({MONTH_FULL[month - 1]} {year}) - internal consistency "
+          f"(row sums / percentages / % columns / deltas / chart==table) + cross-slide "
+          f"registry R1, R2, R-cur exact; D1-D4 registered.")
 
 
 def build_month(year, month, out_path=None, chart_dir=None, prev_hs=None):
@@ -795,7 +1314,26 @@ def build_month(year, month, out_path=None, chart_dir=None, prev_hs=None):
         chart_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), f"charts_{year}_{month:02d}")
 
     month_label = f"{MONTH_FULL[month - 1]} {year}"
-    populate_deck(base_deck, pxd, hs_current, prev_hs, month_label, chart_dir, out_path, year, month)
+    prs = populate_deck(base_deck, pxd, hs_current, prev_hs, month_label, chart_dir, out_path, year, month)
+
+    # HARDENED BLOCKING GATE (HANDOVER Part C): validate the freshly built
+    # deck before it is written. On any failure, no deck is left at out_path
+    # (a .REJECTED copy is saved for inspection) and the exception propagates
+    # so __main__ exits non-zero.
+    try:
+        validate_deck(prs, pxd, hs_current, prev_hs, year, month)
+    except DeckValidationError:
+        rejected = out_path + ".REJECTED"
+        try:
+            prs.save(rejected)
+            print(f"  validation failed - NO deck written to {out_path}")
+            print(f"  rejected copy saved for inspection: {rejected}")
+        except Exception:
+            pass
+        raise
+
+    prs.save(out_path)
+    print("written", out_path)
     return out_path
 
 
@@ -874,7 +1412,11 @@ if __name__ == "__main__":
         ("slide9 Jun26 avg completion", pxd["slide9_values"][-1], 1.4),
         ("slide10 created Jun26", pxd["slide10_created"][-1], 347),
         ("slide10 completed Jun26", pxd["slide10_completed"][-1], 322),
-        ("slide5 incident-other total (filtered)", pxd["slide5_incident_other_total"], 68),
+        # ADR-0001: Slide 5 Table 4 Total & % base = the source month total
+        # (77), NOT the old "trimmed" 68. The circulated June deck carried
+        # the same defect - see IO_ORACLE / HANDOVER Part A4.
+        ("slide5 incident-other total (source month total, ADR-0001)",
+         pxd["slide5_incident_other_total"], 77),
         ("hs slide2 Cority", hs["slide2_volumes"]["Cority - Occupational Health Management Service"][0], 17),
         ("hs slide3 Same Day", hs["slide3_bands"]["Same Day"][0], 13),
     ]
@@ -884,6 +1426,17 @@ if __name__ == "__main__":
         ok = got == expected
         all_pass &= ok
         print(f"  {'PASS' if ok else 'FAIL'}: {label} = {got} (expected {expected})")
+
+    # ---- Part 1b: Slide 5 Table 4 mapping (ADR-0001) vs the corrected June
+    # oracle - every named row + the computed "Other" row + the Total.
+    print("\n=== Self-test part 1b: Slide 5 Table 4 mapping vs ADR-0001 June oracle ===")
+    io_june = pxd["slide5_incident_other"]
+    for label, want in IO_ORACLE[(2026, 6)].items():
+        got = (pxd["slide5_incident_other_total"] if label == "__total__"
+               else io_june.get(label, (None,))[0])
+        ok = got == want
+        all_pass &= ok
+        print(f"  {'PASS' if ok else 'FAIL'}: June Table 4 {label} = {got} (expected {want})")
 
     # ---- Part 2: full-deck assembly. Rebuild June end to end from May's
     # own finished deck as base (the real monthly process), then diff every
@@ -898,8 +1451,13 @@ if __name__ == "__main__":
     test_charts = os.path.join(SCRATCH, "charts_selftest")
     try:
         built_path = build_month(2026, 6, out_path=test_out, chart_dir=test_charts)
+        # (4, "Table 4") is skipped from the reference diff on purpose: the
+        # real June deck carries the pre-ADR-0001 defect (Total 68, no
+        # "Other" row), so it is not valid ground truth for this table. It
+        # is checked against the corrected IO_ORACLE below instead.
         mismatches = _diff_all_tables(
-            built_path, real_june, skip_slides={7, 8, 9}, skip_tables={(4, "Table 6")}
+            built_path, real_june, skip_slides={7, 8, 9},
+            skip_tables={(4, "Table 6"), (4, "Table 4")},
         )
         # Slides 8/9/10 (index 7/8/9) contain Picture 2 (chart image, not
         # comparable - see _diff_all_tables docstring) alongside their KPI
@@ -933,6 +1491,22 @@ if __name__ == "__main__":
         for ci, (ca, cb) in enumerate(zip(list(ta6.rows)[-1].cells, list(tb6.rows)[-1].cells)):
             if ca.text != cb.text:
                 mismatches.append((5, "Table 6 (Total row, by role)", -1, ci, ca.text, cb.text))
+
+        # Slide 5, Table 4: checked against the corrected ADR-0001 oracle,
+        # NOT the (defective) real June deck. HANDOVER Part A4: the June
+        # oracle for this table changes from 68 to 77 - that is the fix.
+        t4b = next(sh.table for sh in Presentation(built_path).slides[4].shapes
+                   if sh.has_table and sh.name == "Table 4")
+        io_labels = [d for d, _ in INCIDENT_OTHER_NAMED] + ["Other"]
+        for ri, label in enumerate(io_labels, start=1):
+            want = str(IO_ORACLE[(2026, 6)][label])
+            got = t4b.rows[ri].cells[1].text.strip()
+            if got != want:
+                mismatches.append((5, "Table 4 (vs ADR-0001 oracle)", ri, 1, got, want))
+        tot_got = t4b.rows[11].cells[1].text.strip()
+        if tot_got != str(IO_ORACLE[(2026, 6)]["__total__"]):
+            mismatches.append((5, "Table 4 (vs ADR-0001 oracle)", 11, 1, tot_got,
+                               str(IO_ORACLE[(2026, 6)]["__total__"])))
 
         # One known, disclosed deviation from the real deck - not a bug,
         # filtered out of the strict diff rather than silently left in: the
@@ -976,8 +1550,73 @@ if __name__ == "__main__":
         print(f"  NOTE (flagged, not a failure): slide 7 'LESS THAN 5 DAYS' Jun26 = {less5_jun!r}; "
               f"real deck shows '87.02%' - exact count division (67/77) gives 87.01%, a 0.01-point "
               f"rounding-methodology difference that doesn't resolve to one clean rule from the "
-              f"available source data. See HANDOVER.md.")
+              f"available source data. See HANDOVER.md (registry D4).")
+
+        # ---- Part 3: hardened BLOCKING gate against the freshly built June
+        # deck. build_month() already ran validate_deck() inline before
+        # saving (a failure there would have raised and been caught below);
+        # this re-runs it explicitly for a visible self-test line.
+        _, prev_hs_path_june = find_source_files(2026, 5)
+        prev_hs_june = extract_hs(prev_hs_path_june)
+        try:
+            validate_deck(Presentation(built_path), pxd, hs, prev_hs_june, 2026, 6)
+            print("  PASS: validate_deck(June, freshly built) - internal + cross-slide registry")
+        except DeckValidationError as e:
+            all_pass = False
+            print(f"  FAIL: validate_deck(June) - {e}")
     except Exception as e:
         all_pass = False
         print(f"  FAIL: full-deck assembly raised {type(e).__name__}: {e}")
-    print("ALL PASS" if all_pass else "SOME FAILED - do not trust this script on real data yet")
+
+    # ---- Part 4: August 2026 as a SECOND known-good self-test month
+    # (HANDOVER Part C3.4). Fresh end-to-end build from July's deck; the
+    # hardened gate runs inline in build_month(); then Slide 5 Table 4 is
+    # checked against the ADR-0001 August oracle and the Part B captions are
+    # confirmed present. Scratch output only - never the OneDrive archive.
+    print("\n=== Self-test part 4: fresh August 2026 build + hardened gate ===")
+    aug_out = os.path.join(SCRATCH, "assembly_selftest_august.pptx")
+    aug_charts = os.path.join(SCRATCH, "charts_selftest_august")
+    try:
+        aug_path = build_month(2026, 8, out_path=aug_out, chart_dir=aug_charts)
+        print("  PASS: build_month(2026, 8) completed - validate_deck() ran inline and passed")
+        aug_prs = Presentation(aug_path)
+        t4a = next(sh.table for sh in aug_prs.slides[4].shapes
+                   if sh.has_table and sh.name == "Table 4")
+        io_labels = [d for d, _ in INCIDENT_OTHER_NAMED] + ["Other"]
+        for ri, label in enumerate(io_labels, start=1):
+            want = str(IO_ORACLE[(2026, 8)][label])
+            got = t4a.rows[ri].cells[1].text.strip()
+            ok = got == want
+            all_pass &= ok
+            print(f"  {'PASS' if ok else 'FAIL'}: Aug Table 4 {label} = {got} (expected {want})")
+        tot_got = t4a.rows[11].cells[1].text.strip()
+        ok = tot_got == str(IO_ORACLE[(2026, 8)]["__total__"])
+        all_pass &= ok
+        print(f"  {'PASS' if ok else 'FAIL'}: Aug Table 4 Total = {tot_got} "
+              f"(expected {IO_ORACLE[(2026, 8)]['__total__']})")
+        ok = tot_got == "61" and t4a.rows[10].cells[0].text.strip() == "Other" \
+            and t4a.rows[10].cells[1].text.strip() == "2"
+        all_pass &= ok
+        print(f"  {'PASS' if ok else 'FAIL'}: Aug Slide 5 Table 4 shows Total 61 / 'Other' row = 2")
+        cap = next((sh for sh in aug_prs.slides[4].shapes if sh.name == "IncidentOtherScopeCaption"), None)
+        ptr = next((sh for sh in aug_prs.slides[3].shapes if sh.name == "IncidentOtherPointer"), None)
+        ok = cap is not None and ptr is not None and "61" in cap.text_frame.text
+        all_pass &= ok
+        print(f"  {'PASS' if ok else 'FAIL'}: Slide 5 scope caption + Slide 4 pointer text boxes present")
+    except DeckValidationError as e:
+        all_pass = False
+        print(f"  FAIL: August build BLOCKED by validate_deck - {e}")
+    except Exception as e:
+        all_pass = False
+        print(f"  FAIL: August build raised {type(e).__name__}: {e}")
+    finally:
+        for pth in (aug_out, aug_out + ".REJECTED"):
+            if os.path.exists(pth):
+                try:
+                    os.remove(pth)
+                except OSError:
+                    pass
+
+    print("\n" + ("ALL PASS" if all_pass
+                  else "SOME FAILED - do not trust this script on real data yet"))
+    sys.exit(0 if all_pass else 1)
