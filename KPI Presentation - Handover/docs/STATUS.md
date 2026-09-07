@@ -1,13 +1,14 @@
 # STATUS — KPI Presentation
-**Last updated:** 7 Sep 2026 (Drew implemented HANDOVER Parts A + B + C in `build_kpi_presentation.py`; self-test green on June + a fresh August build; deck NOT yet rebuilt/rendered/approved — that is Lauren's next step)
-**Current phase:** Active — standing monthly responsibility. August 2026 run: pipeline fix landed, awaiting Lauren's clean rebuild + render + Kevin's approval.
+**Last updated:** 7 Sep 2026 (Lauren rebuilt August 2026 clean on `b9826fd`; `validate_deck()` passed inline; self-test `ALL PASS`; 11 slides rendered + verified. Awaiting Codex final pass, then Kevin's approval, then canonical save.)
+**Current phase:** Active — standing monthly responsibility. August 2026 run: rebuilt + self-validated + verified; not yet approved or saved.
 
 ## Confirmed
 - SOP current: `docs/KPI_RUN_SOP.md`. Canonical naming: `KPI presentation - <Month> <Year>.pptx`.
 - Last confirmed KPI run: May 2026. July 2026 deck was built and sent to Michael O'Sullivan (carries the Slide 5 defect below — see follow-up).
 - **7 Sep 2026 — August source data verified live** (`...\2026\08 Aug\Source Data\`, 1 Sep 2026 export). Base deck: `...\07 Jul\KPI presentation - July 2026.pptx`.
 - **7 Sep 2026 — pipeline picture-swap idempotency bug fixed by Drew** (`b13afe5`). Clean `build_month(2026, 8)` works; June self-test `ALL PASS` on the fixed script.
-- **7 Sep 2026 — clean August deck built + all 11 slides rendered** (scratchpad, evidence only). Design/layout parity vs July clean; all slides except Slide 5 `Table 4` verify accurate vs source (Codex).
+- **7 Sep 2026 — Slide 5 fix + captions + hardened gate implemented by Drew** (`b9826fd`) — Parts A + B + C below.
+- **7 Sep 2026 — August 2026 rebuilt CLEAN on `b9826fd` by Lauren, verified** (scratchpad, evidence only — `Lauren Rebuilt Tests August 2026 (NOT canonical - pending Codex+Kevin review).pptx` + `aug_png\Slide1–11.PNG`). `validate_deck()` ran inline during the build with no exception. Slide 5 `Table 4`: 10 rows sum to Total 61, "Other" = 2 (3.28%), percentages equal the source sheet. Slide 5 scope caption + Slide 4 pointer present, within bounds, understated grey footnotes. R1 (Slide 5 Table 4 Total 61 == Slide 7 band total 61) ✓; R2 (Slide 5 Table 6 Total 368 == Slide 4 Service Request 368) ✓; D1 (Slide 4 Incident–Other 66 vs 61) registered differ-by-design. All month headers correct. Layout parity vs July: only the two intended caption boxes added; slides 8/9/10 chart-image shape name normalised to `Picture 2` (Drew's `b13afe5`) with identical geometry — no drift.
 
 ## Done — HANDOVER Parts A + B + C implemented (Drew, 7 Sep 2026)
 Landed as one change to `tools/speaking-briefs/build_kpi_presentation.py` (+ `.gitignore`). Decision in **ADR-0001**, registry in **`docs/reference/incident-other-reconciliation.md`**. Nothing saved to OneDrive; no canonical deck built.
@@ -28,7 +29,8 @@ Landed as one change to `tools/speaking-briefs/build_kpi_presentation.py` (+ `.g
 - Minor pre-existing cosmetic (not a regression): Slides 8 & 9 matplotlib "Total:" annotation slightly overlaps the last bar label.
 
 ## Up Next
-1. **DONE (Drew, 7 Sep 2026):** HANDOVER Parts A + B + C implemented in `build_kpi_presentation.py`; self-test `ALL PASS` on June (updated `Table 4` oracle 68 → 77) and a fresh August build; R1/R2/R-cur exact; gate proven to block a broken figure.
-2. **Lauren (next):** re-run `build_month(2026, 8)` clean to the canonical location, re-render all 11 slides, check Slide 5 `Table 4` (Total 61 / Other 2 / scope caption present), the Slide 4 pointer, and overall layout parity vs July, then put the visual to Kevin. The build now self-validates before it writes — if `validate_deck` fails, no deck is produced.
-3. On Kevin's explicit approval: save canonical `KPI presentation - August 2026.pptx` into `...\2026\08 Aug\`; log `docs/sessions/2026-08-KPI-run.md`; confirm distribution to Michael O'Sullivan.
-4. Kevin decides the July-deck reissue vs written-reply question (Michael raised it 13 Aug — a reply is owed).
+1. **DONE (Drew):** HANDOVER Parts A + B + C in `build_kpi_presentation.py` (`b9826fd`); self-test `ALL PASS`; gate proven to block a broken figure.
+2. **DONE (Lauren, 7 Sep 2026):** rebuilt August 2026 clean on `b9826fd` to a non-canonical scratch path; `validate_deck()` passed inline; self-test `ALL PASS`; all 11 slides rendered and verified (Slide 5 Table 4 Total 61 / Other 2 / caption; Slide 4 pointer; R1/R2 reconcile; headers; layout parity).
+3. **Codex (next):** final review pass on the rebuilt August deck **and** the `validate_deck()` logic in `build_kpi_presentation.py`.
+4. On Codex clean + **Kevin's explicit approval of the visual:** Lauren saves canonical `KPI presentation - August 2026.pptx` into `...\2026\08 Aug\`; logs `docs/sessions/2026-08-KPI-run.md`; confirms distribution to Michael O'Sullivan.
+5. Kevin decides the July-deck reissue vs written-reply question (Michael raised it 13 Aug — a reply is owed).
