@@ -1,23 +1,21 @@
-# HANDOVER — KPI Presentation
+# HANDOVER — 2026-09-07
 
-**Session date:** 21 Aug 2026 (area split) — carrying forward the 31 July 2026 merge session below, KPI-relevant portions only. Full original combined record: see `Standing Agenda - Handover/docs/HANDOVER.md` for the Standing-Agenda-side counterpart of this same history.
+## TL;DR
+Kevin asked for the August 2026 KPI Presentation. Source data is present and verified (local OneDrive, not GitHub) and the mandatory self-test gate passes `ALL PASS`. The build is **blocked** at the final step by a pipeline bug: `build_month(2026, 8)` raises `RuntimeError: slide 8: Picture 2 not found`. It is a code idempotency bug in the picture-swap block — Drew's to fix, not a content/data problem. A diagnostic build with a local uncommitted workaround confirms every table and chart populates correctly for August; it was rendered to PNG and visually checked. No clean August deck exists yet; nothing has been saved to the OneDrive archive.
 
----
+## State of Play
+- **Data source (verified live, 7 Sep 2026):** `C:\Users\admin\OneDrive - Nexus365\Functional Analysis Team Monthly Statistics\2026\08 Aug\Source Data\` — `HR_Systems_Functional_Team_Monthly_Report_Excel - 202609010715.xlsx` (67,156 B) and `Health and Safety Systems Support Statistics - 202609010600.docx` (1,608,477 B), both dated 7 Sep 2026, from the 1 Sep 2026 export (August month-end). Base deck: `...\2026\07 Jul\KPI presentation - July 2026.pptx` (Drew's official July deck). Prev-month H&S carry-forward auto-read from `...\2026\07 Jul\Source Data\...202608010600.docx`.
+- **Self-test gate:** `python build_kpi_presentation.py` → `ALL PASS`. Part 1 (9/9 extraction vs known June), Part 2 (every table cell across 11 slides matches the real June deck; 9/9 chart-value checks). Known disclosed 0.01pp rounding NOTE on slide 7 "LESS THAN 5 DAYS" prints as expected — not a failure. Run from a fresh copy of the script pulled from `origin/main` (commit `6d163f9`).
+- **Blocker:** `build_month(2026, 8)` → `RuntimeError: slide 8: Picture 2 not found - layout may have changed` at `populate_deck()` (the `picture_swaps` loop, ~line 709-715). The slides 8/9/10 large chart image is found by hardcoded `sh.name == "Picture 2"`. That name exists only in hand-made real decks (May, June self-test bases). Drew's July pipeline output renamed them via `python-pptx.add_picture()` → `Picture 13` (slide 8), `Picture 11` (slides 9 & 10). August is the first month built on a pipeline-generated base, so the first to hit it. Pipeline is not idempotent month-over-month.
+- **Diagnostic build (local uncommitted workaround — NOT an approved fix, NOT saved to OneDrive):** patched the lookup to pick the largest-area picture on each slide. Full 11-slide deck assembled; all 134 month-over-month data cells across slides 2–10 updated; slide 1 title → "AUGUST 2026 KPI STATISTICS |"; all three matplotlib chart images regenerated and placed at the carried-forward positions. Rendered to PNG via PowerPoint COM; slides 1, 2, 4, 5, 8, 10 visually confirmed — Oxford / People Department chrome intact, correct Aug 26 / Jul 26 / Aug 25 columns, recomputed native pie charts. Minor pre-existing cosmetic (not a regression): slide 8's matplotlib "Total:" annotation slightly overlaps the last bar's data label — same in prior months.
+- **August figures observed (for cross-check when the clean deck is built):** Slide 4 PXD categories Aug25/Jul26/Aug26 — Service Request 140/246/368, Incident–Other 77/100/66, HR Self Service 46/56/53, Change 25/16/17, Total 288/418/504. Slide 2 H&S Jul26/Aug26 — Cority 17/11, Odyssey 5/7, IRIS 9/5, DSE 0/0, Total 31/23 (−8, −26%). Slide 3 H&S current bands — 6+ days 14 (51.85%), Same Day 8 (29.63%), 3–5 days 4 (14.81%), Next Day 1 (3.70%). Slide 5 — SR breakdown total 368, Incident-Other filtered total 60. Slide 8 avg acceptance Aug25/Jul26/Aug26 — 1.7 / 1.0 / 0.2. Slide 10 created 314/462/491, completed 298/440/518, variance −16/−22/+27.
 
-## Origin (31 July 2026 session, KPI-relevant portions)
-Kevin had been out of work for roughly a month. While reconstructing programme state, a branch containing real, substantive KPI process work was found on GitHub (`claude/affectionate-goodall-7na7co`), never merged into `main`:
-- `docs/KPI_RUN_SOP.md` — locked SOP, merged into `main`
-- `docs/reference/kpi-definitions.md` — merged, but **still a stub** (all fields `[TBC]`) — see Known Gaps in STATUS.md, not yet resolved.
+## Next Concrete Action
+Route the picture-swap bug to Drew: in `tools/speaking-briefs/build_kpi_presentation.py`, make the slides 8/9/10 chart-image swap idempotent across months. Minimal fix — after `slide.shapes.add_picture(...)`, set `new_pic.name = "Picture 2"`. Alternative — select the target picture by a stable property (largest area, or "the PICTURE that is not one of the known small header/crest pictures") instead of by name. Then re-run the bundled self-test (must stay `ALL PASS`). After that, Lauren re-runs `build_month(2026, 8)` clean (no patch) to a clearly non-canonical file, renders it, shows Kevin. Save canonical `KPI presentation - August 2026.pptx` into `...\2026\08 Aug\` only on Kevin's explicit approval.
 
-## What is NOT known and must not be assumed
-- Whether a June or July 2026 KPI run happened at all — the last **confirmed** run in the source material is May 2026 (sent 9 Jun, presented 10 Jun).
-- Do not invent figures, dates, or outcomes — confirm with Kevin directly.
-
-## Next concrete actions
-1. Populate `docs/reference/kpi-definitions.md` with Kevin — real open gap, not resolved by the 31 Jul merge.
-2. Per the `voice-workflows` programme (`begb0037admin/voice-workflows`), Monthly KPI Run is Phase 1 (definitions/source mappings not yet approved) — accurate, not stale.
-3. Confirm whether "KPI presentation" PowerPoint decks under `OneDrive - Nexus365/Functional Analysis Team Monthly Statistics/` should be linked from `kpi-definitions.md` as the canonical output location.
-4. Ask Kevin: did a June and/or July 2026 KPI run happen during his absence? If so, capture as a new dated session file.
-
-## 21 Aug 2026 — area split
-This area was split out of the former combined "KPI Monthly Standing Agenda" folder per Kevin's explicit instruction — the two are separate meetings, format and pipeline kept intact, only the docs area split. See `tools/speaking-briefs/build_kpi_presentation.py` (Drew's pipeline, unchanged by this split) and Lauren's `AGENT.md` "Standing responsibility: Monthly KPI Presentation build" for the full, already-locked-in process this area supports.
+## Watch Out For
+- Do not "fix" the slide 7 "LESS THAN 5 DAYS" 0.01pp rounding NOTE — it is deliberate and documented in the script's own comments.
+- Do not save any August deck into the OneDrive archive without Kevin's explicit review and go-ahead. Show → approve → push. The real deck goes to Michael O'Sullivan.
+- The diagnostic PNGs / patched .pptx live only in this session's scratchpad and are labelled "DIAGNOSTIC ONLY … NOT REAL OUTPUT" — they are evidence, not the deliverable.
+- The self-test base decks (May, June) are hand-made and still carry `Picture 2`; a green self-test does not prove month-over-month idempotency. Once Drew fixes this, a stronger self-test would chain two months (build N, then build N+1 on that output).
+- KPI run must be complete before Standing Agenda prep — flag to Kevin if Standing Agenda prep is requested before this is unblocked (`docs/KPI_RUN_SOP.md` dependency).
