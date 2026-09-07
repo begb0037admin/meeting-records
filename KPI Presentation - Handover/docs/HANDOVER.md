@@ -20,7 +20,11 @@ Drew shipped Parts A + B + C (`meeting-records` `b9826fd`): Slide 5 `Table 4` fi
 - **Other August figures:** Slide 4 PXD categories Aug25/Jul26/Aug26 — Service Request 140/246/368, Incident – Other 77/100/66, HR Self Service 46/56/53, Change 25/16/17, Total 288/418/504. Slide 2 H&S Jul26/Aug26 — Cority 17/11, Odyssey 5/7, IRIS 9/5, DSE 0/0, Total 31/23. Slide 8 avg acceptance 1.7/1.0/0.2; Slide 9 avg completion 3.7/1.9/1.8; Slide 10 created 314/462/491, completed 298/440/518.
 
 ## Next Concrete Action
-Codex's audit of `validate_deck()` is done and its 5 findings are fixed (the 7 Sep 2026 gate-hardening commit (the commit immediately after `b9826fd` on `main`)); the rebuilt August deck is unchanged by that work. **Kevin reviews the visual and approves** → Lauren copies the scratchpad deck to `C:\Users\admin\OneDrive - Nexus365\Functional Analysis Team Monthly Statistics\2026\08 Aug\KPI presentation - August 2026.pptx`, creates `docs/sessions/2026-08-KPI-run.md`, and confirms distribution to Michael O'Sullivan. If any further issue is found → back to Drew (script) or Lauren (content), do not work around it.
+**7 Sep 2026 (later): a DRAFT file is now in the OneDrive folder for Kevin to open and review** —
+`C:\Users\admin\OneDrive - Nexus365\Functional Analysis Team Monthly Statistics\2026\08 Aug\KPI presentation - August 2026 (DRAFT for review).pptx`
+(md5 `9ab558b0…`; built on committed `b9826fd`, then re-verified against Drew's landed gate-hardening `503e274` — fresh rebuild diff = **0 table cells, 0 chart series**; `validate_deck()` PASS on the hardened gate). ADR-0001 §4 wording nit fixed in `b6b7d46` (Slide 4 pointer quote → "rolling 15-month window", matching the shipped caption).
+
+**On Kevin's explicit approval** → Lauren renames the draft to canonical `KPI presentation - August 2026.pptx` in the same folder, creates `docs/sessions/2026-08-KPI-run.md`, commits + pushes (meeting-records + lauren memory), and confirms distribution to Michael O'Sullivan. If any issue is found → back to Drew (script) or Lauren (content), do not work around it.
 
 ## Watch Out For
 - Do not save to the OneDrive canonical path before Codex's pass **and** Kevin's approval.
