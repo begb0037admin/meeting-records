@@ -1,6 +1,13 @@
 # STATUS — KPI Presentation
 **Last updated:** 7 Sep 2026 — **August 2026 run complete, speaker notes written in.** Canonical `...\2026\08 Aug\KPI presentation - August 2026.pptx` md5 `38d68fa2…` / 2,275,746 B. Slides 2–10 carry August speaker notes; before/after data diff = 0; `validate_deck()` PASS. Notes were written into the verified build (`dcb3e67e`), not the caption-stripped on-disk file — PowerPoint dropped the Slide 4 caption when Kevin opened/closed the deck (handed to Drew). `KPI_RUN_SOP.md` §2 now makes speaker notes an explicit mandatory step.
-**Current phase:** Active — standing monthly responsibility. August 2026: complete.
+**Current phase:** Active — standing monthly responsibility. August 2026: complete. **Pipeline hardening for both handed-to-Drew issues LANDED (the 7 Sep 2026 notes-handling + caption-durability commit):** notes handling + stale/empty-notes gate, and scope captions re-homed to inherited placeholders so PowerPoint keeps them (gate now fails only if the caption *text* is absent, not on a rename). Self-test `ALL PASS`. The delivered on-disk file was built before this fix — see HANDOVER "Next Concrete Action" for the rebuild/re-write once it unlocks.
+
+## THE MONTHLY KPI RUN — MANDATORY ORDERED CHECKLIST
+Hard-coded (Kevin, 7 Sep 2026). In order, every month; each step gates the next. Full detail: `KPI_RUN_SOP.md`.
+1. **BUILD** — `build_month(YYYY, M)`. `validate_deck()` runs inline before write; failure ⇒ no deck (`.REJECTED` only), non-zero exit. Hard-stops if the speaker-notes file is missing.
+2. **SPEAKER NOTES (Lauren)** — `notes/speaker-notes-YYYY-MM.md`, `## Slide N` for Slides 2–10. Automated notes check must pass (non-empty, not byte-identical to base deck, current month referenced).
+3. **CODEX VERIFIES EVERY NOTE NUMBER — mandatory, every month, not optional QA.** `codex exec -s read-only --skip-git-repo-check` from repo root, prompt shape in `docs/reference/codex-notes-review-prompt.md`; re-derive every figure from slide table + source; log verdict in the session file. `NOTES NOT CLEAR` ⇒ back to Lauren/Drew.
+4. **ONLY THEN → KEVIN.**
 
 ## Confirmed
 - SOP current: `docs/KPI_RUN_SOP.md`. Canonical naming: `KPI presentation - <Month> <Year>.pptx`.

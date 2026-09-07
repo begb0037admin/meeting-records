@@ -36,6 +36,8 @@ from pptx import Presentation
 from pptx.chart.data import CategoryChartData
 from pptx.util import Pt
 from pptx.dml.color import RGBColor
+from pptx.oxml.ns import qn
+from copy import deepcopy
 import openpyxl
 from docx import Document
 import matplotlib
@@ -169,6 +171,49 @@ def find_source_files(year, month):
     excel_path = find_one(src, "HR_Systems_Functional_Team_Monthly_Report_Excel*.xlsx")
     hs_path = find_one(src, "Health and Safety Systems Support Statistics*.docx")
     return excel_path, hs_path
+
+
+# --- Speaker notes (Part D, 7 Sep 2026 - closes a real process gap) --------
+# Confirmed live: the July AND August decks both still carried JUNE's speaker
+# notes verbatim (byte-identical notes_text_frame content) - populate_deck
+# never touched notes_slide at all, so whatever the base deck's notes said
+# just rode along. Kevin reads these aloud when presenting, so he was reading
+# June's numbers in July and again in August. This was invisible to
+# validate_deck() because it only ever checked tables/charts/reconciliation.
+#
+# Speaker notes are Lauren's authored content (drafted prose, not a pure
+# data substitution), same status as a meeting brief - so they live in this
+# repo, not OneDrive, and Drew's job is only to place approved text and
+# refuse to build without it, never to draft or judge the wording.
+NOTES_DIR = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "..", "..",
+    "KPI Presentation - Handover", "notes",
+)
+# Slides that must carry month-specific speaker notes (0-based slide index -
+# Slides 2 through 10; Slide 1 is the title card and Slide 11 is "Thank you",
+# neither carries data-specific notes).
+NOTES_REQUIRED_SLIDES = set(range(1, 10))
+
+
+def notes_path_for(year, month, notes_path=None):
+    if notes_path:
+        return notes_path
+    return os.path.normpath(os.path.join(NOTES_DIR, f"speaker-notes-{year}-{month:02d}.md"))
+
+
+def load_month_notes(year, month, notes_path=None):
+    """Parse `## Slide N` markdown sections into {1-based slide number: body
+    text}. Returns (None, resolved_path) if the file doesn't exist yet -
+    callers decide what that means (build_month treats it as a hard stop)."""
+    path = notes_path_for(year, month, notes_path)
+    if not os.path.exists(path):
+        return None, path
+    raw = open(path, encoding="utf-8").read()
+    parts = re.split(r"(?im)^##\s*slide\s+(\d+)\s*$", raw)
+    notes = {}
+    for i in range(1, len(parts), 2):
+        notes[int(parts[i])] = parts[i + 1].strip()
+    return notes, path
 
 
 def parse_count_pct(s):
@@ -486,24 +531,56 @@ def _table_shape(slide, name):
     raise RuntimeError(f"table shape {name!r} not found")
 
 
-def _upsert_textbox(slide, name, text, left, top, width, height, size_pt=9):
-    """Add a named text box, or update it in place if one with this name
-    already exists (so month-over-month re-runs from a prior pipeline deck
-    don't stack duplicates). Body-sized, deck grey, left-aligned, wrapped."""
-    box = next((sh for sh in slide.shapes if sh.name == name), None)
-    if box is None:
-        box = slide.shapes.add_textbox(left, top, width, height)
-        box.name = name
-    tf = box.text_frame
+# The scope notes on Slides 4 & 5 are hosted as an INHERITED BODY placeholder
+# (the "Title w Chart" layout's spare idx-11 placeholder), NOT a free
+# add_textbox shape. Confirmed 7 Sep 2026: PowerPoint silently dropped the
+# free text box when Kevin opened the delivered deck (the on-disk file came
+# back with Slide 4's caption gone, which then failed validate_deck()). A
+# layout-inherited placeholder is retained across an open/save round-trip -
+# that is what placeholders are for. See SCOPE_NOTE_SIGNATURES / the gate's
+# scope-note check for the "re-homed OK, absent = fail" rule.
+SCOPE_NOTE_PH_IDX = 11
+
+
+def _upsert_scope_note(slide, name, text, left, top, width, height, size_pt=9):
+    """Place a small grey scope note on `slide` as an inherited BODY
+    placeholder (idx SCOPE_NOTE_PH_IDX), positioned where told. Idempotent:
+    if a shape called `name` is already there, just replace its text. The
+    placeholder form survives a PowerPoint open/close; add_textbox did not."""
+    shape = next((sh for sh in slide.shapes if sh.name == name), None)
+    if shape is None:
+        src = next((ph._element for ph in slide.slide_layout.placeholders
+                    if ph.placeholder_format.idx == SCOPE_NOTE_PH_IDX), None)
+        if src is None:
+            raise RuntimeError(
+                f"layout {slide.slide_layout.name!r} has no idx-{SCOPE_NOTE_PH_IDX} "
+                f"placeholder to host the scope note - layout changed?"
+            )
+        el = deepcopy(src)
+        cnvpr = el.find(qn("p:nvSpPr") + "/" + qn("p:cNvPr"))
+        used = {int(x.get("id")) for x in slide.shapes._spTree.iter(qn("p:cNvPr"))}
+        cnvpr.set("id", str(max(used) + 1 if used else 100))
+        cnvpr.set("name", name)
+        for ext in cnvpr.findall(qn("a:extLst")):   # drop layout's creationId GUID
+            cnvpr.remove(ext)
+        slide.shapes._spTree.append(el)
+        shape = next(sh for sh in slide.shapes if sh.name == name)
+    shape.left, shape.top, shape.width, shape.height = left, top, width, height
+    tf = shape.text_frame
     tf.word_wrap = True
+    try:
+        tf.auto_size = None        # no spAutoFit - keep the box inert
+    except Exception:
+        pass
     tf.clear()
     para = tf.paragraphs[0]
+    para.level = 0
     run = para.add_run()
     run.text = text
     run.font.size = Pt(size_pt)
     run.font.bold = False
     run.font.color.rgb = RGBColor(0x59, 0x59, 0x59)
-    return box
+    return shape
 
 
 # Canonical name of the slides 8/9/10 chart-image shape on a hand-made deck.
@@ -568,7 +645,7 @@ def set_pie_chart(shape, categories, value_map, series_name):
     shape.chart.replace_data(cd)
 
 
-def populate_deck(base_deck_path, pxd, hs_current, hs_prev, month_label, chart_dir, out_path, year, month):
+def populate_deck(base_deck_path, pxd, hs_current, hs_prev, month_label, chart_dir, out_path, year, month, notes=None):
     """Assemble a full month's deck from a base (prior month's finished
     deck, already carrying the layout fixes) plus extracted figures.
 
@@ -576,7 +653,12 @@ def populate_deck(base_deck_path, pxd, hs_current, hs_prev, month_label, chart_d
     needed to relabel every table's month-column headers (e.g. slide 4's
     'Jun 25 / May 26 / Jun 26'), which stay stale otherwise since they're
     plain template text carried forward from whichever month the base deck
-    was last for, not derived from data like the cells beneath them."""
+    was last for, not derived from data like the cells beneath them.
+
+    notes: optional {1-based slide number: text} from load_month_notes().
+    When given, each listed slide's speaker notes are replaced. When None,
+    notes are left exactly as the base deck carried them - callers (i.e.
+    build_month) are responsible for deciding whether that is acceptable."""
     prs = Presentation(base_deck_path)
     m = pxd["slide4_months"]  # 15-month label list, ends at current month
     cur, prev_i, yr_i = -1, -2, -13  # current, previous month, 12 months back +1
@@ -755,15 +837,16 @@ def populate_deck(base_deck_path, pxd, hs_current, hs_prev, month_label, chart_d
 
     set_cell(t6_5.rows[len(t6_5.rows) - 1].cells[1], str(sum(v[0] for v in sr.values())))
 
-    # PART B (ADR-0001 section 4): run-time scope captions. Text boxes only -
-    # no table / row / layout change. The three "Incident - Other" figures on
-    # Slides 4, 5 and 7 come from three different Ivanti queries and are not
-    # all meant to match (registry D1); these captions are the on-slide
-    # explanation. Idempotent: on a re-run the boxes are found by name and
-    # updated in place rather than stacked.
+    # PART B (ADR-0001 section 4): run-time scope notes explaining why the
+    # three "Incident - Other" figures on Slides 4, 5 and 7 legitimately
+    # differ (registry D1 - three different Ivanti queries). Michael
+    # O'Sullivan asked for this on-slide. Hosted as an INHERITED placeholder
+    # (see _upsert_scope_note) so PowerPoint keeps them across an open/close;
+    # the earlier free add_textbox version was silently dropped. No table /
+    # row change. Idempotent: found by name and updated in place on re-runs.
     n_io = pxd["slide5_incident_other_total"]
     s5_tbl = _table_shape(slide5, "Table 4")
-    _upsert_textbox(
+    _upsert_scope_note(
         slide5, "IncidentOtherScopeCaption",
         (f"Incident – Other (this table): non-self-service Incident tasks "
          f"completed last month, by service category — total {n_io}. "
@@ -777,7 +860,7 @@ def populate_deck(base_deck_path, pxd, hs_current, hs_prev, month_label, chart_d
         height=1300000,
     )
     s4_tbl = _table_shape(prs.slides[3], "Table 5")
-    _upsert_textbox(
+    _upsert_scope_note(
         prs.slides[3], "IncidentOtherPointer",
         ("Incident – Other = tasks completed by HRIS parent ticket type "
          "(rolling 15-month window). Slide 5 shows last month's service-"
@@ -935,6 +1018,23 @@ def populate_deck(base_deck_path, pxd, hs_current, hs_prev, month_label, chart_d
         # back to the largest-area heuristic instead of a clean name match.
         new_pic.name = CHART_PICTURE_NAME
 
+    # PART D (7 Sep 2026): speaker notes. Capture the BASE deck's per-slide
+    # notes BEFORE any are overwritten, so validate_deck() can tell "updated
+    # for this month" from "still carrying last time's text" - that
+    # distinction is the entire point of this fix (see NOTES_DIR comment).
+    prs._kpi_base_notes = {
+        si: (sl.notes_slide.notes_text_frame.text if sl.has_notes_slide else "")
+        for si, sl in enumerate(prs.slides)
+    }
+    if notes:
+        for slide_num, text in notes.items():
+            si = slide_num - 1
+            if 0 <= si < len(prs.slides):
+                prs.slides[si].notes_slide.notes_text_frame.text = text
+        prs._kpi_notes_written = set(notes.keys())
+    else:
+        prs._kpi_notes_written = set()
+
     # NOTE: no longer saves here. build_month() runs validate_deck(prs, ...)
     # against this in-memory Presentation and only then writes it to disk, so
     # a deck that fails an internal or cross-slide check is never left at
@@ -1008,7 +1108,23 @@ EXPECTED_TABLES = {           # slide index -> set of table shape names
     7: {"Table 11"}, 8: {"Table 10"}, 9: {"Table 3"},
 }
 EXPECTED_NATIVE_CHART_SLIDES = {1, 2, 3, 5, 6}   # slides 8-10 use PNG images, not native charts
-EXPECTED_CAPTIONS = {3: "IncidentOtherPointer", 4: "IncidentOtherScopeCaption"}
+# Scope-note check. Was an absolute "a shape named X exists" check; that is
+# too brittle now that PowerPoint has been seen to drop / re-home the shape.
+# The gate now checks that the *explanatory text* is present SOMEWHERE on the
+# slide (any shape) via these content signatures - a rename or a move is
+# tolerated, the text being gone entirely is a hard failure (it carries the
+# Slide 4-vs-5 reconciliation explanation Michael O'Sullivan asked for).
+# Expected shape names are still checked, but only as a non-blocking advisory.
+EXPECTED_CAPTION_NAMES = {3: "IncidentOtherPointer", 4: "IncidentOtherScopeCaption"}
+SCOPE_NOTE_SIGNATURES = {
+    3: ("HRIS parent ticket type", "Slide 5 shows"),
+    4: ("by service category", "Slide 7 breaks down this same"),
+}
+# Slides that must carry month-specific speaker notes (PART D, 7 Sep 2026) -
+# same set as NOTES_REQUIRED_SLIDES, aliased here so it lives with the rest
+# of the structural manifest. Slide 1 (title) and Slide 11 (thank you) are
+# excluded on purpose - they never carry data-specific notes.
+EXPECTED_NOTES_SLIDES = NOTES_REQUIRED_SLIDES
 # (slide index, table name) pairs whose "Total"-labelled row is covered by an
 # explicit named check above. The structural sweep fails the build if it
 # finds a Total-labelled row in a table NOT listed here.
@@ -1043,7 +1159,7 @@ def _band_counts(series_map, idx):
     return {lab: parse_count_pct(s[idx])[0] for lab, s in series_map.items()}
 
 
-def validate_deck(prs, pxd, hs_current, hs_prev, year, month, allow_no_chart_series=False):
+def validate_deck(prs, pxd, hs_current, hs_prev, year, month, allow_no_chart_series=False, notes_required=True):
     """BLOCKING gate. Runs against the freshly built Presentation `prs`
     (not a reference deck) plus the same extracted inputs populate_deck
     used. Collects every failure, prints them, and raises
@@ -1066,6 +1182,18 @@ def validate_deck(prs, pxd, hs_current, hs_prev, year, month, allow_no_chart_ser
       * cross-slide registry: R1, R2, R-cur exact; D1-D4 registered as
         differ-by-design; any un-registered repeated metric that
         mismatches -> fail.
+      * PART D (7 Sep 2026) - speaker notes on Slides 2-10: not empty, not
+        byte-identical to the base deck's notes for that slide (i.e.
+        genuinely updated), and the current month's name appears somewhere
+        across them. LIMITS (stated here, not just in a comment further
+        down): this can only prove the notes were CHANGED and reference the
+        right month - it cannot verify the prose is factually correct.
+        Content correctness stays Lauren's judgement call, same as
+        everywhere else in this pipeline; a mandatory Codex numeric-accuracy
+        pass on the notes is a separate, human-run step (see KPI_RUN_SOP.md).
+        notes_required=False turns this into a soft, non-blocking note (for
+        self-test coverage of a month whose notes aren't drafted yet); real
+        builds (build_month) never set it False.
     """
     cur, prev_i, yr_i = -1, -2, -13
     failures = []
@@ -1106,25 +1234,58 @@ def validate_deck(prs, pxd, hs_current, hs_prev, year, month, allow_no_chart_ser
     #     manifest and the matching data checks to be updated.
     chk(len(prs.slides) == EXPECTED_SLIDE_COUNT,
         f"STRUCTURE: deck has {len(prs.slides)} slides, manifest expects {EXPECTED_SLIDE_COUNT}")
-    actual_tables, actual_charts, actual_caps = {}, set(), {}
+    actual_tables, actual_charts = {}, set()
     for si, sl in enumerate(prs.slides):
         names = {sh.name for sh in sl.shapes if sh.has_table}
         if names:
             actual_tables[si] = names
         if any(sh.has_chart for sh in sl.shapes):
             actual_charts.add(si)
-        for sh in sl.shapes:
-            if sh.name in ("IncidentOtherPointer", "IncidentOtherScopeCaption"):
-                actual_caps[si] = sh.name
     chk(actual_tables == EXPECTED_TABLES,
         f"STRUCTURE: table inventory changed. got {actual_tables}, expected {EXPECTED_TABLES} "
         f"- update EXPECTED_TABLES and add data checks for any new table.")
     chk(actual_charts == EXPECTED_NATIVE_CHART_SLIDES,
         f"STRUCTURE: native-chart slide set changed. got {sorted(actual_charts)}, "
         f"expected {sorted(EXPECTED_NATIVE_CHART_SLIDES)}.")
-    chk(actual_caps == EXPECTED_CAPTIONS,
-        f"STRUCTURE: run-time caption inventory changed. got {actual_caps}, "
-        f"expected {EXPECTED_CAPTIONS} (Part B scope captions).")
+
+    # Scope notes (Slides 4 & 5): the EXPLANATORY TEXT must be present on the
+    # slide (any shape) - a rename or a move is tolerated, the text being
+    # gone entirely is a hard failure. PowerPoint has been seen to drop the
+    # free-text-box form on open/close; the pipeline now hosts it as an
+    # inherited placeholder, and this check no longer keys on the shape name.
+    def _slide_text(sl):
+        out = []
+        for sh in sl.shapes:
+            if sh.has_table:
+                out += [c.text for r in sh.table.rows for c in r.cells]
+            elif sh.has_text_frame:
+                out.append(sh.text_frame.text)
+        return "\n".join(out)
+    for si, needles in SCOPE_NOTE_SIGNATURES.items():
+        blob = _slide_text(prs.slides[si])
+        missing = [n for n in needles if n not in blob]
+        chk(not missing,
+            f"STRUCTURE: Slide {si + 1} scope-note text is missing (no shape "
+            f"contains {missing}). This is the Slide 4-vs-5 'Incident - Other' "
+            f"reconciliation explanation Michael O'Sullivan asked for - it must "
+            f"be present and durable on the delivered deck.")
+        named = next((sh for sh in prs.slides[si].shapes
+                      if sh.name == EXPECTED_CAPTION_NAMES[si]), None)
+        if named is None:
+            print(f"  validate_deck ADVISORY (non-blocking): Slide {si + 1} scope "
+                  f"note is present but not in a shape named "
+                  f"{EXPECTED_CAPTION_NAMES[si]!r} - it may have been re-homed "
+                  f"(PowerPoint round-trip, or a manual edit). Text is intact.")
+    missing_notes_slides = {si for si in EXPECTED_NOTES_SLIDES if not prs.slides[si].has_notes_slide}
+    chk(not missing_notes_slides,
+        f"STRUCTURE: slide(s) {sorted(missing_notes_slides)} (1-based "
+        f"{[s+1 for s in sorted(missing_notes_slides)]}) have no notes slide "
+        f"at all - expected every Slide 2-10 to carry a notes slide.")
+    missing_notes_slides = {si for si in EXPECTED_NOTES_SLIDES if not prs.slides[si].has_notes_slide}
+    chk(not missing_notes_slides,
+        f"STRUCTURE: slide(s) {sorted(missing_notes_slides)} (1-based "
+        f"{[s+1 for s in sorted(missing_notes_slides)]}) have no notes slide "
+        f"at all - expected every Slide 2-10 to carry a notes slide.")
 
     # (b) sweep EVERY table: any row whose first cell is "Total" must have its
     #     integer columns sum to that row and its percentage column (if any)
@@ -1393,6 +1554,95 @@ def validate_deck(prs, pxd, hs_current, hs_prev, year, month, allow_no_chart_ser
     chk(_ctxt(t, 3, 4) == plain_delta(v_cur - v_prev), "Slide 10 Table 3 Variance MoM wrong")
     chk(_ctxt(t, 3, 5) == plain_delta(v_cur - v_yr), "Slide 10 Table 3 Variance YoY wrong")
 
+    # ================= SPEAKER NOTES (PART D, 7 Sep 2026) =================
+    # Real incident that motivated this section: the July AND August decks
+    # both still carried JUNE's speaker notes byte-for-byte (populate_deck
+    # never touched notes_slide at all). Kevin reads these aloud when
+    # presenting, so he read June's figures in both July and August.
+    # LIMITS (stated here, not just in a comment further down): these checks
+    # can prove the notes were CHANGED and reference the right month/figures
+    # - they CANNOT verify the prose is factually correct. Content
+    # correctness is Lauren's judgement call, checked by the separate,
+    # mandatory Codex numeric-accuracy pass described in KPI_RUN_SOP.md, not
+    # by this script.
+    base_notes = getattr(prs, "_kpi_base_notes", None)
+    cur_month_name = MONTH_FULL[month - 1]
+    combined_text = []
+    for si in sorted(EXPECTED_NOTES_SLIDES):
+        sl = prs.slides[si]
+        txt = sl.notes_slide.notes_text_frame.text.strip() if sl.has_notes_slide else ""
+        combined_text.append(txt)
+        if notes_required:
+            chk(bool(txt), f"NOTES: Slide {si + 1} speaker notes are empty.")
+            if base_notes is not None:
+                chk(txt != base_notes.get(si, "").strip(),
+                    f"NOTES: Slide {si + 1} speaker notes are byte-identical to the "
+                    f"base deck's notes for this slide - not updated for "
+                    f"{cur_month_name} {year}.")
+    if not notes_required:
+        print("  validate_deck NOTE: notes_required=False - speaker-notes content "
+              "checks run in non-blocking mode (self-test coverage of a month "
+              "whose notes aren't drafted yet; build_month always uses "
+              "notes_required=True).")
+    else:
+        chk(cur_month_name in "\n".join(combined_text),
+            f"NOTES: {cur_month_name!r} does not appear anywhere in the Slide "
+            f"2-10 speaker notes - looks stale (best-effort: cannot verify "
+            f"prose content, only that the current month is referenced "
+            f"somewhere across them).")
+
+        # Best-effort, per-slide figure freshness: ADVISORY ONLY (printed,
+        # does not fail the build). Fires when the PREVIOUS period's
+        # headline number is present in a slide's notes and the CURRENT one
+        # is not. Deliberately non-blocking, not just "best-effort" in name:
+        # empirically confirmed to false-positive on genuine, correct,
+        # Lauren-approved prose - the real August Slide 7 notes discuss the
+        # "65 to 75 percent" amber KPI band, and 65 also happens to be
+        # July's (unrelated) Incident-Other headline count. Hard-failing on
+        # that coincidence would block a deck that is factually right, which
+        # is worse than the gap this section closes. Kept as a printed
+        # signal for human review, per the task's own "(best-effort)"
+        # framing - the month-name check above is the hard-fail layer for
+        # staleness; this is a hint layer on top of it.
+        def _num_in(text, n):
+            return re.search(rf"(?<!\d){re.escape(str(n))}(?!\d)", text) is not None
+
+        def _fresh(si, label, cur_val, prev_val):
+            sl2 = prs.slides[si]
+            txt = sl2.notes_slide.notes_text_frame.text if sl2.has_notes_slide else ""
+            cur_s, prev_s = str(cur_val), str(prev_val)
+            if _num_in(txt, prev_s) and not _num_in(txt, cur_s):
+                print(f"  validate_deck ADVISORY (non-blocking): Slide {si + 1} notes "
+                      f"mention last period's {label} figure ({prev_s}) but not this "
+                      f"month's ({cur_s}) - worth a human glance, not a build failure.")
+
+        s2_cur = sum(_hs_vol(hs_current, s) for s in ("Cority", "Odyssey", "IRIS", "DSE"))
+        s2_prev = sum(_hs_vol(hs_prev, s) for s in ("Cority", "Odyssey", "IRIS", "DSE"))
+        _fresh(1, "H&S volume total", s2_cur, s2_prev)
+
+        s3_cur = sum(v[0] for v in hs_current.get("slide3_bands", {}).values())
+        s3_prev = sum(v[0] for v in hs_prev.get("slide3_bands", {}).values())
+        _fresh(2, "time-to-resolve total", s3_cur, s3_prev)
+
+        s4_cur = sum(pxd["slide4_categories"][k][cur] for k in pxd["slide4_categories"])
+        s4_prev_hl = sum(pxd["slide4_categories"][k][prev_i] for k in pxd["slide4_categories"])
+        _fresh(3, "PXD total", s4_cur, s4_prev_hl)
+
+        s6_cur = sum(_band_counts(pxd["slide6_bands"], cur).values())
+        s6_prev = sum(_band_counts(pxd["slide6_bands"], prev_i).values())
+        _fresh(5, "Service Request total", s6_cur, s6_prev)
+
+        s7_cur = sum(_band_counts(pxd["slide7_bands"], cur).values())
+        s7_prev = sum(_band_counts(pxd["slide7_bands"], prev_i).values())
+        _fresh(6, "Incident-Other total", s7_cur, s7_prev)
+
+        _fresh(7, "average acceptance days",
+               f"{pxd['slide8_values'][cur]:.1f}", f"{pxd['slide8_values'][prev_i]:.1f}")
+        _fresh(8, "average completion days",
+               f"{pxd['slide9_values'][cur]:.1f}", f"{pxd['slide9_values'][prev_i]:.1f}")
+        _fresh(9, "Created total", pxd["slide10_created"][cur], pxd["slide10_created"][prev_i])
+        _fresh(9, "Completed total", pxd["slide10_completed"][cur], pxd["slide10_completed"][prev_i])
+
     # ================= CROSS-SLIDE RECONCILIATION =================
     s5t4_total = _cint(find_table(prs.slides[4], "Table 4"), 11, 1)
     s7_band_total = sum(_band_counts(pxd["slide7_bands"], cur).values())
@@ -1483,11 +1733,12 @@ def validate_deck(prs, pxd, hs_current, hs_prev, year, month, allow_no_chart_ser
     print(f"validate_deck: PASS ({MONTH_FULL[month - 1]} {year}) - structural manifest + "
           f"Total-row sweep; per-category source trace (Slides 4 & 5); H&S source match "
           f"(Slides 2 & 3); row sums / percentages / % columns / deltas / pie==table; "
-          f"chart-array chain (Slides 8-10); cross-slide registry R1, R2, R-cur exact; "
-          f"D1-D4 registered.")
+          f"chart-array chain (Slides 8-10); speaker notes updated + month-referenced "
+          f"(Slides 2-10{', notes_required=False' if not notes_required else ''}); "
+          f"cross-slide registry R1, R2, R-cur exact; D1-D4 registered.")
 
 
-def build_month(year, month, out_path=None, chart_dir=None, prev_hs=None):
+def build_month(year, month, out_path=None, chart_dir=None, prev_hs=None, notes_path=None):
     """Top-level entry point: build one month's KPI Presentation end to end
     from its own Source Data folder, using the previous month's own
     finished deck as the base (the real monthly process - see memory/
@@ -1497,10 +1748,30 @@ def build_month(year, month, out_path=None, chart_dir=None, prev_hs=None):
     prior month's H&S figures, for when the prior month's own Source Data
     folder isn't available. If not given, it's read live from the prior
     month's own H&S doc - real carried-forward data, not invented, per the
-    module docstring's KNOWN GAP note."""
+    module docstring's KNOWN GAP note.
+
+    notes_path: optional explicit path to the month's speaker-notes markdown
+    (defaults to notes_path_for(year, month), i.e. `KPI Presentation -
+    Handover/notes/speaker-notes-{year}-{month:02d}.md`). Speaker notes are
+    a mandatory part of the deliverable (PART D, 7 Sep 2026) - Kevin reads
+    them aloud, and the confirmed production bug was that July's and
+    August's decks both still carried June's notes verbatim. If the file
+    doesn't exist, the build stops here rather than silently shipping stale
+    or empty notes; Lauren drafts it (content), this script only places it."""
     excel_path, hs_path = find_source_files(year, month)
     pxd = extract_pxd(excel_path)
     hs_current = extract_hs(hs_path)
+
+    notes, resolved_notes_path = load_month_notes(year, month, notes_path)
+    if notes is None:
+        raise FileNotFoundError(
+            f"speaker notes for {MONTH_FULL[month - 1]} {year} not found at "
+            f"{resolved_notes_path!r}. Speaker notes are part of the KPI "
+            f"deliverable, not optional polish - Kevin reads them aloud when "
+            f"presenting. Lauren drafts '## Slide N' sections for slides 2-10 "
+            f"in that file (content - see KPI_RUN_SOP.md); this script will "
+            f"not build without it."
+        )
 
     if prev_hs is None:
         py, pm = prev_ym(year, month)
@@ -1523,7 +1794,7 @@ def build_month(year, month, out_path=None, chart_dir=None, prev_hs=None):
         chart_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), f"charts_{year}_{month:02d}")
 
     month_label = f"{MONTH_FULL[month - 1]} {year}"
-    prs = populate_deck(base_deck, pxd, hs_current, prev_hs, month_label, chart_dir, out_path, year, month)
+    prs = populate_deck(base_deck, pxd, hs_current, prev_hs, month_label, chart_dir, out_path, year, month, notes=notes)
 
     # HARDENED BLOCKING GATE (HANDOVER Part C): validate the freshly built
     # deck before it is written. On any failure, no deck is left at out_path
@@ -1770,10 +2041,12 @@ if __name__ == "__main__":
         # chart-array chain), not a reload from disk.
         _, prev_hs_path_june = find_source_files(2026, 5)
         prev_hs_june = extract_hs(prev_hs_path_june)
+        june_notes, _ = load_month_notes(2026, 6)
         try:
             _june_prs = populate_deck(
                 deck_path(2026, 5), pxd, hs, prev_hs_june, "June 2026",
                 os.path.join(SCRATCH, "charts_selftest_p3"), test_out, 2026, 6,
+                notes=june_notes,
             )
             validate_deck(_june_prs, pxd, hs, prev_hs_june, 2026, 6)
             print("  PASS: validate_deck(June, freshly built in-memory) - all checks")

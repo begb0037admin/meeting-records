@@ -3,6 +3,52 @@
 > Trigger phrase: **"prep KPI run"** or **"run KPIs"**
 > Runs monthly, before the standing agenda meeting.
 
+---
+
+## MANDATORY ORDERED CHECKLIST — do this, in this order, every month
+
+Hard-coded because this run has flaked the same way across four consecutive
+months (Jun–Sep 2026): stale content carried forward from a prior month that
+still *looked* valid. Each step below gates the next. Nothing goes to Kevin
+until 1–3 all pass **and are recorded in that month's session log**.
+
+- [ ] **1 — BUILD THE DECK.** Run `build_month(YYYY, M)` (or `python
+      build_kpi_presentation.py` for the self-test). The hardened
+      `validate_deck()` gate runs **inline before the file is written** — on
+      any failure it raises `DeckValidationError`, writes **no** deck (only a
+      `.REJECTED` copy), and exits non-zero. A deck exists only if the gate
+      passed. This step also hard-stops if the month's speaker-notes file
+      (step 2) is missing.
+- [ ] **2 — DRAFT / UPDATE THE MONTH'S SPEAKER NOTES (Lauren owns the content).**
+      `KPI Presentation - Handover/notes/speaker-notes-YYYY-MM.md`, `## Slide N`
+      sections for Slides 2–10 (see §2 below for the authoring rules). The build
+      will not run without this file. The automated notes check inside
+      `validate_deck()` must pass: every Slide 2–10 note non-empty, **not
+      byte-identical** to the base (previous month's) deck's notes, and the
+      current month's name present somewhere across the notes. That check
+      proves the notes were *changed and reference the right month* — it
+      **cannot** prove the prose is factually correct. That is step 3.
+- [ ] **3 — CODEX INDEPENDENTLY VERIFIES EVERY SPEAKER-NOTE NUMBER. Mandatory,
+      every month — a required step, not optional QA.** Codex re-derives every
+      figure, percentage, month, year, MoM/YoY direction word, and KPI band
+      colour quoted in the notes from (a) that slide's own table in the built
+      deck and (b) the underlying source workbook / H&S doc, and reports
+      PASS/FAIL per claim with deck value vs its value vs source location.
+      **How to invoke** (the pattern used for the Aug 2026 review — keep it):
+      from the `meeting-records` repo root,
+      `codex exec -s read-only --skip-git-repo-check` with a prompt of the
+      shape in `KPI Presentation - Handover/docs/reference/codex-notes-review-prompt.md`
+      (READ-ONLY; re-derive, don't trust the builder; terse PASS/FAIL per
+      claim; final line `NOTES CLEAR` or `NOTES NOT CLEAR — <n> issues`).
+      Record the run and its verdict in `docs/sessions/YYYY-MM-KPI-run.md`.
+      If `NOTES NOT CLEAR` → back to Lauren (wording/figure) or Drew (pipeline);
+      do **not** work around it.
+- [ ] **4 — ONLY THEN → KEVIN.** The deck goes to Kevin for approval and on to
+      Michael O'Sullivan for the team meeting **only after steps 1–3 have all
+      passed and are logged.**
+
+---
+
 ## Steps
 
 ### 1. Produce KPI output
