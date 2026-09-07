@@ -310,6 +310,11 @@ def extract_pxd(excel_path):
     io_display["Other"] = (other_count, pct_str(other_count, io_total))
     out["slide5_incident_other"] = io_display          # {display_label: (count, "NN.NN%")}
     out["slide5_incident_other_total"] = io_total
+    # FIX 2 (7 Sep 2026): raw source Service-Category -> count map, so
+    # validate_deck() can trace every displayed Table 4 count back to a
+    # specific source figure (defends against a coherently-wrong allocation
+    # - e.g. two category rows swapped - that still self-reconciles).
+    out["slide5_incident_other_source_counts"] = dict(io_counts)
 
     # Slides 6/7: completion-time % bands, monthly rolling
     _, sr_time = monthly_by_category("Time To Complete Service Requ1")
@@ -818,8 +823,15 @@ def populate_deck(base_deck_path, pxd, hs_current, hs_prev, month_label, chart_d
         cur_total, prev_total = sum(cur_counts.values()), sum(prev_counts.values())
 
         def combined_pct(counts, total, labels):
+            # HARDENING FIX 5 (7 Sep 2026): use pct2 (Decimal ROUND_HALF_UP),
+            # the SAME helper validate_deck() checks against - so the emitter
+            # and the gate can never disagree on rounding direction next
+            # month. (Previously round(), which is half-to-even + float-repr
+            # sensitive and would risk a false gate failure on a .xx5 cell.)
+            # Verified no-op for Jun/Jul/Aug: none of these cells sit on a
+            # half-cent boundary.
             n = sum(counts.get(l, 0) for l in labels)
-            return round(n / total * 100, 2) if total else 0.0
+            return pct2(n, total)
 
         same_next = ["Same Day", "Next Day"]
         less_5 = ["Same Day", "Next Day", "3 - 5 days"]
@@ -830,10 +842,10 @@ def populate_deck(base_deck_path, pxd, hs_current, hs_prev, month_label, chart_d
         set_cell(t.rows[2].cells[5], f"{combined_pct(cur_counts, cur_total, less_5):.2f}%")
 
         pie_map = {
-            "Same Day": round(cur_counts.get("Same Day", 0) / cur_total * 100, 2) if cur_total else 0,
-            "6+ Days": round(cur_counts.get("6+ days", 0) / cur_total * 100, 2) if cur_total else 0,
-            "3-5 Days": round(cur_counts.get("3 - 5 days", 0) / cur_total * 100, 2) if cur_total else 0,
-            "Next Day": round(cur_counts.get("Next Day", 0) / cur_total * 100, 2) if cur_total else 0,
+            "Same Day": float(pct2(cur_counts.get("Same Day", 0), cur_total)),
+            "6+ Days": float(pct2(cur_counts.get("6+ days", 0), cur_total)),
+            "3-5 Days": float(pct2(cur_counts.get("3 - 5 days", 0), cur_total)),
+            "Next Day": float(pct2(cur_counts.get("Next Day", 0), cur_total)),
         }
         set_pie_chart(
             next(sh for sh in prs.slides[slide_i].shapes if sh.has_chart),
@@ -848,22 +860,37 @@ def populate_deck(base_deck_path, pxd, hs_current, hs_prev, month_label, chart_d
     # against June's own pre-known figures.
     os.makedirs(chart_dir, exist_ok=True)
 
+    # HARDENING FIX 4 (7 Sep 2026): the exact value arrays handed to
+    # make_trend_chart / make_combo_chart are recorded on the Presentation so
+    # validate_deck() can assert  source series == chart array == table cell
+    # for Slides 8/9/10 (the chart itself is a matplotlib PNG that cannot be
+    # read back). CHAIN: `acc`/`comp` here ARE `pxd["slide8_values"]` /
+    # `pxd["slide9_values"]` (the source series); the same list object is
+    # both drawn by make_trend_chart AND sliced [yr/prev/cur] into the KPI
+    # table; likewise `created`/`completed` are `pxd["slide10_created"]` /
+    # `pxd["slide10_completed"]` and feed both make_combo_chart and Table 3.
+    chart_series = {}
+
     t8 = find_table(prs.slides[7], "Table 11")
     acc = pxd["slide8_values"]
     for ci, idx in ((0, yr_i), (1, prev_i), (2, cur)):
         set_cell(t8.rows[3].cells[ci], f"{acc[idx]:.1f}")
     img8 = os.path.join(chart_dir, "slide8_chart.png")
-    make_trend_chart(pxd["slide8_months"], list(acc), sum(pxd["slide10_created"]), img8, y_step=0.1)
+    chart_series["slide8_values"] = list(acc)
+    make_trend_chart(pxd["slide8_months"], chart_series["slide8_values"], sum(pxd["slide10_created"]), img8, y_step=0.1)
 
     t9 = find_table(prs.slides[8], "Table 10")
     comp = pxd["slide9_values"]
     for ci, idx in ((0, yr_i), (1, prev_i), (2, cur)):
         set_cell(t9.rows[3].cells[ci], f"{comp[idx]:.1f}")
     img9 = os.path.join(chart_dir, "slide9_chart.png")
-    make_trend_chart(pxd["slide9_months"], list(comp), sum(pxd["slide9_completed_tasks"]), img9, y_step=0.5)
+    chart_series["slide9_values"] = list(comp)
+    make_trend_chart(pxd["slide9_months"], chart_series["slide9_values"], sum(pxd["slide9_completed_tasks"]), img9, y_step=0.5)
 
     t10 = find_table(prs.slides[9], "Table 3")
     created, completed = pxd["slide10_created"], pxd["slide10_completed"]
+    chart_series["slide10_created"] = list(created)
+    chart_series["slide10_completed"] = list(completed)
     for ci, idx in ((1, yr_i), (2, prev_i), (3, cur)):
         set_cell(t10.rows[1].cells[ci], str(created[idx]))
         set_cell(t10.rows[2].cells[ci], str(completed[idx]))
@@ -878,7 +905,9 @@ def populate_deck(base_deck_path, pxd, hs_current, hs_prev, month_label, chart_d
     set_cell(t10.rows[3].cells[4], plain_delta(var_cur - var_prev))
     set_cell(t10.rows[3].cells[5], plain_delta(var_cur - var_yr))
     img10 = os.path.join(chart_dir, "slide10_chart.png")
-    make_combo_chart(pxd["slide10_months"], list(created), list(completed), img10)
+    make_combo_chart(pxd["slide10_months"], chart_series["slide10_created"],
+                     chart_series["slide10_completed"], img10)
+    prs._kpi_chart_series = chart_series   # read by validate_deck (FIX 4)
 
     # Proven picture-swap positions, captured from Kevin's manual layout
     # pass on 2 Aug 2026 (build_full_poc.py, SHA1-verified against the real
@@ -965,6 +994,32 @@ RECONCILIATION_DIFFER_BY_DESIGN = [
            "ambiguity in the source; <=0.01 pp permitted on this cell only."),
 ]
 
+# ---- Structural manifest (HARDENING FIX 1, 7 Sep 2026) --------------------
+# The gate's data checks are per-table/per-metric and enumerated. This
+# manifest + the structural sweep in validate_deck() turn a *structural*
+# change (a new slide, table, Total row, caption, or native chart) into a
+# hard build failure, so the gate cannot silently under-cover a deck that
+# has grown. Keyed by 0-based slide index. If the deck layout legitimately
+# changes, update this manifest AND add the matching data checks.
+EXPECTED_SLIDE_COUNT = 11
+EXPECTED_TABLES = {           # slide index -> set of table shape names
+    1: {"Table 5"}, 2: {"Table 5"}, 3: {"Table 5"},
+    4: {"Table 4", "Table 6"}, 5: {"Table 5"}, 6: {"Table 5"},
+    7: {"Table 11"}, 8: {"Table 10"}, 9: {"Table 3"},
+}
+EXPECTED_NATIVE_CHART_SLIDES = {1, 2, 3, 5, 6}   # slides 8-10 use PNG images, not native charts
+EXPECTED_CAPTIONS = {3: "IncidentOtherPointer", 4: "IncidentOtherScopeCaption"}
+# (slide index, table name) pairs whose "Total"-labelled row is covered by an
+# explicit named check above. The structural sweep fails the build if it
+# finds a Total-labelled row in a table NOT listed here.
+COVERED_TOTAL_ROW_TABLES = {
+    (1, "Table 5"), (2, "Table 5"), (3, "Table 5"),
+    (4, "Table 4"), (4, "Table 6"),
+}
+
+_INT_RE = re.compile(r"^\d+$")
+_PCT_RE = re.compile(r"^\d+(?:\.\d+)?%$")
+
 
 def _dec2(x):
     """Round any float/int to 2 dp as a Decimal, ROUND_HALF_UP (same
@@ -988,17 +1043,26 @@ def _band_counts(series_map, idx):
     return {lab: parse_count_pct(s[idx])[0] for lab, s in series_map.items()}
 
 
-def validate_deck(prs, pxd, hs_current, hs_prev, year, month):
+def validate_deck(prs, pxd, hs_current, hs_prev, year, month, allow_no_chart_series=False):
     """BLOCKING gate. Runs against the freshly built Presentation `prs`
     (not a reference deck) plus the same extracted inputs populate_deck
     used. Collects every failure, prints them, and raises
     DeckValidationError if there is at least one. Checks:
+      * FIX 1 - structural manifest (slide / table / native-chart / caption
+        inventory) + a sweep of every table for a "Total"-labelled row so a
+        structural change forces a gate update
       * every Total row: category rows sum to the displayed Total (exact int)
+      * FIX 2 - every displayed category count traces to its specific source
+        figure (Slide 4 vs pxd; Slide 5 Table 4 vs the raw source category
+        map) so a coherently-wrong allocation cannot pass
       * every single-category % cell == count / displayed Total (<=0.001)
       * every % column sums to 100 (<=0.10 pp)
+      * FIX 3 - Slide 2 / Slide 3 counts == the H&S Word-doc source figures
       * combined-band cells (Slides 6 & 7) exact except registered D4
       * delta cells arithmetically correct (MoM / YoY / Variance)
       * pie chart series values == the matching table cell values
+      * FIX 4 - Slides 8/9/10: source series == the array handed to
+        make_trend_chart / make_combo_chart == the table cells
       * cross-slide registry: R1, R2, R-cur exact; D1-D4 registered as
         differ-by-design; any un-registered repeated metric that
         mismatches -> fail.
@@ -1036,6 +1100,69 @@ def validate_deck(prs, pxd, hs_current, hs_prev, year, month):
         chk(not missing,
             f"{label} pie: expected categories not found on the chart: {sorted(missing)}")
 
+    # ================= FIX 1: STRUCTURAL MANIFEST + SWEEP =================
+    # (a) the deck's inventory of slides / tables / native charts / captions
+    #     must match EXPECTED_* exactly - any structural change forces this
+    #     manifest and the matching data checks to be updated.
+    chk(len(prs.slides) == EXPECTED_SLIDE_COUNT,
+        f"STRUCTURE: deck has {len(prs.slides)} slides, manifest expects {EXPECTED_SLIDE_COUNT}")
+    actual_tables, actual_charts, actual_caps = {}, set(), {}
+    for si, sl in enumerate(prs.slides):
+        names = {sh.name for sh in sl.shapes if sh.has_table}
+        if names:
+            actual_tables[si] = names
+        if any(sh.has_chart for sh in sl.shapes):
+            actual_charts.add(si)
+        for sh in sl.shapes:
+            if sh.name in ("IncidentOtherPointer", "IncidentOtherScopeCaption"):
+                actual_caps[si] = sh.name
+    chk(actual_tables == EXPECTED_TABLES,
+        f"STRUCTURE: table inventory changed. got {actual_tables}, expected {EXPECTED_TABLES} "
+        f"- update EXPECTED_TABLES and add data checks for any new table.")
+    chk(actual_charts == EXPECTED_NATIVE_CHART_SLIDES,
+        f"STRUCTURE: native-chart slide set changed. got {sorted(actual_charts)}, "
+        f"expected {sorted(EXPECTED_NATIVE_CHART_SLIDES)}.")
+    chk(actual_caps == EXPECTED_CAPTIONS,
+        f"STRUCTURE: run-time caption inventory changed. got {actual_caps}, "
+        f"expected {EXPECTED_CAPTIONS} (Part B scope captions).")
+
+    # (b) sweep EVERY table: any row whose first cell is "Total" must have its
+    #     integer columns sum to that row and its percentage column (if any)
+    #     sum to 100 - and that (slide, table) must be in COVERED_TOTAL_ROW_TABLES
+    #     (i.e. it also has a hand-written check above). A Total-labelled row
+    #     in an unlisted table fails the build.
+    for si, sl in enumerate(prs.slides):
+        for sh in sl.shapes:
+            if not sh.has_table:
+                continue
+            tbl = sh.table
+            rows = list(tbl.rows)
+            tot_idx = next((ri for ri, rw in enumerate(rows)
+                            if rw.cells and rw.cells[0].text.strip().lower() == "total"), None)
+            if tot_idx is None:
+                continue
+            chk((si, sh.name) in COVERED_TOTAL_ROW_TABLES,
+                f"STRUCTURE: Slide {si + 1} {sh.name!r} has a 'Total' row but is not in "
+                f"COVERED_TOTAL_ROW_TABLES - add an explicit check and register it.")
+            ncols = len(rows[0].cells)
+            cat_idx = range(1, tot_idx)
+            for ci in range(1, ncols):
+                cat_txt = [rows[ri].cells[ci].text.strip() for ri in cat_idx]
+                tot_txt = rows[tot_idx].cells[ci].text.strip()
+                if cat_txt and all(_INT_RE.match(x) for x in cat_txt) and _INT_RE.match(tot_txt):
+                    s = sum(int(x) for x in cat_txt)
+                    chk(s == int(tot_txt),
+                        f"SWEEP: Slide {si + 1} {sh.name!r} col {ci}: category rows sum {s} "
+                        f"!= Total row {tot_txt}")
+                elif cat_txt and all(_PCT_RE.match(x) for x in cat_txt):
+                    s = sum(Decimal(x.rstrip('%')) for x in cat_txt)
+                    chk(abs(s - 100) <= PCT_SUM_TOL,
+                        f"SWEEP: Slide {si + 1} {sh.name!r} col {ci}: % column sums to {s}, not 100")
+                    if tot_txt:
+                        chk(tot_txt in ("100%", "100.00%"),
+                            f"SWEEP: Slide {si + 1} {sh.name!r} col {ci} Total-row % cell is "
+                            f"{tot_txt!r}, expected '100%'")
+
     # ---- Slide 2 Table 5: H&S system volumes ----------------------------
     t = find_table(prs.slides[1], "Table 5")
     s2_prev = [_cint(t, ri, 1) for ri in range(1, 5)]
@@ -1050,6 +1177,19 @@ def validate_deck(prs, pxd, hs_current, hs_prev, year, month):
         f"Slide 2 Table 5 Total MoM: {_ctxt(t, 5, 3)!r} != {fmt_delta(s2_ct, s2_pt)!r}")
     check_pie(1, {"Cority": (s2_cur[0], s2_ct), "Odyssey": (s2_cur[1], s2_ct),
                   "IRIS": (s2_cur[2], s2_ct), "DSE": (s2_cur[3], s2_ct)}, "Slide 2")
+
+    # FIX 3: Slide 2 counts must equal the H&S Word-doc source figures
+    # (hs_current / hs_prev), not merely be internally self-consistent.
+    def _hs_vol(hs_dict, short):
+        for full, (cnt, _pct) in hs_dict.get("slide2_volumes", {}).items():
+            if short in full:
+                return cnt
+        return 0
+    for ri, short in zip(range(1, 5), ["Cority", "Odyssey", "IRIS", "DSE"]):
+        chk(_cint(t, ri, 1) == _hs_vol(hs_prev, short),
+            f"FIX3 Slide 2 {short} prev: deck {_cint(t, ri, 1)} != H&S source {_hs_vol(hs_prev, short)}")
+        chk(_cint(t, ri, 2) == _hs_vol(hs_current, short),
+            f"FIX3 Slide 2 {short} cur: deck {_cint(t, ri, 2)} != H&S source {_hs_vol(hs_current, short)}")
 
     # ---- Slide 3 Table 5: H&S time to resolve --------------------------
     t = find_table(prs.slides[2], "Table 5")
@@ -1075,9 +1215,19 @@ def validate_deck(prs, pxd, hs_current, hs_prev, year, month):
     check_pie(2, {"Same Day": (s3_cur[0], s3_ct), "Next Day": (s3_cur[1], s3_ct),
                   "3-5 Day": (s3_cur[2], s3_ct), "6+ Days": (s3_cur[3], s3_ct)}, "Slide 3")
 
+    # FIX 3: Slide 3 band counts must equal the H&S Word-doc source figures.
+    s3b_cur = hs_current.get("slide3_bands", {})
+    s3b_prev = hs_prev.get("slide3_bands", {})
+    for (lab, ri) in s3:
+        chk(_cint(t, ri, 1) == s3b_prev.get(lab, (0,))[0],
+            f"FIX3 Slide 3 {lab!r} prev: deck {_cint(t, ri, 1)} != H&S source {s3b_prev.get(lab, (0,))[0]}")
+        chk(_cint(t, ri, 3) == s3b_cur.get(lab, (0,))[0],
+            f"FIX3 Slide 3 {lab!r} cur: deck {_cint(t, ri, 3)} != H&S source {s3b_cur.get(lab, (0,))[0]}")
+
     # ---- Slide 4 Table 5: PXD categories ------------------------------
     t = find_table(prs.slides[3], "Table 5")
-    s4 = [("Service Request", 1), ("Incident - Other", 2), ("HR Self Service", 3), ("Change", 4)]
+    # deck row -> the pxd["slide4_categories"] key it must trace to.
+    s4 = [("Service Request", 1), ("Incident – Other", 2), ("HR Self Service", 3), ("Change", 4)]
     s4_yr = [_cint(t, ri, 1) for _, ri in s4]
     s4_prev = [_cint(t, ri, 2) for _, ri in s4]
     s4_cur = [_cint(t, ri, 3) for _, ri in s4]
@@ -1085,6 +1235,15 @@ def validate_deck(prs, pxd, hs_current, hs_prev, year, month):
     chk(sum(s4_yr) == s4_yt, f"Slide 4 Table 5: yr rows sum {sum(s4_yr)} != Total {s4_yt}")
     chk(sum(s4_prev) == s4_pt, f"Slide 4 Table 5: prev rows sum {sum(s4_prev)} != Total {s4_pt}")
     chk(sum(s4_cur) == s4_ct, f"Slide 4 Table 5: cur rows sum {sum(s4_cur)} != Total {s4_ct}")
+    # FIX 2: every displayed count must trace to its specific source figure
+    # in pxd["slide4_categories"] (defends against two category rows swapped
+    # while the Total / pie / deltas still self-reconcile).
+    for (pxdkey, ri) in s4:
+        src = pxd["slide4_categories"][pxdkey]
+        for col, idx in ((1, yr_i), (2, prev_i), (3, cur)):
+            chk(_cint(t, ri, col) == src[idx],
+                f"FIX2 Slide 4 Table 5 {pxdkey!r} col {col}: deck {_cint(t, ri, col)} "
+                f"!= source {src[idx]}")
     for (_, ri), yv, pv, cv in zip(s4, s4_yr, s4_prev, s4_cur):
         chk(_ctxt(t, ri, 4) == fmt_delta(cv, pv),
             f"Slide 4 Table 5 row {ri} MoM: {_ctxt(t, ri, 4)!r} != {fmt_delta(cv, pv)!r}")
@@ -1106,6 +1265,21 @@ def validate_deck(prs, pxd, hs_current, hs_prev, year, month):
     chk(io_total_cell == pxd["slide5_incident_other_total"],
         f"Slide 5 Table 4: displayed Total {io_total_cell} != source month total "
         f"{pxd['slide5_incident_other_total']}")
+    # FIX 2: reconstruct the expected 10 counts straight from the raw source
+    # category map (independent of pxd["slide5_incident_other"], which
+    # populate_deck consumed) and check every displayed count against it -
+    # so a swapped/misallocated category cannot pass just because the Total
+    # and percentages still add up.
+    src_counts = pxd["slide5_incident_other_source_counts"]
+    io_total_src = pxd["slide5_incident_other_total"]
+    exp_named = [src_counts.get(src_name, 0) for _disp, src_name in INCIDENT_OTHER_NAMED]
+    exp_io = exp_named + [io_total_src - sum(exp_named)]      # + "Other"
+    io_labels = [d for d, _ in INCIDENT_OTHER_NAMED] + ["Other"]
+    for i, ri in enumerate(range(1, 11)):
+        chk(_ctxt(t, ri, 0) == io_labels[i],
+            f"FIX2 Slide 5 Table 4 row {ri} label: {_ctxt(t, ri, 0)!r} != {io_labels[i]!r}")
+        chk(io_counts[i] == exp_io[i],
+            f"FIX2 Slide 5 Table 4 {io_labels[i]!r}: deck {io_counts[i]} != source-derived {exp_io[i]}")
     for i, ri in enumerate(range(1, 11)):
         chk(abs(_cpct(t, ri, 2) - pct2(io_counts[i], io_total_cell)) <= PCT_CELL_TOL,
             f"Slide 5 Table 4 row {ri} %: {_cpct(t, ri, 2)} != {pct2(io_counts[i], io_total_cell)} "
@@ -1158,16 +1332,47 @@ def validate_deck(prs, pxd, hs_current, hs_prev, year, month):
                             "3-5 Days": (cc.get("3 - 5 days", 0), ct),
                             "6+ Days": (cc.get("6+ days", 0), ct)}, f"Slide {slide_i + 1}")
 
-    # ---- Slides 8 & 9: average-days KPI tables ----------------------
-    # The trend chart is a matplotlib PNG generated directly from the same
-    # value array, so its last 3 bars equal these source values by
-    # construction - the table-cell check is the verifiable form of R8 here.
+    # ---- Slides 8, 9 & 10: chart-image value chain (FIX 4) ------------
+    # The chart on these three slides is a matplotlib PNG that cannot be
+    # read back. Instead assert the full chain so the image provably derives
+    # from verified numbers:
+    #     source series  ==  the array populate_deck handed to
+    #     make_trend_chart / make_combo_chart  ==  the table cells.
+    # populate_deck records the exact arrays on prs._kpi_chart_series.
+    cs = getattr(prs, "_kpi_chart_series", None)
+    if cs is None:
+        chk(allow_no_chart_series,
+            "FIX4: populate_deck did not record _kpi_chart_series - chart-image "
+            "value chain cannot be verified. (allow_no_chart_series=True is only "
+            "for auditing a reloaded .pptx; the inline build gate always has it.)")
+        if allow_no_chart_series:
+            print("  validate_deck NOTE: chart-array identity links skipped "
+                  "(reloaded deck); source == table still enforced for Slides 8-10.")
+
+    # source == table for the Slide 8/9 KPI value rows (always runs)
     for slide_i, tname, key in ((7, "Table 11", "slide8_values"), (8, "Table 10", "slide9_values")):
         t = find_table(prs.slides[slide_i], tname)
-        vals = pxd[key]
+        src = list(pxd[key])
         for ci, idx in ((0, yr_i), (1, prev_i), (2, cur)):
-            chk(_ctxt(t, 3, ci) == f"{vals[idx]:.1f}",
-                f"Slide {slide_i + 1} {tname} value col {ci}: {_ctxt(t, 3, ci)!r} != {vals[idx]:.1f}")
+            chk(_ctxt(t, 3, ci) == f"{src[idx]:.1f}",
+                f"Slide {slide_i + 1} {tname} value col {ci}: {_ctxt(t, 3, ci)!r} != {src[idx]:.1f}")
+        if cs is not None:                 # chart array == source == table
+            chk(cs[key] == src,
+                f"FIX4 Slide {slide_i + 1}: chart array != source series {key}")
+            for ci, idx in ((0, yr_i), (1, prev_i), (2, cur)):
+                chk(f"{cs[key][idx]:.1f}" == _ctxt(t, 3, ci),
+                    f"FIX4 Slide {slide_i + 1} {tname} col {ci}: chart array {cs[key][idx]} "
+                    f"!= table cell {_ctxt(t, 3, ci)!r}")
+    if cs is not None:                     # Slide 10 combo chart: Created / Completed series
+        t10c = find_table(prs.slides[9], "Table 3")
+        for key, row in (("slide10_created", 1), ("slide10_completed", 2)):
+            src = list(pxd[key])
+            chk(cs[key] == src,
+                f"FIX4 Slide 10: chart array != source series {key}")
+            for ci, idx in ((1, yr_i), (2, prev_i), (3, cur)):
+                chk(str(cs[key][idx]) == _ctxt(t10c, row, ci),
+                    f"FIX4 Slide 10 Table 3 row {row} col {ci}: chart array {cs[key][idx]} "
+                    f"!= table cell {_ctxt(t10c, row, ci)!r}")
 
     # ---- Slide 10 Table 3: created vs completed --------------------
     t = find_table(prs.slides[9], "Table 3")
@@ -1272,10 +1477,14 @@ def validate_deck(prs, pxd, hs_current, hs_prev, year, month):
         print("!" * len(head))
         for f in failures:
             print("  - " + f)
-        raise DeckValidationError(head)
-    print(f"validate_deck: PASS ({MONTH_FULL[month - 1]} {year}) - internal consistency "
-          f"(row sums / percentages / % columns / deltas / chart==table) + cross-slide "
-          f"registry R1, R2, R-cur exact; D1-D4 registered.")
+        err = DeckValidationError(head)
+        err.failures = list(failures)   # for programmatic assertions (tampering tests)
+        raise err
+    print(f"validate_deck: PASS ({MONTH_FULL[month - 1]} {year}) - structural manifest + "
+          f"Total-row sweep; per-category source trace (Slides 4 & 5); H&S source match "
+          f"(Slides 2 & 3); row sums / percentages / % columns / deltas / pie==table; "
+          f"chart-array chain (Slides 8-10); cross-slide registry R1, R2, R-cur exact; "
+          f"D1-D4 registered.")
 
 
 def build_month(year, month, out_path=None, chart_dir=None, prev_hs=None):
@@ -1552,15 +1761,22 @@ if __name__ == "__main__":
               f"rounding-methodology difference that doesn't resolve to one clean rule from the "
               f"available source data. See HANDOVER.md (registry D4).")
 
-        # ---- Part 3: hardened BLOCKING gate against the freshly built June
-        # deck. build_month() already ran validate_deck() inline before
+        # ---- Part 3: hardened BLOCKING gate against a freshly built June
+        # deck. build_month() above already ran validate_deck() inline before
         # saving (a failure there would have raised and been caught below);
-        # this re-runs it explicitly for a visible self-test line.
+        # this rebuilds in-memory and re-runs the gate explicitly for a
+        # visible self-test line. It must be the in-memory Presentation from
+        # populate_deck (it carries prs._kpi_chart_series for the FIX 4
+        # chart-array chain), not a reload from disk.
         _, prev_hs_path_june = find_source_files(2026, 5)
         prev_hs_june = extract_hs(prev_hs_path_june)
         try:
-            validate_deck(Presentation(built_path), pxd, hs, prev_hs_june, 2026, 6)
-            print("  PASS: validate_deck(June, freshly built) - internal + cross-slide registry")
+            _june_prs = populate_deck(
+                deck_path(2026, 5), pxd, hs, prev_hs_june, "June 2026",
+                os.path.join(SCRATCH, "charts_selftest_p3"), test_out, 2026, 6,
+            )
+            validate_deck(_june_prs, pxd, hs, prev_hs_june, 2026, 6)
+            print("  PASS: validate_deck(June, freshly built in-memory) - all checks")
         except DeckValidationError as e:
             all_pass = False
             print(f"  FAIL: validate_deck(June) - {e}")

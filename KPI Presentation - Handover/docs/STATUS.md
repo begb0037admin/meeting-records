@@ -1,6 +1,6 @@
 # STATUS — KPI Presentation
-**Last updated:** 7 Sep 2026 (Lauren rebuilt August 2026 clean on `b9826fd`; `validate_deck()` passed inline; self-test `ALL PASS`; 11 slides rendered + verified. Awaiting Codex final pass, then Kevin's approval, then canonical save.)
-**Current phase:** Active — standing monthly responsibility. August 2026 run: rebuilt + self-validated + verified; not yet approved or saved.
+**Last updated:** 7 Sep 2026 (Lauren rebuilt August 2026 clean on `b9826fd`; Codex audited `validate_deck()` and its 5 hardening findings are now fixed by Drew (the gate-hardening commit right after `b9826fd`) with **no change to any figure** — delivered-deck ⇄ fresh-rebuild cell diff empty, `validate_deck()` passes vs the delivered deck, self-test `ALL PASS`. Awaiting Kevin's approval, then canonical save.)
+**Current phase:** Active — standing monthly responsibility. August 2026 run: rebuilt + self-validated + verified + gate hardened; not yet approved or saved.
 
 ## Confirmed
 - SOP current: `docs/KPI_RUN_SOP.md`. Canonical naming: `KPI presentation - <Month> <Year>.pptx`.
@@ -18,6 +18,14 @@ Landed as one change to `tools/speaking-briefs/build_kpi_presentation.py` (+ `.g
 
 **Self-test result (7 Sep 2026, `python build_kpi_presentation.py` → `ALL PASS`, exit 0):** Part 1 + 1b green (June extraction + full `Table 4` mapping vs oracle); Part 2 green (every table cell matches the real June deck, `Table 4` vs ADR-0001 oracle); Part 3 green (`validate_deck` on freshly built June); Part 4 green (fresh August build, gate passed inline, `Table 4` = Total 61 / Other 2, captions present). Gate proven to block: injecting one wrong figure → `DeckValidationError`, no deck written, `.REJECTED` copy only, non-zero exit.
 
+## Gate hardening pass — Codex audit follow-up (Drew, 7 Sep 2026, the 7 Sep 2026 gate-hardening commit (the commit immediately after `b9826fd` on `main`))
+Codex confirmed the blocking wiring, `pct2` half-up, and the June 68→77 oracle sound, and flagged 5 hardening gaps. **All 5 fixed; every fix is coverage-only.** Proof: (a) fresh June/August rebuild table+chart cell diff before/after = **empty**; (b) Lauren's *delivered* August deck vs a fresh rebuild on the new code = **empty diff**; (c) `validate_deck()` **passes** against the delivered deck (`allow_no_chart_series=True` reload path); (d) self-test `ALL PASS` (June + fresh August). Tampering tests prove each new check blocks the build.
+1. **Structural manifest + Total-row sweep** — `EXPECTED_TABLES` / `EXPECTED_NATIVE_CHART_SLIDES` / `EXPECTED_CAPTIONS` / `EXPECTED_SLIDE_COUNT` / `COVERED_TOTAL_ROW_TABLES`. Deck inventory change ⇒ fail; a `Total`-labelled row in any unlisted table ⇒ fail.
+2. **Per-category source trace** — every Slide 4 count vs `pxd["slide4_categories"]`; every Slide 5 `Table 4` count reconstructed from the raw source category map. A coherently-wrong allocation (swapped categories, totals still add up) now fails.
+3. **H&S source match** — Slide 2 / Slide 3 counts compared to the H&S Word-doc figures, not just internal consistency.
+4. **Chart-image value chain** — `populate_deck` records the arrays fed to `make_trend_chart`/`make_combo_chart` on `prs._kpi_chart_series`; gate asserts source == chart array == table cell for Slides 8/9/10. `allow_no_chart_series=True` when auditing a reloaded .pptx (identity links noted-and-skipped, source==table still enforced).
+5. **Emitter/validator rounding parity** — Slide 6/7 combined-band cells + pie now use `pct2` (same helper as the gate). No-op for Jun/Jul/Aug.
+
 ## Awaiting Kevin (after Drew's fix + rebuild)
 - Approval of the corrected August visual before the canonical OneDrive save.
 - **Separate decision:** July 2026 deck already sent to Michael has the old Slide 5 numbers (Total 62). Corrected = Total 65 / add "Other 7" / caption. Reissue the deck, or send Michael a written explanation citing ADR-0001. A reply is owed (he raised it 13 Aug).
@@ -31,6 +39,6 @@ Landed as one change to `tools/speaking-briefs/build_kpi_presentation.py` (+ `.g
 ## Up Next
 1. **DONE (Drew):** HANDOVER Parts A + B + C in `build_kpi_presentation.py` (`b9826fd`); self-test `ALL PASS`; gate proven to block a broken figure.
 2. **DONE (Lauren, 7 Sep 2026):** rebuilt August 2026 clean on `b9826fd` to a non-canonical scratch path; `validate_deck()` passed inline; self-test `ALL PASS`; all 11 slides rendered and verified (Slide 5 Table 4 Total 61 / Other 2 / caption; Slide 4 pointer; R1/R2 reconcile; headers; layout parity).
-3. **Codex (next):** final review pass on the rebuilt August deck **and** the `validate_deck()` logic in `build_kpi_presentation.py`.
-4. On Codex clean + **Kevin's explicit approval of the visual:** Lauren saves canonical `KPI presentation - August 2026.pptx` into `...\2026\08 Aug\`; logs `docs/sessions/2026-08-KPI-run.md`; confirms distribution to Michael O'Sullivan.
+3. **DONE (Drew, 7 Sep 2026):** Codex-audit follow-up — 5 `validate_deck()` hardening gaps closed, coverage-only, delivered deck unchanged (see "Gate hardening pass" above).
+4. On **Kevin's explicit approval of the visual:** Lauren saves canonical `KPI presentation - August 2026.pptx` into `...\2026\08 Aug\`; logs `docs/sessions/2026-08-KPI-run.md`; confirms distribution to Michael O'Sullivan.
 5. Kevin decides the July-deck reissue vs written-reply question (Michael raised it 13 Aug — a reply is owed).

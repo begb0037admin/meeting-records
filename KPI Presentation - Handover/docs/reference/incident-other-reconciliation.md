@@ -73,3 +73,12 @@ The self-test gate checks each group below against the **freshly built month** (
 
 ## Maintenance
 When a new repeated metric is identified on the deck, add it here as a "must be equal" (R) or "differ by design" (D) entry **before** it can pass the build. The gate treats any un-registered repeated figure that mismatches as a build failure.
+
+## Gate hardening pass — 7 Sep 2026 (Codex audit follow-up)
+`validate_deck()` in `build_kpi_presentation.py` was extended after a Codex audit of the first version (`b9826fd`). Blocking wiring, `pct2` half-up, and the June oracle 68→77 were confirmed sound; five hardening gaps were closed. None of these change any figure in the verified June/August build (before/after cell diff empty):
+
+1. **Structural manifest + Total-row sweep** — `EXPECTED_TABLES` / `EXPECTED_NATIVE_CHART_SLIDES` / `EXPECTED_CAPTIONS` / `EXPECTED_SLIDE_COUNT` / `COVERED_TOTAL_ROW_TABLES`. The gate now enumerates every slide's tables, native charts and run-time captions and fails if the inventory changes, and sweeps **every** table for a `Total`-labelled row (integer columns must sum to it, `%` column must sum to 100). A `Total` row in a table not in `COVERED_TOTAL_ROW_TABLES` fails the build — so a future added table/row cannot pass unchecked.
+2. **Per-category source trace** — every displayed count on Slide 4 `Table 5` is asserted against `pxd["slide4_categories"]`, and every Slide 5 `Table 4` count is reconstructed from the raw source Service-Category map (`slide5_incident_other_source_counts`) — a coherently-wrong allocation (two categories swapped, totals/percentages still self-consistent) now fails.
+3. **H&S source match** — Slide 2 and Slide 3 counts are compared to the H&S Word-doc figures (`hs_current` / `hs_prev`), not merely checked for internal consistency.
+4. **Chart-image value chain** — `populate_deck` records the exact arrays handed to `make_trend_chart` / `make_combo_chart` on `prs._kpi_chart_series`; the gate asserts `source series == chart array == table cell` for Slides 8/9/10 (the PNG itself can't be read back, but it provably derives from verified numbers).
+5. **Emitter/validator rounding parity** — `populate_deck`'s Slide 6/7 combined-band cells and pie now use `pct2` (Decimal ROUND_HALF_UP), the same helper the gate checks against, removing a future false-failure risk on a `.xx5` cell. Verified a no-op for Jun/Jul/Aug.
