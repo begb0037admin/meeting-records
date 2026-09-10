@@ -2,6 +2,14 @@
 
 Read-only source adapter for the Windows Managers Meeting Voice proof of concept.
 
+## Current checkpoint
+
+This MCP remains the context layer for the retained Windows proof of concept;
+it does not replace Claude's meeting-preparation reasoning. Normal preparation
+reads the GitHub-published snapshots only. The Outlook action below is a
+separate, consequential capability and is never scheduled, polled or invoked
+in the background.
+
 It exposes five normal read tools:
 
 - `get_source_health`
@@ -55,3 +63,8 @@ python scripts/validate_historical.py
 
 The Voice launcher supplies this server to Claude for that invocation while
 retaining Claude's existing user-level connectors, including Granola.
+
+The archived 24 June validator and the unit tests are the safe proof-of-concept
+checks. A current live Managers Meeting is not required for validation when no
+recent meeting exists; archived material must be labelled as historical and
+must never be published as a current brief.

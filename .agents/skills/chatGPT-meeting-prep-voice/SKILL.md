@@ -7,6 +7,12 @@ description: Use Claude Code as the established reasoning engine for meeting-rec
 
 Use Codex as the conversational interface and Claude Code as the meeting-prep worker. Do not replace Claude's established `meeting-records` reasoning or rewrite its draft in Codex.
 
+> **Status — 10 September 2026:** This skill is retained as a Windows proof of
+> concept. The repository's approved default front door is the direct Claude
+> workflow in `claude-meeting-voice`. Do not describe this Codex route as a
+> production-ready or fully verified Voice-to-background-work integration until
+> a user-facing smoke test observes the handoff and returned draft.
+
 ## Prototype boundary
 
 - Produce a draft only.

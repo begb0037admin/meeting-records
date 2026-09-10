@@ -28,7 +28,8 @@ Container repo for Kevin Lelitte's recurring meeting prep and records — Univer
 | `SK - Handover/` | Stephen Kirker handover materials |
 | `Meeting Archive/` | Archived meeting records |
 | `Team 1-1's/` | Team 1-1 records (Michael, Asta, James) |
-| `.agents/skills/chatGPT-meeting-prep-voice/` | Codex Voice front end that launches the established Claude meeting-prep workflow on Windows (draft-only prototype) |
-| `mcp/meeting-connector/` | Windows MCP for GitHub-published meeting context, plus a separately confirmed manual Outlook refresh action |
+| `.agents/skills/claude-meeting-voice/` | Current Claude-native Managers Meeting front door and direct launcher |
+| `.agents/skills/chatGPT-meeting-prep-voice/` | Retained Codex/ChatGPT Voice front-end proof of concept for Windows; draft-only and not the approved production route |
+| `mcp/meeting-connector/` | Read-only GitHub meeting context, plus a separately confirmed manual Outlook refresh action |
 
-Each folder has its own CLAUDE.md for AI context. For one-off prep docs, see `Meeting Reviews/`.
+Each folder has its own CLAUDE.md for AI context. For one-off prep docs, see `Meeting Reviews/`. The Managers Meeting prototype checkpoint is in `HR Systems Managers Meeting - Handover/docs/`.

@@ -17,7 +17,7 @@ Do NOT ask Kevin for a recap. Navigate to the relevant subfolder.
 - **Owner:** Kevin Lelitte, Manager/Director HR Systems, University of Oxford
 - **Status:** Active
 - **Repo:** https://github.com/begb0037admin/meeting-records
-- **Last updated:** 2026-08-01
+- **Last updated:** 2026-09-10
 
 ## Voice Front Door (Claude-native)
 - Shared skill: `.agents/skills/claude-meeting-voice/`
@@ -61,6 +61,11 @@ Do NOT ask Kevin for a recap. Navigate to the relevant subfolder.
 - The normal show → approve → push gate remains unchanged. Revision and
   publication handoffs are deliberately deferred until the direct-Claude flow
   has been proven (see `voice-workflows/PROGRAMME_STATUS.md` for phase status).
+- **10 September checkpoint:** the earlier Codex/ChatGPT Voice front-end is
+  retained in `.agents/skills/chatGPT-meeting-prep-voice/` as a Windows
+  proof-of-concept only. It is not a verified production handoff. The direct
+  Claude skill remains the documented approved front door until a user-facing
+  Voice smoke test proves otherwise.
 
 ## Structure
 | Folder | Purpose |
