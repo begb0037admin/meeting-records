@@ -17,7 +17,7 @@ Do NOT ask Kevin for a recap. Navigate to the relevant subfolder.
 - **Owner:** Kevin Lelitte, Manager/Director HR Systems, University of Oxford
 - **Status:** Active
 - **Repo:** https://github.com/begb0037admin/meeting-records
-- **Last updated:** 2026-09-10
+- **Last updated:** 2026-09-14
 
 ## Voice Front Door (Claude-native)
 - Shared skill: `.agents/skills/claude-meeting-voice/`
@@ -75,6 +75,8 @@ Do NOT ask Kevin for a recap. Navigate to the relevant subfolder.
 | `SK - Handover/` | Stephen Kirker handover materials |
 | `Meeting Archive/` | Archived meeting records |
 | `Team 1-1's/` | Team 1-1 records (Michael, Asta, James) |
+| `PDR 2026/` | Annual PDR meeting-flow docs, one per person (Kevin, Michael, Asta, James) |
+| `PDR 2026 - Handover/` | PDR process SOP, handover, and the canonical Oxford PDR Conversation Guide |
 
 ## File Naming Convention
 All meeting prep documents in `Meeting Reviews/` follow the Granola naming standard so files and meetings match:
@@ -185,6 +187,9 @@ Monthly — typically 2nd or 3rd week. Detailed context in `KPI Monthly Standing
 3. Check `begb0037admin/command-centre/data/tasks.json` for relevant actions
 4. Produce meeting prep document — show to Kevin, get approval, then save to `KPI Monthly Standing Agenda/docs/sessions/`
 5. KPI run output is a separate file from meeting prep — same approval gate applies
+
+## Meeting Prep Workflow (PDR — Annual, September)
+Annual PDR, one meeting per FA team member (Kevin as reviewee, Michael/Asta/James as Kevin's reviewees) — once-a-year, not a recognised cadence; re-orient from scratch. **Start here:** `PDR 2026 - Handover/docs/PDR_SOP.md` (full process) and `PDR 2026 - Handover/docs/reference/PDR Conversation Guide - PDR Refresh - 22.05.2024 v1.docx` (Oxford's official 6-stage structure — always use this order). Check `Kevin Lelitte - Transcribed Files` (OneDrive Nexus365) for that person's real prior-year PDR transcript before building anything — richer than the review-form docx alone. One flow doc per person in `PDR 2026/<Person>/` (Desktop + this repo), used live in the meeting. Post-meeting: Granola transcript → real Manager Summary written into the actual `.docx`, not the flow doc.
 
 ## Meeting Prep Workflow (Ad Hoc)
 Any meeting Kevin asks to prepare for — one-off reviews, supplier meetings, evaluation sessions, escalation meetings, or any meeting not covered by the scheduled workflows above.
