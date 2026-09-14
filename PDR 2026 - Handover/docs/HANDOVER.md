@@ -57,3 +57,28 @@ Kevin now uses a `PDR 2026/<Person Name>/` folder structure on his Desktop (`D:\
 - [x] `Team 1-1's/Michael/docs/HANDOVER.md` (replaced stale June scaffold)
 - [x] `begb0037admin/lauren` `MEMORY.md` + new memory file (see below)
 - [x] `begb0037admin/agent-commons` `MEMORY.md`, `memory/index.json`, new candidate file — SharePoint Edu-permission-gap finding pushed cross-agent
+
+---
+
+## Update — 14 Sep 2026 (later, same day): meeting-flow format extended to all four people
+
+Kevin asked for the same PDR **meeting-flow** format used for Michael's `PDR Review Form - 14-SEP-2026.md` (a single flowing script-style markdown document structured around Oxford's real 6-stage PDR Conversation Guide, weaving in each person's real content as context then giving natural bolded sayable questions, live checkboxes in Section 6, and a one-line Granola pointer at the end — not a reference doc, not blank fields to fill in later) to be applied to James Salas Guillen, Asta Palmer, and Kevin Lelitte himself.
+
+**Source verified directly, not paraphrased from memory:** `PDR Conversation Guide - PDR Refresh - 22.05.2024 v1.docx` (Kevin's Downloads folder) was extracted via its raw `word/document.xml` (python-docx's own paragraph API returned nothing — the guide's content lives in a form that only surfaces through raw XML `w:t` runs, worth remembering for any future Oxford `.docx` extraction). Exact 6-stage question wording confirmed: Check in on workload and wellbeing; Performance/progress; Values; Personal development & career aspirations; Working together; Agree actions and close.
+
+**Built:**
+- `PDR 2026/James Salas Guillen/PDR Review Form - 21-SEP-2026.md`
+- `PDR 2026/Asta Palmer/PDR Review Form - 25-SEP-2026.md`
+- `PDR 2026/Kevin Lelitte/PDR Review Form - 16-SEP-2026.md`
+
+All three saved to their respective Desktop folders and, unlike this repo's usual ephemeral-output rule for generated HTML briefs/decks, **deliberately also committed here** (Kevin's explicit instruction this session: "Commit all three to meeting-records with clear messages") — this is a considered exception for this artifact type (a small, durable, hand-authored-style conversation guide, not a large generated HTML/pptx output), not a silent reversal of the ephemeral-output convention for briefs generally.
+
+**Genuine content gaps found and left honest, not papered over** (per Kevin's explicit instruction not to invent content):
+- **James and Asta:** neither brief has any real 2026 self-review content pulled from either of them directly — both HTML briefs' only real material is dated command-centre/work-inbox activity ("Themes to cover for 2026"), which was used for Section 2 (Performance/progress) only. Sections 1 (Workload & wellbeing), 3 (Values), 4 (Personal development), and 5 (Working together) have **no real material to draw on** for either person — each of those sections is flagged plainly in-file ("No 2026 self-review content confirmed for this section yet — check with [name] directly or via Granola before the meeting") and kept to the plain standard guide questions only, not padded with invented personalised detail.
+- **James's 2025 doc:** never attempted this cycle (connector-pacing rule) — no 2025 continuity/contrast possible.
+- **Asta's 2025 doc:** confirmed to exist (`Asta Palmer - PDR Review.docx`) but content still blocked at the download layer — same result, flagged.
+- **Kevin's own brief:** framed as reviewee prep (not questions to ask someone else), per his instruction and the guide's own "whether you are a manager or a colleague" language. Real material exists for Sections 1 and 2 (absence-coverage gaps overlapping his own July leave; the SHSMS resourcing case and his 3 active roadmap rows) — used directly. Sections 3 and 4 have no real material (his 2025 doc is confirmed to exist but content-blocked, same as Asta's) and are flagged the same way. **Reviewer identity is presumed Simon Burford but unconfirmed by any source checked** — flagged explicitly in Section 5 and at the top of the file; worth confirming before or at the start of the meeting.
+
+**Not done / still open:** none of this content-gap work changes the three still-open items from the previous update (Kevin's/Asta's 2025 docs blocked until Oxford's Edu identity is back in use post-1 Oct 2026; James's 2025 doc never attempted; the HR Systems PDR Completion 2026 SharePoint tracker never successfully read). Once any of those unblock, these three new meeting-flow docs should be revisited for real self-review content in Sections 1/3/4/5, not just Section 2.
+
+Commits: `17765933` (James), `903d1d58` (Asta), `bc2c46eb` (Kevin), this file (`PDR 2026 - Handover/docs/HANDOVER.md`) at the commit immediately following.
