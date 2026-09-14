@@ -73,6 +73,25 @@ from brief_chrome import SCRATCH, e, render_page, write_brief_output
 # NOT checked: Granola (not attempted this session — the PDR-specific gap
 # was the Oxford connector, not Granola; worth a follow-up check before this
 # pack is treated as complete).
+#
+# UPDATE 14 Sep 2026 (second pass, later same day): Kevin's/James's/Asta's
+# sections filled in for real. Drew ran one bounded, mail-domain-only
+# connector pass (SharePoint deliberately not touched — confirmed broken
+# again that same morning, oauth_token_invalid_grant): James's PDR date was
+# FOUND (three 25 Aug 2026 emails: Kevin's booking mail, the invite, and
+# James's own acceptance) — Monday 21 Sep 2026, 12:00-1:00pm, resolving the
+# 13 Sep "not found" gap and clearing before his confirmed 25-28 Sep annual
+# leave. Kevin's and Asta's 2025 review docs were both confirmed to exist
+# (found by name/date/size via mail search) but their actual text remained
+# unreachable — a distinct download-layer failure (WinError 10061, then
+# HTTP 403 for Kevin's; WinError 10061 then a Codex-side retry-policy
+# refusal for Asta's), not the original SharePoint OAuth issue. Asta's real
+# stored filename also turned out to have no "2025" in it ("Asta Palmer -
+# PDR Review.docx"). James's own 2025 doc was not attempted this pass (one
+# bounded pass, per pacing rules) — still carries the original generic
+# OAuth-blocked flag, now known be be possibly a different failure mode.
+# Full record: begb0037admin/drew, memory/codex-m365-mail-attachment-
+# download-winerror-10061-14sept.md.
 
 PDR_TRACKER_URL = ("https://unioxfordnexus.sharepoint.com/:x:/r/sites/"
                     "HumanResources-HRSystems-HRSystemsManagementTeam/Shared%20Documents/"
@@ -205,7 +224,7 @@ build_person(
     glance_rows="""<table><thead><tr><th>Item</th><th>Status</th></tr></thead><tbody>
       <tr><td>Date/time</td><td><span class="pill pill-resolved">Confirmed</span> 16 Sep, 15:00-16:00 UK</td></tr>
       <tr><td>Reviewer</td><td><span class="pill pill-overdue">Blocked</span> presumed Simon Burford, not verified</td></tr>
-      <tr><td>2025 review doc</td><td><span class="pill pill-overdue">Blocked</span> OAuth reauth required</td></tr>
+      <tr><td>2025 review doc</td><td><span class="pill pill-overdue">Found, download blocked</span> confirmed exists, content unreachable (WinError 10061/403)</td></tr>
       <tr><td>Simon's own PDR</td><td><span class="pill pill-onhold">Ongoing</span> still unbooked per command-centre</td></tr>
       </tbody></table>""",
     themes=[
@@ -229,8 +248,18 @@ build_person(
     ],
     scheduling_risk_html="No risk identified with Kevin's own slot — it's confirmed. The open risk is entirely "
                           "on the reviewer/process side: who's reviewing, and against what documented 2025 "
-                          "baseline, given the docx is currently unreachable.",
+                          "baseline, given the docx's content is unreachable (though the document itself is "
+                          "now confirmed to exist).",
     docx_name="Kevin Lelitte - PDR Review 2025.docx",
+    blocked_reason=("<b>Found, not blocked-and-unknown</b> &mdash; Drew's mail-domain connector pass "
+                     "(14&nbsp;Sep&nbsp;2026) confirmed a matching email: Kevin's own sent message, "
+                     "24&nbsp;Sep&nbsp;2025 12:09:30&nbsp;UTC, subject &ldquo;Kevin - PDR Review&rdquo;, "
+                     "132,315-byte attachment. The connector found and identified it correctly, but "
+                     "downloading the signed URL to extract the actual text failed &mdash; first "
+                     "<code>WinError 10061</code> (connection refused), retry got <code>HTTP 403: "
+                     "Forbidden</code> &mdash; a download-layer block, distinct from the earlier SharePoint "
+                     "OAuth issue (SharePoint itself wasn't touched this pass). Not re-attempted beyond the "
+                     "one retry, per connector-pacing instructions."),
 )
 
 # ---------------------------------------------------------------------------
@@ -358,12 +387,16 @@ build_person(
     slug="james",
     display_name="James Salas Guillen",
     meeting_label="Kevin reviewing James Salas Guillen's 2026 PDR",
-    date_status_html="<b>Not found</b> &mdash; no PDR calendar entry or command-centre/work-inbox record of a "
-                      "booked date exists anywhere checked; confirm directly whether one has been arranged",
+    date_status_html="<b>Confirmed</b> Mon 21 Sep 2026, 12:00&ndash;1:00pm UK &mdash; found via mail-domain "
+                      "connector search 14 Sep 2026 (three 25 Aug 2026 emails: Kevin's booking mail "
+                      "&ldquo;PDR 2026 &ndash; Monday 21 September&rdquo;, the invite &ldquo;James Salas "
+                      "Guillen - PDR Review 2026&rdquo;, and James's own &ldquo;Accepted: James Salas "
+                      "Guillen - PDR Review 2026&rdquo;) &mdash; not previously found in Google Calendar, "
+                      "command-centre, or work-inbox, which is why the 13 Sep pass came up empty",
     glance_rows="""<table><thead><tr><th>Item</th><th>Status</th></tr></thead><tbody>
-      <tr><td>Date/time</td><td><span class="pill pill-overdue">Not found</span> no record of a booked session</td></tr>
-      <tr><td>2025 review doc</td><td><span class="pill pill-overdue">Blocked</span> OAuth reauth required</td></tr>
-      <tr><td>Scheduling constraint</td><td><span class="pill pill-atrisk">Flag</span> annual leave 25-28 Sep confirmed</td></tr>
+      <tr><td>Date/time</td><td><span class="pill pill-resolved">Confirmed</span> Mon 21 Sep, 12:00-1:00pm, accepted</td></tr>
+      <tr><td>2025 review doc</td><td><span class="pill pill-overdue">Not attempted</span> only Kevin's/Asta's pulled this pass</td></tr>
+      <tr><td>Scheduling constraint</td><td><span class="pill pill-resolved">Clear</span> 21 Sep is before his 25-28 Sep annual leave</td></tr>
       </tbody></table>""",
     themes=[
         {"id": "1", "title": "Cority — SFTP feed, applicant import, ongoing ownership", "pill": "new",
@@ -382,11 +415,17 @@ build_person(
          "(command-centre t2608271801020).",
          "say": "How's the IRIS/IEX timing coordination with Amanda going?"},
     ],
-    scheduling_risk_html="No PDR date could be found for James in any source checked — this needs confirming "
-                          "directly rather than assumed booked. Separately, command-centre shows James's "
-                          "annual leave confirmed for 25-28 Sep — worth checking against whatever date is "
-                          "eventually set.",
+    scheduling_risk_html="Resolved 14 Sep 2026 — booked for Mon 21 Sep 2026, 12:00-1:00pm, accepted by James "
+                          "(found via mail-domain connector search after the 13 Sep pass found nothing in "
+                          "Google Calendar, command-centre, or work-inbox). No conflict with his confirmed "
+                          "25-28 Sep annual leave — the review lands comfortably before it.",
     docx_name="James Salas Guillen - PDR Review 2025.docx",
+    blocked_reason=("Not attempted this session &mdash; only Kevin's and Asta's 2025 docs were pulled in the "
+                     "14&nbsp;Sep&nbsp;2026 mail-domain pass, per the connector-pacing rule of one bounded "
+                     "pass at a time. Kevin's and Asta's own docs were both found to exist but blocked at "
+                     "the download layer (<code>WinError 10061</code>/<code>HTTP 403</code>), a different "
+                     "failure mode from the original SharePoint OAuth issue this row still names &mdash; "
+                     "worth trying James's the same way next pass rather than assuming it's identical."),
 )
 
 # ---------------------------------------------------------------------------
@@ -399,15 +438,16 @@ build_person(
                       "sent to Asta Siautilaite in error)",
     glance_rows="""<table><thead><tr><th>Item</th><th>Status</th></tr></thead><tbody>
       <tr><td>Date/time</td><td><span class="pill pill-resolved">Confirmed</span> 25 Sep, 12:00-1:00pm</td></tr>
-      <tr><td>2025 review doc</td><td><span class="pill pill-overdue">Blocked</span> OAuth reauth required</td></tr>
+      <tr><td>2025 review doc</td><td><span class="pill pill-overdue">Found, download blocked</span> confirmed exists (real name has no "2025"), content unreachable</td></tr>
       <tr><td>Roadmap ownership</td><td><span class="pill pill-atrisk">Flag</span> leads zero active roadmap rows structurally</td></tr>
       </tbody></table>""",
     themes=[
         {"id": "1", "title": "Holiday Records — 3 reports built", "pill": "resolved", "category": "Delivery",
-         "desc": "Three holiday-records reports approved and awaiting scheduling (command-centre "
-                 "t1781204987882, case 69001638).",
-         "say": "The three holiday records reports are approved and just waiting on scheduling — good, "
-                "concrete delivery worth naming."},
+         "desc": "Three holiday-records reports approved; kickoff call with Access Group confirmed for "
+                 "2pm Fri 18 Sep 2026, calendar invite still awaited as of the last logged update "
+                 "(command-centre t1781204987882, case 69001638).",
+         "say": "The three holiday records reports are approved, and the Access Group kickoff call is "
+                "locked in for the 18th — good, concrete delivery worth naming."},
         {"id": "2", "title": "Team calendar config investigation", "pill": "onhold", "category": "Systems",
          "desc": "Investigating a team calendar config issue jointly with Michael and Simon "
                  "(command-centre t2608071801051).",
@@ -427,7 +467,16 @@ build_person(
     ],
     scheduling_risk_html="Asta's date is confirmed and corroborated by two independent command-centre entries "
                           "(27 Aug and 2 Sep) — no risk identified.",
-    docx_name="Asta Palmer - PDR Review 2025.docx",
+    docx_name="Asta Palmer - PDR Review.docx",
+    blocked_reason=("<b>Found, not blocked-and-unknown</b> &mdash; the real stored filename is "
+                     "&ldquo;Asta Palmer - PDR Review.docx&rdquo;, with no &ldquo;2025&rdquo; in it (unlike "
+                     "Kevin's/James's/Michael's naming pattern). Drew's "
+                     "mail-domain connector pass (14&nbsp;Sep&nbsp;2026) confirmed a matching email: Asta's "
+                     "own message to Kevin, 15&nbsp;Sep&nbsp;2025 14:28:52&nbsp;UTC, subject &ldquo;RE: "
+                     "Preparing for Your Upcoming PDR&rdquo;, 136,056-byte attachment. Downloading the "
+                     "signed URL failed with <code>WinError 10061</code> (connection refused); the retry "
+                     "was refused outright by Codex's own internal safety guard as exceeding the one-retry "
+                     "pacing limit, not a second network failure. Not re-attempted this session."),
 )
 
 print("PDR 2026 prep pack: 4 briefs built (Kevin, Michael O'Sullivan, James Salas Guillen, Asta Palmer).")
