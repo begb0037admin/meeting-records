@@ -27,6 +27,26 @@ from brief_chrome import SCRATCH, e, render_page, write_brief_output
 # lookup and rebuild this pack — the 2025-recap and SharePoint-toolkit
 # sections below are placeholders, not "nothing to report."
 #
+# UPDATE 14 Sep 2026: Michael O'Sullivan's PDR moved to TODAY (his own
+# email this morning, not a scheduled reschedule notice — see his block
+# below), and Kevin needed that one done first. Reauth got the mail domain
+# working (confirmed via real message/body reads) but SharePoint/calendar
+# stayed broken across several rounds, then flapped again after briefly
+# working, then a token-rotation collision was root-caused and fixed, then
+# attachment-content fetch (as opposed to search/body reads, which work
+# fine) hit its own distinct failure modes — a timeout, then a transient
+# 404, then a genuine HTTP 403 on the signed download URL for the 2025 doc
+# specifically. Full connector incident trail: begb0037admin/drew memory,
+# files dated 13-14 Sep 2026 (search "oauth-reauth", "reflapped",
+# "cross-machine-root-cause", "still-broken-after-cross-machine-fix",
+# "mail-domain-independently-healthy"). Michael's section below now has his
+# real, complete 2026 self-review (mail domain succeeded); his 2025 doc is
+# confirmed to exist and is precisely named but its content is still
+# unreachable (the 403, not the earlier OAuth issue) — flagged accordingly,
+# not silently dropped. Kevin/James/Asta's sections are unchanged from
+# 13 Sep and still carry the original OAuth-blocked placeholders — pick
+# those up next once Michael's meeting is done.
+#
 # Sources actually available and used, verified live 13 Sep 2026:
 #   - Kevin's own Google Calendar: "Kevin's PDR Review 2026", Tue 16 Sep
 #     2026, 15:00-16:00 UK — the only PDR calendar entry connector-side
@@ -91,27 +111,32 @@ def render_theme(t):
   </article>'''
 
 
-def recap_2025_block(name, docx_name):
+def recap_2025_block(name, docx_name, blocked_reason=None):
+    reason = blocked_reason or (
+        f"<b>Blocked</b> &mdash; source document &ldquo;{docx_name}&rdquo; is unreachable this "
+        "session (Oxford M365 connector OAuth reauth required, see flag above). Nothing below is invented or "
+        "inferred from memory; rerun this build once the connector is reauthenticated to populate this "
+        "table for real.")
     return f"""<div class="table-wrap card">
         <table>
           <thead><tr><th>Achieved</th><th>Not achieved / carried forward</th><th>Notes</th></tr></thead>
           <tbody>
-            <tr><td colspan="3"><b>Blocked</b> &mdash; source document &ldquo;{docx_name}&rdquo; is unreachable this
-            session (Oxford M365 connector OAuth reauth required, see flag above). Nothing below is invented or
-            inferred from memory; rerun this build once the connector is reauthenticated to populate this
-            table for real.</td></tr>
+            <tr><td colspan="3">{reason}</td></tr>
           </tbody>
         </table>
       </div>"""
 
 
 def build_person(slug, display_name, meeting_label, date_status_html, glance_rows, themes,
-                  scheduling_risk_html, docx_name, extra_conflict_html=""):
+                  scheduling_risk_html, docx_name, extra_conflict_html="", extra_section_html="",
+                  blocked_reason=None, recap_label="2025 recap",
+                  recap_sub="What was achieved, what wasn't, what carries forward"):
     items_html = "\n".join(render_theme(t) for t in themes)
 
     sections = f"""
-  <h2>2025 recap <span class="h2-sub">What was achieved, what wasn't, what carries forward</span></h2>
-  {recap_2025_block(display_name, docx_name)}
+  <h2>{recap_label} <span class="h2-sub">{recap_sub}</span></h2>
+  {recap_2025_block(display_name, docx_name, blocked_reason)}
+  {extra_section_html}
 
   <h2>Themes to cover for 2026 <span class="h2-sub">Grounded in live, dated command-centre/work-inbox activity, not generic PDR boilerplate</span></h2>
   <div class="item-grid">
@@ -209,44 +234,122 @@ build_person(
 )
 
 # ---------------------------------------------------------------------------
-# Michael O'Sullivan
+# Michael O'Sullivan — updated 14 Sep 2026, meeting is TODAY. Michael emailed
+# his completed 2026 self-review form this morning (09:10:22 BST); full text
+# retrieved live via the mail-domain connector (working) — SharePoint/
+# calendar domains were not, so the reschedule-to-today date and the 2025
+# comparison doc both come from what the mail thread itself revealed, not
+# from those blocked domains. See MICHAEL_2026_SUBMISSION below for the
+# real, complete extracted content — nothing in it is invented.
+MICHAEL_2026_SUBMISSION = """<div class="table-wrap card">
+    <p class="body-loose" style="margin-top:0;"><b>Source:</b> Michael's email today, 14 Sep 2026 09:10:22 BST
+    (&ldquo;RE: PDR 2026 &ndash; Friday 18 September&rdquo;) &mdash; &ldquo;Ahead of my PDR review this afternoon,
+    please find completed form. I've literally just finished this so apologies not to get it back before now.&rdquo;
+    Attachment &ldquo;PDR Review Form - 14-SEP-2026.docx&rdquo; (138,258 bytes), full text retrieved live.</p>
+    <p class="body-loose"><b>Performance &mdash; looking back:</b> Full-time on the WFM (Workforce Management)
+    Project through to March 2026 (project itself ran to April 2026), then transitioned back to BAU Functional
+    Analysis &mdash; but WFM kept generating BAU workload (incidents/service requests/queries) even while he was
+    meant to be fully allocated to it. Kept contributing to BAU throughout: ~37% of the FA team's incident-related
+    tasks completed Sep 2025&ndash;Feb 2026 even while full-time on WFM, rising to a &ldquo;very high
+    percentage&rdquo; since formally returning to BAU in March. Operational Support/OSM: <b>79 Change Requests
+    completed over the 12 months</b> &mdash; named examples include Clinical Pay Uplift, PeopleXD Oxford Living
+    Wage Uplift 2026, several pension/compliance changes (NHS 2015 Scheme, NHS ERRBO, NHS AVC, USS Future
+    Service/Career Revalued DB AVC salary exchange), Sickness Absence Return workflow config, WFM Balance Period
+    End 2025, Employee Co-Workers Calendar, PeopleXD UK Payroll Year End 2025/26, HESA category defaults, and
+    email template updates post website migration. Legacy ownership: corrected/enhanced the PERDEP02 report suite
+    (Change #20019074) &mdash; restored Target End Date filtering/MAX_TARGET_END logic, added End of FTC Reason
+    fields, applied a new Division parameter consistently. Collaboration cited with Business Change, Training,
+    Service/Support Desk, EDU &mdash; specifically the EDU collaboration on Gender Validation for HMRC RTI
+    compliance.</p>
+    <p class="body-loose"><b>Values:</b> ties back to Professional Services Together (People, Collaboration,
+    Quality) via the same WFM/BAU transition narrative.</p>
+    <p class="body-loose"><b>Looking forward / development:</b> wants to keep developing within Functional
+    Analysis; no specific development ask made; states he's &ldquo;happy in current role&rdquo;; values regular
+    feedback; wants more complex changes and more cross-team work.</p>
+    <p class="body-loose"><b>Career aspirations:</b> no specific aspiration stated &mdash; again &ldquo;happy in
+    current role&rdquo;, wants to keep deepening HR systems expertise, cites the WFM Project as valuable
+    groundwork.</p>
+    <p class="body-loose" style="margin-bottom:0;"><b>Manager summary section:</b> left blank in the form &mdash;
+    that's Kevin's part to complete, expected, not a gap in the submission.</p>
+  </div>
+  <div class="risk-block" style="margin-top:1.2rem;">
+    <p class="risk-head">Comparing to 2025 &mdash; what to check, since the 2025 text itself isn't in this brief</p>
+    <p class="body-loose">The 2025 PDR (<code>Michael - PDR Review Form 29SEP2025.docx</code>, confirmed to exist
+    as an attachment on Kevin's own 25 Aug email to Michael) couldn't be pulled into this brief &mdash; see the
+    2025 recap section above for why. Kevin already has this file in his own sent mail and can open it directly
+    in the minutes before the meeting if a side-by-side matters more than this brief's turnaround allowed for.
+    Worth checking specifically: (1) did last year's forward-look flag the WFM Project as the big 2026 theme, or
+    has it landed as a surprise scale of BAU overlap; (2) was a development ask or career aspiration raised last
+    year that this year's &ldquo;happy in current role, no specific ask&rdquo; represents a change from &mdash;
+    worth probing gently rather than taking the blank answer at face value; (3) whether the 79-change-request
+    volume this year reads as more, less, or about the same as whatever throughput was reported/expected in 2025.</p>
+  </div>"""
+
 build_person(
     slug="michael",
     display_name="Michael O'Sullivan",
     meeting_label="Kevin reviewing Michael O'Sullivan's 2026 PDR",
-    date_status_html="<b>Unresolved</b> originally Fri 18 Sep, Michael requested a reschedule 30 Aug (leave + "
-                      "annual-leave-year-end) &mdash; no new date recorded anywhere as of the last note, 9 Sep",
+    date_status_html="<b>Confirmed — TODAY</b>, 14 Sep 2026, this afternoon (Michael's own email this morning: "
+                      "&ldquo;ahead of my PDR review this afternoon&rdquo;) &mdash; originally booked for 18 Sep, "
+                      "rescheduled since; exact time not stated in the email itself, only &ldquo;this "
+                      "afternoon&rdquo;",
     glance_rows="""<table><thead><tr><th>Item</th><th>Status</th></tr></thead><tbody>
-      <tr><td>Date/time</td><td><span class="pill pill-overdue">Unresolved</span> 18 Sep declined, no new date yet</td></tr>
-      <tr><td>2025 review doc</td><td><span class="pill pill-overdue">Blocked</span> OAuth reauth required</td></tr>
-      <tr><td>Current workload signal</td><td><span class="pill pill-new">High</span> central to Clinical Pay Uplift, WFM, PeopleXD config</td></tr>
+      <tr><td>Date/time</td><td><span class="pill pill-resolved">Confirmed</span> today, this afternoon (exact time not stated in email)</td></tr>
+      <tr><td>2026 self-review</td><td><span class="pill pill-resolved">Received</span> full form submitted this morning, real content below</td></tr>
+      <tr><td>2025 review doc</td><td><span class="pill pill-overdue">Blocked</span> found + named, content unreachable (signed-URL 403)</td></tr>
+      <tr><td>Current workload signal</td><td><span class="pill pill-new">High</span> 79 CRs delivered, WFM/BAU dual-load all year</td></tr>
       </tbody></table>""",
     themes=[
-        {"id": "1", "title": "Clinical Pay Uplift — testing lead", "pill": "resolved", "category": "Delivery",
-         "desc": "Confirmed live 27 Jul per meeting-records; Michael led the testing workstream.",
-         "say": "Clinical Pay Uplift went live 27 July with you leading testing — that's a real, dateable "
-                "delivery worth naming explicitly."},
-        {"id": "2", "title": "DTP1092 / Company 90 &ndash; UOXU/UOXC refresh approach", "pill": "onhold",
-         "category": "Systems", "desc": "Owns confirming the refresh approach for Company 90 integration "
-         "testing (command-centre t2608071801052), alongside the wider REF2029/College-staff-into-PXD workstream.",
-         "say": "How's the Company 90 refresh approach landed — are we clean on UOXU vs UOXC now?"},
-        {"id": "3", "title": "38-day balance leave scheme — advisory role", "pill": "info", "category": "Advisory",
-         "desc": "Advising on GLAM joining the 38-day balance departments scheme and reviewing the wider "
-                 "implementation timeline (command-centre t2608111507360, t2608121801280).",
-         "say": "Your read on the 38-day balance rollout and GLAM's position in it has been useful — I want "
-                "to make sure that's recognised, not just absorbed as background work."},
-        {"id": "4", "title": "Repeatedly flagged as highest-risk single point of absence", "pill": "atrisk",
-         "category": "Capacity / risk", "desc": "Named directly in the SK 1-1 brief as the highest-risk "
-         "absence given his central role across clinical pay uplift, OSPS pension changes, WFM lead, and "
-         "PeopleXD config queries.",
-         "say": "You've been flagged more than once this year as a single point of failure for several "
-                "workstreams at once — I want to talk about whether that's sustainable and what backup "
-                "looks like."},
+        {"id": "1", "title": "WFM Project transition back to BAU — dual-loaded all year", "pill": "new",
+         "category": "Capacity / delivery", "desc": "His own submission: full-time on WFM to March 2026, but kept "
+         "delivering ~37% of FA team's incident work throughout, then a very high share since returning to BAU. "
+         "Corroborates the SK&nbsp;1-1 brief's repeated flag of him as highest-risk single point of absence.",
+         "say": "The WFM/BAU overlap you've described — nearly 40% of incident work even while notionally "
+                "full-time on WFM — is a bigger ask than the project plan probably accounted for. I want to "
+                "talk about whether that's sustainable going forward, not just note it as a 2025-26 fact."},
+        {"id": "2", "title": "79 Change Requests delivered", "pill": "resolved", "category": "Delivery",
+         "desc": "Includes Clinical Pay Uplift, PeopleXD Oxford Living Wage Uplift 2026, multiple NHS/USS "
+         "pension compliance changes, Sickness Absence Return workflow config, PeopleXD UK Payroll Year End "
+         "2025/26, and more — a real, high-volume delivery record for the year.",
+         "say": "79 change requests this year, across some genuinely high-stakes ones — Clinical Pay Uplift, "
+                "the payroll year end work — that's a lot to name explicitly rather than let blur into "
+                "\"BAU as usual.\""},
+        {"id": "3", "title": "PERDEP02 legacy report fix (Change #20019074)", "pill": "info",
+         "category": "Technical ownership", "desc": "Restored Target End Date filtering/MAX_TARGET_END logic, "
+         "added End of FTC Reason fields, applied a consistent Division parameter — real technical ownership of "
+         "an inherited report suite, not just new-build work.",
+         "say": "The PERDEP02 fix is a good example of taking ownership of something inherited and broken, "
+                "not just building new things — worth naming as its own point."},
+        {"id": "4", "title": "Cross-team collaboration — EDU / Gender Validation / HMRC RTI", "pill": "info",
+         "category": "Collaboration", "desc": "Specifically cited EDU collaboration on Gender Validation for "
+         "HMRC RTI compliance, alongside Business Change, Training, and Service/Support Desk.",
+         "say": "The EDU collaboration on HMRC RTI compliance is a good concrete example if we're talking about "
+                "cross-team work — worth asking what made that one work well."},
+        {"id": "5", "title": "\"Happy in current role\" — no development ask or aspiration stated", "pill": "atrisk",
+         "category": "Development", "desc": "Both the development and career-aspiration sections say he's happy "
+         "in his current role with no specific ask, though he does want more complex changes and more "
+         "cross-team work. Worth probing gently rather than taking at face value, especially given the capacity "
+         "strain already flagged above.",
+         "say": "You've said you're happy where you are and don't have a specific development ask — I want to "
+                "make sure that's genuinely where you're at, not just not wanting to add to an already full "
+                "plate. What would \"more complex changes, more cross-team work\" actually look like for you?"},
     ],
-    scheduling_risk_html="Michael's PDR date is genuinely unresolved — he asked to move off 18 Sep on 30 Aug "
-                          "and nothing since confirms a replacement date. This needs resolving before this "
-                          "brief is usable for an actual sitting.",
-    docx_name="Michael O'Sullivan - PDR Review 2025.docx",
+    scheduling_risk_html="Confirmed for today — the only open detail is the exact time, which Michael's email "
+                          "doesn't state (\"this afternoon\" only). Worth a quick check of the actual invite if "
+                          "that matters before walking in.",
+    docx_name="Michael - PDR Review Form 29SEP2025.docx",
+    blocked_reason=("<b>Found, not blocked-and-unknown</b> &mdash; confirmed to exist as an attachment on "
+                     "Kevin's own 25&nbsp;Aug&nbsp;2026 13:17&nbsp;BST sent email to Michael (alongside a blank "
+                     "template, <code>PDR Review Form - PDR Refresh - 22.05.2024 v1.docx</code>, not this one). "
+                     "The connector found and fetched the message/attachment reference correctly, but extracting "
+                     "the actual document text failed twice with <code>HTTP 403: Forbidden</code> on the signed "
+                     "download URL &mdash; a distinct failure from the earlier OAuth/timeout issues, looks like a "
+                     "connector sandbox restriction on out-of-band binary downloads specifically. Not fixed by a "
+                     "further retry. Kevin already has this exact file in his own sent mail if a direct read is "
+                     "needed before this afternoon's meeting."),
+    extra_section_html=f"""
+  <h2>What Michael submitted this morning <span class="h2-sub">Full 2026 self-review, extracted live from his email attachment</span></h2>
+  {MICHAEL_2026_SUBMISSION}""",
 )
 
 # ---------------------------------------------------------------------------
