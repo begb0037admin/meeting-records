@@ -1,6 +1,6 @@
 # PDR 2026 — Kevin Lelitte — meeting flow (own review, as reviewee)
 
-*Kevin Lelitte · HR Systems Functional Analysis · Reviewer: presumed Simon Burford, unconfirmed by any source checked · 16 Sep 2026, 15:00–16:00*
+*Kevin Lelitte · HR Systems Functional Analysis · Reviewer: Simon Burford, confirmed via the real 2025 PDR Review docx (his manager comments, signed 29/09/2025) · 16 Sep 2026, 15:00–16:00*
 
 This is prep for being asked these questions, not a script for asking someone else — the Oxford guide is explicit that either side uses the same six stages. Read each stage as "have I thought this through and can I answer it honestly," not as something to perform.
 
@@ -48,9 +48,11 @@ Be ready to answer:
 
 ## 3 · Values
 
-Last year's transcript doesn't contain a direct, named values-framework discussion for you either — that's a genuine gap even now that the document-block issue is worked around via the transcript. The closest related material: your reviewer praised your people management directly, citing how you supported Lee through a difficult performance period (particularly around his mental health) to the point he "turned a corner," and how you built enough psychological safety in the team that people now speak up openly in FA catch-ups rather than only in 1-1s — echoing a People Management Board discussion about psychological safety as one of the most important things a manager can offer. That's real evidence of values in practice (People, arguably Collaboration), but it was never framed by either of you as a formal values answer last year — think through your own explicit examples before the meeting rather than improvising in the room.
+Your actual 2025 PDR form did have a values answer, now recovered from the real docx: **People** — 1-1s, workload balance, supporting the team through change. **Collaboration** — cross-team work with HR, Payroll & Reward, Finance, IT, Compliance, and H&S. **Quality** — embedding governance where none existed before (the DPIA, the H&S support model).
 
-No 2026 self-review content is confirmed yet for this section either.
+Simon's own comments echo this from the other side: he praised your people management directly, citing how you supported Lee through a difficult performance period (particularly around his mental health) to the point he "turned a corner," and how you built enough psychological safety in the team that people now speak up openly in FA catch-ups rather than only in 1-1s.
+
+No 2026 self-review content is confirmed yet — think through what's changed since, not just repeat last year's answer.
 
 Be ready to answer:
 
@@ -64,7 +66,11 @@ Be ready to answer:
 
 **Last year, your stated aspiration was to stay put and go deeper.** You were happy where you were (early in the manager role) and wanted to embed yourself further rather than move on. The specific development goal you set for yourself was to genuinely learn the PeopleXD system in depth, despite management/coordination work eating most of your time — you framed it as reducing single points of failure: starting with learning Health & Safety alongside James, then planning to learn Asta's role too, so the team isn't left exposed if either of them is away. You also flagged interest in mentoring/coaching (a management-team-level conversation at the time), deeper data-protection/governance knowledge (a team-wide gap), structured PM/agile methodologies, and broader HR/payroll statutory knowledge. Your actual 2025 objectives, as agreed: finish the DPIA, support PFST and the health & safety project, reduce single-point-of-failure risk through knowledge transfer, build a dashboard development & enhancement operating model, progress the PeopleXD database storage solution (including the applicant clear-down), collect sickness absence data, finalise the mandated training list, and the tabloid migration.
 
-No 2026 self-review content is confirmed yet for this section — worth genuinely checking your own progress against every one of last year's named objectives before the meeting, not just the headline ones.
+Your actual 2025 form also named these development priorities: deeper Agile training, more DPIA/GDPR/data-protection expertise, deeper HR/payroll statutory knowledge, deeper PeopleXD system expertise, and continuing to explore AI tools (ChatGPT Edu, Gemini) for documentation and first-line support. Career aspirations: further embed as Team Lead, become a recognised PeopleXD expert, build compliance/governance/innovation expertise, longer-term interest in AI tools for HR Systems.
+
+**Simon's own written priority for you this coming year, direct from his manager summary:** support Michael's return to BAU post-WFM, build continuity for single-point-of-failure roles — James and Asta by name — and strengthen cross-team-lead relationships and first/second-line collaboration with Emma. That's not a guess — it's what he actually wrote. Worth being ready to speak to it directly rather than waiting for him to raise it, especially since the James/Asta single-point-of-failure risk has come up independently in both their own PDR material and Michael's this cycle.
+
+No 2026 self-review content is confirmed yet — worth genuinely checking your own progress against every one of last year's named objectives before the meeting, not just the headline ones.
 
 Be ready to answer:
 
@@ -76,11 +82,11 @@ Be ready to answer:
 
 **"Where did you actually land on each of last year's objectives — DPIA, PFST/H&S support, single-point-of-failure reduction, the dashboard operating model, database storage, sickness data, mandated training, tabloid migration?"**
 
+**"What's the actual state of the James/Asta continuity risk you flagged last year — has it moved, or is it where it was?"**
+
 ---
 
 ## 5 · Working together
-
-Your reviewer is presumed to be Simon Burford but this is unconfirmed by any source checked this pass — worth clarifying before or at the start of the meeting if it isn't already obvious on the day. (The 2025 transcript doesn't name the reviewer either — it opens mid-conversation, so this can't be confirmed retroactively.)
 
 **Last year, your own feedback on the relationship was entirely positive.** You said you only had positive feedback to give, that you and your reviewer worked in a similar way, and that you felt comfortable raising things. You specifically called out the shared "work planner" exercise as genuinely useful — getting everything out of your head and onto a page, and being able to share it — and described it as "quite therapeutic." Worth checking whether that's still true, or whether this year's heavier absence-cover load (Section 1) has changed how supported you feel.
 
