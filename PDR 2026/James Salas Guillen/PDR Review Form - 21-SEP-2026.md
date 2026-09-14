@@ -16,9 +16,13 @@ Let him answer freely first — don't jump to the form yet.
 
 **Last year (2025 PDR), James raised this directly and more than once.** He flagged workload pressure in the FA team channel, to Chris, and to the occupational health team — not sat on it. Concrete examples he gave: a backlog left behind by the Chorisey/Odyssey project transition (not his own doing, inherited from the project), still being worked through; a 5–6 day absence during which 20 surge requests built up, plus another dozen the week after he returned; and data-warehouse/Cority API support work (~3–4 hours) that landed on him with no warning and wasn't in his plan. He described being unable to block a full day for focused Cority testing because interruptions kept pushing it back, and said plainly: "There's no consistency. It's very hard to plan forward." Kevin's framing last year was that "help" isn't only extra hands — it's pushing back to management on his behalf — and that James should keep surfacing this rather than absorbing it quietly.
 
+**Confirmed from the real 2025 PDR docx (your own Manager Summary):** you wrote that the backlog was "not of his making, and I fully agree," and committed to pushing on resourcing and building a structured roadmap with Chris and Marie over the following six months, plus a shared 1:1 template. Worth checking whether that roadmap work and the template actually happened.
+
 No 2026 self-review content is confirmed yet for this section — ask directly, and use last year as the comparison point rather than starting cold.
 
 **"Last year you were flagging backlog and burnout risk more than once — where's that sitting now? Better, worse, same?"**
+
+**"Last year I said I'd push on resourcing and build a structured roadmap with Chris and Marie over six months — did that actually happen from where you're sitting?"**
 
 **"Overall, how do you feel things are going?"**
 
@@ -61,6 +65,8 @@ No 2026 self-review content is confirmed yet for this section — ask directly.
 ## 4 · Personal development & career aspirations
 
 **Last year's real discussion, condensed by James himself:** he wants to become "a product owner of a single system" — genuine SME depth on one system rather than spreading across the five he currently touches. He named Cority specifically, and already considers himself most SME-like there — he was heavily involved in the original project, did light penetration testing on it, and formally logged a known accepted risk (which ties to the DPIA being out of date, also flagged in the meeting). He raised secondment interest but concluded it was probably unrealistic — Kevin agreed a secondment would likely be rejected on resourcing grounds, and that the 3-month notice period defeats most 6–12 month secondment windows anyway. Training/development time within the current role was agreed as the realistic path instead. Separately, James is on the university's cybersecurity team distribution list and was working toward a trainer qualification — he'd had to postpone the exam because the format changed and needed to re-study.
+
+**Confirmed from the real 2025 PDR docx:** his career aspiration is on record as wanting to move toward a "product-focused/strategic role" — roadmap ownership, cross-functional leadership — and formal leadership/PM training, consistent with the "single-system SME" framing from the transcript. Your own 2025 manager comments explicitly supported his product/SME career path and formal training: "His contributions this year have been significant... I believe James will continue to make a strong impact."
 
 No 2026 self-review content is confirmed yet for this section — check with James directly whether the Cority-SME / single-system-ownership aspiration and the cybersecurity trainer qualification are still live.
 
