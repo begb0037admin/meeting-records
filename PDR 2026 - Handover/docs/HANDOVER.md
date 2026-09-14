@@ -82,3 +82,37 @@ All three saved to their respective Desktop folders and, unlike this repo's usua
 **Not done / still open:** none of this content-gap work changes the three still-open items from the previous update (Kevin's/Asta's 2025 docs blocked until Oxford's Edu identity is back in use post-1 Oct 2026; James's 2025 doc never attempted; the HR Systems PDR Completion 2026 SharePoint tracker never successfully read). Once any of those unblock, these three new meeting-flow docs should be revisited for real self-review content in Sections 1/3/4/5, not just Section 2.
 
 Commits: `17765933` (James), `903d1d58` (Asta), `bc2c46eb` (Kevin), this file (`PDR 2026 - Handover/docs/HANDOVER.md`) at the commit immediately following.
+
+---
+
+## Update — 14 Sep 2026 (later still, same day): Sections 1/3/4/5 filled from real 2025 transcripts; PDR SOP + canonical guide reference added
+
+The gaps flagged in the previous update above — no 2025 continuity for James, Asta, or Kevin in Sections 1/3/4/5 — are now closed for these three people, **not via the Oxford connector (still blocked, Issue B above), but via Kevin pointing directly at the real recorded meeting transcripts already sitting locally**: `C:\Users\admin\OneDrive - Nexus365\Kevin Lelitte - Transcribed Files\` — `2025__0912_james_PDR.docx`, `2025__0917_Kevin_PDR.docx`, `2025__0922_Asta_PDR.docx`, plus `2025__0930_Micharl_PDR.docx` for Michael (read-only, see below). These are meeting recordings/transcripts, not the written review-form docx files that are SharePoint-blocked — a genuinely different, unblocked source. Unlike the canonical guide (see prior update), `python-docx`'s normal paragraph API worked fine on all four — these aren't Oxford template documents.
+
+**Sections 1, 3, 4, 5 updated with real last-year content, framed explicitly as "last year's discussion" for comparison, in:**
+- `PDR 2026/James Salas Guillen/PDR Review Form - 21-SEP-2026.md`
+- `PDR 2026/Asta Palmer/PDR Review Form - 25-SEP-2026.md`
+- `PDR 2026/Kevin Lelitte/PDR Review Form - 16-SEP-2026.md`
+
+(Section 2 untouched in all three — it already had real 2026 content from the prior pass.)
+
+**Genuine gaps found even with the transcripts as a source — left flagged in-file, not papered over:**
+- James: no real depth on the People/Quality values beyond naming them (only Collaboration was elaborated).
+- Asta: no Oxford/Professional-Services values-framework discussion at all in her 2025 transcript — Section 3 stays a flagged gap.
+- Kevin: same as Asta for Section 3 — no directly-named values discussion; reviewer identity still unconfirmed (the transcript opens mid-conversation, doesn't name them).
+- All three: still no 2026 self-review content for Sections 1/3/4/5 — the transcripts only ever supply last-year comparison material, not this year's actual answers. Ask directly in the room.
+
+**Michael O'Sullivan — read-only, per Kevin's explicit instruction not to touch his already-closed docs.** `2025__0930_Micharl_PDR.docx` was read and compared against his finished `PDR Review Form - 14-SEP-2026.md`/`.docx`. Two things worth relaying to Kevin, not actioned:
+1. The finished doc's Section 4 line "positive feedback from his Head of Department" and "agreed to explore leadership development" reads a little stronger than the transcript supports — the actual 2025 feedback on the team-lead role was attributed to Marie specifically (not explicitly "Head of Department"), and Michael's own words on leadership/mentoring were tentative ("I wouldn't say no... I'll definitely consider it," "not actively looking," "if something presents itself, I might take it up") rather than an agreed plan. Similarly, "a SQL-training/peer-learning commitment was also agreed" reads as more settled than the transcript shows — Michael has basic SQL from sessions with Simon (also attended by Helen), described himself as "definitely less confident" and open to more, but no firm training commitment was actually agreed in the conversation, just an open discussion.
+2. Not in the finished doc, worth having as background even though not actioned: Michael led the mobile app project largely solo last year ("felt like a bit of a one-man band on that one," started as Simon's project then passed to him) — a real achievement not currently referenced anywhere in his 2026 write-up. Also, Michael raised that recorded catch-ups make people more guarded about what they say — a team-culture point, not specific to his own PDR.
+
+**Nothing in Michael's closed files was edited.**
+
+**New process docs added (Job 3/4 of this session):**
+- `PDR 2026 - Handover/docs/PDR_SOP.md` — the repeatable PDR prep/run SOP: check the person's real prior-year transcript first (new step, see below), the Desktop folder-per-person convention, building the single six-stage flow doc with real content and never-invented questions, running the meeting from that one file, the post-meeting Granola-to-Manager-Summary step, and a "don't reopen a closed PDR" rule. Matches the existing SOP pattern (`STANDING_AGENDA_SOP.md`, `KPI_RUN_SOP.md`) used elsewhere in this repo.
+- `PDR 2026 - Handover/docs/reference/PDR Conversation Guide - PDR Refresh - 22.05.2024 v1.docx` — the canonical Oxford guide itself, copied in from Kevin's Downloads folder (previously only read locally, never placed in the repo). `docs/reference/README.md` added alongside it documenting what it is and the `python-docx`-paragraph-API-returns-nothing extraction gotcha already recorded in the prior update above.
+- **New standing step captured in the SOP:** before building any future PDR flow doc, always check `Kevin Lelitte - Transcribed Files` for that person's real prior-year transcript first — richer than the review-form docx summary, and (as this session showed) can be genuinely available even when the review-form docx itself is SharePoint-blocked. Filename pattern is roughly `YYYY__MMDD_<name>_PDR.docx` but isn't perfectly consistent (Michael's real file has a typo, "Micharl").
+
+**Not done / still open:** Kevin's and Asta's *written* 2025 review-form docx files remain genuinely SharePoint-blocked (Issue B above, unchanged) — this session's transcript-based fill is a different, working path around that gap, not a fix for it. The HR Systems PDR Completion 2026 SharePoint tracker (Open Gap #4 above) is still never successfully read. 2026 self-review content for Sections 1/3/4/5 across James, Asta, and Kevin is still genuinely absent — worth asking directly in each real meeting rather than assuming the transcript fill covers it.
+
+Commits: `f2aeb81`/`635b310` (canonical guide docx), `13676eb` (`PDR_SOP.md`), `b56a6ca` (`docs/reference/README.md`), plus updates to the three flow docs above (James, Asta, Kevin) with new commit SHAs on `main`.
