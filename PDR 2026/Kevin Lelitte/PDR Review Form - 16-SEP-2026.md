@@ -14,9 +14,13 @@ Expect to be asked something like **"How's it going? How have you been finding t
 
 ## 1 · Workload & wellbeing
 
-The concrete thing to be ready to speak to: multiple documented periods this year with no meaningful first-line HR Systems cover — w/c 6 Jul, a gap on 13 Jul, and end-July when Michael, Beth, Simon, and Sarah were all out simultaneously — overlapping your own July leave.
+**Last year (2025 PDR), you told your reviewer you were coping** — no work-related sleep issues, generally enjoying the role — and that you felt comfortable proactively raising concerns rather than sitting on them; your reviewer specifically credited that as a sign of a good working relationship. They also named the year as unusually demanding to manage through: first-line resourcing concerns, project resourcing pressure, pulling Asta out of the team for a couple of weeks, and covering big periods of leave.
+
+The concrete thing to be ready to speak to for 2026: multiple documented periods this year with no meaningful first-line HR Systems cover — w/c 6 Jul, a gap on 13 Jul, and end-July when Michael, Beth, Simon, and Sarah were all out simultaneously — overlapping your own July leave. Worth being honest with yourself about whether "coping fine" still holds, given this year's gaps look more acute than what you described last year.
 
 Be ready to answer:
+
+**"Last year you said you were coping fine and comfortable raising concerns early — is that still true given this year's cover gaps, or has something shifted?"**
 
 **"Overall, how do you feel things are going?"**
 
@@ -44,7 +48,9 @@ Be ready to answer:
 
 ## 3 · Values
 
-No 2026 self-review content confirmed for this section yet, and last year's review document exists but its content is still blocked at the download layer — so there's nothing here to check against what you said last year. Think through your own examples before the meeting rather than improvising in the room.
+Last year's transcript doesn't contain a direct, named values-framework discussion for you either — that's a genuine gap even now that the document-block issue is worked around via the transcript. The closest related material: your reviewer praised your people management directly, citing how you supported Lee through a difficult performance period (particularly around his mental health) to the point he "turned a corner," and how you built enough psychological safety in the team that people now speak up openly in FA catch-ups rather than only in 1-1s — echoing a People Management Board discussion about psychological safety as one of the most important things a manager can offer. That's real evidence of values in practice (People, arguably Collaboration), but it was never framed by either of you as a formal values answer last year — think through your own explicit examples before the meeting rather than improvising in the room.
+
+No 2026 self-review content is confirmed yet for this section either.
 
 Be ready to answer:
 
@@ -56,7 +62,9 @@ Be ready to answer:
 
 ## 4 · Personal development & career aspirations
 
-No 2026 self-review content confirmed for this section yet, and no 2025 comparison is available either (same content-block issue as Section 3). Worth genuinely thinking through rather than leaving it to the moment.
+**Last year, your stated aspiration was to stay put and go deeper.** You were happy where you were (early in the manager role) and wanted to embed yourself further rather than move on. The specific development goal you set for yourself was to genuinely learn the PeopleXD system in depth, despite management/coordination work eating most of your time — you framed it as reducing single points of failure: starting with learning Health & Safety alongside James, then planning to learn Asta's role too, so the team isn't left exposed if either of them is away. You also flagged interest in mentoring/coaching (a management-team-level conversation at the time), deeper data-protection/governance knowledge (a team-wide gap), structured PM/agile methodologies, and broader HR/payroll statutory knowledge. Your actual 2025 objectives, as agreed: finish the DPIA, support PFST and the health & safety project, reduce single-point-of-failure risk through knowledge transfer, build a dashboard development & enhancement operating model, progress the PeopleXD database storage solution (including the applicant clear-down), collect sickness absence data, finalise the mandated training list, and the tabloid migration.
+
+No 2026 self-review content is confirmed yet for this section — worth genuinely checking your own progress against every one of last year's named objectives before the meeting, not just the headline ones.
 
 Be ready to answer:
 
@@ -66,11 +74,15 @@ Be ready to answer:
 
 **"What are your career goals, and what support could you reasonably ask for?"**
 
+**"Where did you actually land on each of last year's objectives — DPIA, PFST/H&S support, single-point-of-failure reduction, the dashboard operating model, database storage, sickness data, mandated training, tabloid migration?"**
+
 ---
 
 ## 5 · Working together
 
-Your reviewer is presumed to be Simon Burford but this is unconfirmed by any source checked this pass — worth clarifying before or at the start of the meeting if it isn't already obvious on the day.
+Your reviewer is presumed to be Simon Burford but this is unconfirmed by any source checked this pass — worth clarifying before or at the start of the meeting if it isn't already obvious on the day. (The 2025 transcript doesn't name the reviewer either — it opens mid-conversation, so this can't be confirmed retroactively.)
+
+**Last year, your own feedback on the relationship was entirely positive.** You said you only had positive feedback to give, that you and your reviewer worked in a similar way, and that you felt comfortable raising things. You specifically called out the shared "work planner" exercise as genuinely useful — getting everything out of your head and onto a page, and being able to share it — and described it as "quite therapeutic." Worth checking whether that's still true, or whether this year's heavier absence-cover load (Section 1) has changed how supported you feel.
 
 Be ready to answer:
 
