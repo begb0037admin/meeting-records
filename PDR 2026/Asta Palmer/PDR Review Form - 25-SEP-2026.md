@@ -16,7 +16,7 @@ Let her answer freely first — don't jump to the form yet.
 
 **Last year, Asta was explicit that backlog/absence cover wasn't her main concern** — she and Michael are rarely off at the same time, and when she is away he covers urgent items. Her stronger point was about *quality* of cover: she'd rather deal with a backlog in a structured way herself than have someone less familiar with security tasks (e.g. Lee) pick them up and get them wrong, creating more rework later. Her clearest, most direct ask when asked how Kevin could support her better was **hands-on practical support** — someone able to physically pick things up when she's on leave — rather than wellbeing check-ins specifically. Separately, she described feeling "a little bit deflated" last year, which she attributed to team-wide pressure and resourcing struggles rather than anything specific to her own role, and named one concrete grievance: a request about her hours took roughly three months to get a clear answer from management, which she called "unprofessional" and said had cost her some trust in the management team.
 
-(Her written 2025 review-form docx is still confirmed to exist but unread — this section draws on the 2025 PDR meeting transcript instead, a separate, genuine source.)
+**Her real 2025 PDR docx has now been read.** Note: calendar/other records list her as "Siautiaite," the PDR docx and email use "Palmer" — confirmed same person. Your own Manager Summary called it "an excellent year" and flagged wanting to protect her from taking on responsibilities that move too far beyond her role without proper recognition or support — a direct match to her own "step back, not forward" comment from the transcript.
 
 No 2026 self-review content is confirmed yet for this section — ask directly, and check whether the hours request and the hands-on-cover point from last year were ever actually resolved.
 
@@ -48,6 +48,8 @@ She's delivered three approved Holiday Records reports, with the Access Group ki
 
 ## 3 · Values
 
+**Confirmed from her real 2025 docx:** Collaboration (1st-line support, HR Analytics liaison) and Continuous improvement (streamlining sysadmin processes) were her named values — narrower than the team-wide framework, worth checking if that's still how she'd frame it.
+
 No specific Oxford / Professional Services values framework discussion is recorded in Asta's 2025 PDR transcript — this is a genuine gap even with the transcript as a source, not something to infer or invent. The closest related material from last year is cultural/behavioural, not values-framework-labelled: she spoke about deliberately keeping team feedback constructive, taking on cross-team work (analytics, training with Julie) beyond her core role, and her frustration that "we talk so much about values... but actually don't address what's right in front of you" in relation to the unresolved hours request — a live example of her holding the university to its own stated values, not an example of her demonstrating one.
 
 No 2026 self-review content confirmed for this section either — check with Asta directly or via Granola before the meeting.
@@ -62,7 +64,11 @@ No 2026 self-review content confirmed for this section either — check with Ast
 
 **Last year's real achievements, named directly by Kevin in the meeting:** 74% of OSM tasks dealt with same-day; building a super-user access role with Jonathan, outside her core remit; contributions to workforce management projects; and establishing herself as the SME for PeopleXD security. Asta said she was genuinely proud of this, but also that she'd reached a point of wanting to "take a step back, not a step forward" from further scope-creep — she'd been saying yes to things outside her role and felt the talent-module project in particular was challenging because expectations were never made clear to her going in (she doesn't regret it, but flagged the lack of clarity). A previous conversation about her moving into an FA role was confirmed closed last year — the team isn't hiring, so that path isn't live. Her stated career aspiration was not to change grade or move roles, but to keep learning and avoid stagnating in place. Concrete development interests she named: SQL (self-directed, using ChatGPT as a learning aid), AI/compliance tooling for the wider HR systems team (she specifically proposed an AI-searchable document store), structured project management / agile methodologies, and broader HR & payroll statutory knowledge — the last one prompted by feeling unprepared during the recent pay uplift. She also confirmed no objectives were set for her in last year's PDR at all.
 
+**Confirmed from the real 2025 docx — your own agreed actions:** define proper objectives for her going forward (they'd never been set), give her SQL/reporting exposure, explore structured mentoring, formally recognise her SME cover role, and keep watching for stagnation risk given the scope-creep concern above. This is a direct commitment on record — worth checking off each one, not just discussing generally.
+
 No 2026 self-review content is confirmed yet for this section — check whether any of last year's development interests (SQL, the AI document-store idea, agile training, payroll/statutory knowledge) were actually followed up, and whether this is the year objectives finally get set for her.
+
+**"Last year I agreed to define real objectives for you, give you SQL/reporting exposure, and look at structured mentoring — where did each of those actually land?"**
 
 **"Last year you flagged SQL, the AI document-store idea, agile training, and payroll/statutory knowledge as things you wanted to develop — and no objectives were ever actually set for you. Where does that stand now?"**
 
