@@ -28,6 +28,14 @@ from brief_chrome import SCRATCH, e, render_page, write_brief_output
 #      the agenda rather than follow it, so they're renumbered 1-6 (in their
 #      original relative order) and the 24-June-sourced items follow as 7-15
 #      (also unchanged relative order). Same 15 items, reordered only.
+#
+#      FOURTH PASS, same day: added a new "What Kevin's been actively working
+#      on" reference section (not agenda items) -- Wins/Projects pulled live
+#      from the September 2026 Monthly Standing Agenda deck (local OneDrive,
+#      People Department - HR Systems - Monthly Standing Agenda/), plus a
+#      narrower table of Kevin's own dated actions/meeting attendance
+#      confirmed by name in Work Inbox, Command Centre, and Granola. Nothing
+#      invented or inferred -- every row traces to a specific source.
 AGENDA = [
     {
         "id": "1", "title": "Clockify time-tracking decision",
@@ -217,11 +225,72 @@ SECTIONS = f"""
     <p class="risk-head">What's actually unresolved: the DTP1092 / College Staff naming question</p>
     <p class="body-loose">Item&nbsp;12's caution is the one genuine open ambiguity in this brief &mdash; whether the "DTP1092 College Staff into PXD" work-inbox thread and the Roadmap's own DTP1092 row (titled around ORCID/REF research data, no mention of College Staff) are the same initiative or two separately-tracked items sharing a label. Flagged for Kevin to confirm, not asserted either way here.</p>
   </div>
+
+  <h2>What Kevin's been actively working on &mdash; recent activity <span class="h2-sub">Reference material, not agenda items &middot; compiled only from real, dated sources &mdash; nothing invented or inferred</span></h2>
+  <p class="body-loose">Two different kinds of evidence below, kept separate deliberately: the HR Systems team Wins/Projects list (which Kevin leads and curates, but reflects team-wide delivery, not solely his own hands-on actions) and a narrower set of dated actions/meeting attendance directly attributable to Kevin by name in Work Inbox, Command Centre, or Granola. This list is genuinely substantial, not padded &mdash; no items below were guessed or generalised.</p>
+
+  <h2>Recently delivered (Wins) <span class="h2-sub">HR Systems Standing Agenda, September 2026</span></h2>
+  <table>
+    <thead><tr><th>Item</th><th>What was delivered</th></tr></thead>
+    <tbody>
+      <tr><td>NHS ERRBO Pension Scheme</td><td>New NHS Early Retirement Reduction Buy Out (ERRBO) Contributions Pension Scheme implemented.</td></tr>
+      <tr><td>USS Future Service DB AVC Scheme</td><td>New USS Future Service DB AVC &ndash; Salary Exchange Pension Scheme implemented.</td></tr>
+      <tr><td>USS Career Revalued Benefits DB AVC Scheme</td><td>New USS Career Revalued Benefits DB AVC &ndash; Salary Exchange Pension Scheme implemented.</td></tr>
+      <tr><td>Staff Request Rejection Notifications</td><td>Updated to include new data-mapping fields.</td></tr>
+      <tr><td>WFM Balance Calendars &amp; Entitlements Update</td><td>89 individual balance configurations updated across three environments (incl. Production) ahead of balance period-end activities starting 5&nbsp;Oct.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Active work in progress <span class="h2-sub">HR Systems Standing Agenda, September 2026 &middot; 20 items</span></h2>
+  <table>
+    <thead><tr><th>Item</th><th>Status (from the deck's own notes)</th></tr></thead>
+    <tbody>
+      <tr><td>38-Day Balance Rollout &ndash; Departmental</td><td>Chemistry first (131 workgroups), GLAM next; period-end activities start 5&nbsp;Oct.</td></tr>
+      <tr><td>OSPS DB and DC Employer Rate changes</td><td>Working through employer rate changes, due Oct.</td></tr>
+      <tr><td>Letter Templates</td><td>Awaiting final versions; Michelle reworking after a further round of policy changes.</td></tr>
+      <tr><td>Volunteering Leave (independent pay code)</td><td>UAT nearing completion, targeting go-live 1&nbsp;Oct.</td></tr>
+      <tr><td>New Insight Reports for Annual Leave Duty</td><td>With Access Group; Holiday Records split into 3 reports; first scoping meeting Fri 18&nbsp;Sept.</td></tr>
+      <tr><td>Organisational Structure Update</td><td>Final PACS draft available; College/Hall entities moving level 2&rarr;3; College REF-structure work deferred.</td></tr>
+      <tr><td>SHSMS / H&amp;S Module Supplier Evaluation</td><td>Supplier workshops begin 25&nbsp;Sept (revised deadline); Entra ID admin handover and score approval next.</td></tr>
+      <tr><td>College REF Staff on PeopleXD</td><td>Interface testing under way; short-term Data Warehouse fix live this week.</td></tr>
+      <tr><td>Evo / SSO Migration</td><td>Funding confirmed; pre-project SSO scoping call held 11&nbsp;Aug.</td></tr>
+      <tr><td>Holiday Data Retention Policy</td><td>New 7-year retention duty from 6&nbsp;Apr; process/policy guidance still to be agreed.</td></tr>
+      <tr><td>Sickness Absence Survey / Data Completeness</td><td>Biweekly WG; survey due 9&nbsp;Oct, submission deadline 27&nbsp;Nov; Power BI dashboard targeted end Sept.</td></tr>
+      <tr><td>UCEA Uplift &ndash; Timeline Decision (Oct/Nov)</td><td>Sept ruled out, Oct considered unrealistic; November now the earliest realistic option.</td></tr>
+      <tr><td>PERPAY20 Ended Allowance Pay Audit</td><td>Payroll Officer setup being revisited.</td></tr>
+      <tr><td>Load Employee Rates of Pay</td><td>Testing new custom logic in the PeopleXD Payroll Dashboard.</td></tr>
+      <tr><td>Staff Request Audit / Insight</td><td>Reviewing audit capability after Access Group enhancements.</td></tr>
+      <tr><td>My Development Reviews</td><td>Being recreated ready for next year's cycle.</td></tr>
+      <tr><td>IRIS Enhancements &amp; Eco Online Rollout</td><td>Go-live confirmed night of Mon 28&nbsp;Sept.</td></tr>
+      <tr><td>Cority Quality &ndash; Outlook/Teams, Business Rules &amp; Compliance Reporting</td><td>Funding approved; next working session 5&nbsp;Oct.</td></tr>
+      <tr><td>Cority Applicant Data Import + Merging</td><td>Duplicate-record work in development alongside a report design review.</td></tr>
+      <tr><td>RECSUP20 Applicant Cority Interface File</td><td>Unit testing commenced.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Kevin's own dated actions &amp; meeting attendance <span class="h2-sub">Confirmed by name in Work Inbox / Command Centre / Granola</span></h2>
+  <table>
+    <thead><tr><th>Date</th><th>What</th><th>Source</th></tr></thead>
+    <tbody>
+      <tr><td>15 Sep</td><td>Confirmed Chemistry's batched 38-day-balance approach to Julie Hickman</td><td>Command Centre t2608121801280</td></tr>
+      <tr><td>15 Sep</td><td>Attended "Org structure changes &ndash; colour coding, entity names, subsidiary companies" (with Anna Gilbert)</td><td>Granola not_MyaqBPQrcY2m1c</td></tr>
+      <tr><td>15 Sep</td><td>Leading today's Organisational Structure Update walkthrough (13:30) while Katherine Corr is on leave</td><td>Work Inbox calToday</td></tr>
+      <tr><td>14 Sep</td><td>Assigned P5 Incident #11710565 (Task #50985406) by Michael O'Sullivan for urgent investigation &mdash; still open</td><td>Command Centre t2609141647140</td></tr>
+      <tr><td>14 Sep</td><td>Attended H&amp;S Roadmap meeting</td><td>Granola not_11HR2RMim2Hkbj</td></tr>
+      <tr><td>14 Sep</td><td>Attended "HR systems &ndash; primary job position business rules, compliance reporting, and Outlook/Teams"</td><td>Granola not_Kr3cDdaQJmbav6</td></tr>
+      <tr><td>14 Sep</td><td>Attended Michael O'Sullivan's PDR session (as reviewer)</td><td>Granola not_kNSeKHIl1NbCXV</td></tr>
+      <tr><td>11 Sep</td><td>Attended "Org structure updates &ndash; deletions, department moves, and college migration" (with Anthony Kong)</td><td>Granola not_NceWe0kwzQDUNx</td></tr>
+      <tr><td>9 Sep</td><td>Escalated GLAM Ashmolean Visitor Experience incident 11688462 to Julie Hickman</td><td>Command Centre t035</td></tr>
+      <tr><td>9 Sep</td><td>Attended IRIS Enhancements &amp; Eco Online Rollout project kickoff</td><td>Granola not_MI7KdWkUwSoJjq</td></tr>
+      <tr><td>Early Sept (multiple)</td><td>Confirmed/re-confirmed Friday 18&nbsp;Sept 2pm Holiday Records kickoff call with Access Group</td><td>Command Centre t1781204987882</td></tr>
+      <tr><td>8 Sep</td><td>Attended Sickness Absence Survey working group</td><td>Granola not_2Vb3zFrEdry9DI</td></tr>
+    </tbody>
+  </table>
 """
 
 FOOTNOTE = """<div class="footnote">
-    Prepared 15 Sept 2026 for the 16 Sept 2026 sitting &middot; Sources: HR Systems Managers Meeting 20/08 Granola note (items 1&ndash;6, not previously captured in Meeting Reviews, leading the agenda per Kevin), HR Systems Managers Meeting &mdash; 24-06.md (last captured Meeting Reviews outcome, items 7&ndash;15), HR Systems Roadmap alignment worksheet 27-08 (cross-check for overlapping items), Work Inbox data/briefing.json + Command Centre data/tasks.json (pulled 15 Sept 2026)<br>
-    Refreshed three times as one-time authorized exceptions to the 21 Aug 2026 pipeline-review content-push freeze &mdash; see meeting-pipeline-review-21aug.md. Not a general lifting of that freeze.<br>
+    Prepared 15 Sept 2026 for the 16 Sept 2026 sitting &middot; Sources: HR Systems Managers Meeting 20/08 Granola note (items 1&ndash;6, not previously captured in Meeting Reviews, leading the agenda per Kevin), HR Systems Managers Meeting &mdash; 24-06.md (last captured Meeting Reviews outcome, items 7&ndash;15), HR Systems Roadmap alignment worksheet 27-08 (cross-check for overlapping items), Work Inbox data/briefing.json + Command Centre data/tasks.json (pulled 15 Sept 2026), Monthly Standing Agenda September 2026.pptx (local OneDrive, recent-activity section), Granola meeting notes (recent-activity section)<br>
+    Refreshed four times as one-time authorized exceptions to the 21 Aug 2026 pipeline-review content-push freeze &mdash; see meeting-pipeline-review-21aug.md. Not a general lifting of that freeze.<br>
     Branding: command-centre/BRANDING.md v2.0 (4 Jul 2026) &mdash; Oxford Navy, Inter, canonical crest. Template shared with the HR Systems Roadmap brief via brief_chrome.py.
   </div>"""
 
