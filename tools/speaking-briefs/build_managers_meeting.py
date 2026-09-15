@@ -10,12 +10,19 @@ from brief_chrome import SCRATCH, e, render_page, write_brief_output
 #      against live Work Inbox (data/briefing.json) and Command Centre
 #      (data/tasks.json), both pulled 15 Sept 2026, plus the 27 Aug Roadmap
 #      alignment worksheet where an item overlaps a tracked Roadmap row.
-#      Granola could not be reached this session (no GRANOLA_API_KEY set).
 #      Refresh authorized by Kevin as a one-time exception to the 21 Aug
 #      pipeline-review freeze on ad hoc build_*.py content pushes — see
 #      meeting-pipeline-review-21aug.md and
 #      managers-meeting-15sep-stale-script-and-meetingsdir-write.md in
 #      Lauren's memory.
+#
+#      SECOND PASS, same day: Granola was reachable this time and turned up
+#      a real "HR Systems Managers Meeting 20/08" outcome note that was never
+#      captured into Meeting Reviews/ — a genuinely more recent captured
+#      outcome than 24 June, covering different backlog items. Items 10-15
+#      below are folded in from that 20 Aug outcome, per Kevin's explicit
+#      direction the same day. Also a further one-time exception to the 21
+#      Aug freeze, not a general lifting of it.
 AGENDA = [
     {
         "id": "1", "title": "H&amp;S Modular System (SHSMS) — resourcing concern",
@@ -89,6 +96,54 @@ AGENDA = [
         "current": "Four weeks unresolved. This is a live data-protection exposure, not a routine backlog item — warrants explicit sign-off on how it's being closed down, not just noted. New this brief — not on the 24&nbsp;June agenda.",
         "say": "One I need to raise directly — there's real applicant PII sitting in a raw production file from the Cority import, flagged to me on 18&nbsp;Aug and still not resolved. I want an explicit plan for closing this down, not just leaving it open.",
     },
+    {
+        "id": "10", "title": "Clockify time-tracking decision",
+        "pill": "new", "owner": "Kevin",
+        "desc": "Team time-tracking tool decision, raised at the 20&nbsp;Aug Managers Meeting — Clockify vs the free alternative Jibble.",
+        "lu_date": "20 Aug", "lu_text": "Decision pending Jonathan's budget approval. Jibble flagged as backup (manual entry only, no start/stop clock — possible hard sell given key-logging perception and data-protection concerns).",
+        "current": "No Work Inbox or Command Centre record of Jonathan's decision since 20&nbsp;Aug — genuinely unconfirmed either way. If approved: super-user/admin setup and migration begin. If declined: evaluate Jibble and extract existing Clockify data first. Separately, the team is still trying to locate historical Clockify hours logged against a 2024 project refresh, believed archived.",
+        "say": "Clockify — has Jonathan actually signed off the budget yet? If not, we need to start looking seriously at Jibble as the fallback, and someone still needs to track down that archived 2024 hours data.",
+    },
+    {
+        "id": "11", "title": "PSP workload boundaries &amp; FTE reduction review",
+        "pill": "new", "owner": "Kevin",
+        "desc": "Team should not accept Professional Services Programme (PSP) work without explicit sign-off; separately, HR Systems is under a strategic workforce planning review (Sarah Kay leading for Renu) with a 17.2&nbsp;FTE reduction flagged across professional services.",
+        "lu_date": "20 Aug", "lu_text": "Agreed: PSP requests to come via the lead with backfill agreed; unresolved requests escalate to Renu. JDs under review, several acknowledged as outdated.",
+        "current": "No update found in Work Inbox or Command Centre since 20&nbsp;Aug — needs a live check in the room rather than assuming it's settled. Capacity was described as critically stretched at the time, with an explicit steer that gaps should be visible, not quietly absorbed.",
+        "say": "Two things from 20&nbsp;Aug I want to close out — are we actually holding the line on PSP work needing sign-off, and where's the 17.2&nbsp;FTE reduction review landed? I don't want us papering over capacity gaps again.",
+    },
+    {
+        "id": "12", "title": "WFM / sickness dashboard readiness",
+        "pill": "new", "owner": "Kevin",
+        "desc": "Workforce management (WFM) data completeness ahead of October go-live, plus the on-hold executive sickness dashboard.",
+        "lu_date": "20 Aug", "lu_text": "Some departments showed only one sickness record for the whole year despite 300+ staff; David engaged to confirm departmental readiness. Kevin to be invited to the next WFM meeting.",
+        "current": "Overlaps live activity already elsewhere on this brief's radar (the 38-day-balance departments rollout is moving fast as of today) — worth checking whether October go-live confidence has genuinely improved since 20&nbsp;Aug or whether the same data-completeness gap is still open.",
+        "say": "WFM data completeness for the October go-live — where are we against the departments that were showing basically no sickness records back in August? Has David confirmed everyone's on board yet?",
+    },
+    {
+        "id": "13", "title": "Tableau migration &amp; equal pay audit",
+        "pill": "new", "owner": "Kevin",
+        "desc": "Equal pay audit due by July 2027 (statutory, every three years) currently depends on Tableau — the only tool that can calculate the required medians.",
+        "lu_date": "20 Aug", "lu_text": "Proposed plan: run the audit in Tableau one final time (~1 week effort), then migrate properly over three years; Reward team (Jasmine, Sarah) to be looped in by email; migration to be added to the Roadmap with documented rationale.",
+        "current": "No record of the Jasmine/Sarah email or a new Roadmap entry for this migration since 20&nbsp;Aug — worth confirming whether that action actually went out.",
+        "say": "Tableau — did the email to Jasmine and Sarah go out, and is the migration actually on the Roadmap yet with the rationale written down? Don't want the one-last-run plan for the equal pay audit slipping by default.",
+    },
+    {
+        "id": "14", "title": "PDR scheduling — leads tracker",
+        "pill": "new", "owner": "Kevin",
+        "desc": "All HR Systems leads asked to book PDR sessions with their teams sooner rather than later and spread them out; PDR tracker link to be reshared so status stays visible.",
+        "lu_date": "20 Aug", "lu_text": "Simon had booked his PDR at the time; other leads still to follow.",
+        "current": "Kevin's own 2026 PDR round is now well underway (Michael, James, Asta, Kevin all separately scheduled through late Sept) — worth checking this is being modelled for the wider team too, not just Kevin's direct reports.",
+        "say": "Quick check — has the PDR tracker link actually gone back out to leads, and is everyone booking sessions the way we asked on 20&nbsp;Aug?",
+    },
+    {
+        "id": "15", "title": "Susan's acting-up allowance business case",
+        "pill": "new", "owner": "Kevin",
+        "desc": "Business case drafted for Susan's acting-up allowance (approx. &pound;300 total spend) to cover a defined period.",
+        "lu_date": "20 Aug", "lu_text": "To be raised at the next one-to-one with Renu, after Renu's return from leave, presented in person rather than by email.",
+        "current": "No record of that one-to-one having happened yet. If it's still outstanding, worth a steer on what cover looks like for the three-month period in the meantime if the case isn't approved.",
+        "say": "Susan's acting-up case — has that conversation with Renu happened yet? If not, we still need a fallback for cover in the meantime.",
+    },
 ]
 
 
@@ -129,17 +184,23 @@ GLANCE_TABLE = """<table>
             <tr><td class="idcell">7</td><td>UKVI Skilled Workers requirement</td><td>Kevin</td><td><span class="pill pill-onhold">Historic</span></td></tr>
             <tr><td class="idcell">8</td><td>Organisational Structure Update (FINAL)</td><td>Simon / Sarah</td><td><span class="pill pill-raise">Raise</span></td></tr>
             <tr><td class="idcell">9</td><td>Cority Applicant Data Import — data exposure</td><td>Kevin</td><td><span class="pill pill-raise">Raise</span></td></tr>
+            <tr><td class="idcell">10</td><td>Clockify time-tracking decision</td><td>Kevin</td><td><span class="pill pill-new">New</span></td></tr>
+            <tr><td class="idcell">11</td><td>PSP workload boundaries &amp; FTE reduction review</td><td>Kevin</td><td><span class="pill pill-new">New</span></td></tr>
+            <tr><td class="idcell">12</td><td>WFM / sickness dashboard readiness</td><td>Kevin</td><td><span class="pill pill-new">New</span></td></tr>
+            <tr><td class="idcell">13</td><td>Tableau migration &amp; equal pay audit</td><td>Kevin</td><td><span class="pill pill-new">New</span></td></tr>
+            <tr><td class="idcell">14</td><td>PDR scheduling — leads tracker</td><td>Kevin</td><td><span class="pill pill-new">New</span></td></tr>
+            <tr><td class="idcell">15</td><td>Susan's acting-up allowance business case</td><td>Kevin</td><td><span class="pill pill-new">New</span></td></tr>
           </tbody>
         </table>"""
 
 SECTIONS = f"""
-  <h2>Agenda items — full context <span class="h2-sub">Carried forward from 24 June &middot; refreshed against live Work Inbox / Command Centre 15 Sept 2026</span></h2>
+  <h2>Agenda items — full context <span class="h2-sub">Items 1&ndash;9 carried forward from 24 June, refreshed against live Work Inbox / Command Centre 15 Sept 2026 &middot; items 10&ndash;15 folded in from the 20 Aug 2026 Managers Meeting outcome (Granola)</span></h2>
   <div class="item-grid">
 {ITEMS_HTML}
   </div>
 
   <h2 class="h2-warn">Risks and dependencies</h2>
-  <p class="body-loose">The core structural risk is unchanged from earlier drafts: <b>no HR Systems Managers Meeting outcome has been captured since 24&nbsp;June 2026</b> — three-plus fortnightly cycles missing before tomorrow's 16&nbsp;Sept sitting. This brief has been actively refreshed against live Work Inbox and Command Centre data (pulled 15&nbsp;Sept) rather than left to run on stale June content, but it is still not a substitute for a captured meeting outcome.</p>
+  <p class="body-loose"><b>Correction from earlier drafts:</b> a Managers Meeting did in fact take place on 20&nbsp;Aug 2026 (confirmed via Granola) — it was simply never captured into Meeting Reviews/, which still only holds the 24&nbsp;June doc. That's a documentation-pipeline gap worth fixing separately, not an open action for this meeting. Items 10&ndash;15 fold in that 20&nbsp;Aug backlog; items 1&ndash;9 still trace back to 24&nbsp;June and have been actively refreshed against live Work Inbox and Command Centre data (pulled 15&nbsp;Sept).</p>
   <p class="body-loose"><b>DPIA Stage&nbsp;7 sign-off (Roadmap item 136) is PARKED</b>, per Kevin's explicit instruction — not an open action item on this agenda. It sits at v0.5, with several review round-trips through Marie Cooksey across late Aug/early Sept; sign-off itself is still not logged as done, but this is being held deliberately rather than chased in this meeting.</p>
 
   <h2>Unresolved conflicts</h2>
@@ -154,8 +215,8 @@ SECTIONS = f"""
 """
 
 FOOTNOTE = """<div class="footnote">
-    Prepared 15 Sept 2026 for the 16 Sept 2026 sitting &middot; Sources: HR Systems Managers Meeting &mdash; 24-06.md (last captured outcome), HR Systems Roadmap alignment worksheet 27-08 (cross-check for overlapping items), Work Inbox data/briefing.json + Command Centre data/tasks.json (pulled 15 Sept 2026), Granola (not reachable this session &mdash; no GRANOLA_API_KEY set)<br>
-    Refreshed as a one-time authorized exception to the 21 Aug 2026 pipeline-review content-push freeze &mdash; see meeting-pipeline-review-21aug.md. Not a general lifting of that freeze.<br>
+    Prepared 15 Sept 2026 for the 16 Sept 2026 sitting &middot; Sources: HR Systems Managers Meeting &mdash; 24-06.md (last captured Meeting Reviews outcome, items 1&ndash;9), HR Systems Managers Meeting 20/08 Granola note (items 10&ndash;15, not previously captured in Meeting Reviews), HR Systems Roadmap alignment worksheet 27-08 (cross-check for overlapping items), Work Inbox data/briefing.json + Command Centre data/tasks.json (pulled 15 Sept 2026)<br>
+    Refreshed twice as one-time authorized exceptions to the 21 Aug 2026 pipeline-review content-push freeze &mdash; see meeting-pipeline-review-21aug.md. Not a general lifting of that freeze.<br>
     Branding: command-centre/BRANDING.md v2.0 (4 Jul 2026) &mdash; Oxford Navy, Inter, canonical crest. Template shared with the HR Systems Roadmap brief via brief_chrome.py.
   </div>"""
 
@@ -166,16 +227,16 @@ html_out = render_page(
     h1="HR Systems Managers Meeting — 16/09",
     meta_spans=[
         "<b>Meeting</b> Wednesday 16 September 2026 (fortnightly)",
-        "<b>Follow-on from</b> 24 June 2026",
+        "<b>Follow-on from</b> 24 June 2026 (items 1&ndash;9) &amp; 20 Aug 2026 (items 10&ndash;15)",
         "<b>Status</b> Refreshed 15 Sept 2026 &mdash; ready for review",
     ],
     flag_label="Before anything else",
     flag_paragraphs=[
-        "No HR Systems Managers Meeting outcome is captured in Granola, and no prep or outcome document exists in this repo, since 24&nbsp;June &mdash; meaning the fortnightly sittings in between are still missing before this one. Everything below carries the <b>24&nbsp;June agenda</b> forward, but has now been actively cross-checked and updated against live Work Inbox and Command Centre data (pulled 15&nbsp;Sept) &mdash; 5 of the original 7 items had material, dated updates, and 2 new items (Organisational Structure Update, Cority Applicant Data Import) have been added.",
+        "No prep or outcome document exists in this repo's Meeting Reviews/ since 24&nbsp;June, but a real Managers Meeting did take place on 20&nbsp;Aug (found via Granola) &mdash; it just was never captured there. Items 1&ndash;9 carry the <b>24&nbsp;June agenda</b> forward, actively cross-checked and updated against live Work Inbox and Command Centre data (pulled 15&nbsp;Sept) &mdash; 5 of the original 7 had material, dated updates, and 2 new items (Organisational Structure Update, Cority Applicant Data Import) have been added. Items 10&ndash;15 are folded in fresh from the 20&nbsp;Aug outcome: Clockify, PSP workload/FTE reduction, WFM/sickness dashboard readiness, Tableau migration/equal pay audit, PDR scheduling, and Susan's acting-up case.",
         "Tell me what actually happened at the meeting and I'll correct the record afterwards.",
     ],
     glance_label="At a glance",
-    glance_sub="9 agenda items &middot; carried forward from 24 Jun, refreshed against live Work Inbox / Command Centre 15 Sept 2026",
+    glance_sub="15 agenda items &middot; 1&ndash;9 carried forward from 24 Jun (refreshed against live Work Inbox / Command Centre 15 Sept 2026), 10&ndash;15 folded in from the 20 Aug 2026 outcome",
     glance_table_html=GLANCE_TABLE,
     sections_html=SECTIONS,
     footnote_html=FOOTNOTE,
