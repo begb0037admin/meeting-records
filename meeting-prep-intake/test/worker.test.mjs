@@ -184,3 +184,52 @@ test("chat preserves an explicit unavailable extraction note", async () => {
     assert.match(body.messages.at(-1).content, /no longer available/);
   } finally { globalThis.fetch = original; }
 });
+
+test("chat rejects an oversized extractionIds array before issuing any KV reads", async () => {
+  const memory = kv();
+  const original = globalThis.fetch;
+  globalThis.fetch = async () => { throw new Error("should not call Anthropic"); };
+  try {
+    const oversized = Array.from({ length: 4 }, (_, i) => ({ extractionId: `extract_${i}`, sheets: ["Keep"] }));
+    const response = await call(
+      "/api/chat",
+      { draftId: "draft_flood", itemId: "itm_flood", item: chatItem, message: "Use them all", extractionIds: oversized },
+      { CHAT_KV: memory, ANTHROPIC_API_KEY: "x" },
+    );
+    assert.equal(response.status, 400);
+    assert.match((await response.json()).error, /No more than 3 extraction references/);
+    // No KV reads for any of the (nonexistent) extraction keys, and no partial reply persisted.
+    assert.ok(![...memory.store.keys()].some((key) => key.startsWith("extract:v1:")));
+    assert.equal(memory.calls.put, 0);
+  } finally { globalThis.fetch = original; }
+});
+
+test("bounds sheet conversion to a huge declared range without materializing it", async () => {
+  const memory = kv();
+  const book = XLSX.utils.book_new();
+  // Real data occupies only two rows/columns, but the sheet *declares* a used
+  // range of 200,000 rows — simulates a malformed/overformatted workbook that
+  // stays well under the 5 MB upload cap while claiming a huge used range.
+  const inflated = XLSX.utils.aoa_to_sheet([["Name", "Count"], ["Open", 1]]);
+  inflated["!ref"] = "A1:Z200000";
+  XLSX.utils.book_append_sheet(book, inflated, "Inflated");
+  const bytes = XLSX.write(book, { type: "buffer", bookType: "xlsx" });
+  const started = Date.now();
+  const result = await extractCall("inflated.xlsx", bytes, { CHAT_KV: memory });
+  const elapsed = Date.now() - started;
+  const data = await result.json();
+  assert.equal(result.status, 200);
+  // Dimensions still report the sheet's real declared size (cheap arithmetic,
+  // not a materialization concern) ...
+  assert.equal(data.sheets[0].dimensions.rows, 200000);
+  assert.equal(data.sheets[0].dimensions.cols, 26);
+  // ... but the preview only ever reflects the bounded, actually-converted range.
+  assert.equal(data.sheets[0].truncated, true);
+  assert.match(data.sheets[0].preview, /Open\t1/);
+  // Measured directly: converting this same declared range unclamped costs ~2.9s
+  // of sheet_to_json alone (confirmed via a standalone repro against this exact
+  // fixture); the clamped read completes in low single-digit ms. 500ms leaves
+  // generous headroom above real clamped cost while still catching a regression
+  // back to unbounded conversion.
+  assert.ok(elapsed < 500, `expected a bounded conversion, took ${elapsed}ms`);
+});

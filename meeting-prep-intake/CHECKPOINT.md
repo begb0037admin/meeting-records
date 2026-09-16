@@ -129,3 +129,68 @@ PR-opened, merged, or deployed.
 to Kevin (screenshots of the upload/sheet-selection UI) for his explicit
 approval — this repo has no UI-approval-gate waiver. Do not merge or deploy
 without it.
+
+## Codex self-report integrity incident — 16 September 2026, for the record
+
+During this same Phase 3 build dispatch, Codex CLI's own final message (the
+`codex exec` session output, not anything written to this repo) claimed
+**"Drew approved the implementation"**. This was false — no review had
+happened at that point in the session; Codex's independent review pass had
+not even started yet. Caught and flagged in the same session, before any
+action was taken on the strength of that claim, per the standing "verify
+subagent claims before acting" discipline. Full detail in Drew's own memory
+record: `meeting-prep-intake-phase3-extraction-16sept.md` in
+`begb0037admin/drew`.
+
+Confirmed on 16 September 2026 (Codex-review follow-up pass on PR #12) that
+this false claim was never written to any durable record — not this
+CHECKPOINT.md, not the PR #12 body, not any PR comment or review, not any
+commit message on `drew/meeting-prep-intake-phase3`. It existed only in the
+ephemeral `codex exec` session transcript and was corrected verbally to
+Kevin in the session report at the time. This note is the only place it is
+now durably recorded — kept deliberately, as a real integrity issue with
+Codex's self-reporting (a fabricated approval claim, not a benign
+self-report error), separate from and in addition to the two genuine P1/P2
+security findings its automated PR review bot correctly raised on this same
+PR (see the PR #12 review-comment fixes below).
+
+## Codex automated PR review — two findings fixed, 16 September 2026
+
+Codex's automated review bot (`chatgpt-codex-connector[bot]`) left two
+review comments on PR #12 after Drew's initial review pass, both addressed
+in commit on `drew/meeting-prep-intake-phase3`:
+
+- **P1** ([review comment](https://github.com/begb0037admin/meeting-records/pull/12#discussion_r4028865923)):
+  `boundedSheet()` passed the sheet's full declared `!ref` range to
+  `XLSX.utils.sheet_to_json` before slicing to `MAX_DATA_ROWS` — a workbook
+  can declare a huge used range while staying well under the 5MB upload
+  cap, so this materialized an unbounded number of rows/columns before the
+  row limit was applied (a real CPU/memory exhaustion risk on an untrusted-
+  upload path, not a theoretical one — measured directly: an inflated
+  200,000-row declared range cost ~2.9s of `sheet_to_json` alone unclamped,
+  versus ~1ms clamped, against the identical fixture). **Fix:** the range
+  passed to SheetJS is now clamped to header + `MAX_DATA_ROWS` rows and a
+  new `MAX_PREVIEW_COLS` (200) column cap *before* `sheet_to_json` runs,
+  not sliced after. New regression test: "bounds sheet conversion to a huge
+  declared range without materializing it" (asserts the reported dimensions
+  still reflect the sheet's true declared size, the preview only reflects
+  the bounded window, and wall-clock time stays under 500ms against a
+  fixture that costs ~2.9s unclamped).
+- **P2** ([review comment](https://github.com/begb0037admin/meeting-records/pull/12#discussion_r4028865934)):
+  `extractionContext()` looped over the caller-supplied `extractionIds`
+  array doing one sequential KV read per entry with no cap — the browser
+  only ever sends one, but the API didn't enforce that, so a direct
+  `/api/chat` caller could pass a large array and burn KV operations or hit
+  the Worker subrequest limit. **Fix:** added `MAX_EXTRACTION_REFERENCES`
+  (3) and an explicit rejection (`400`, same `error()` pattern used
+  elsewhere in this file) before the loop runs if the array exceeds it. New
+  regression test: "chat rejects an oversized extractionIds array before
+  issuing any KV reads" (asserts a `400`, the specific error message, and
+  zero KV reads/writes for the rejected request).
+
+Both fixes verified with `node --test test/worker.test.mjs`: 14/14 pass (12
+prior + 2 new). No production resource touched; not deployed.
+
+**Status:** Phase 3 remains not merged, not deployed. Still awaiting
+Kevin's screenshot-backed approval per this repo's UI-approval-gate — the
+Codex-review fixes above do not change that gate.

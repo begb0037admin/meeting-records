@@ -11,7 +11,9 @@ const EXTRACTION_TTL_SECONDS = 60 * 60;
 const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
 const MAX_SHEETS = 20;
 const MAX_DATA_ROWS = 50;
+const MAX_PREVIEW_COLS = 200;
 const MAX_PREVIEW_CHARS = 2000;
+const MAX_EXTRACTION_REFERENCES = 3;
 const AURA2_EN_SPEAKERS = new Set([
   "amalthea", "andromeda", "apollo", "arcas", "aries", "asteria", "athena",
   "atlas", "aurora", "callista", "cora", "cordelia", "delia", "draco",
@@ -271,6 +273,8 @@ async function chatDoc(kv, key) {
 }
 async function extractionContext(kv, extractionIds) {
   if (!Array.isArray(extractionIds)) return [];
+  if (extractionIds.length > MAX_EXTRACTION_REFERENCES)
+    throw error(`No more than ${MAX_EXTRACTION_REFERENCES} extraction references may be supplied per message.`);
   const resolved = [];
   for (const reference of extractionIds) {
     const extractionId = reference?.extractionId;
@@ -388,12 +392,30 @@ function boundedSheet(sheet, name) {
   const range = XLSX.utils.decode_range(sheet["!ref"] || "A1:A1");
   const rows = range.e.r - range.s.r + 1;
   const cols = range.e.c - range.s.c + 1;
+  // A workbook can *declare* a huge used range (!ref) while staying well under the
+  // upload size cap. Clamp the range handed to SheetJS itself — header row plus
+  // MAX_DATA_ROWS data rows, MAX_PREVIEW_COLS columns — before sheet_to_json runs,
+  // so a malformed/overformatted sheet can't force materialization of the full
+  // declared range ahead of the row/column limits being applied.
+  const clampedRange = {
+    s: { r: range.s.r, c: range.s.c },
+    e: {
+      r: Math.min(range.e.r, range.s.r + MAX_DATA_ROWS),
+      c: Math.min(range.e.c, range.s.c + MAX_PREVIEW_COLS - 1),
+    },
+  };
+  const clampedCols = clampedRange.e.c - clampedRange.s.c + 1;
   // V1 heuristic: the first row is treated as column headers, though workbooks need not follow that convention.
-  const values = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: false, defval: "", range: sheet["!ref"] || "A1:A1" });
-  const headers = (values[0] || []).slice(0, cols).map((value) => String(value));
-  const previewRows = values.slice(1, MAX_DATA_ROWS + 1).map((row) => row.slice(0, cols).map((value) => String(value ?? "")).join("\t"));
+  const values = XLSX.utils.sheet_to_json(sheet, {
+    header: 1,
+    raw: false,
+    defval: "",
+    range: XLSX.utils.encode_range(clampedRange),
+  });
+  const headers = (values[0] || []).slice(0, clampedCols).map((value) => String(value));
+  const previewRows = values.slice(1, MAX_DATA_ROWS + 1).map((row) => row.slice(0, clampedCols).map((value) => String(value ?? "")).join("\t"));
   let preview = [headers.join("\t"), ...previewRows].join("\n");
-  let truncated = rows > MAX_DATA_ROWS + 1;
+  let truncated = rows > MAX_DATA_ROWS + 1 || cols > clampedCols;
   if (preview.length > MAX_PREVIEW_CHARS) {
     preview = `${preview.slice(0, MAX_PREVIEW_CHARS - 1)}…`;
     truncated = true;
