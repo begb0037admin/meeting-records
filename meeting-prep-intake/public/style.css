@@ -34,6 +34,7 @@ h2 {
 .chat-line.assistant { background: #f0f5ef; }
 .chat-line.error { background: #fff0f0; }
 .chat-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
+.speaker-note-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin: .3rem 0 .6rem; }
 .section-head,
 .item header,
 .row {
