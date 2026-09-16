@@ -33,29 +33,50 @@ from brief_chrome import SCRATCH, e, render_page, write_brief_output
 #      where that's the best available source, explicitly marked unconfirmed
 #      where nothing more current exists.
 #
-#      Framing correction, same day: Kevin presents all three items himself
-#      in this meeting -- he is not being briefed/updated by James or
-#      Michael. Items 1 and 2 are Kevin STANDING IN to present slots James
-#      and Michael normally own (per Kevin's own account of today's
-#      arrangement -- not independently confirmed via calendar/absence data,
-#      which doesn't show either of them absent today, but this is Kevin
-#      describing his own day directly, not an intermediary's claim). Item 3
-#      is Kevin's own work, presented by him as normal.
+#      Framing correction #1, same day: Kevin presents items himself in this
+#      meeting where the source supports it -- he is not being briefed by
+#      others by default. Item 3 is Kevin's own work, presented by him as
+#      normal.
+#
+#      Framing correction #2, same day, SUPERSEDES the item-1 framing above:
+#      the standing-agenda slot has NO fixed owner -- Kevin assigns who
+#      presents it each time, case by case. Today it's James, because Kevin
+#      is on annual leave this afternoon -- confirmed via Work Inbox
+#      `calFull` (an all-day "Kevin - Annual Leave" entry plus a specific
+#      12:30 "Kevin A/L (pm)" item today), which the shorter `calTomorrow`
+#      field used in the first pass didn't surface, causing that pass to get
+#      the who's-presenting direction backwards twice in a row (first "James
+#      covering for Kevin," then "Kevin covering for James" -- both wrong;
+#      real answer is "no fixed owner, James assigned today"). Item 1's Say
+#      field is now a note FOR Kevin about what to expect from James, not a
+#      first-person line for Kevin to say, since he isn't the one presenting
+#      it today.
+#
+#      Item 2 (patch release notes) was checked for the same backwards-
+#      framing risk and found to be a genuinely different pattern: the
+#      calendar entry's own wording has Michael as the designated lead "for
+#      next 6 months," not a rotating slot -- "Kevin standing in for Michael"
+#      holds up. Real patch content itself (what's changing, what it
+#      affects) was searched for across Work Inbox, Command Centre, and
+#      OneDrive and not found anywhere beyond the calendar entry's own
+#      generic description -- flagged plainly in the item rather than
+#      guessed at, plus an explicit ask to Asta for support in the room
+#      since she'd normally hold the working detail here.
 #
 #      Kevin's three requested focus areas, verified against real sources
 #      (not inferred) rather than taken at face value -- see each item's
 #      "what"/"status" for exactly what was confirmed vs not:
-#        1. Standing agenda, Kevin presenting for James -- confirmed a real
-#           recurring tracked-items slide exists (19 Aug transcript refers to
-#           "the standard agenda slide" directly), but no capture since
-#           19 Aug to confirm today's actual content -- flagged as stale, not
-#           guessed.
+#        1. Standing agenda, James presenting today (Kevin assigns
+#           case-by-case) -- confirmed a real recurring tracked-items slide
+#           exists (19 Aug transcript refers to "the standard agenda slide"
+#           directly), but no capture since 19 Aug to confirm today's actual
+#           content -- flagged as stale, not guessed.
 #        2. Fortnightly patch release notes, Kevin presenting for Michael --
 #           confirmed as a real, separate 11:30 calendar slot today, but the
 #           actual patch content itself could not be found in Work Inbox,
-#           Command Centre, or Granola -- only the calendar entry's own
-#           generic description exists. Flagged as a genuine gap, not
-#           invented.
+#           Command Centre, OneDrive, or Granola -- only the calendar entry's
+#           own generic description exists. Flagged as a genuine gap, not
+#           invented; added an explicit ask to Asta for support.
 #        3. PXD UDF HESA update, Kevin's own -- confirmed real and materially more
 #           current than the version already in the Managers Meeting brief:
 #           Command Centre task t2609141649162 (dated 15 Sept, yesterday)
@@ -67,14 +88,14 @@ from brief_chrome import SCRATCH, e, render_page, write_brief_output
 #           already flagged urgent in the Managers Meeting brief.
 
 ITEMS = [
-    {"id": "1", "title": "Standing agenda &mdash; Kevin presenting, standing in for James", "pill": "onhold",
-     "what": "James normally owns and presents the standing-agenda slot; Kevin is presenting it today on James's behalf (per Kevin's own account &mdash; not independently confirmed via calendar/absence data, which doesn't show James absent today, but this is Kevin's own description of today's arrangement, not an intermediary's claim). The standing agenda itself is a real, recurring tracked-items slide &mdash; confirmed via the 19&nbsp;Aug transcript's own reference to \"the standard agenda slide.\" Last real content captured: Azure Security Groups (largely done, ready to remove from the slide), Letter Templates (on hold pending Michelle's return from leave), GLAM leave/absence workstreams, and a payroll/availability watch item.",
-     "status": "<b>No FA Team Catch-up outcome captured in Granola since 19&nbsp;Aug</b> &mdash; nearly a month's gap. Today's actual current slide content isn't independently confirmed; presenting from the last known real state.",
-     "say": "I'm covering the standing agenda for James today &mdash; last I've got is the 19&nbsp;Aug state, so flag anything that's actually moved since."},
+    {"id": "1", "title": "Standing agenda &mdash; James presenting today, Kevin assigns case-by-case", "pill": "onhold",
+     "what": "There's no fixed owner for the standing-agenda slot &mdash; Kevin assigns who presents it each time, case by case. Today he's assigned it to James, because Kevin is on annual leave this afternoon (confirmed via Work Inbox calFull: an all-day \"Kevin - Annual Leave\" entry today plus a specific 12:30 \"Kevin A/L (pm)\" calendar item &mdash; this wasn't visible in the shorter calTomorrow view used in an earlier pass, which is why that pass got the framing backwards). The standing agenda itself is a real, recurring tracked-items slide &mdash; confirmed via the 19&nbsp;Aug transcript's own reference to \"the standard agenda slide.\" Last real content captured: Azure Security Groups (largely done, ready to remove from the slide), Letter Templates (on hold pending Michelle's return from leave), GLAM leave/absence workstreams, and a payroll/availability watch item.",
+     "status": "<b>No FA Team Catch-up outcome captured in Granola since 19&nbsp;Aug</b> &mdash; nearly a month's gap. Today's actual current slide content isn't independently confirmed; James will be presenting from the last known real state unless he has something newer.",
+     "say": "Note for Kevin, not a speaking line &mdash; James is presenting this one today, not you. Just listen for whether anything's moved since the 19&nbsp;Aug state (Azure Security Groups, Letter Templates, GLAM workstreams, payroll watch)."},
     {"id": "2", "title": "Fortnightly patch release notes &mdash; Kevin presenting, standing in for Michael", "pill": "raise",
-     "what": "Michael normally leads this fortnightly patch release review; Kevin is presenting it today on Michael's behalf (per Kevin's own account, same basis as item&nbsp;1). Real, separate calendar slot today (11:30): \"leading patch release review for next 6 months; check HR Systems impact and implementation dependencies before next release date.\"",
-     "status": "<b>Actual patch release notes content not found</b> in Work Inbox, Command Centre, or Granola &mdash; only the calendar entry's own generic description exists. Presenting without the underlying document unless it surfaces before the meeting.",
-     "say": "I'm covering the patch release review for Michael today, but I don't actually have the notes document in front of me from anything I can pull &mdash; need to get hold of it live or defer the detail."},
+     "what": "Michael is the designated lead for this fortnightly patch release review \"for next 6 months\" (the calendar entry's own wording, not a rotating case-by-case slot like item&nbsp;1) &mdash; Kevin is presenting it today on Michael's behalf. Real, separate calendar slot today (11:30): \"check HR Systems impact and implementation dependencies before next release date.\" <b>The actual patch content itself &mdash; what's changing in this release and what it affects &mdash; could not be located</b> after checking Work Inbox (briefing.json, no \"release notes\"/\"PeopleXD release\" hits beyond the calendar entry itself), Command Centre (tasks.json, no hits), OneDrive (searched for patch/release-note documents, found nothing current), and Granola (no note exists for this review series). Not guessing at content that isn't sourced.",
+     "status": "Kevin hasn't run one of these in a while and doesn't have the underlying document. Presenting without it unless it surfaces before the meeting.",
+     "say": "I'm covering the patch release review for Michael today, but I genuinely don't have the notes document in front of me from anything I can pull. Asta, I'd appreciate your support on this one &mdash; it's been a while since I've run through these and you'll hold more of the working detail than I do right now."},
     {"id": "3", "title": "PXD UDF HESA update &mdash; Kevin's own update", "pill": "new",
      "what": "Kevin's own REF 2029 HESA UDF work with Nathan Kirwan &mdash; already flagged urgent in the HR Systems Managers Meeting brief (deadline Thu 17&nbsp;Sept). Since that item was added, Command Centre shows real, dated movement: Nathan has matched the UDF template structure to the data items, and Kevin has given technical guidance on the Contract ID column and confirmed the current UDF template download is needed.",
      "status": "<b>Genuinely more current than the Managers Meeting brief's version</b> (which only had \"last confirmed correct 10&nbsp;Sept\") &mdash; per Command Centre task t2609141649162, dated <b>15&nbsp;Sept</b> (yesterday): Nathan re-confirmed the team is on track for delivery. Upload deadline Thursday 17&nbsp;Sept, ahead of the wider FA-works deadline Friday 18&nbsp;Sept. A separate \"PXD HESA UDF\" calendar slot exists tomorrow, 17&nbsp;Sept 12:00.",
@@ -96,7 +117,7 @@ ITEMS_TABLE = "\n".join(render_row(a) for a in ITEMS)
 GLANCE_TABLE = """<table>
           <thead><tr><th>ID</th><th>Item</th><th>Type</th></tr></thead>
           <tbody>
-            <tr><td class="idcell">1</td><td>Standing agenda (Kevin presenting for James)</td><td><span class="pill pill-onhold">Historic</span></td></tr>
+            <tr><td class="idcell">1</td><td>Standing agenda (James presenting today)</td><td><span class="pill pill-onhold">Historic</span></td></tr>
             <tr><td class="idcell">2</td><td>Patch release notes (Kevin presenting for Michael)</td><td><span class="pill pill-raise">Raise</span></td></tr>
             <tr><td class="idcell">3</td><td>PXD UDF HESA update (Kevin's own)</td><td><span class="pill pill-new">New</span></td></tr>
           </tbody>
@@ -120,7 +141,7 @@ SECTIONS = f"""
 """
 
 FOOTNOTE = """<div class="footnote">
-    Prepared 16 Sept 2026 for today's 09:30 sitting (first build of this meeting type) &middot; Sources: Work Inbox data/briefing.json (calTomorrow field from the 15 Sept pull, i.e. today's live schedule), Command Centre data/tasks.json (task t2609141649162, dated 15 Sept), Granola "FA Team Catch-up" notes (11 Aug: not_edc9scBKs2Fy0a, 19 Aug: not_HfuqAJkW1IgOZr &mdash; most recent available, nearly a month stale).<br>
+    Prepared 16 Sept 2026 for today's 09:30 sitting, corrected same day (first build of this meeting type) &middot; Sources: Work Inbox data/briefing.json calFull field (richer than calTomorrow -- surfaces the all-day "Kevin - Annual Leave" entry and the 12:30 "Kevin A/L (pm)" item that calTomorrow's shorter view missed), Command Centre data/tasks.json (task t2609141649162, dated 15 Sept), Granola "FA Team Catch-up" notes (11 Aug: not_edc9scBKs2Fy0a, 19 Aug: not_HfuqAJkW1IgOZr &mdash; most recent available, nearly a month stale). Patch-content search also checked OneDrive directly -- nothing found beyond the calendar entry's own description.<br>
     First-time authorized build under the 21 Aug 2026 pipeline-review freeze -- a new meeting type, not an edit to an existing frozen script.<br>
     Branding: command-centre/BRANDING.md v2.0 &mdash; Oxford Navy, Inter, canonical crest. Template shared via brief_chrome.py.
   </div>"""
