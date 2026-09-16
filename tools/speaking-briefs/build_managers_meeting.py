@@ -14,6 +14,20 @@ from brief_chrome import SCRATCH, e, render_page, write_brief_output
 #      items, not agenda discussion items -- "per item or per section" was
 #      explicitly allowed.
 #
+#      NINTH PASS, same day: Kevin's What lines weren't concrete enough --
+#      several read as a restated title rather than the actual specific
+#      change/issue plus who raised it and when. Rewrote every SK 1-1 and
+#      Managers Meeting item's What field to lead with the concrete
+#      specific (using the same transcript/task/email material already
+#      verified in earlier passes, not new research) and name the
+#      requester/date where the source actually supports it -- and to say
+#      plainly where it doesn't (several 20 Aug items have no requester
+#      named in the transcript beyond "raised at the meeting"; that's
+#      stated as fact, not filled in with a guess). The addendum table's
+#      status lines were left as-is -- they're standing-team-deck project
+#      status entries, not requests, so "who requested" doesn't apply the
+#      same way; already had a section-level speaker note as agreed.
+#
 #      No item, source tag, date, or the Athena exclusion was dropped. Full
 #      pass-by-pass history is in Lauren's memory
 #      (`managers-meeting-16sep-second-pass.md` and its addenda), not
@@ -25,7 +39,7 @@ from brief_chrome import SCRATCH, e, render_page, write_brief_output
 
 SK_ITEMS = [
     {"id": "1", "title": "Org structure work &mdash; new management units &amp; docs", "pill": "info",
-     "what": "Three new pack management units need creating in the org structure system, with documentation updated as work goes.",
+     "what": "Org structure: create three new pack management units in the system (a portal approach, not the old back-end process) and keep documentation updated &mdash; raised by Simon as Kevin's main focus item in the 19&nbsp;Aug 1-1.",
      "status": "No confirmation found since 19&nbsp;Aug that they've been created.",
      "say": "Let's get those three management units built and keep the docs updated as we go &mdash; has that actually started?"},
     {"id": "2", "title": "Cority Applicant Data Import (RECSUP20) &mdash; report fixes &amp; provenance question", "pill": "raise",
@@ -33,98 +47,98 @@ SK_ITEMS = [
      "status": "<i>Source: pasted email thread (\"Cority - Applicant Data Import file\" &mdash; Simon Burford/James Salas Guillen/Kevin Lelitte) &mdash; not connector/Granola-verified, per Kevin's instruction. Distinct from any other Cority-related item elsewhere in this brief.</i>",
      "say": "The Cority applicant import report needs real fixes at source, and nobody can tell me how it was originally built &mdash; I want an actual plan, not another patch."},
     {"id": "3", "title": "38-day leave balance &mdash; how-to guide with Michael", "pill": "info",
-     "what": "A how-to guide for the 38-day leave balance issue needs writing with Michael, separate from the wider departmental rollout already under way. Clockify ref 208 already on the Roadmap.",
+     "what": "38-day leave balance: write a how-to guide with Michael so the fix is repeatable (Clockify ref 208 already on the Roadmap) &mdash; raised by Simon in the 19&nbsp;Aug 1-1.",
      "status": "Guide's write-up not confirmed since 19&nbsp;Aug.",
      "say": "Did we actually get that how-to guide written with Michael, or is it still just in my head from the 1-1?"},
     {"id": "4", "title": "Relieve pressure on Michael &amp; Asta &mdash; take on PeopleXD work", "pill": "info",
-     "what": "Michael and Asta are stretched post-WFM go-live (high incident/sysadmin volume); Kevin agreed to pick up PeopleXD tasks directly to help.",
+     "what": "PeopleXD workload: take on more PeopleXD tasks directly to relieve Michael and Asta, who are stretched post-WFM go-live (high incident/sysadmin volume) &mdash; raised by Simon in the 19&nbsp;Aug 1-1.",
      "status": "Meeting with Michael set 20&nbsp;Aug to identify handover; not confirmed since.",
      "say": "What PeopleXD work did I actually end up taking off Michael's plate, and is it still the right split?"},
     {"id": "5", "title": "T-shirt size application-form question change with Michael", "pill": "info",
-     "what": "T-shirt size the application-form internal-candidate-identification change with Michael, before Marie decides whether to progress it. Trigger email: \"Application form &ndash; identification of internal candidates,\" fwd by Simon Burford 19&nbsp;Aug 15:51; Kevin's effort estimate sent 9&nbsp;Sept.",
+     "what": "Application form change: add internal-candidate identification to the application form &mdash; requested by Laura Porter/Phil Taylor, forwarded by Simon Burford 19&nbsp;Aug 15:51 (Kevin's effort estimate sent back 9&nbsp;Sept). To be t-shirt sized with Michael before Marie decides whether to progress it.",
      "status": "Sizing outcome not confirmed. Original sender (Laura Porter vs Phil Taylor) and whether Marie was cc'd &mdash; not confirmed from available connector data, no live Outlook/Graph search attempted.",
      "say": "Has the application-form change actually been sized with Michael, and did Marie decide whether to progress it?"},
     {"id": "6", "title": "Internal job-site portal 404 bug &mdash; raise as official ticket", "pill": "raise",
-     "what": "The internal job-site portal has a 404 bug patched only with a pre-leave workaround, not a real fix.",
+     "what": "Job-site bug: the internal job-site portal 404s, currently patched only with a pre-leave workaround &mdash; Kevin's own open item from the 19&nbsp;Aug 1-1, needs raising as an official ticket.",
      "status": "No ticket confirmed raised since 19&nbsp;Aug.",
      "say": "Has that 404 bug actually been logged as an official ticket yet?"},
     {"id": "7", "title": "Cover / plus-one for Simon at meetings", "pill": "info",
-     "what": "Simon asked Kevin to be his stand-in at meetings he can't personally attend, particularly while the org structure work runs without dedicated PM cover (confirmed verbatim in the transcript, distinct from the separate Crispin PM-absence situation).",
+     "what": "Meeting cover: be Simon's stand-in/plus-one when he can't attend, particularly while the org structure work runs without dedicated PM cover &mdash; agreed directly between Simon and Kevin, confirmed verbatim in the 19&nbsp;Aug transcript (distinct from the separate Crispin PM-absence situation).",
      "status": "Standing arrangement &mdash; no specific instance to check yet.",
      "say": "Just confirming &mdash; I'm still your plus-one if you can't make a meeting, right?"},
     {"id": "8", "title": "Manage own workload &mdash; calendar breaks, avoid back-to-back meetings", "pill": "info",
-     "what": "Part of Kevin's return-to-work approach after surgery: self-managed with calendar breaks, flagging early to Simon if struggling, rather than a phased return.",
+     "what": "Workload management: calendar breaks and no back-to-back meetings, flagging early to Simon if struggling &mdash; part of Kevin's own return-to-work approach after surgery, agreed in the 19&nbsp;Aug 1-1.",
      "status": "Agreed approach; no specific update found.",
      "say": "The calendar-breaks approach is genuinely working &mdash; I'll flag you directly if that changes."},
     {"id": "9", "title": "Book PDR with Simon &mdash; late September", "pill": "resolved",
-     "what": "Simon agreed to send a calendar invite for Kevin's PDR in late September.",
+     "what": "PDR booking: Simon agreed to send Kevin a calendar invite for his PDR in late September &mdash; agreed in the 19&nbsp;Aug 1-1.",
      "status": "<b>Resolved</b> &mdash; confirmed for today, 15:00&ndash;16:00 (Google Calendar).",
      "say": "PDR's booked for later today &mdash; nothing needed from you on this one."},
     {"id": "10", "title": "Decide on remaining 2.5 days annual leave", "pill": "onhold",
-     "what": "2.5 days of annual leave still need a decision &mdash; use them or carry them over, with Jonathan updating the system if carried.",
+     "what": "Annual leave: 2.5 days remaining need a decision &mdash; use them or carry over, with Jonathan updating the system if carried &mdash; raised by Kevin himself in the 19&nbsp;Aug 1-1.",
      "status": "No decision communicated to Simon on record since 19&nbsp;Aug.",
      "say": "I still owe you a decision on those 2.5 days &mdash; let me get back to you on that today."},
 ]
 
 MM_ITEMS = [
     {"id": "1", "title": "Clockify budget decision &mdash; chase Jonathan", "pill": "raise",
-     "what": "The move to Clockify for time-tracking depends on Jonathan's budget approval; no funding means falling back to evaluating Jibble and extracting existing Clockify data first.",
+     "what": "Clockify decision: the team's proposed move to Clockify for time-tracking needs Jonathan's budget sign-off, or falls back to evaluating Jibble and extracting existing data first &mdash; raised at the 20&nbsp;Aug meeting; Kevin to chase Jonathan directly.",
      "status": "No decision on record since 20&nbsp;Aug &mdash; still open.",
      "say": "Has Jonathan actually given us a yes or no on the Clockify budget?"},
     {"id": "2", "title": "Locate historical Clockify project code (2024 hours)", "pill": "onhold",
-     "what": "The team's trying to trace an old Clockify project code covering roughly 2024's logged hours, raised as an open ask in the meeting.",
+     "what": "Historical Clockify code: trace an old Clockify project code covering roughly 2024's logged hours &mdash; raised as an open team-wide ask at the 20&nbsp;Aug meeting (no specific requester named in the transcript).",
      "status": "Not found on record since 20&nbsp;Aug.",
      "say": "Did anyone ever track down that old 2024 Clockify code?"},
     {"id": "3", "title": "Leavers checklist &amp; incident-response one-pager", "pill": "raise",
-     "what": "A one-pager is needed covering who to inform and what to check when someone leaves or an incident happens, while it's still fresh.",
+     "what": "Leavers/incident one-pager: draft a one-pager covering who to inform and what to check when someone leaves or an incident happens &mdash; raised at the 20&nbsp;Aug meeting following a recent incident near-miss; Kevin asked to book the drafting session (specific requester not named in the transcript).",
      "status": "No fixed date agreed 20&nbsp;Aug; session with Kevin not confirmed held since.",
      "say": "I still owe the team that leavers/incident one-pager &mdash; let's get a session booked."},
     {"id": "4", "title": "WhatsApp group membership review", "pill": "onhold",
-     "what": "The work WhatsApp group used for team-wide alerts has stale/unclear membership (people who've left still in it, unnamed numbers) &mdash; a real data-breach risk.",
+     "what": "WhatsApp membership: the work WhatsApp group used for team-wide alerts has stale/unclear membership (people who've left still in it, unnamed numbers) &mdash; a data-breach risk raised at the 20&nbsp;Aug meeting.",
      "status": "Due at \"the team meeting next week\" (transcript-confirmed wording); not confirmed done.",
      "say": "Did the WhatsApp membership review actually happen at last week's team meeting?"},
     {"id": "5", "title": "WFM meeting invite &mdash; data completeness", "pill": "onhold",
-     "what": "Some departments show only one sickness record for the whole year despite 300+ staff &mdash; a data-completeness risk ahead of October's WFM go-live. David engaged to confirm readiness.",
+     "what": "WFM data completeness: some departments show only one sickness record for the whole year despite 300+ staff, a risk ahead of October's WFM go-live &mdash; raised at the 20&nbsp;Aug meeting; David already engaged on departmental readiness.",
      "status": "Not reconfirmed since 20&nbsp;Aug.",
      "say": "Has David actually confirmed every department's ready for the October go-live?"},
     {"id": "6", "title": "Signals absence reporting &mdash; meeting Tuesday", "pill": "onhold",
-     "what": "Signals absence reporting is a separate recurring meeting Kevin needs adding back onto after being away &mdash; genuinely distinct from the WFM meeting above (transcript confirms two separate things, not one).",
+     "what": "Signals absence reporting: a separate recurring meeting Kevin needs adding back onto after being away &mdash; raised by Kevin himself at the 20&nbsp;Aug meeting, genuinely distinct from the WFM meeting above (transcript confirms two separate things, not one).",
      "status": "Invite status unconfirmed.",
      "say": "Did I actually get added to the Signals absence reporting invite for Tuesday?"},
     {"id": "7", "title": "Tableau &mdash; email Jasmine and Sarah", "pill": "raise",
-     "what": "The Tableau spreadsheet behind the statutory equal pay audit (due roughly every 3 years) needs updating, with Reward team contacts Jasmine and Sarah looped in by email.",
+     "what": "Tableau spreadsheet: update the spreadsheet behind the statutory equal pay audit (due roughly every 3 years) and loop in Reward-team contacts Jasmine and Sarah by email &mdash; raised at the 20&nbsp;Aug meeting (specific requester not named in the transcript).",
      "status": "Not confirmed sent since 20&nbsp;Aug.",
      "say": "Did that email to Jasmine and Sarah on the Tableau spreadsheet actually go out?"},
     {"id": "8", "title": "Tableau &mdash; final audit run + migration on Roadmap", "pill": "raise",
-     "what": "Plan is one final equal pay audit run in Tableau ahead of the July 2027 deadline, then a proper migration off Tableau over three years, added to the Roadmap with documented rationale.",
+     "what": "Tableau migration: run the equal pay audit in Tableau one final time ahead of the July 2027 deadline, then migrate off Tableau over three years, added to the Roadmap with documented rationale &mdash; agreed at the 20&nbsp;Aug meeting.",
      "status": "Not confirmed added since 20&nbsp;Aug.",
      "say": "Is the Tableau migration actually written into the Roadmap yet, with the reasoning behind it?"},
     {"id": "9", "title": "PDR tracker &mdash; reshare with leads", "pill": "info",
-     "what": "The PDR tracker link needs resharing with leads so booked/completed sessions stay visible across the whole team.",
+     "what": "PDR tracker: reshare the tracker link with leads so booked/completed sessions stay visible across the whole team &mdash; raised at the 20&nbsp;Aug meeting as a general reminder to leads.",
      "status": "Kevin's own PDR is today; wider reshare to leads not confirmed.",
      "say": "Has the PDR tracker link actually gone back out to the leads?"},
     {"id": "10", "title": "Susan's acting-up allowance business case", "pill": "raise",
-     "what": "A drafted business case (approx. &pound;300 total) for Susan's acting-up allowance needs raising with Renu in person, once Renu's back from leave &mdash; no guarantee of approval.",
+     "what": "Susan's business case: Kevin drafted a two-page business case (approx. &pound;300 total) for Susan's acting-up allowance at the 20&nbsp;Aug meeting, to raise with Renu in person once she's back from leave &mdash; no guarantee of approval.",
      "status": "1-1 with Renu not confirmed held since 20&nbsp;Aug.",
      "say": "Have you had that conversation with Renu on Susan's case yet?"},
     {"id": "11", "title": "PSP work &mdash; via lead first, escalate to Renu if unresolved", "pill": "onhold",
-     "what": "PSP requests should route via the team lead first, with backfill agreed before it's taken on, escalating to Renu only if unresolved &mdash; part of a wider strategic workforce review Sarah Kay is running on Renu's behalf.",
+     "what": "PSP work process: PSP requests should route via the team lead first, with backfill agreed before it's taken on, escalating to Renu only if unresolved &mdash; discussed at the 20&nbsp;Aug meeting, part of a wider strategic workforce review Sarah Kay is running on Renu's behalf.",
      "status": "No update on record since 20&nbsp;Aug &mdash; needs a live check.",
      "say": "Are we actually holding the line on PSP work coming via the lead first?"},
     {"id": "12", "title": "Nathan's AI inbox-logging skill", "pill": "new",
-     "what": "Nathan's built a rough prototype AI skill that reads the applicant inbox and logs requests into a spreadsheet automatically &mdash; could free up Anne and Henry's time on inbox cover once refined.",
+     "what": "Nathan's AI skill: a rough prototype that reads the applicant inbox and logs requests into a spreadsheet automatically, demoed live by Nathan at the 20&nbsp;Aug meeting &mdash; could free up Anne and Henry's time on inbox cover once refined.",
      "status": "Real, demoed live 20&nbsp;Aug (confirmed via transcript). No further refinement/sharing on record.",
      "say": "Has Nathan's inbox-logging skill moved on at all since his demo?"},
     {"id": "13", "title": "Executive dashboard &mdash; on hold pending data structure", "pill": "onhold",
-     "what": "The planned executive dashboard can't be built until the underlying calculation data is properly structured.",
+     "what": "Executive dashboard: can't be built until the underlying calculation data is properly structured &mdash; status update given at the 20&nbsp;Aug meeting.",
      "status": "Progress made, not complete; no update since 20&nbsp;Aug.",
      "say": "Where's the calculation data got to &mdash; any closer to being able to build that dashboard?"},
     {"id": "14", "title": "Broken SharePoint links &mdash; Julian to review/fix", "pill": "info",
-     "what": "A Codex scan of SharePoint surfaced broken hyperlinks across pages (majority in the cyber security section); Julian has the output (page, URL, link name) to work through.",
+     "what": "Broken SharePoint links: a Codex scan Kevin ran surfaced broken hyperlinks across SharePoint pages (majority in the cyber security section), shared at the 20&nbsp;Aug meeting &mdash; Julian has the output (page, URL, link name) to work through.",
      "status": "No completion on record.",
      "say": "How far through the broken-links list has Julian actually got?"},
     {"id": "15", "title": "OSM data access &mdash; for AI-driven FAQ/theme analysis", "pill": "onhold",
-     "what": "Early thinking on getting more direct access to OSM's support-request data, to use AI (not Power Automate &mdash; ruled out, non-Microsoft) to spot themes and maybe automate FAQ-style responses.",
+     "what": "OSM data access: early thinking on getting more direct access to OSM's support-request data, to use AI (not Power Automate &mdash; ruled out, non-Microsoft) to spot themes and maybe automate FAQ-style responses &mdash; discussed at the 20&nbsp;Aug meeting.",
      "status": "Early-stage only. No movement on record since 20&nbsp;Aug.",
      "say": "Has there been any real movement on getting proper access to that OSM data?"},
 ]
@@ -216,7 +230,7 @@ SECTIONS = f"""
 FOOTNOTE = """<div class="footnote">
     Rebuilt 16 Sept 2026 for today's 10:00 sitting; context lines and speaker notes added same day per Kevin's request &middot; Sources: SK 1-1 transcript (not_dIj3MwTSbme10y, 19 Aug), Managers Meeting transcript (not_ZSu5h6SBdMTD9o, 20 Aug), Monthly Standing Agenda September 2026.pptx (local OneDrive), a pasted email thread for the REF 2029 HESA UDF item and the Cority/RECSUP20 item (neither connector-verified, per Kevin), Work Inbox + Command Centre (pulled 15&ndash;16 Sept).<br>
     One SK 1-1 transcript item (a colleague's confidential upcoming leave) is deliberately omitted throughout, per Kevin's standing instruction.<br>
-    Eighth same-day authorized exception to the 21 Aug 2026 pipeline-review content-push freeze &mdash; not a general lifting of it. Full pass-by-pass history in Lauren's memory, not repeated here.<br>
+    Ninth same-day authorized exception to the 21 Aug 2026 pipeline-review content-push freeze &mdash; not a general lifting of it. Full pass-by-pass history in Lauren's memory, not repeated here.<br>
     Branding: command-centre/BRANDING.md v2.0 &mdash; Oxford Navy, Inter, canonical crest. Template shared via brief_chrome.py.
   </div>"""
 
