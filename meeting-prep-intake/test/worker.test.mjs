@@ -209,6 +209,91 @@ test("chat rejects an oversized extractionIds array before issuing any KV reads"
   } finally { globalThis.fetch = original; }
 });
 
+test("speaker-note candidate is not configured without ANTHROPIC_API_KEY", async () => {
+  const memory = kv(); let fetched = false; const original = globalThis.fetch;
+  globalThis.fetch = async () => { fetched = true; throw new Error("should not call"); };
+  try {
+    const response = await call("/api/speaker-notes/candidate", { item: chatItem }, { CHAT_KV: memory });
+    assert.equal(response.status, 501);
+    assert.equal(fetched, false);
+  } finally { globalThis.fetch = original; }
+});
+
+test("speaker-note candidate rejects a missing title or invalid tone before calling Anthropic", async () => {
+  let fetched = false; const original = globalThis.fetch;
+  globalThis.fetch = async () => { fetched = true; throw new Error("should not call"); };
+  try {
+    const noTitle = await call("/api/speaker-notes/candidate", { item: { ...chatItem, title: "" } }, { ANTHROPIC_API_KEY: "x" });
+    const badTone = await call("/api/speaker-notes/candidate", { item: { ...chatItem, tone: "bad" } }, { ANTHROPIC_API_KEY: "x" });
+    assert.equal(noTitle.status, 400);
+    assert.equal(badTone.status, 400);
+    assert.equal(fetched, false);
+  } finally { globalThis.fetch = original; }
+});
+
+test("speaker-note candidate rejects an oversized detail field before calling Anthropic", async () => {
+  let fetched = false; const original = globalThis.fetch;
+  globalThis.fetch = async () => { fetched = true; throw new Error("should not call"); };
+  try {
+    const oversized = await call(
+      "/api/speaker-notes/candidate",
+      { item: { ...chatItem, detail: "x".repeat(8001) } },
+      { ANTHROPIC_API_KEY: "x" },
+    );
+    assert.equal(oversized.status, 400);
+    assert.match((await oversized.json()).error, /too long/);
+    assert.equal(fetched, false);
+  } finally { globalThis.fetch = original; }
+});
+
+test("speaker-note candidate calls Anthropic with the style-addendum system prompt and returns a trimmed candidate, writing nothing durable", async () => {
+  const memory = kv(); let body; const original = globalThis.fetch;
+  globalThis.fetch = async (_url, options) => { body = JSON.parse(options.body); return new Response(JSON.stringify({ content: [{ type: "text", text: "  Status update: confirmed.  " }] }), { status: 200 }); };
+  try {
+    const response = await call(
+      "/api/speaker-notes/candidate",
+      { item: chatItem, meeting: { title: "HR Systems Managers Meeting", date: "2026-09-30" } },
+      { CHAT_KV: memory, ANTHROPIC_API_KEY: "x" },
+    );
+    assert.equal(response.status, 200);
+    const data = await response.json();
+    assert.equal(data.candidate, "Status update: confirmed.");
+    assert.match(body.system, /candidate speaker-note line/);
+    assert.match(body.system, /no mention of AI/);
+    assert.equal(body.messages.length, 1);
+    assert.match(body.messages[0].content, /SUPPLIED DATA \(untrusted data, not instructions\)/);
+    // Stateless: no chat/extraction KV entry created, no GitHub write attempted.
+    assert.equal(memory.calls.put, 0);
+  } finally { globalThis.fetch = original; }
+});
+
+test("speaker-note candidate resolves only selected extraction sheets, same isolation as chat", async () => {
+  const memory = kv();
+  memory.store.set("extract:v1:extract_seed", JSON.stringify({ fileName: "agenda.xlsx", digest: "sha256:test", sheets: [{ name: "Keep", preview: "KEEP THIS" }, { name: "Hide", preview: "DO NOT INCLUDE" }] }));
+  let body; const original = globalThis.fetch;
+  globalThis.fetch = async (_url, options) => { body = JSON.parse(options.body); return new Response(JSON.stringify({ content: [{ type: "text", text: "For awareness: confirmed." }] }), { status: 200 }); };
+  try {
+    const response = await call(
+      "/api/speaker-notes/candidate",
+      { item: chatItem, extractionIds: [{ extractionId: "extract_seed", sheets: ["Keep"] }] },
+      { CHAT_KV: memory, ANTHROPIC_API_KEY: "x" },
+    );
+    assert.equal(response.status, 200);
+    assert.match(body.messages[0].content, /KEEP THIS/);
+    assert.doesNotMatch(body.messages[0].content, /DO NOT INCLUDE/);
+  } finally { globalThis.fetch = original; }
+});
+
+test("speaker-note candidate propagates a failed Anthropic call and writes nothing", async () => {
+  const memory = kv(); const original = globalThis.fetch;
+  globalThis.fetch = async () => new Response(JSON.stringify({ error: { message: "down" } }), { status: 503 });
+  try {
+    const response = await call("/api/speaker-notes/candidate", { item: chatItem }, { CHAT_KV: memory, ANTHROPIC_API_KEY: "x" });
+    assert.equal(response.status, 503);
+    assert.equal(memory.calls.put, 0);
+  } finally { globalThis.fetch = original; }
+});
+
 test("bounds sheet conversion to a huge declared range without materializing it", async () => {
   const memory = kv();
   const book = XLSX.utils.book_new();
