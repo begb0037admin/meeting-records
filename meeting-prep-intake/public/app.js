@@ -67,7 +67,59 @@ function addItem(data = {}) {
   items.append(el); renderNumbers(); void loadChat(el);
 }
 async function loadMeetings() { try { const data = await api("/api/meetings/list"); definitions = data.meetings; for (const m of definitions) { const o = document.createElement("option"); o.value = m.meetingId; o.textContent = m.displayName; $("#meetingSelect").append(o); } } catch (e) { message($("#meetingMessage"), e.message); } }
-$("#meetingSelect").addEventListener("change", async (e) => { if (!e.target.value) return; $("#adHocTitle").value = ""; try { const data = await api("/api/intakes/previous", { meetingId: e.target.value }); for (const item of data.eligibleCarryForward || []) addItem(item); if (data.eligibleCarryForward?.length) message($("#meetingMessage"), "Eligible prior items added. Review each disposition.", true); } catch (err) { message($("#meetingMessage"), err.message); } try { const data = await api("/api/intakes/pending", { meetingId: e.target.value }); if (data.pending) { $("#meetingDate").value = data.pending.date; for (const item of data.pending.items || []) addItem({ ...item, origin: "roadmap-weekly", sourceLabel: data.pending.sourceLabel }); message($("#meetingMessage"), `Pre-populated ${(data.pending.items || []).length} item(s) from ${data.pending.sourceLabel} — review before submitting.`, true); } } catch (err) { message($("#meetingMessage"), err.message); } });
+async function loadPendingDraft(meetingId) {
+  try {
+    const data = await api("/api/intakes/pending", { meetingId });
+    if (data.pending) { $("#meetingDate").value = data.pending.date; for (const item of data.pending.items || []) addItem({ ...item, origin: "roadmap-weekly", sourceLabel: data.pending.sourceLabel }); message($("#meetingMessage"), `Pre-populated ${(data.pending.items || []).length} item(s) from ${data.pending.sourceLabel} — review before submitting.`, true); }
+  } catch (err) { message($("#meetingMessage"), err.message); }
+}
+// Only the HR Systems Roadmap meeting has a real extraction pipeline behind it
+// (automation/extract_hr_roadmap_pending.py reads the local Roadmap Master
+// workbook) -- the button is meaningless for any other meeting, so it's hidden
+// unless this exact meeting is selected.
+const HR_ROADMAP_MEETING_ID = "hr-systems-roadmap";
+let pullTimer = null, pullDeadline = 0;
+function stopPulling() { if (pullTimer) { clearInterval(pullTimer); pullTimer = null; } }
+function renderPullState(state) {
+  const el = $("#pullStatus");
+  if (!state || state.status === "idle") { el.textContent = ""; el.className = "message"; return; }
+  if (state.status === "requested" || state.status === "running") return message(el, "Pulling…", true);
+  if (state.status === "done") { const when = new Date(state.completedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }); return message(el, `Pulled at ${when} — ${state.itemCount} item(s).`, true); }
+  message(el, `Failed — ${state.error || "unknown error"} (click to retry)`);
+}
+async function pollPullStatus(meetingId) {
+  if (Date.now() > pullDeadline) { stopPulling(); return message($("#pullStatus"), "Failed — timed out waiting for the local pull job. Is it running? (click to retry)"); }
+  try {
+    const state = await api("/api/intakes/pull-status", { meetingId });
+    renderPullState(state);
+    if (state.status === "done" || state.status === "failed") { stopPulling(); if (state.status === "done") await loadPendingDraft(meetingId); }
+  } catch { /* transient network hiccup while polling -- keep trying until the deadline */ }
+}
+function startPolling(meetingId) { stopPulling(); pullDeadline = Date.now() + 5 * 60 * 1000; pollPullStatus(meetingId); pullTimer = setInterval(() => pollPullStatus(meetingId), 4000); }
+$("#pullRoadmap").onclick = async () => {
+  const meetingId = $("#meetingSelect").value;
+  if (meetingId !== HR_ROADMAP_MEETING_ID) return;
+  message($("#pullStatus"), "Pulling…", true);
+  try { await api("/api/intakes/pull-request", { meetingId }); startPolling(meetingId); }
+  catch (e) {
+    if (/already in progress/i.test(e.message)) { startPolling(meetingId); return; } // a real pull is running -- reflect it, not an error
+    if (/wait a moment/i.test(e.message)) { message($("#pullStatus"), e.message, true); return; } // cooldown, not a failure
+    message($("#pullStatus"), `Failed — ${e.message} (click to retry)`);
+  }
+};
+$("#meetingSelect").addEventListener("change", async (e) => {
+  stopPulling();
+  const meetingId = e.target.value;
+  $("#pullRoadmapBox").hidden = meetingId !== HR_ROADMAP_MEETING_ID;
+  $("#pullStatus").textContent = "";
+  if (!meetingId) return;
+  $("#adHocTitle").value = "";
+  try { const data = await api("/api/intakes/previous", { meetingId }); for (const item of data.eligibleCarryForward || []) addItem(item); if (data.eligibleCarryForward?.length) message($("#meetingMessage"), "Eligible prior items added. Review each disposition.", true); } catch (err) { message($("#meetingMessage"), err.message); }
+  await loadPendingDraft(meetingId);
+  if (meetingId === HR_ROADMAP_MEETING_ID) {
+    try { const state = await api("/api/intakes/pull-status", { meetingId }); renderPullState(state); if (state.status === "requested" || state.status === "running") startPolling(meetingId); } catch { /* status check is best-effort */ }
+  }
+});
 $("#newRecurring").onclick = () => { if (!$("#adHocTitle").value.trim()) return message($("#meetingMessage"), "Enter an ad-hoc title first."); message($("#meetingMessage"), "Creating recurring definitions is an explicit follow-up admin action; Phase 1 does not write definitions from the browser. Use the versioned definitions file, then select it here."); };
 $("#addItem").onclick = () => addItem();
 $("#submit").onclick = async () => { const meetingId = $("#meetingSelect").value; const title = (meetingId ? definitions.find((m) => m.meetingId === meetingId)?.displayName : $("#adHocTitle").value).trim(); const date = $("#meetingDate").value; if (!title || !date) return message($("#submitMessage"), "Select a recurring meeting or enter an ad-hoc title, and set a date."); const submittedItems = [...items.children]; const draft = submittedItems.map((el, index) => { const detail = $(".detail", el).value; return { itemId: el.dataset.itemId, position: index + 1, priority: Number($(".priority", el).value), title: $(".title", el).value.trim(), tone: $(".tone", el).value, detail, confirmedContext: detail, speakerNoteSeed: $(".seed", el).value, status: $(".status", el)?.value || "open", sources: JSON.parse(el.dataset.sources || "[]"), carryForward: el.dataset.carry ? { ...JSON.parse(el.dataset.carry), disposition: $(".status", el).value } : null }; }).filter((x) => x.status !== "dismissed"); try { const data = await api("/api/intakes/submit", { schemaVersion: 1, meeting: { meetingId: meetingId || null, title, date, kind: meetingId ? "recurring" : "ad-hoc" }, items: draft, submittedBy: "Kevin" }); message($("#submitMessage"), `Locked intake submitted: ${data.path} (commit ${data.commitSha})`, true); $("#submit").disabled = true; submittedItems.forEach(clearChat); sessionStorage.removeItem("meetingPrepDraftId"); resetDraft(); } catch (e) { message($("#submitMessage"), e.message); } };

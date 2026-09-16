@@ -10,6 +10,18 @@ const CHAT_TTL_SECONDS = 7 * 24 * 60 * 60;
 const EXTRACTION_TTL_SECONDS = 60 * 60;
 const PENDING_TTL_SECONDS = 21 * 24 * 60 * 60;
 const MAX_PENDING_ITEMS = 100;
+// Phase 5 follow-up (16 Sep 2026): Kevin explicitly rejected a silent unattended
+// Thursday-morning schedule -- he wants to trigger the roadmap pull himself, on
+// demand, with visible pass/fail feedback, never a silent hang. PULL_STATE_TTL is
+// generous cleanup only; PULL_STALE_MS is what actually protects against a dead
+// local poller leaving the button stuck on "Pulling..." forever -- past that age
+// a "requested"/"running" state is treated as abandoned and a fresh request is
+// allowed again. PULL_SUCCESS_COOLDOWN_MS only throttles rapid re-clicks after a
+// *successful* pull; a failure can always be retried immediately (no cooldown).
+const PULL_STATE_TTL_SECONDS = 60 * 60;
+const PULL_STALE_MS = 5 * 60 * 1000;
+const PULL_SUCCESS_COOLDOWN_MS = 30 * 1000;
+const MAX_PULL_ERROR_CHARS = 500;
 const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
 const MAX_SHEETS = 20;
 const MAX_DATA_ROWS = 50;
@@ -311,6 +323,84 @@ async function writePending(env, request, input, origin) {
   const key = pendingKey(input.meetingId, input.date); const expiresAt = new Date(Date.now() + PENDING_TTL_SECONDS * 1000).toISOString();
   await env.CHAT_KV.put(key, JSON.stringify({ date: input.date, items: input.items, generatedAt: input.generatedAt, sourceLabel: input.sourceLabel, sourceDigest: input.sourceDigest }), { expirationTtl: PENDING_TTL_SECONDS });
   return response(200, { ok: true, key, expiresAt }, origin);
+}
+
+function pullKey(meetingId) { return `pullstate:v1:${meetingId}`; }
+async function isActiveMeeting(env, meetingId) {
+  const defs = await getJson(env, DEFINITIONS_PATH);
+  return (defs?.data.meetings || []).some((m) => m.meetingId === meetingId && m.active);
+}
+async function readPullState(env, meetingId) {
+  try { const raw = await env.CHAT_KV.get(pullKey(meetingId)); return raw ? JSON.parse(raw) : null; } catch { return null; }
+}
+function pullStale(state) {
+  if (!state) return true;
+  const at = state.status === "running" ? state.startedAt : state.requestedAt;
+  const parsed = at ? Date.parse(at) : NaN;
+  return Number.isNaN(parsed) || Date.now() - parsed > PULL_STALE_MS;
+}
+// Browser-facing, no secret: "Pull roadmap now" writes a request flag the local,
+// secret-gated automation poller (not this request) claims and processes. This
+// route never touches the filesystem/workbook itself -- it only ever reads/writes
+// a small KV status record, so it is safe to leave unauthenticated at the same
+// trust level as the other public read routes in this file.
+async function pullRequest(env, input, origin) {
+  if (!/^[a-z0-9-]+$/.test(input?.meetingId || "")) throw error("Invalid meetingId.");
+  if (!env.CHAT_KV) return response(501, { ok: false, error: "Pull-request storage is not configured." }, origin);
+  if (!(await isActiveMeeting(env, input.meetingId))) throw error("Unknown or inactive meeting.");
+  const existing = await readPullState(env, input.meetingId);
+  if (existing && (existing.status === "requested" || existing.status === "running") && !pullStale(existing))
+    return response(429, { ok: false, error: "A pull is already in progress for this meeting." }, origin);
+  if (existing && existing.status === "done" && existing.completedAt && Date.now() - Date.parse(existing.completedAt) < PULL_SUCCESS_COOLDOWN_MS)
+    return response(429, { ok: false, error: "Pulled recently — wait a moment before pulling again." }, origin);
+  const requestedAt = new Date().toISOString();
+  await env.CHAT_KV.put(pullKey(input.meetingId), JSON.stringify({ meetingId: input.meetingId, status: "requested", requestedAt }), { expirationTtl: PULL_STATE_TTL_SECONDS });
+  return response(200, { ok: true, status: "requested", requestedAt }, origin);
+}
+async function pullStatus(env, input, origin) {
+  if (!/^[a-z0-9-]+$/.test(input?.meetingId || "")) throw error("Invalid meetingId.");
+  if (!env.CHAT_KV) return response(501, { ok: false, error: "Pull-request storage is not configured." }, origin);
+  const state = await readPullState(env, input.meetingId);
+  if (!state) return response(200, { ok: true, status: "idle" }, origin);
+  return response(200, { ok: true, ...state }, origin);
+}
+// Secret-gated, called only by the local poller. Atomically (single KV write, no
+// read-modify-race window beyond the read immediately above it, acceptable given
+// this is one desktop polling its own single-tenant queue, not a public surface)
+// claims a "requested" state so a second poller tick or a second machine never
+// double-processes the same request.
+async function pullClaim(env, request, input, origin) {
+  if (!env.PENDING_WRITE_SECRET) return response(501, { ok: false, error: "Pull automation is not configured." }, origin);
+  if (!secretMatches(request.headers.get("X-Automation-Secret"), env.PENDING_WRITE_SECRET)) return response(401, { ok: false, error: "Unauthorised." }, origin);
+  if (!/^[a-z0-9-]+$/.test(input?.meetingId || "")) throw error("Invalid meetingId.");
+  if (!env.CHAT_KV) return response(501, { ok: false, error: "Pull-request storage is not configured." }, origin);
+  const state = await readPullState(env, input.meetingId);
+  if (!state || state.status !== "requested") return response(200, { ok: true, claimed: false }, origin);
+  const startedAt = new Date().toISOString();
+  await env.CHAT_KV.put(pullKey(input.meetingId), JSON.stringify({ ...state, status: "running", startedAt }), { expirationTtl: PULL_STATE_TTL_SECONDS });
+  return response(200, { ok: true, claimed: true, meetingId: input.meetingId }, origin);
+}
+async function pullComplete(env, request, input, origin) {
+  if (!env.PENDING_WRITE_SECRET) return response(501, { ok: false, error: "Pull automation is not configured." }, origin);
+  if (!secretMatches(request.headers.get("X-Automation-Secret"), env.PENDING_WRITE_SECRET)) return response(401, { ok: false, error: "Unauthorised." }, origin);
+  if (!/^[a-z0-9-]+$/.test(input?.meetingId || "")) throw error("Invalid meetingId.");
+  if (!["done", "failed"].includes(input?.status)) throw error("status must be 'done' or 'failed'.");
+  if (input.status === "done" && (!Number.isInteger(input.itemCount) || input.itemCount < 0)) throw error("itemCount must be a non-negative integer for a done result.");
+  if (input.status === "failed" && (typeof input.error !== "string" || !input.error.trim())) throw error("error is required for a failed result.");
+  if (!env.CHAT_KV) return response(501, { ok: false, error: "Pull-request storage is not configured." }, origin);
+  const existing = await readPullState(env, input.meetingId);
+  const completedAt = new Date().toISOString();
+  const record = {
+    meetingId: input.meetingId,
+    status: input.status,
+    requestedAt: existing?.requestedAt,
+    startedAt: existing?.startedAt,
+    completedAt,
+    ...(input.status === "done" ? { itemCount: input.itemCount, date: typeof input.date === "string" ? input.date.slice(0, 10) : undefined } : {}),
+    ...(input.status === "failed" ? { error: input.error.slice(0, MAX_PULL_ERROR_CHARS) } : {}),
+  };
+  await env.CHAT_KV.put(pullKey(input.meetingId), JSON.stringify(record), { expirationTtl: PULL_STATE_TTL_SECONDS });
+  return response(200, { ok: true }, origin);
 }
 
 function chatKey(draftId, itemId) {
@@ -674,6 +764,10 @@ export default {
       }
       if (url.pathname === "/api/intakes/pending") return await pending(env, input, origin);
       if (url.pathname === "/api/intakes/pending/write") return await writePending(env, request, input, origin);
+      if (url.pathname === "/api/intakes/pull-request") return await pullRequest(env, input, origin);
+      if (url.pathname === "/api/intakes/pull-status") return await pullStatus(env, input, origin);
+      if (url.pathname === "/api/intakes/pull-claim") return await pullClaim(env, request, input, origin);
+      if (url.pathname === "/api/intakes/pull-complete") return await pullComplete(env, request, input, origin);
       if (url.pathname === "/api/intakes/submit")
         return response(
           201,

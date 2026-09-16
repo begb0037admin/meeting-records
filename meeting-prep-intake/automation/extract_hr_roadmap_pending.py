@@ -1,4 +1,12 @@
-"""Build and post the weekly HR Systems Roadmap pending draft.
+"""Build and post the HR Systems Roadmap pending draft.
+
+Run this directly (optionally with --dry-run) for manual testing/debugging.
+In normal operation it's invoked by poll_hr_roadmap_pull.py's compute_payload()
+import, triggered on demand from the "Pull roadmap now" button in the browser
+-- not on a fixed schedule. (An earlier version of this feature ran on a
+silent Thursday-morning Task Scheduler trigger; Kevin rejected that 16 Sep
+2026 because a silent overnight failure would leave him stuck day-of with no
+visibility -- see CHECKPOINT.md's Phase 5 follow-up entry.)
 
 Row-selection rule, confirmed directly by Kevin (16 Sep 2026), superseding an
 earlier status/checkpoint-date heuristic drafted before this spec arrived:
@@ -31,6 +39,14 @@ import openpyxl
 WORKBOOK = Path(r"C:\Users\admin\OneDrive - Nexus365\HR Systems Roadmap Master\HR Systems Roadmap MASTER.xlsm")
 WORKER_URL = "https://meeting.lelitte.co.uk/api/intakes/pending/write"
 MEETING_ID = "hr-systems-roadmap"; SOURCE_LABEL = "HR Systems Roadmap Master.xlsm (Work Tracker)"
+# Real, confirmed-live gotcha (16 Sep 2026): Cloudflare's edge returns a bare 403
+# (error code 1010, "browser signature" block) for urllib's default User-Agent
+# (Python-urllib/x.y) against this zone -- unrelated to this Worker's own code,
+# and it affects the real meeting.lelitte.co.uk hostname, not just local dev
+# preview. Every outbound request from this automation must set a real
+# User-Agent or it silently 403s in production. Shared here so both this
+# script and poll_hr_roadmap_pull.py use exactly one value.
+USER_AGENT = "meeting-prep-intake-automation/1.0 (+https://github.com/begb0037admin/meeting-records)"
 
 LEAD_FILTER = {"Chris, James", "FA", "FA, BC, Tr", "FA, BC. Tr", "FA, HRA", "Grace, Nik",
     "Kevin", "Lee", "Marie C", "MarieC", "Simon", "Simon / Marie", "TBC"}
@@ -150,33 +166,22 @@ def load_workbook_with_retry(path, attempts=3, delay=5):
     raise last_error
 
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--dry-run", action="store_true", help="Print the computed payload instead of posting it.")
-    args = parser.parse_args()
+def compute_payload():
+    """Read the live workbook and return the pending-draft payload dict.
 
-    log("Starting HR Systems Roadmap pending draft extraction.")
+    Raises on any real failure (workbook unreadable, header mismatch, invalid
+    row) -- the caller decides how to report that. Shared by this script's own
+    CLI/--dry-run path and poll_hr_roadmap_pull.py's on-demand button path, so
+    both ever run exactly the same extraction logic, never two copies that can
+    drift apart.
+    """
     log(f"Reading workbook: {WORKBOOK}")
-    try:
-        book = load_workbook_with_retry(WORKBOOK)
-    except Exception as exc:
-        log(f"Failed to open workbook: {exc}")
-        return 1
-
-    try:
-        rows = load_rows(book)
-    except Exception as exc:
-        log(f"Failed to read Work Tracker: {exc}")
-        return 1
-
+    book = load_workbook_with_retry(WORKBOOK)
+    rows = load_rows(book)
     meeting = target_date()
-    try:
-        items = build_items(rows, meeting)
-    except ValueError as exc:
-        log(str(exc))
-        return 1
-
-    payload = {
+    items = build_items(rows, meeting)
+    log(f"Rows: total {len(rows)} / lead-matched & active {len(items)}. Target date: {meeting.isoformat()}")
+    return {
         "meetingId": MEETING_ID,
         "date": meeting.isoformat(),
         "items": items,
@@ -184,7 +189,44 @@ def main():
         "sourceLabel": SOURCE_LABEL,
         "sourceDigest": "sha256:" + hashlib.sha256(WORKBOOK.read_bytes()).hexdigest(),
     }
-    log(f"Rows: total {len(rows)} / lead-matched & active {len(items)}. Target date: {meeting.isoformat()}")
+
+
+def post_with_retry(url, payload, secret, attempts=WEEKDAY_RETRIES, delay=5):
+    """POST JSON with the shared automation secret, retrying transient failures.
+
+    Shared by this script's own push and poll_hr_roadmap_pull.py's two POSTs
+    (the draft write and the pull-complete status report).
+    """
+    last_error = None
+    for attempt in range(1, attempts + 1):
+        try:
+            request = Request(
+                url,
+                data=json.dumps(payload).encode(),
+                method="POST",
+                headers={"Content-Type": "application/json", "X-Automation-Secret": secret, "User-Agent": USER_AGENT},
+            )
+            with urlopen(request, timeout=30) as response:
+                return response.read().decode()
+        except (HTTPError, URLError, OSError) as exc:
+            last_error = exc
+            log(f"POST {url} attempt {attempt}/{attempts} failed: {exc}")
+            if attempt < attempts:
+                time.sleep(delay)
+    raise last_error
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--dry-run", action="store_true", help="Print the computed payload instead of posting it.")
+    args = parser.parse_args()
+
+    log("Starting HR Systems Roadmap pending draft extraction (manual/CLI run).")
+    try:
+        payload = compute_payload()
+    except Exception as exc:
+        log(f"Failed to compute payload: {exc}")
+        return 1
 
     if args.dry_run:
         log(json.dumps(payload, indent=2))
@@ -195,22 +237,12 @@ def main():
         log("MEETING_PREP_PENDING_SECRET is not set.")
         return 1
 
-    for attempt in range(1, WEEKDAY_RETRIES + 1):
-        try:
-            request = Request(
-                WORKER_URL,
-                data=json.dumps(payload).encode(),
-                method="POST",
-                headers={"Content-Type": "application/json", "X-Automation-Secret": secret},
-            )
-            with urlopen(request, timeout=30) as response:
-                log(f"Write confirmation: {response.read().decode()}")
-                return 0
-        except (HTTPError, URLError, OSError) as exc:
-            log(f"Write attempt {attempt}/{WEEKDAY_RETRIES} failed: {exc}")
-            if attempt < WEEKDAY_RETRIES:
-                time.sleep(5)
-    return 1
+    try:
+        log(f"Write confirmation: {post_with_retry(WORKER_URL, payload, secret)}")
+        return 0
+    except Exception as exc:
+        log(f"Write failed after retries: {exc}")
+        return 1
 
 
 if __name__ == "__main__":
