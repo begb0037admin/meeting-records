@@ -564,3 +564,19 @@ decisive than a local dev session anyway.
 **Status:** built, tested (22/22), audited (0 vulnerabilities), Kevin gave
 standing authorization to proceed autonomously through merge/deploy/live
 verification without further check-ins for this repo, same as Phases 3/4.
+
+**Codex automated PR review — one real P1 finding, fixed same session:**
+PR #14's review bot correctly caught that the backend change alone was
+dead-on-arrival for the actual use case: `public/index.html`'s file input
+still declared `accept=".xlsx"` and `public/app.js`'s empty-selection
+message still said "Choose a .xlsx workbook first." — so Kevin's browser
+file picker would have filtered his `.xlsm` out, meaning he'd have had to
+manually override the OS file-type filter to select it, which is itself a
+manual step and defeats the entire point of this fix. **Fixed:** file input
+`accept` now `.xlsx,.xlsm`, the message now says ".xlsx or .xlsm". Also
+updated `README.md`'s Phase 3 description (was `.xlsx`-only, now documents
+`.xlsm` acceptance and the mismatched-extension defense-in-depth that
+remains). No backend/test change needed for this fix. Full suite re-run
+after the UI fix: 22/22 pass (Node tests don't exercise the browser file
+picker directly, but nothing in `worker.js`/`worker.test.mjs` was touched
+by this follow-up commit).
