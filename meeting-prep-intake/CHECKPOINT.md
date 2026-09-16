@@ -580,3 +580,264 @@ remains). No backend/test change needed for this fix. Full suite re-run
 after the UI fix: 22/22 pass (Node tests don't exercise the browser file
 picker directly, but nothing in `worker.js`/`worker.test.mjs` was touched
 by this follow-up commit).
+
+## Phase 5 — HR Systems Roadmap on-demand pre-population — 16 September 2026
+
+### Task 1 (same session): carry-forward showing empty for HR Roadmap Meeting
+
+Diagnosed, not fixed — not a bug. Confirmed directly against GitHub (a full
+recursive tree query of the repo): the `intakes/` directory does not exist
+anywhere, for any `meetingId`. Every phase of this system shipped the same
+day Kevin first used it, so nothing has ever been locked-and-submitted
+through it yet, HR Roadmap included. `data/meeting-definitions.json`
+correctly defines `hr-systems-roadmap`. Read `listPrevious()` and
+`eligibleCarryForward()` directly: no date-window filter, no meetingId
+mismatch, no swallowed error — `listPrevious()` returns `null` when there's
+nothing to find, `eligibleCarryForward(null)` returns `[]`, and the browser
+(`app.js`'s `meetingSelect` handler) correctly shows nothing rather than
+misreporting when the array is empty. Working exactly as designed.
+
+### Task 2 build, part 1: weekly pending-draft mechanism
+
+Built on `drew/meeting-prep-intake-phase5` (Codex, lead implementer per
+Kevin's standing role-flip for this project — see Phase 1's entry). New
+routes `POST /api/intakes/pending` (public read, skips a date already
+locked) and `POST /api/intakes/pending/write` (secret-gated,
+`X-Automation-Secret` against a new `PENDING_WRITE_SECRET` Worker secret),
+reusing `CHAT_KV` under `pending:v1:<meetingId>:<date>`, 21-day TTL — same
+reuse-not-new-namespace precedent as Phase 3's extraction cache. Browser
+pre-fills any pending draft into the form when "HR Systems Roadmap" is
+selected. New `automation/extract_hr_roadmap_pending.py` reads the local
+`HR Systems Roadmap MASTER.xlsm` "Work Tracker" sheet.
+
+**Row-selection spec was corrected mid-build.** The original heuristic
+(Status active + `Next checkpoint date` due by the meeting date) was Drew's
+own construction, drafted before a corrected spec arrived from Kevin,
+relayed mid-session and independently verified against the live workbook
+before being adopted — not trusted on the relay's word alone: all 13 cited
+`Lead` values (`Chris, James`, `FA`, `FA, BC, Tr`, `FA, BC. Tr`, `FA, HRA`,
+`Grace, Nik`, `Kevin`, `Lee`, `Marie C`, `MarieC`, `Simon`, `Simon / Marie`,
+`TBC`) were confirmed to exist verbatim in the real "Lead" column (e.g.
+"Chris, James" x3, "FA, BC. Tr" x1, "MarieC" x8, "Simon" x21), and the
+column-letter mapping given (Deadline=T, Deadline type=V, Progress
+updates=W, Next steps=X, Date last reviewed=Y, Next checkpoint date=Z,
+Description=D not C) matched this script's own live header read exactly.
+The script was rewritten to match: include a row only when `Lead` is in
+that 13-value set; `Detail` is exactly the 8 fields specified (ID,
+Description, Deadline, Deadline type, Progress updates in full — "the most
+important field," not trimmed to one entry — Next steps, Date last
+reviewed, Next checkpoint date); tone/priority left at flat defaults.
+
+**Independent review, same session:** read every changed line directly.
+Fixed a real fragility Codex's implementation had — it zipped row values
+against a hardcoded snapshot of the header names instead of the sheet's
+live header row, which would have silently misaligned every field if
+Kevin's own workbook were ever restructured; rewrote it to read headers
+live and fail loudly (exit 1, nothing posted) on a missing required
+column. Hit and fixed a genuine transient `PermissionError` during testing
+(a momentary OneDrive sync lock on the live file) — added a 3-attempt
+retry with backoff around the workbook open. Fixed a README
+section-ordering defect (a paragraph had landed under the wrong heading).
+
+**Status filter — added beyond Kevin's literal spec, flagged for
+confirmation.** On top of the Lead filter, rows with `Status` "Complete" or
+"Not Delivered" were also excluded (35 of 72 Lead-matched rows vs. 72
+without it) — Drew's own addition, not part of the literal column spec,
+on the reasoning that a finished item has no reason on a live meeting
+agenda. Flagged explicitly and held for Kevin's confirmation before
+shipping (see below — confirmed as-is, no change needed).
+
+### Task 2 build, part 2: trigger mechanism redesigned per Kevin
+
+**Kevin decided both open items** from the first PR (#15, opened as a
+draft, held pending these answers):
+
+1. **Status filter confirmed as-is** — exclude `Complete`/`Not Delivered`,
+   no code change needed.
+2. **Rejected the Thursday-07:00 unattended Task Scheduler design.** His
+   stated reason: worried about a silent overnight failure leaving him
+   stuck day-of with no visibility. Required instead: an on-demand "Pull
+   roadmap now" button he triggers himself, with a visible status
+   indicator (Pulling… → Pulled at HH:MM — N items / Failed — reason,
+   click to retry), built as deterministic code/infrastructure with **no
+   LLM/agent in the loop** — a hard constraint, not a preference.
+
+Built directly by Drew, not via Codex, for this specific increment — same
+precedent as Phase 4 ("the scope was well-understood... Drew wrote it
+directly rather than round-tripping through a co-implementer for a
+well-scoped addition"). This became a real point of friction, see below.
+
+**What was built:** four new routes — `pull-request`/`pull-status`
+(public) and `pull-claim`/`pull-complete` (secret-gated) — implementing a
+small state machine in `CHAT_KV` under `pullstate:v1:<meetingId>`, 1-hour
+TTL. `pull-request` validates the meeting is real/active against
+`data/meeting-definitions.json` before writing anything, and rate-limits:
+blocks a second request while one is genuinely in flight *unless* that
+state has gone stale (>5 minutes with no update — protects against a dead
+poller leaving the button stuck on "Pulling…" forever), a 30-second
+cooldown after a *successful* pull, and deliberately **no cooldown after a
+failure** so "click to retry" always works immediately. The browser's own
+status poller has an independent 5-minute client-side timeout, so even a
+completely dead backend can't leave the button spinning silently forever.
+New `automation/poll_hr_roadmap_pull.py`, intended to run every 2 minutes
+via Task Scheduler, calls the secret-gated `pull-claim` to atomically claim
+a request, then calls the *exact same* `extract_hr_roadmap_pending
+.compute_payload()` the manual CLI already used (refactored out of that
+script's `main()` specifically so both paths run identical logic, never
+two copies that can drift), writes the draft via the existing
+`pending/write`, and reports success or failure back via `pull-complete`
+— so the button's status is always honest, never silent, matching the
+hard constraint.
+
+Old Thursday-schedule desktop scripts deleted
+(`Run HR Roadmap Pending Draft.ps1`, `Register-HRRoadmapPendingDraft.ps1`
+— reversible via git history); replaced with
+`Run-HRRoadmapPoll.ps1`/`Register-HRRoadmapPoll.ps1`.
+
+**Independent review of this increment (Drew reviewing Drew's own work,
+same rigor as reviewing Codex's):** read every changed line. Confirmed the
+rate-limit ordering (auth/validation before any KV write on every
+secret-gated route), that `pull-status` never exposes the actual extracted
+`items` content (only status metadata — `meetingId`/`status`/timestamps/
+`itemCount`/`error`), and that the client only ever writes a returned
+candidate/state into `.textContent`/`.value`, never `innerHTML`. Added 11
+new tests covering meeting validation, the request/status round trip,
+in-flight/stale/cooldown rate-limiting, claim single-use semantics, and
+complete validation + error-length capping.
+
+**Real production bug found and fixed via live testing, not a mocked
+test:** Cloudflare's edge returned a bare `403` (error code 1010, a
+"browser signature" block) for `urllib`'s default User-Agent against
+`meeting.lelitte.co.uk` — confirmed against the *real* production
+hostname, not just a local dev preview, before being caught. Every
+outbound request from `automation/*.py` now sets a real `User-Agent`
+(shared `USER_AGENT` constant) — re-verified working after the fix, both
+locally and against production.
+
+**Live Workers-runtime smoke test** (`wrangler dev --remote`, real
+`CHAT_KV`/`GITHUB_PAT` bindings, dev-only `PENDING_WRITE_SECRET` override):
+pending read/write/round-trip, `pull-request` validated against the real
+`data/meeting-definitions.json`, live 429s for in-flight/cooldown cases,
+and a full real end-to-end run of the actual (unmodified) poller script —
+claim → real workbook extraction → draft write → status "done" → draft
+readable. Also deliberately exercised a genuine failure path (pointed at
+the not-yet-deployed production `pending/write` route, correctly surfaced
+as status "failed" with a real error, not a hang). Synthetic KV entries
+cleaned up from production afterward each time.
+
+**Process note, for the record — a genuine timing conflict, not glossed
+over:** partway through this second increment, an instruction arrived
+(relayed via the coordinating session) that Codex must be lead implementer
+for this work, with Drew reviewing only — the same role-flip pattern as
+Phases 1–4, which Drew had *not* followed for this specific increment
+(matching the Phase 4 precedent of writing a well-scoped addition
+directly). By the time that instruction reached Drew, PR #15 had already
+been merged (`f30b0921c1dfbf44ddc86f3c60941c9113d71179`) and deployed live
+(Version ID `a10aa4b7-8251-49e7-af2b-04d6c874bd52`), with a real,
+independently-verified end-to-end production run already completed. Drew
+did not attempt to comply retroactively or unilaterally revert a working,
+tested, live deployment on the strength of an instruction that predated
+knowing it was already shipped — instead reported the exact real-world
+state and asked explicitly whether Kevin wanted a full revert-and-rebuild
+through Codex for process reasons alone, or considered this shipped.
+**Kevin's decision: accept the increment as shipped — no revert, no
+rollback.** The real Friday draft this run produced was kept, not deleted.
+
+**Standing rule established from this point forward, non-negotiable:**
+**Codex CLI is the mandatory lead implementer for all future work on this
+feature (`meeting-prep-intake`) and on this repo (`meeting-records`)
+generally — Drew reviews, integrates, provisions secrets/deploys, and
+checkpoints, but does not write feature-implementation code directly,
+except for genuinely trivial, non-substantive fixes (a config value, a
+rename, a one-line path correction) where spawning Codex would be pure
+overhead.** This supersedes the Phase 4 precedent of writing well-scoped
+additions directly — that precedent no longer applies going forward on
+this repo. Related, separately-stated reason: Kevin's own Claude
+session/usage budget is a real, current constraint, not just a process
+preference — minimize direct Claude token usage on this repo to
+review/verification/orchestration, route actual implementation through
+Codex.
+
+### Merge, deploy, and live verification
+
+- Branch `drew/meeting-prep-intake-phase5` merged main in first (picked up
+  PR #14's unrelated `.xlsm`-extraction-allowance work, one real conflict
+  in `public/index.html` — both changes were additive, resolved by keeping
+  both: the new `pullRoadmapBox` markup and main's
+  `accept=".xlsx,.xlsm"`). Full suite re-run against the merged tree:
+  37/37 pass, `npm audit` 0 vulnerabilities.
+- PR #15 merged: `f30b0921c1dfbf44ddc86f3c60941c9113d71179`.
+- Fresh clone of `main` afterward, independently re-ran the full suite
+  again before touching anything else: 37/37 pass, 0 vulnerabilities —
+  matches, no drift.
+- Provisioned `PENDING_WRITE_SECRET`: generated fresh (32 random bytes,
+  URL-safe base64), set via `wrangler secret put`, and set as a matching
+  Windows **User** environment variable (`MEETING_PREP_PENDING_SECRET`) —
+  same convention as `GITHUB_PAT`/`ANTHROPIC_API_KEY`, never written to a
+  file, never logged, never committed.
+- `wrangler deploy`: succeeded, Version ID
+  `a10aa4b7-8251-49e7-af2b-04d6c874bd52`, trigger
+  `meeting.lelitte.co.uk (custom domain)`.
+- **Live production verification, checked directly against the real
+  hostname:** `index.html`/`app.js` byte-identical to source;
+  `/api/meetings/list` unaffected; a real `pull-request` against
+  production (validated against the real, live
+  `data/meeting-definitions.json`), a genuine `429` on an immediate
+  repeat, a genuine `401` on `pull-claim` without the secret; then **the
+  real, unmodified `poll_hr_roadmap_pull.py`** (as it will run from the
+  scheduled task, no code changes for the test) run against real
+  production end to end — claimed the request, read the real workbook,
+  extracted **35 items** for **2026-09-18** (this Friday), wrote the
+  draft, reported success. `pull-status` and `pending` both confirmed
+  correct afterward. **This real draft was left in place, not deleted —
+  it's genuinely useful for Friday's meeting.**
+- **Task Scheduler registration — a second real bug found and fixed
+  live, this time in the deployment tooling, not the feature code.**
+  `schtasks.exe`'s `/tr` argument, containing a path with spaces, was
+  silently mis-split by PowerShell's native-exe argument marshalling; the
+  wrapping registration script printed a false "Registered" success
+  message (`$ErrorActionPreference = 'Stop'` does not catch a non-zero
+  exit from a native `.exe`) while `Get-ScheduledTask` proved the task
+  had never actually been created. Fixed by renaming the wrapper script
+  to remove spaces (`Run-HRRoadmapPoll.ps1`) and switching registration to
+  the `ScheduledTasks` PowerShell module
+  (`Register-ScheduledTask`/`New-ScheduledTaskAction`/
+  `New-ScheduledTaskTrigger`) instead of shelling out to `schtasks.exe` —
+  avoids the whole class of quoting bug rather than fighting it further.
+  Also dropped `-RunLevel Highest` (this account isn't a local admin on
+  this box, registration was denied with it — `HRESULT 0x80070005` — and
+  the task doesn't need elevated rights, it only reads a local file and
+  makes outbound HTTPS calls) and fixed `[TimeSpan]::MaxValue` being out
+  of range for the Task Scheduler XML duration format (replaced with a
+  10-year repetition duration). Pushed directly to `main`
+  (`4015503`) as an operational/deployment-tooling fix, not a change to
+  the shipped feature's logic — judgment call: this class of fix (secret
+  provisioning, `wrangler deploy`, local Task Scheduler registration) has
+  been Drew's direct operational responsibility throughout every phase of
+  this build regardless of who implemented the feature code, and continues
+  to be under the new Codex-mandatory rule above, which governs
+  implementation of the feature, not deployment operations.
+  **Verified live:** `Get-ScheduledTask` shows task `MeetingPrep-HRRoadmap-
+  Poll`, State "Ready", correct `Execute`/`Arguments`
+  (`powershell.exe -NoProfile -ExecutionPolicy Bypass -File
+  "C:\Users\admin\Desktop\Run-HRRoadmapPoll.ps1"`), 2-minute repetition. A
+  manual `Start-ScheduledTask` run completed with `LastTaskResult 0`
+  (success — nothing was pending, so it correctly did nothing), and
+  production's `pull-status` for `hr-systems-roadmap` was unaffected by
+  that idle run, confirming the "exit quietly when nothing is requested"
+  path works for real, not just in a mocked test.
+
+**Current state: Phase 5 is fully merged, deployed, and live in
+production**, including the on-demand button, the deterministic poller,
+and the Task Scheduler registration that runs it every 2 minutes on
+Kevin's desktop. A real, correct 35-item draft for Friday 18 September
+2026's HR Systems Roadmap meeting is sitting in production right now,
+ready for Kevin to review/edit when he opens `meeting.lelitte.co.uk` and
+selects "HR Systems Roadmap."
+
+**Exact next action:** none blocking. If the Friday draft looks wrong to
+Kevin when he actually reviews it (wrong items included/excluded, wrong
+field content), that's a product-spec question to route back through him
+before touching the extraction logic again — not something to silently
+adjust. **Any future engineering work on this feature or this repo goes
+through Codex as lead implementer first, per the standing rule above.**
