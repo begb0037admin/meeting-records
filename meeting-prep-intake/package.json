@@ -3,5 +3,8 @@
   "type": "module",
   "scripts": {
     "test": "node --test test/worker.test.mjs"
+  },
+  "dependencies": {
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   }
 }

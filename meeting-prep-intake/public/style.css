@@ -108,3 +108,35 @@ button {
   padding-top: 0.7rem;
   font-style: italic;
 }
+.extract-panel {
+  border-top: 1px dashed #cbd2e3;
+  margin-top: 1rem;
+  padding-top: 0.7rem;
+}
+.extract-panel h3 {
+  margin: 0 0 0.5rem;
+}
+.xlsx-file {
+  display: inline-block;
+  width: auto;
+  margin: 0 0.5rem 0.5rem 0;
+}
+.extract-sheet-row {
+  border-top: 1px solid #dbe2ee;
+  padding: 0.6rem 0;
+}
+.extract-sheet-row label {
+  margin: 0;
+}
+.extract-sheet-row input {
+  width: auto;
+  margin: 0;
+}
+.extract-sheet-row pre {
+  max-height: 9rem;
+  overflow: auto;
+  margin: 0.5rem 0 0;
+  padding: 0.5rem;
+  background: #f5f7fb;
+  white-space: pre-wrap;
+}

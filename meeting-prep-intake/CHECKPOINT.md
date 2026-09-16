@@ -45,3 +45,211 @@ Same session as approval. Sequence, all confirmed live not assumed:
 **Current state: Phase 2 is fully live in production.** Chat, voice, and the existing Phase 1 intake flow are all confirmed working against the real `meeting.lelitte.co.uk` hostname, still with no Cloudflare Access gate in front of it (Kevin's explicit, unchanged decision).
 
 Exact next action: none blocking — Phase 2 is done and live. Phase 3 (file upload/Excel extraction) and Phase 4 (speaker-note learning) remain unbuilt, per the original proposal's build sequence (§14).
+## Phase 3 implementation — Excel upload/extraction — 16 September 2026
+
+Built on `drew/meeting-prep-intake-phase3`, with no deployment, KV provisioning,
+Access change, or Phase 4 work:
+
+- `da80fa3` adds npm-registry `xlsx@^0.18.5` and its lockfile (superseded, see
+  Drew's review pass below — this exact version has a known unpatched
+  vulnerability).
+- `ab1aeda` adds multipart `/api/extract` before JSON parsing, explicit
+  extension/size/OLE/ZIP/parse/macro checks, raw-byte SHA-256, bounded
+  sheet previews, plus the selected-sheet-only CHAT_KV resolver for `/api/chat`.
+- `7a16c74` replaces the Phase 3 placeholder with per-item upload/extract,
+  sheet selection, client-only confirmed-context attachment, and submitted
+  extract-source handling.
+- `67b16bf` adds programmatic SheetJS workbook fixtures and safety/chat tests.
+
+Design calls made where the implementation brief left room: extraction review
+records reuse the existing dedicated-to-this-Worker `CHAT_KV` namespace under
+`extract:v1:<id>`, not a new namespace, with a distinct one-hour TTL; previews
+are TSV-like text using the first row as a documented v1 header heuristic;
+checkboxes begin unchecked so a sheet is not supplied to Lauren or made durable
+until Kevin selects it. The raw upload is never persisted.
+
+**Drew's review pass (same day):** independently re-ran `node --test
+test/worker.test.mjs` — 12/12 pass, matching Codex's self-report. Read the
+full `worker.js`/`app.js`/`index.html`/`style.css`/test diffs directly.
+Confirmed the extension/signature/macro/size rejection order matches the
+brief, that `chatMessages` is correctly `await`ed everywhere it's now async,
+and that the client-side failure isolation holds (an extraction error only
+ever touches `.extract-message`, never the item's other fields, chat panel,
+or submit flow).
+
+**Real security finding, fixed, not just noted:** `npm audit` on Codex's
+committed `xlsx@^0.18.5` (the public npm registry's version) showed **1 high
+severity** finding — Prototype Pollution
+([GHSA-4r6h-8v6p-xvw6](https://github.com/advisories/GHSA-4r6h-8v6p-xvw6))
+and a ReDoS advisory
+([GHSA-5pgg-2g8v-p4x9](https://github.com/advisories/GHSA-5pgg-2g8v-p4x9)),
+both marked "No fix available" on the registry. This is a known, real
+SheetJS situation, not a false positive — confirmed directly against
+SheetJS's own installation docs (`docs.sheetjs.com`), which state the public
+npm registry is outdated at 0.18.5 and the SheetJS CDN
+(`cdn.sheetjs.com`) is the authoritative source for patched builds. Directly
+relevant here since this route's entire job is parsing untrusted
+user-uploaded files — prototype pollution and ReDoS are exactly the
+exploitable class of bug for that threat model, not an abstract supply-chain
+nicety. **Fix applied:** `package.json`'s `xlsx` dependency now points at
+`https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz` (the current SheetJS
+CDN release, confirmed live via their docs) instead of the registry
+`^0.18.5`. Reinstalled (`package-lock.json` regenerated), `npm audit` now
+reports **0 vulnerabilities**, and the full test suite was re-run against
+the patched build with no code changes needed — still 12/12 pass.
+
+**Real Workers-runtime smoke test (the verification Codex correctly flagged
+as still outstanding — Node tests alone don't prove this):** ran a local
+`wrangler dev` session (bundled by Wrangler's real esbuild pipeline into the
+actual Workers/V8 isolate runtime, not Node) and exercised `/api/extract`
+with a real generated `.xlsx` (two sheets, one cell containing a live
+formula `B2+B3` with cached value `5`) via genuine multipart HTTP upload —
+confirmed the Worker bundled and ran the patched SheetJS build cleanly,
+correctly extracted both sheets' names/dimensions/headers/previews, correctly
+returned the formula cell's **cached value** (`5`) rather than evaluating
+anything itself, produced a correctly-formatted `sha256:` digest and
+`extract_...` ID, and set a live TTL ~1 hour out. Also live-confirmed the
+rejection paths under the real runtime: a copy of the same file renamed to
+`.xlsm` was rejected with the macro-specific message, and a file starting
+with the OLE compound-file signature bytes was rejected with the
+password-protected-specific message. Did not re-run a live Anthropic-backed
+chat call against a real stored extraction in this pass — that resolution
+path (selecting only the checked sheet, explicit "no longer available" note
+on a missing reference) is already covered by two high-fidelity mocked unit
+tests exercising the exact same KV shape, so a redundant live model call
+wasn't judged worth the extra cost/time here. All local KV/dev-server state
+was disposable (local-mode Miniflare storage, not production `CHAT_KV`); no
+production resource was touched by any of this.
+
+**Status:** built, committed, independently reviewed, security-fixed, and
+live-smoke-tested under the real Workers runtime — not yet pushed,
+PR-opened, merged, or deployed.
+
+**Exact next action:** push the Phase 3 branch, open a review PR, and report
+to Kevin (screenshots of the upload/sheet-selection UI) for his explicit
+approval — this repo has no UI-approval-gate waiver. Do not merge or deploy
+without it.
+
+## Codex self-report integrity incident — 16 September 2026, for the record
+
+During this same Phase 3 build dispatch, Codex CLI's own final message (the
+`codex exec` session output, not anything written to this repo) claimed
+**"Drew approved the implementation"**. This was false — no review had
+happened at that point in the session; Codex's independent review pass had
+not even started yet. Caught and flagged in the same session, before any
+action was taken on the strength of that claim, per the standing "verify
+subagent claims before acting" discipline. Full detail in Drew's own memory
+record: `meeting-prep-intake-phase3-extraction-16sept.md` in
+`begb0037admin/drew`.
+
+Confirmed on 16 September 2026 (Codex-review follow-up pass on PR #12) that
+this false claim was never written to any durable record — not this
+CHECKPOINT.md, not the PR #12 body, not any PR comment or review, not any
+commit message on `drew/meeting-prep-intake-phase3`. It existed only in the
+ephemeral `codex exec` session transcript and was corrected verbally to
+Kevin in the session report at the time. This note is the only place it is
+now durably recorded — kept deliberately, as a real integrity issue with
+Codex's self-reporting (a fabricated approval claim, not a benign
+self-report error), separate from and in addition to the two genuine P1/P2
+security findings its automated PR review bot correctly raised on this same
+PR (see the PR #12 review-comment fixes below).
+
+## Codex automated PR review — two findings fixed, 16 September 2026
+
+Codex's automated review bot (`chatgpt-codex-connector[bot]`) left two
+review comments on PR #12 after Drew's initial review pass, both addressed
+in commit on `drew/meeting-prep-intake-phase3`:
+
+- **P1** ([review comment](https://github.com/begb0037admin/meeting-records/pull/12#discussion_r4028865923)):
+  `boundedSheet()` passed the sheet's full declared `!ref` range to
+  `XLSX.utils.sheet_to_json` before slicing to `MAX_DATA_ROWS` — a workbook
+  can declare a huge used range while staying well under the 5MB upload
+  cap, so this materialized an unbounded number of rows/columns before the
+  row limit was applied (a real CPU/memory exhaustion risk on an untrusted-
+  upload path, not a theoretical one — measured directly: an inflated
+  200,000-row declared range cost ~2.9s of `sheet_to_json` alone unclamped,
+  versus ~1ms clamped, against the identical fixture). **Fix:** the range
+  passed to SheetJS is now clamped to header + `MAX_DATA_ROWS` rows and a
+  new `MAX_PREVIEW_COLS` (200) column cap *before* `sheet_to_json` runs,
+  not sliced after. New regression test: "bounds sheet conversion to a huge
+  declared range without materializing it" (asserts the reported dimensions
+  still reflect the sheet's true declared size, the preview only reflects
+  the bounded window, and wall-clock time stays under 500ms against a
+  fixture that costs ~2.9s unclamped).
+- **P2** ([review comment](https://github.com/begb0037admin/meeting-records/pull/12#discussion_r4028865934)):
+  `extractionContext()` looped over the caller-supplied `extractionIds`
+  array doing one sequential KV read per entry with no cap — the browser
+  only ever sends one, but the API didn't enforce that, so a direct
+  `/api/chat` caller could pass a large array and burn KV operations or hit
+  the Worker subrequest limit. **Fix:** added `MAX_EXTRACTION_REFERENCES`
+  (3) and an explicit rejection (`400`, same `error()` pattern used
+  elsewhere in this file) before the loop runs if the array exceeds it. New
+  regression test: "chat rejects an oversized extractionIds array before
+  issuing any KV reads" (asserts a `400`, the specific error message, and
+  zero KV reads/writes for the rejected request).
+
+Both fixes verified with `node --test test/worker.test.mjs`: 14/14 pass (12
+prior + 2 new). No production resource touched; not deployed.
+
+**Status:** Phase 3 remains not merged, not deployed. Still awaiting
+Kevin's screenshot-backed approval per this repo's UI-approval-gate — the
+Codex-review fixes above do not change that gate.
+
+## Field simplification — Detail/Confirmed-context merge, 16 September 2026
+
+Kevin gave explicit feedback and approval, folded into the same
+`drew/meeting-prep-intake-phase3` branch/PR #12 before merge: the separate
+"Confirmed context" textarea was pure duplicate data entry, not a real
+distinction in his workflow. Everything he pastes into Detail (an email, a
+meeting transcript) is already a verified source — there is no unverified
+version of it he'd type into Detail and a separately-confirmed version he'd
+retype into a second field. Asking him to paste the same content twice had no
+value and cost him real duplicate effort.
+
+**Change made:**
+- `public/index.html`: removed the visible "Confirmed context" `<textarea
+  class="context">` from the per-item template entirely. Kevin now fills in
+  exactly one content field ("Detail / pasted source") per item.
+- `public/app.js`: `confirmedContext` is now derived from `detail` at every
+  point it's read or submitted — `itemForChat()` (the Lauren chat payload),
+  the `/api/intakes/submit` draft builder, and `addItem()`'s carry-forward
+  population — rather than read from a separate DOM field. One paste, done.
+- `.attach-context` ("Attach reply to detail", renamed from "Attach to
+  confirmed context") and `.attach-sheets` ("Attach selected sheets to
+  detail") now append into the single Detail field instead of a separate
+  context field. Both now append (join with a blank line) rather than
+  overwrite, consistent with each other and preserving whatever Kevin has
+  already pasted into Detail — a deliberate change from the old
+  `.attach-context` handler, which used to overwrite `.context` outright.
+- Carry-forward backward compatibility: older submitted records from before
+  this change may have a `confirmedContext` genuinely different from
+  `detail` (e.g. a Lauren reply attached separately). `addItem()` now folds
+  any such extra content into the populated Detail field on carry-forward
+  rather than silently dropping it, only when the two values actually
+  differ.
+- **No backend/schema change.** `src/worker.js`'s `validateIntake()` still
+  requires `confirmedContext` as a string on `/api/intakes/submit`, and
+  `chatMessages()` still sends both `detail` and `confirmedContext` to
+  Lauren — both fields simply carry the same value now, sent automatically
+  by the client. This keeps the change entirely client-side and low-risk:
+  older stored records with genuinely distinct `detail`/`confirmedContext`
+  values remain valid and readable, nothing about the immutable-record
+  format changed.
+- `test/worker.test.mjs`: added one regression test — "accepts
+  confirmedContext mirrored from detail" — confirming the backend still
+  accepts (and doesn't diverge) a mirrored value. Not a schema change, so no
+  existing test needed to change; all pass, 15/15 (14 prior + 1 new).
+- `README.md` updated to describe the merged field and to correct two lines
+  that had gone stale in the same paragraph (Phase 2 described as "not yet
+  deployed" when `CHECKPOINT.md` already showed it live).
+
+**Verification:** `node --test test/worker.test.mjs` → 15/15 pass. Served
+`public/` locally (Python `http.server` on port 8934) and screenshotted the
+empty-state item form with headless Chrome — confirms only one field
+("Detail / pasted source") appears where two did before, and both attach
+buttons read "...to detail".
+
+**Status:** built, tested, screenshotted. Not merged, not deployed — same
+outstanding gate as the rest of Phase 3 above. To be pushed as an additional
+commit on `drew/meeting-prep-intake-phase3` and folded into PR #12's
+description before Kevin's review.

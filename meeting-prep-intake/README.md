@@ -4,7 +4,9 @@ Private Cloudflare Worker and static interface for creating immutable meeting-in
 
 **Phase 1** (merged, live at `meeting.lelitte.co.uk`): meeting picker, agenda-item workspace, carry-forward, and the immutable GitHub submission gateway.
 
-**Phase 2** (this branch, not yet deployed): per-item Lauren chat (`/api/chat`) backed by a dedicated `CHAT_KV` namespace keyed by `draftId:itemId`, and Workers AI voice routes (`/api/voice/stt`, `/api/voice/tts`). Chat is never durable on its own — Kevin explicitly copies a Lauren reply into the existing `confirmedContext` textarea before it can be submitted.
+**Phase 2** (merged, live): per-item Lauren chat (`/api/chat`) backed by a dedicated `CHAT_KV` namespace keyed by `draftId:itemId`, and Workers AI voice routes (`/api/voice/stt`, `/api/voice/tts`). Chat is never durable on its own — Kevin can click "Attach reply to detail" to append a Lauren reply into the Detail field before it is submitted.
+
+**Field-simplification change** (16 Sept 2026, folded into the Phase 3 PR): the browser no longer shows a separate "Confirmed context" field. Kevin's real workflow has no unverified-vs-confirmed distinction — everything pasted into Detail (an email, a transcript) is already a verified source, so a second field asking him to re-enter the same content was pure duplicate data entry. The client now submits `confirmedContext` equal to `detail` automatically; the backend schema and Lauren's chat payload shape are unchanged (`confirmedContext` is still a required string on `/api/intakes/submit` and is still sent to `/api/chat`), only the browser UI and what the user has to type changed. "Attach selected sheets to detail" (Excel extraction) now appends into Detail the same way.
 
 ## Deploy preparation (do not deploy from this build)
 

@@ -1,3 +1,5 @@
+import * as XLSX from "xlsx";
+
 const OWNER = "begb0037admin";
 const REPO = "meeting-records";
 const BRANCH = "main";
@@ -5,6 +7,13 @@ const DEFINITIONS_PATH = "data/meeting-definitions.json";
 const TONES = new Set(["update", "raise", "fyi", "decision-needed"]);
 const STATUSES = new Set(["open", "carried", "resolved", "dismissed"]);
 const CHAT_TTL_SECONDS = 7 * 24 * 60 * 60;
+const EXTRACTION_TTL_SECONDS = 60 * 60;
+const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
+const MAX_SHEETS = 20;
+const MAX_DATA_ROWS = 50;
+const MAX_PREVIEW_COLS = 200;
+const MAX_PREVIEW_CHARS = 2000;
+const MAX_EXTRACTION_REFERENCES = 3;
 const AURA2_EN_SPEAKERS = new Set([
   "amalthea", "andromeda", "apollo", "arcas", "aries", "asteria", "athena",
   "atlas", "aurora", "callista", "cora", "cordelia", "delia", "draco",
@@ -248,6 +257,11 @@ function chatKey(draftId, itemId) {
     throw error("Invalid itemId.");
   return `chat:v1:${draftId}:${itemId}`;
 }
+function extractionKey(extractionId) {
+  if (!/^extract_[A-Za-z0-9_-]+$/.test(extractionId || ""))
+    throw error("Invalid extractionId.");
+  return `extract:v1:${extractionId}`;
+}
 async function chatDoc(kv, key) {
   try {
     const raw = await kv.get(key);
@@ -257,7 +271,38 @@ async function chatDoc(kv, key) {
     return { v: 1, turns: [] };
   }
 }
-function chatMessages(doc, input) {
+async function extractionContext(kv, extractionIds) {
+  if (!Array.isArray(extractionIds)) return [];
+  if (extractionIds.length > MAX_EXTRACTION_REFERENCES)
+    throw error(`No more than ${MAX_EXTRACTION_REFERENCES} extraction references may be supplied per message.`);
+  const resolved = [];
+  for (const reference of extractionIds) {
+    const extractionId = reference?.extractionId;
+    const selectedNames = Array.isArray(reference?.sheets)
+      ? reference.sheets.filter((name) => typeof name === "string")
+      : [];
+    try {
+      const raw = await kv.get(extractionKey(extractionId));
+      const doc = raw ? JSON.parse(raw) : null;
+      if (!doc || !Array.isArray(doc.sheets)) throw new Error("missing");
+      resolved.push({
+        extractionId,
+        fileName: doc.fileName || "uploaded workbook",
+        digest: doc.digest || "",
+        sheets: doc.sheets
+          .filter((sheet) => selectedNames.includes(sheet.name))
+          .map((sheet) => ({ name: sheet.name, preview: sheet.preview })),
+      });
+    } catch {
+      resolved.push({
+        extractionId: typeof extractionId === "string" ? extractionId : "invalid reference",
+        unavailable: "This extraction reference is no longer available. Ask a clarifying question rather than infer its contents.",
+      });
+    }
+  }
+  return resolved;
+}
+async function chatMessages(kv, doc, input) {
   const prior = doc.turns.slice(-12).flatMap((turn) =>
     typeof turn?.q === "string" && typeof turn?.a === "string"
       ? [{ role: "user", content: turn.q }, { role: "assistant", content: turn.a }]
@@ -273,7 +318,7 @@ function chatMessages(doc, input) {
     meeting: input.meeting
       ? { title: input.meeting.title || "", date: input.meeting.date || "" }
       : null,
-    extractionIds: Array.isArray(input.extractionIds) ? input.extractionIds : [],
+    extractions: await extractionContext(kv, input.extractionIds),
     message: input.message,
   };
   prior.push({
@@ -304,7 +349,7 @@ async function chat(env, input, origin) {
   const upstream = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: { "content-type": "application/json", "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
-    body: JSON.stringify({ model: env.MODEL || "claude-sonnet-4-6", max_tokens: 1200, system: LAUREN_SYSTEM_PROMPT, messages: chatMessages(doc, input) }),
+    body: JSON.stringify({ model: env.MODEL || "claude-sonnet-4-6", max_tokens: 1200, system: LAUREN_SYSTEM_PROMPT, messages: await chatMessages(env.CHAT_KV, doc, input) }),
   });
   if (!upstream.ok) {
     let detail = "Chat service failed.";
@@ -319,6 +364,106 @@ async function chat(env, input, origin) {
   doc.updated = new Date().toISOString();
   await env.CHAT_KV.put(key, JSON.stringify(doc), { expirationTtl: CHAT_TTL_SECONDS });
   return response(200, { ok: true, reply, turns: doc.turns }, origin);
+}
+function extensionRejection(fileName) {
+  const lower = String(fileName || "").toLowerCase();
+  if (lower.endsWith(".xlsx")) return null;
+  if (lower.endsWith(".xlsm")) return "Macro-enabled workbooks (.xlsm) are not accepted — only plain .xlsx.";
+  if (lower.endsWith(".xlsb")) return "Binary workbooks (.xlsb) are not accepted — only plain .xlsx.";
+  if (lower.endsWith(".xls")) return "Legacy .xls workbooks are not accepted.";
+  const extension = lower.match(/\.[^.]+$/)?.[0] || "no extension";
+  return `Files with ${extension} are not accepted — only plain .xlsx.`;
+}
+function startsWith(bytes, signature) {
+  return signature.every((value, index) => bytes[index] === value);
+}
+function zipSignature(bytes) {
+  return [
+    [0x50, 0x4b, 0x03, 0x04],
+    [0x50, 0x4b, 0x05, 0x06],
+    [0x50, 0x4b, 0x07, 0x08],
+  ].some((signature) => startsWith(bytes, signature));
+}
+async function sha256(buffer) {
+  const hash = await crypto.subtle.digest("SHA-256", buffer);
+  return `sha256:${Array.from(new Uint8Array(hash), (byte) => byte.toString(16).padStart(2, "0")).join("")}`;
+}
+function boundedSheet(sheet, name) {
+  const range = XLSX.utils.decode_range(sheet["!ref"] || "A1:A1");
+  const rows = range.e.r - range.s.r + 1;
+  const cols = range.e.c - range.s.c + 1;
+  // A workbook can *declare* a huge used range (!ref) while staying well under the
+  // upload size cap. Clamp the range handed to SheetJS itself — header row plus
+  // MAX_DATA_ROWS data rows, MAX_PREVIEW_COLS columns — before sheet_to_json runs,
+  // so a malformed/overformatted sheet can't force materialization of the full
+  // declared range ahead of the row/column limits being applied.
+  const clampedRange = {
+    s: { r: range.s.r, c: range.s.c },
+    e: {
+      r: Math.min(range.e.r, range.s.r + MAX_DATA_ROWS),
+      c: Math.min(range.e.c, range.s.c + MAX_PREVIEW_COLS - 1),
+    },
+  };
+  const clampedCols = clampedRange.e.c - clampedRange.s.c + 1;
+  // V1 heuristic: the first row is treated as column headers, though workbooks need not follow that convention.
+  const values = XLSX.utils.sheet_to_json(sheet, {
+    header: 1,
+    raw: false,
+    defval: "",
+    range: XLSX.utils.encode_range(clampedRange),
+  });
+  const headers = (values[0] || []).slice(0, clampedCols).map((value) => String(value));
+  const previewRows = values.slice(1, MAX_DATA_ROWS + 1).map((row) => row.slice(0, clampedCols).map((value) => String(value ?? "")).join("\t"));
+  let preview = [headers.join("\t"), ...previewRows].join("\n");
+  let truncated = rows > MAX_DATA_ROWS + 1 || cols > clampedCols;
+  if (preview.length > MAX_PREVIEW_CHARS) {
+    preview = `${preview.slice(0, MAX_PREVIEW_CHARS - 1)}…`;
+    truncated = true;
+  }
+  return { name, dimensions: { rows, cols }, headers, preview, truncated };
+}
+async function extract(request, env, origin) {
+  if (!env.CHAT_KV)
+    return response(501, { ok: false, error: "Extraction review storage is not configured." }, origin);
+  const contentLength = Number(request.headers.get("Content-Length"));
+  if (Number.isFinite(contentLength) && contentLength > MAX_UPLOAD_BYTES)
+    throw error("Workbook exceeds the 5 MB upload limit.");
+  const form = await request.formData();
+  const file = form.get("file");
+  const itemId = form.get("itemId");
+  if (!/^itm_[A-Za-z0-9_-]+$/.test(itemId || "")) throw error("Invalid itemId.");
+  if (!file || typeof file.arrayBuffer !== "function") throw error("A .xlsx file is required.");
+  const extensionError = extensionRejection(file.name);
+  if (extensionError) throw error(extensionError);
+  if (file.size > MAX_UPLOAD_BYTES) throw error("Workbook exceeds the 5 MB upload limit.");
+  const buffer = await file.arrayBuffer();
+  const bytes = new Uint8Array(buffer);
+  if (startsWith(bytes, [0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1]))
+    throw error("Password-protected workbooks cannot be accepted.");
+  if (!zipSignature(bytes)) throw error("File is not a valid .xlsx workbook.");
+  let workbook;
+  try {
+    workbook = XLSX.read(bytes, { type: "array", bookVBA: true, cellFormula: true });
+  } catch {
+    throw error("File is not a valid .xlsx workbook.");
+  }
+  if (workbook.vbaraw) throw error("This file contains macro content and cannot be accepted.");
+  const sheetNames = workbook.SheetNames || [];
+  if (!sheetNames.length) throw error("File is not a valid .xlsx workbook.");
+  const sheets = sheetNames.slice(0, MAX_SHEETS).map((name) => boundedSheet(workbook.Sheets[name], name));
+  const extractionId = `extract_${crypto.randomUUID().replaceAll("-", "")}`;
+  const digest = await sha256(buffer);
+  const createdAt = new Date().toISOString();
+  const expiresAt = new Date(Date.now() + EXTRACTION_TTL_SECONDS * 1000).toISOString();
+  await env.CHAT_KV.put(
+    extractionKey(extractionId),
+    JSON.stringify({ itemId, fileName: file.name, digest, sheets, createdAt }),
+    { expirationTtl: EXTRACTION_TTL_SECONDS },
+  );
+  return response(200, {
+    ok: true, extractionId, fileName: file.name, digest, sheets, expiresAt,
+    notes: sheetNames.length > MAX_SHEETS ? [`Only the first ${MAX_SHEETS} sheets were extracted; ${sheetNames.length - MAX_SHEETS} were skipped.`] : [],
+  }, origin);
 }
 function bufToBase64(buf) {
   const bytes = new Uint8Array(buf);
@@ -377,6 +522,7 @@ export default {
     try {
       if (url.pathname === "/api/voice/stt") return await stt(request, env, origin);
       if (url.pathname === "/api/voice/tts") return await tts(request, env, origin);
+      if (url.pathname === "/api/extract") return await extract(request, env, origin);
       const input = await request.json();
       if (url.pathname === "/api/meetings/list") {
         const defs = await getJson(env, DEFINITIONS_PATH);
@@ -414,7 +560,6 @@ export default {
       if (url.pathname === "/api/chat") return await chat(env, input, origin);
       if (
         [
-          "/api/extract",
           "/api/speaker-notes/candidate",
         ].includes(url.pathname)
       )
