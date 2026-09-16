@@ -1,102 +1,162 @@
 from datetime import datetime
 from brief_chrome import SCRATCH, e, render_page, write_brief_output
 
-# ---- SIXTH PASS, 16 Sept 2026 (meeting day): decluttering pass on the fifth
-#      pass's full rebuild, per Kevin's feedback that it read too noisy.
-#      Converted the SK 1-1 / Managers Meeting item cards into compact table
-#      rows (item + one tight status line + pill), trimmed the reconciliation
-#      notes down to resolved facts only (the working-out lives in Lauren's
-#      own memory record, not the brief), and tightened wording throughout.
-#      No item, source tag, date, or the Athena exclusion was dropped -- this
-#      is a presentation cut, not a content cut. Full history of every prior
-#      same-day pass (agenda refresh, fold-in, reorder, recent-activity
-#      section, full replace from SK1-1/20Aug transcripts, the REF 2029 HESA
-#      addition) is in Lauren's memory (`managers-meeting-16sep-second-pass.md`
-#      and its addenda), not repeated here.
+# ---- EIGHTH PASS, 16 Sept 2026 (meeting day): added a "what this is" context
+#      line and a speaker-note line to every item, on top of the sixth pass's
+#      decluttered table format. Every item now carries three parts: What
+#      (1-2 sentence context, so the item is recognisable without re-reading
+#      source), Status (current position, unchanged from the sixth pass),
+#      and Say (a short talking point in Kevin's own voice, grounded in the
+#      same real source already gathered for that item -- not generic
+#      filler, same standing pattern as the KPI Presentation deck's speaker
+#      notes). The addendum table gets one speaker-note line at the section
+#      level rather than per-row, since those are lower-stakes reference
+#      items, not agenda discussion items -- "per item or per section" was
+#      explicitly allowed.
+#
+#      No item, source tag, date, or the Athena exclusion was dropped. Full
+#      pass-by-pass history is in Lauren's memory
+#      (`managers-meeting-16sep-second-pass.md` and its addenda), not
+#      repeated here.
 #
 #      One item from the SK 1-1 transcript (a colleague's confidential
 #      upcoming leave) remains deliberately excluded throughout, per Kevin's
 #      standing instruction earlier the same day.
 
 SK_ITEMS = [
-    {"id": "1", "title": "Org structure work &mdash; new management units &amp; docs", "pill": "info", "owner": "Kevin",
-     "note": "Create the 3 new pack management units, update docs as you go. No confirmation found since 19&nbsp;Aug that they've been created."},
-    {"id": "2", "title": "Cority Applicant Data Import (RECSUP20) &mdash; report fixes &amp; provenance question", "pill": "raise", "owner": "Kevin / James Salas Guillen / Simon Burford",
-     "note": "RECSUP20_Applicant Cority Interface File needs fixing at source in PXD: strip quotation marks, fix column headers splitting across CSV rows, format DOB dd/mm/yyyy with no time, ensure all 27 expected columns present even if blank (James, 11&nbsp;Aug) &mdash; plus a possible Cority column-mapping mismatch, separate support ticket open. Simon tested the export 18&nbsp;Aug: headers look fine in Notepad++, open question whether Cority handles quote-wrapped comma-containing fields (e.g. \"MATHS, PHYSICAL &amp; LIFE SCIENCES\"), DOB fix in progress. Simon also asked whether it's OK to strip spaces from column headings, and flagged a real provenance gap &mdash; no copy on the QA server, no change request on record, doesn't appear to have followed standard report development process. <i>Source: pasted email thread (\"Cority - Applicant Data Import file\") &mdash; not connector/Granola-verified, per Kevin's instruction. Distinct from any other Cority-related item elsewhere in this brief.</i>"},
-    {"id": "3", "title": "38-day leave balance &mdash; how-to guide with Michael", "pill": "info", "owner": "Kevin",
-     "note": "Clockify ref 208 already on Roadmap. Guide's write-up not confirmed since 19&nbsp;Aug."},
-    {"id": "4", "title": "Relieve pressure on Michael &amp; Asta &mdash; take on PeopleXD work", "pill": "info", "owner": "Kevin",
-     "note": "Meeting with Michael set 20&nbsp;Aug to identify handover; not confirmed since."},
-    {"id": "5", "title": "T-shirt size application-form question change with Michael", "pill": "info", "owner": "Kevin",
-     "note": "Trigger: \"Application form &ndash; identification of internal candidates,\" fwd by Simon Burford 19&nbsp;Aug 15:51; Kevin's effort estimate sent 9&nbsp;Sept. Original sender (Laura Porter vs Phil Taylor) and whether Marie was cc'd &mdash; not confirmed from available connector data, no live Outlook/Graph search attempted."},
-    {"id": "6", "title": "Internal job-site portal 404 bug &mdash; raise as official ticket", "pill": "raise", "owner": "Kevin",
-     "note": "Workaround only in place. No ticket confirmed raised since 19&nbsp;Aug."},
-    {"id": "7", "title": "Cover / plus-one for Simon at meetings", "pill": "info", "owner": "Kevin",
-     "note": "Standing arrangement, confirmed verbatim in the transcript (distinct from the separate Crispin PM-absence situation)."},
-    {"id": "8", "title": "Manage own workload &mdash; calendar breaks, avoid back-to-back meetings", "pill": "info", "owner": "Kevin",
-     "note": "Agreed as Kevin's return-to-work approach. No specific update found."},
-    {"id": "9", "title": "Book PDR with Simon &mdash; late September", "pill": "resolved", "owner": "Kevin",
-     "note": "<b>Resolved</b> &mdash; confirmed for today, 15:00&ndash;16:00 (Google Calendar)."},
-    {"id": "10", "title": "Decide on remaining 2.5 days annual leave", "pill": "onhold", "owner": "Kevin",
-     "note": "No decision communicated to Simon on record since 19&nbsp;Aug."},
+    {"id": "1", "title": "Org structure work &mdash; new management units &amp; docs", "pill": "info",
+     "what": "Three new pack management units need creating in the org structure system, with documentation updated as work goes.",
+     "status": "No confirmation found since 19&nbsp;Aug that they've been created.",
+     "say": "Let's get those three management units built and keep the docs updated as we go &mdash; has that actually started?"},
+    {"id": "2", "title": "Cority Applicant Data Import (RECSUP20) &mdash; report fixes &amp; provenance question", "pill": "raise",
+     "what": "RECSUP20's Cority interface file needs source-level PXD fixes (quote-stripping, CSV header/DOB formatting, 27-column completeness) and has a real provenance gap &mdash; no QA-server copy or change request on record for how it was built. A separate Cority column-mapping mismatch has its own support ticket open.",
+     "status": "<i>Source: pasted email thread (\"Cority - Applicant Data Import file\" &mdash; Simon Burford/James Salas Guillen/Kevin Lelitte) &mdash; not connector/Granola-verified, per Kevin's instruction. Distinct from any other Cority-related item elsewhere in this brief.</i>",
+     "say": "The Cority applicant import report needs real fixes at source, and nobody can tell me how it was originally built &mdash; I want an actual plan, not another patch."},
+    {"id": "3", "title": "38-day leave balance &mdash; how-to guide with Michael", "pill": "info",
+     "what": "A how-to guide for the 38-day leave balance issue needs writing with Michael, separate from the wider departmental rollout already under way. Clockify ref 208 already on the Roadmap.",
+     "status": "Guide's write-up not confirmed since 19&nbsp;Aug.",
+     "say": "Did we actually get that how-to guide written with Michael, or is it still just in my head from the 1-1?"},
+    {"id": "4", "title": "Relieve pressure on Michael &amp; Asta &mdash; take on PeopleXD work", "pill": "info",
+     "what": "Michael and Asta are stretched post-WFM go-live (high incident/sysadmin volume); Kevin agreed to pick up PeopleXD tasks directly to help.",
+     "status": "Meeting with Michael set 20&nbsp;Aug to identify handover; not confirmed since.",
+     "say": "What PeopleXD work did I actually end up taking off Michael's plate, and is it still the right split?"},
+    {"id": "5", "title": "T-shirt size application-form question change with Michael", "pill": "info",
+     "what": "T-shirt size the application-form internal-candidate-identification change with Michael, before Marie decides whether to progress it. Trigger email: \"Application form &ndash; identification of internal candidates,\" fwd by Simon Burford 19&nbsp;Aug 15:51; Kevin's effort estimate sent 9&nbsp;Sept.",
+     "status": "Sizing outcome not confirmed. Original sender (Laura Porter vs Phil Taylor) and whether Marie was cc'd &mdash; not confirmed from available connector data, no live Outlook/Graph search attempted.",
+     "say": "Has the application-form change actually been sized with Michael, and did Marie decide whether to progress it?"},
+    {"id": "6", "title": "Internal job-site portal 404 bug &mdash; raise as official ticket", "pill": "raise",
+     "what": "The internal job-site portal has a 404 bug patched only with a pre-leave workaround, not a real fix.",
+     "status": "No ticket confirmed raised since 19&nbsp;Aug.",
+     "say": "Has that 404 bug actually been logged as an official ticket yet?"},
+    {"id": "7", "title": "Cover / plus-one for Simon at meetings", "pill": "info",
+     "what": "Simon asked Kevin to be his stand-in at meetings he can't personally attend, particularly while the org structure work runs without dedicated PM cover (confirmed verbatim in the transcript, distinct from the separate Crispin PM-absence situation).",
+     "status": "Standing arrangement &mdash; no specific instance to check yet.",
+     "say": "Just confirming &mdash; I'm still your plus-one if you can't make a meeting, right?"},
+    {"id": "8", "title": "Manage own workload &mdash; calendar breaks, avoid back-to-back meetings", "pill": "info",
+     "what": "Part of Kevin's return-to-work approach after surgery: self-managed with calendar breaks, flagging early to Simon if struggling, rather than a phased return.",
+     "status": "Agreed approach; no specific update found.",
+     "say": "The calendar-breaks approach is genuinely working &mdash; I'll flag you directly if that changes."},
+    {"id": "9", "title": "Book PDR with Simon &mdash; late September", "pill": "resolved",
+     "what": "Simon agreed to send a calendar invite for Kevin's PDR in late September.",
+     "status": "<b>Resolved</b> &mdash; confirmed for today, 15:00&ndash;16:00 (Google Calendar).",
+     "say": "PDR's booked for later today &mdash; nothing needed from you on this one."},
+    {"id": "10", "title": "Decide on remaining 2.5 days annual leave", "pill": "onhold",
+     "what": "2.5 days of annual leave still need a decision &mdash; use them or carry them over, with Jonathan updating the system if carried.",
+     "status": "No decision communicated to Simon on record since 19&nbsp;Aug.",
+     "say": "I still owe you a decision on those 2.5 days &mdash; let me get back to you on that today."},
 ]
 
 MM_ITEMS = [
-    {"id": "1", "title": "Clockify budget decision &mdash; chase Jonathan", "pill": "raise", "owner": "Kevin",
-     "note": "No decision on record since 20&nbsp;Aug &mdash; still open."},
-    {"id": "2", "title": "Locate historical Clockify project code (2024 hours)", "pill": "onhold", "owner": "Kevin",
-     "note": "Not found on record since 20&nbsp;Aug."},
-    {"id": "3", "title": "Leavers checklist &amp; incident-response one-pager", "pill": "raise", "owner": "Kevin",
-     "note": "No fixed date agreed 20&nbsp;Aug; session not confirmed held since."},
-    {"id": "4", "title": "WhatsApp group membership review", "pill": "onhold", "owner": "Kevin",
-     "note": "Due at \"the team meeting next week\" (transcript-confirmed wording); not confirmed done."},
-    {"id": "5", "title": "WFM meeting invite &mdash; data completeness", "pill": "onhold", "owner": "Kevin",
-     "note": "David engaged on Oct go-live readiness; not reconfirmed since 20&nbsp;Aug."},
-    {"id": "6", "title": "Signals absence reporting &mdash; meeting Tuesday", "pill": "onhold", "owner": "Kevin",
-     "note": "Separate item from #5 above (transcript confirms two distinct meetings, not one). Invite status unconfirmed."},
-    {"id": "7", "title": "Tableau &mdash; email Jasmine and Sarah", "pill": "raise", "owner": "Kevin",
-     "note": "Not confirmed sent since 20&nbsp;Aug."},
-    {"id": "8", "title": "Tableau &mdash; final audit run + migration on Roadmap", "pill": "raise", "owner": "Kevin",
-     "note": "Migration not confirmed added to the Roadmap since 20&nbsp;Aug."},
-    {"id": "9", "title": "PDR tracker &mdash; reshare with leads", "pill": "info", "owner": "Kevin",
-     "note": "Kevin's own PDR is today; wider reshare to leads not confirmed."},
-    {"id": "10", "title": "Susan's acting-up allowance business case", "pill": "raise", "owner": "Kevin",
-     "note": "1-1 with Renu not confirmed held since 20&nbsp;Aug."},
-    {"id": "11", "title": "PSP work &mdash; via lead first, escalate to Renu if unresolved", "pill": "onhold", "owner": "Kevin",
-     "note": "No update on record since 20&nbsp;Aug &mdash; needs a live check."},
-    {"id": "12", "title": "Nathan's AI inbox-logging skill", "pill": "new", "owner": "Nathan",
-     "note": "Real, demoed live 20&nbsp;Aug (confirmed via transcript). No further refinement/sharing on record."},
-    {"id": "13", "title": "Executive dashboard &mdash; on hold pending data structure", "pill": "onhold", "owner": "Kevin",
-     "note": "Blocked on calculation-data structuring; no update since 20&nbsp;Aug."},
-    {"id": "14", "title": "Broken SharePoint links &mdash; Julian to review/fix", "pill": "info", "owner": "Julian",
-     "note": "Majority of breaks in cyber security section. No completion on record."},
-    {"id": "15", "title": "OSM data access &mdash; for AI-driven FAQ/theme analysis", "pill": "onhold", "owner": "Kevin",
-     "note": "Early-stage only. No movement on record since 20&nbsp;Aug."},
+    {"id": "1", "title": "Clockify budget decision &mdash; chase Jonathan", "pill": "raise",
+     "what": "The move to Clockify for time-tracking depends on Jonathan's budget approval; no funding means falling back to evaluating Jibble and extracting existing Clockify data first.",
+     "status": "No decision on record since 20&nbsp;Aug &mdash; still open.",
+     "say": "Has Jonathan actually given us a yes or no on the Clockify budget?"},
+    {"id": "2", "title": "Locate historical Clockify project code (2024 hours)", "pill": "onhold",
+     "what": "The team's trying to trace an old Clockify project code covering roughly 2024's logged hours, raised as an open ask in the meeting.",
+     "status": "Not found on record since 20&nbsp;Aug.",
+     "say": "Did anyone ever track down that old 2024 Clockify code?"},
+    {"id": "3", "title": "Leavers checklist &amp; incident-response one-pager", "pill": "raise",
+     "what": "A one-pager is needed covering who to inform and what to check when someone leaves or an incident happens, while it's still fresh.",
+     "status": "No fixed date agreed 20&nbsp;Aug; session with Kevin not confirmed held since.",
+     "say": "I still owe the team that leavers/incident one-pager &mdash; let's get a session booked."},
+    {"id": "4", "title": "WhatsApp group membership review", "pill": "onhold",
+     "what": "The work WhatsApp group used for team-wide alerts has stale/unclear membership (people who've left still in it, unnamed numbers) &mdash; a real data-breach risk.",
+     "status": "Due at \"the team meeting next week\" (transcript-confirmed wording); not confirmed done.",
+     "say": "Did the WhatsApp membership review actually happen at last week's team meeting?"},
+    {"id": "5", "title": "WFM meeting invite &mdash; data completeness", "pill": "onhold",
+     "what": "Some departments show only one sickness record for the whole year despite 300+ staff &mdash; a data-completeness risk ahead of October's WFM go-live. David engaged to confirm readiness.",
+     "status": "Not reconfirmed since 20&nbsp;Aug.",
+     "say": "Has David actually confirmed every department's ready for the October go-live?"},
+    {"id": "6", "title": "Signals absence reporting &mdash; meeting Tuesday", "pill": "onhold",
+     "what": "Signals absence reporting is a separate recurring meeting Kevin needs adding back onto after being away &mdash; genuinely distinct from the WFM meeting above (transcript confirms two separate things, not one).",
+     "status": "Invite status unconfirmed.",
+     "say": "Did I actually get added to the Signals absence reporting invite for Tuesday?"},
+    {"id": "7", "title": "Tableau &mdash; email Jasmine and Sarah", "pill": "raise",
+     "what": "The Tableau spreadsheet behind the statutory equal pay audit (due roughly every 3 years) needs updating, with Reward team contacts Jasmine and Sarah looped in by email.",
+     "status": "Not confirmed sent since 20&nbsp;Aug.",
+     "say": "Did that email to Jasmine and Sarah on the Tableau spreadsheet actually go out?"},
+    {"id": "8", "title": "Tableau &mdash; final audit run + migration on Roadmap", "pill": "raise",
+     "what": "Plan is one final equal pay audit run in Tableau ahead of the July 2027 deadline, then a proper migration off Tableau over three years, added to the Roadmap with documented rationale.",
+     "status": "Not confirmed added since 20&nbsp;Aug.",
+     "say": "Is the Tableau migration actually written into the Roadmap yet, with the reasoning behind it?"},
+    {"id": "9", "title": "PDR tracker &mdash; reshare with leads", "pill": "info",
+     "what": "The PDR tracker link needs resharing with leads so booked/completed sessions stay visible across the whole team.",
+     "status": "Kevin's own PDR is today; wider reshare to leads not confirmed.",
+     "say": "Has the PDR tracker link actually gone back out to the leads?"},
+    {"id": "10", "title": "Susan's acting-up allowance business case", "pill": "raise",
+     "what": "A drafted business case (approx. &pound;300 total) for Susan's acting-up allowance needs raising with Renu in person, once Renu's back from leave &mdash; no guarantee of approval.",
+     "status": "1-1 with Renu not confirmed held since 20&nbsp;Aug.",
+     "say": "Have you had that conversation with Renu on Susan's case yet?"},
+    {"id": "11", "title": "PSP work &mdash; via lead first, escalate to Renu if unresolved", "pill": "onhold",
+     "what": "PSP requests should route via the team lead first, with backfill agreed before it's taken on, escalating to Renu only if unresolved &mdash; part of a wider strategic workforce review Sarah Kay is running on Renu's behalf.",
+     "status": "No update on record since 20&nbsp;Aug &mdash; needs a live check.",
+     "say": "Are we actually holding the line on PSP work coming via the lead first?"},
+    {"id": "12", "title": "Nathan's AI inbox-logging skill", "pill": "new",
+     "what": "Nathan's built a rough prototype AI skill that reads the applicant inbox and logs requests into a spreadsheet automatically &mdash; could free up Anne and Henry's time on inbox cover once refined.",
+     "status": "Real, demoed live 20&nbsp;Aug (confirmed via transcript). No further refinement/sharing on record.",
+     "say": "Has Nathan's inbox-logging skill moved on at all since his demo?"},
+    {"id": "13", "title": "Executive dashboard &mdash; on hold pending data structure", "pill": "onhold",
+     "what": "The planned executive dashboard can't be built until the underlying calculation data is properly structured.",
+     "status": "Progress made, not complete; no update since 20&nbsp;Aug.",
+     "say": "Where's the calculation data got to &mdash; any closer to being able to build that dashboard?"},
+    {"id": "14", "title": "Broken SharePoint links &mdash; Julian to review/fix", "pill": "info",
+     "what": "A Codex scan of SharePoint surfaced broken hyperlinks across pages (majority in the cyber security section); Julian has the output (page, URL, link name) to work through.",
+     "status": "No completion on record.",
+     "say": "How far through the broken-links list has Julian actually got?"},
+    {"id": "15", "title": "OSM data access &mdash; for AI-driven FAQ/theme analysis", "pill": "onhold",
+     "what": "Early thinking on getting more direct access to OSM's support-request data, to use AI (not Power Automate &mdash; ruled out, non-Microsoft) to spot themes and maybe automate FAQ-style responses.",
+     "status": "Early-stage only. No movement on record since 20&nbsp;Aug.",
+     "say": "Has there been any real movement on getting proper access to that OSM data?"},
 ]
 
 # Pasted directly by Kevin (Oxford tenant thread already in hand) -- no
 # connector/Granola verification needed or attempted for this one, per his
 # own instruction. Source-tagged accordingly.
-REF_HESA_NOTE = (
-    "Person-level UDF via CorePortal template, 12 field columns retained (Contract Id / Appointment ID blank). "
-    "Nathan preparing the file; last confirmed correct 10&nbsp;Sept. "
+REF_HESA_WHAT = (
+    "REF 2029 UDF upload file for the HESA annual return &mdash; Person-level UDF (not appointment-level), "
+    "using the current CorePortal template, all 12 field columns retained even if blank (Contract Id / Appointment ID "
+    "blank for person-level records). Nathan preparing the file; last confirmed correct 10&nbsp;Sept."
+)
+REF_HESA_STATUS = (
     "<b>Deadline Thursday 17&nbsp;Sept &mdash; tomorrow</b> (moved up from 18&nbsp;Sept per Kevin's own 10&nbsp;Sept email). "
     "<i>Source: pasted email thread (Kevin &harr; Nathan Kirwan, cc Sarah Rowles) &mdash; not connector/Granola-verified, per Kevin's instruction.</i>"
 )
+REF_HESA_SAY = "Nathan's file for the REF 2029 HESA upload needs to land tomorrow &mdash; is it actually on track?"
 
 
 def render_row(a):
     return f'''<tr>
             <td class="idcell">{a["id"]}</td>
             <td>{a["title"]} <span class="pill pill-{a["pill"]}">{ {"raise":"Raise","onhold":"Historic — unresolved","info":"Update","overdue":"Overdue","resolved":"Resolved","new":"New"}[a["pill"]] }</span></td>
-            <td>{a["note"]}</td>
+            <td><b>What:</b> {a["what"]}<br><span class="cur-label">Status</span> {a["status"]}</td>
+            <td><span class="say-label">Say</span> &ldquo;{a["say"]}&rdquo;</td>
           </tr>'''
 
 
 def rows_table(items):
     rows = "\n".join(render_row(a) for a in items)
     return f'''<table>
-          <thead><tr><th>#</th><th>Item</th><th>Current position</th></tr></thead>
+          <thead><tr><th>#</th><th>Item</th><th>What / Status</th><th>Say this</th></tr></thead>
           <tbody>
 {rows}
           </tbody>
@@ -118,7 +178,8 @@ GLANCE_TABLE = """<table>
 
 SECTIONS = f"""
   <h2 class="h2-warn">Urgent &mdash; REF 2029 HESA UDF upload, deadline tomorrow</h2>
-  <p class="body-loose"><b>REF 2029 HESA UDF Upload &mdash; Nathan Kirwan (Research Services).</b> {REF_HESA_NOTE}</p>
+  <p class="body-loose"><b>REF 2029 HESA UDF Upload &mdash; Nathan Kirwan (Research Services).</b> {REF_HESA_WHAT} {REF_HESA_STATUS}</p>
+  <p class="body-loose"><span class="say-label">Say</span> &ldquo;{REF_HESA_SAY}&rdquo;</p>
 
   <h2>SK 1-1, 19 August 2026 <span class="h2-sub">Actions for Kevin, from Simon &mdash; verified against the real transcript</span></h2>
   {SK_TABLE}
@@ -136,25 +197,26 @@ SECTIONS = f"""
   </ul>
 
   <h2>Also confirmed live &mdash; additional active items <span class="h2-sub">Live Sept 2026 Standing Agenda deck (local OneDrive)</span></h2>
+  <p class="body-loose"><span class="say-label">Say</span> &ldquo;A few more things ticking along from the team's own Standing Agenda &mdash; nothing needs deciding here today, just flagging where they're at.&rdquo;</p>
   <table>
     <thead><tr><th>Item</th><th>Status</th></tr></thead>
     <tbody>
-      <tr><td>Staff Request Audit / Insight</td><td>Reviewing audit capability after Access Group enhancements.</td></tr>
-      <tr><td>My Development Reviews</td><td>Being recreated for next year's cycle.</td></tr>
-      <tr><td>IRIS Enhancements &amp; Eco Online Rollout</td><td>Kickoff 9&nbsp;Sept (also a Granola note same day); go-live confirmed night of Mon 28&nbsp;Sept.</td></tr>
-      <tr><td>Sickness Absence Survey / Data Completeness</td><td>Biweekly WG; survey due 9&nbsp;Oct, submission 27&nbsp;Nov; Power BI dashboard targeted end Sept.</td></tr>
-      <tr><td>New Insight Reports for Annual Leave Duty</td><td>With Access Group; Holiday Records split into 3 reports; scoping meeting Fri 18&nbsp;Sept.</td></tr>
+      <tr><td>Staff Request Audit / Insight</td><td>Reviewing PeopleXD's Insight audit capability for staff requests, following recent Access Group enhancements.</td></tr>
+      <tr><td>My Development Reviews</td><td>The "My Development Reviews" process is being recreated ready for next year's appraisal cycle.</td></tr>
+      <tr><td>IRIS Enhancements &amp; Eco Online Rollout</td><td>H&amp;S incident-system enhancements and the Eco Online rollout &mdash; kickoff 9&nbsp;Sept (also a Granola note same day); go-live confirmed night of Mon 28&nbsp;Sept.</td></tr>
+      <tr><td>Sickness Absence Survey / Data Completeness</td><td>Biweekly WG validating sickness data ahead of the annual survey; survey due 9&nbsp;Oct, submission 27&nbsp;Nov; Power BI dashboard targeted end Sept.</td></tr>
+      <tr><td>New Insight Reports for Annual Leave Duty</td><td>New Insight reports being built with Access Group for annual-leave audit duty; Holiday Records split into 3 reports; scoping meeting Fri 18&nbsp;Sept.</td></tr>
       <tr><td>Organisational Structure Update</td><td>Final PACS draft available; College/Hall entities moving level 2&rarr;3; College REF-structure deferred.</td></tr>
-      <tr><td>SHSMS / H&amp;S Module Supplier Evaluation</td><td>Supplier workshops begin 25&nbsp;Sept; Entra ID handover and score approval next.</td></tr>
-      <tr><td>38-Day Balance Rollout &ndash; Departmental</td><td>Chemistry first (131 workgroups), GLAM next; period-end starts 5&nbsp;Oct.</td></tr>
+      <tr><td>SHSMS / H&amp;S Module Supplier Evaluation</td><td>Supplier requirements evaluation for the H&amp;S Management System; workshops begin 25&nbsp;Sept; Entra ID handover and score approval next.</td></tr>
+      <tr><td>38-Day Balance Rollout &ndash; Departmental</td><td>Departmental rollout of the 38-day leave balance changes; Chemistry first (131 workgroups), GLAM next; period-end starts 5&nbsp;Oct.</td></tr>
     </tbody>
   </table>
 """
 
 FOOTNOTE = """<div class="footnote">
-    Rebuilt 16 Sept 2026 for today's 10:00 sitting, decluttered same day per Kevin's feedback &middot; Sources: SK 1-1 transcript (not_dIj3MwTSbme10y, 19 Aug), Managers Meeting transcript (not_ZSu5h6SBdMTD9o, 20 Aug), Monthly Standing Agenda September 2026.pptx (local OneDrive), a pasted email thread for the REF 2029 HESA UDF item (not connector-verified, per Kevin), Work Inbox + Command Centre (pulled 15&ndash;16 Sept).<br>
+    Rebuilt 16 Sept 2026 for today's 10:00 sitting; context lines and speaker notes added same day per Kevin's request &middot; Sources: SK 1-1 transcript (not_dIj3MwTSbme10y, 19 Aug), Managers Meeting transcript (not_ZSu5h6SBdMTD9o, 20 Aug), Monthly Standing Agenda September 2026.pptx (local OneDrive), a pasted email thread for the REF 2029 HESA UDF item and the Cority/RECSUP20 item (neither connector-verified, per Kevin), Work Inbox + Command Centre (pulled 15&ndash;16 Sept).<br>
     One SK 1-1 transcript item (a colleague's confidential upcoming leave) is deliberately omitted throughout, per Kevin's standing instruction.<br>
-    Sixth same-day authorized exception to the 21 Aug 2026 pipeline-review content-push freeze &mdash; not a general lifting of it. Full pass-by-pass history in Lauren's memory, not repeated here.<br>
+    Eighth same-day authorized exception to the 21 Aug 2026 pipeline-review content-push freeze &mdash; not a general lifting of it. Full pass-by-pass history in Lauren's memory, not repeated here.<br>
     Branding: command-centre/BRANDING.md v2.0 &mdash; Oxford Navy, Inter, canonical crest. Template shared via brief_chrome.py.
   </div>"""
 
@@ -166,7 +228,7 @@ html_out = render_page(
     meta_spans=[
         "<b>Meeting</b> Today, Wednesday 16 September 2026, 10:00",
         "<b>Built from</b> SK 1-1 (19 Aug) &amp; Managers Meeting (20 Aug), transcript-verified",
-        "<b>Status</b> Decluttered rebuild, 16 Sept 2026",
+        "<b>Status</b> Context lines + speaker notes added, 16 Sept 2026",
     ],
     flag_label="Before anything else",
     flag_paragraphs=[
