@@ -218,6 +218,17 @@ CSS_BASE = r"""
   td.idcell { font-weight: 700; color: var(--navy-soft); font-variant-numeric: tabular-nums; white-space: nowrap; }
   td.datecell { font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--ink-soft); }
 
+  /* Fixed-grid opt-in: for tables whose cells hold very unevenly long content
+     (e.g. a one-line title next to a multi-sentence What/Status paragraph),
+     the default table CSS above auto-sizes columns per row and produces a
+     ragged, inconsistent grid. table-layout:fixed + an explicit <colgroup>
+     forces every row onto the same column widths. Opt-in via a class rather
+     than changing the bare `table` selector above, so briefs/tables that
+     already look fine under auto-layout (short, evenly-sized cells) are
+     untouched. */
+  table.fixed-grid { table-layout: fixed; }
+  table.fixed-grid td, table.fixed-grid th { overflow-wrap: break-word; word-break: break-word; }
+
   .pill { display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.26rem 0.58rem; border-radius: 999px; white-space: nowrap; }
   .pill-overdue, .pill-raise { background: var(--overdue-bg); color: var(--overdue); }
   .pill-atrisk, .pill-new { background: var(--atrisk-bg); color: var(--atrisk); }
