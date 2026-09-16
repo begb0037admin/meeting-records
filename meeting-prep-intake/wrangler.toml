@@ -13,6 +13,14 @@ routes = [{ pattern = "meeting.lelitte.co.uk", custom_domain = true }]
 directory = "public"
 binding = "ASSETS"
 
+[ai]
+binding = "AI"
+
+# Replace after running `wrangler kv namespace create CHAT_KV` once; do not deploy this placeholder.
+[[kv_namespaces]]
+binding = "CHAT_KV"
+id = "REPLACE_WITH_CHAT_KV_NAMESPACE_ID"
+
 [vars]
 ALLOWED_ORIGIN = "https://meeting.lelitte.co.uk"
 
