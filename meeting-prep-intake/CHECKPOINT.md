@@ -45,3 +45,36 @@ Same session as approval. Sequence, all confirmed live not assumed:
 **Current state: Phase 2 is fully live in production.** Chat, voice, and the existing Phase 1 intake flow are all confirmed working against the real `meeting.lelitte.co.uk` hostname, still with no Cloudflare Access gate in front of it (Kevin's explicit, unchanged decision).
 
 Exact next action: none blocking — Phase 2 is done and live. Phase 3 (file upload/Excel extraction) and Phase 4 (speaker-note learning) remain unbuilt, per the original proposal's build sequence (§14).
+## Phase 3 implementation — Excel upload/extraction — 16 September 2026
+
+Built on `drew/meeting-prep-intake-phase3`, with no deployment, KV provisioning,
+Access change, or Phase 4 work:
+
+- `da80fa3` adds npm-registry-current `xlsx@^0.18.5` and its lockfile.
+- `ab1aeda` adds multipart `/api/extract` before JSON parsing, explicit
+  extension/size/OLE/ZIP/parse/macro checks, raw-byte SHA-256, bounded
+  sheet previews, plus the selected-sheet-only CHAT_KV resolver for `/api/chat`.
+- `7a16c74` replaces the Phase 3 placeholder with per-item upload/extract,
+  sheet selection, client-only confirmed-context attachment, and submitted
+  extract-source handling.
+- `67b16bf` adds programmatic SheetJS workbook fixtures and safety/chat tests.
+
+Design calls made where the implementation brief left room: extraction review
+records reuse the existing dedicated-to-this-Worker `CHAT_KV` namespace under
+`extract:v1:<id>`, not a new namespace, with a distinct one-hour TTL; previews
+are TSV-like text using the first row as a documented v1 header heuristic;
+checkboxes begin unchecked so a sheet is not supplied to Lauren or made durable
+until Kevin selects it. The raw upload is never persisted.
+
+Verification: Codex and Drew independently ran `node --test test/worker.test.mjs`;
+both runs were **12 pass, 0 fail**. This proves the dependency imports and behaviour
+under plain Node only. It does **not** prove SheetJS bundles or runs correctly in
+the actual Wrangler/Workers runtime.
+
+**Status:** built, committed, independently reviewed; not pushed, PR-opened,
+merged, deployed, or live-tested.
+
+**Exact next action:** push the Phase 3 branch and open a review PR. Before any
+production deployment, Drew must run a real `wrangler dev` smoke test that
+uploads a safe synthetic `.xlsx` against the actual Workers runtime/bindings;
+do not treat the Node tests as that proof.
