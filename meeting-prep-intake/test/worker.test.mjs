@@ -33,6 +33,11 @@ test("validates a complete locked Phase 1 intake", () => {
   assert.equal(record.status, "submitted");
   assert.equal(record.items[0].itemId, item.itemId);
 });
+test("accepts confirmedContext mirrored from detail (16 Sept 2026 field-merge — browser no longer collects a separate confirmed-context value)", () => {
+  const mirrored = { ...item, confirmedContext: item.detail };
+  const record = validateIntake({ ...draft, items: [mirrored] });
+  assert.equal(record.items[0].confirmedContext, record.items[0].detail);
+});
 test("rejects missing required item content", () => {
   assert.throws(
     () => validateIntake({ ...draft, items: [{ ...item, detail: undefined }] }),

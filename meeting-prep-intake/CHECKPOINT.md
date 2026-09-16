@@ -194,3 +194,62 @@ prior + 2 new). No production resource touched; not deployed.
 **Status:** Phase 3 remains not merged, not deployed. Still awaiting
 Kevin's screenshot-backed approval per this repo's UI-approval-gate — the
 Codex-review fixes above do not change that gate.
+
+## Field simplification — Detail/Confirmed-context merge, 16 September 2026
+
+Kevin gave explicit feedback and approval, folded into the same
+`drew/meeting-prep-intake-phase3` branch/PR #12 before merge: the separate
+"Confirmed context" textarea was pure duplicate data entry, not a real
+distinction in his workflow. Everything he pastes into Detail (an email, a
+meeting transcript) is already a verified source — there is no unverified
+version of it he'd type into Detail and a separately-confirmed version he'd
+retype into a second field. Asking him to paste the same content twice had no
+value and cost him real duplicate effort.
+
+**Change made:**
+- `public/index.html`: removed the visible "Confirmed context" `<textarea
+  class="context">` from the per-item template entirely. Kevin now fills in
+  exactly one content field ("Detail / pasted source") per item.
+- `public/app.js`: `confirmedContext` is now derived from `detail` at every
+  point it's read or submitted — `itemForChat()` (the Lauren chat payload),
+  the `/api/intakes/submit` draft builder, and `addItem()`'s carry-forward
+  population — rather than read from a separate DOM field. One paste, done.
+- `.attach-context` ("Attach reply to detail", renamed from "Attach to
+  confirmed context") and `.attach-sheets` ("Attach selected sheets to
+  detail") now append into the single Detail field instead of a separate
+  context field. Both now append (join with a blank line) rather than
+  overwrite, consistent with each other and preserving whatever Kevin has
+  already pasted into Detail — a deliberate change from the old
+  `.attach-context` handler, which used to overwrite `.context` outright.
+- Carry-forward backward compatibility: older submitted records from before
+  this change may have a `confirmedContext` genuinely different from
+  `detail` (e.g. a Lauren reply attached separately). `addItem()` now folds
+  any such extra content into the populated Detail field on carry-forward
+  rather than silently dropping it, only when the two values actually
+  differ.
+- **No backend/schema change.** `src/worker.js`'s `validateIntake()` still
+  requires `confirmedContext` as a string on `/api/intakes/submit`, and
+  `chatMessages()` still sends both `detail` and `confirmedContext` to
+  Lauren — both fields simply carry the same value now, sent automatically
+  by the client. This keeps the change entirely client-side and low-risk:
+  older stored records with genuinely distinct `detail`/`confirmedContext`
+  values remain valid and readable, nothing about the immutable-record
+  format changed.
+- `test/worker.test.mjs`: added one regression test — "accepts
+  confirmedContext mirrored from detail" — confirming the backend still
+  accepts (and doesn't diverge) a mirrored value. Not a schema change, so no
+  existing test needed to change; all pass, 15/15 (14 prior + 1 new).
+- `README.md` updated to describe the merged field and to correct two lines
+  that had gone stale in the same paragraph (Phase 2 described as "not yet
+  deployed" when `CHECKPOINT.md` already showed it live).
+
+**Verification:** `node --test test/worker.test.mjs` → 15/15 pass. Served
+`public/` locally (Python `http.server` on port 8934) and screenshotted the
+empty-state item form with headless Chrome — confirms only one field
+("Detail / pasted source") appears where two did before, and both attach
+buttons read "...to detail".
+
+**Status:** built, tested, screenshotted. Not merged, not deployed — same
+outstanding gate as the rest of Phase 3 above. To be pushed as an additional
+commit on `drew/meeting-prep-intake-phase3` and folded into PR #12's
+description before Kevin's review.
