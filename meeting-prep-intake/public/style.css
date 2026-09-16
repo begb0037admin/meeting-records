@@ -1,1 +1,102 @@
-:root{font-family:Inter,system-ui,sans-serif;color:#142235;background:#f5f7fb}body{margin:0}main{max-width:900px;margin:2rem auto;padding:0 1rem}section{background:#fff;border:1px solid #dbe2ee;border-radius:8px;padding:1rem 1.25rem;margin:1rem 0}h1,h2{color:#002147}.intro,.phase-placeholder{color:#56607a}.section-head,.item header,.row{display:flex;gap:1rem;align-items:center;justify-content:space-between}.item{border:1px solid #cbd2e3;border-left:5px solid #002147;border-radius:6px;padding:1rem;margin:1rem 0;background:#fcfdff}.item.dragging{opacity:.5}label{display:block;font-weight:600;margin:.7rem 0}input,select,textarea,button{font:inherit;padding:.45rem;border:1px solid #aeb9cb;border-radius:4px}input,select,textarea{width:100%;box-sizing:border-box;margin-top:.25rem}textarea{min-height:5rem}button{background:#002147;color:#fff;cursor:pointer}.remove{background:#7d1c25}.drag{cursor:grab}.row>label{flex:1}.message{min-height:1.4rem}.error{color:#9d1820}.ok{color:#17633b}.carry{font-size:.9rem}.phase-placeholder{border-top:1px dashed #cbd2e3;padding-top:.7rem;font-style:italic}
+:root {
+  font-family: Inter, system-ui, sans-serif;
+  color: #142235;
+  background: #f5f7fb;
+}
+body {
+  margin: 0;
+}
+main {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+section {
+  background: #fff;
+  border: 1px solid #dbe2ee;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin: 1rem 0;
+}
+h1,
+h2 {
+  color: #002147;
+}
+.intro,
+.phase-placeholder {
+  color: #56607a;
+}
+.section-head,
+.item header,
+.row {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+}
+.item {
+  border: 1px solid #cbd2e3;
+  border-left: 5px solid #002147;
+  border-radius: 6px;
+  padding: 1rem;
+  margin: 1rem 0;
+  background: #fcfdff;
+}
+.item.dragging {
+  opacity: 0.5;
+}
+label {
+  display: block;
+  font-weight: 600;
+  margin: 0.7rem 0;
+}
+input,
+select,
+textarea,
+button {
+  font: inherit;
+  padding: 0.45rem;
+  border: 1px solid #aeb9cb;
+  border-radius: 4px;
+}
+input,
+select,
+textarea {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 0.25rem;
+}
+textarea {
+  min-height: 5rem;
+}
+button {
+  background: #002147;
+  color: #fff;
+  cursor: pointer;
+}
+.remove {
+  background: #7d1c25;
+}
+.drag {
+  cursor: grab;
+}
+.row > label {
+  flex: 1;
+}
+.message {
+  min-height: 1.4rem;
+}
+.error {
+  color: #9d1820;
+}
+.ok {
+  color: #17633b;
+}
+.carry {
+  font-size: 0.9rem;
+}
+.phase-placeholder {
+  border-top: 1px dashed #cbd2e3;
+  padding-top: 0.7rem;
+  font-style: italic;
+}
