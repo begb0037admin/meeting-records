@@ -2,9 +2,24 @@ name = "meeting-prep-intake"
 main = "src/worker.js"
 compatibility_date = "2026-09-16"
 
+# Custom domain, wired up the same way cc./wi./org./finance./ai-usage./
+# transcribe.lelitte.co.uk are for Kevin's other Workers — Cloudflare's
+# Workers "Custom Domains" feature (not a classic Route + manual DNS CNAME),
+# one per Worker, all on the lelitte.co.uk zone. Kevin's confirmed hostname
+# for this one: meeting.lelitte.co.uk.
+routes = [{ pattern = "meeting.lelitte.co.uk", custom_domain = true }]
+
 [assets]
 directory = "public"
 binding = "ASSETS"
 
+[vars]
+ALLOWED_ORIGIN = "https://meeting.lelitte.co.uk"
+
 # Set GITHUB_PAT with `wrangler secret put GITHUB_PAT`; never commit it.
-# This Worker is intentionally not deployed by this change.
+# Already set (16 Sep 2026, via SSH+op from the Mac). The Cloudflare Zero
+# Trust Access Application for meeting.lelitte.co.uk is still pending a
+# scoped API token — do not deploy is no longer accurate once GITHUB_PAT
+# and the route are both in place, but the Worker origin is NOT behind
+# Access until that application exists. Treat any reachability without
+# Access as a real exposure, not expected behaviour.
