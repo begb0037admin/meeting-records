@@ -28,6 +28,25 @@ from brief_chrome import SCRATCH, e, render_page, write_brief_output
 #      status entries, not requests, so "who requested" doesn't apply the
 #      same way; already had a section-level speaker note as agreed.
 #
+#      TENTH PASS, same day: synced newer REF 2029 HESA UDF status (15 Sept,
+#      via Command Centre task t2609141649162) into that item -- see the
+#      REF_HESA_STATUS block below.
+#
+#      ELEVENTH PASS, same day: SK 1-1 item 4 replaced with real team ticket
+#      queue stats (Linda/ticket system, pasted directly by Kevin) --
+#      distilled to the 4 points actually worth raising in the room (209-day
+#      escalation, 45% unassigned backlog, Michael's 3 stale CRs, Asta's
+#      near-stale ticket) per Kevin's own follow-up correction; the full
+#      per-person/per-ticket breakdown is NOT in this brief, only in Lauren's
+#      memory record. Three items removed entirely, not shortened, per
+#      Kevin's explicit noise-cut instructions: "Cover / plus-one for Simon
+#      at meetings," "Manage own workload -- calendar breaks," and "Decide
+#      on remaining 2.5 days annual leave." SK_ITEMS renumbered 1-7
+#      (was 1-10) to close the gaps; no cross-references elsewhere in this
+#      brief depended on SK item numbers (the Reconciliation-notes section
+#      only references Managers Meeting item numbers, a separate table with
+#      its own independent numbering).
+#
 #      No item, source tag, date, or the Athena exclusion was dropped. Full
 #      pass-by-pass history is in Lauren's memory
 #      (`managers-meeting-16sep-second-pass.md` and its addenda), not
@@ -50,10 +69,10 @@ SK_ITEMS = [
      "what": "38-day leave balance: write a how-to guide with Michael so the fix is repeatable (Clockify ref 208 already on the Roadmap) &mdash; raised by Simon in the 19&nbsp;Aug 1-1.",
      "status": "Guide's write-up not confirmed since 19&nbsp;Aug.",
      "say": "Did we actually get that how-to guide written with Michael, or is it still just in my head from the 1-1?"},
-    {"id": "4", "title": "Relieve pressure on Michael &amp; Asta &mdash; take on PeopleXD work", "pill": "info",
-     "what": "PeopleXD workload: take on more PeopleXD tasks directly to relieve Michael and Asta, who are stretched post-WFM go-live (high incident/sysadmin volume) &mdash; raised by Simon in the 19&nbsp;Aug 1-1.",
-     "status": "Meeting with Michael set 20&nbsp;Aug to identify handover; not confirmed since.",
-     "say": "What PeopleXD work did I actually end up taking off Michael's plate, and is it still the right split?"},
+    {"id": "4", "title": "Team ticket queue &mdash; 209-day escalation &amp; unassigned backlog", "pill": "raise",
+     "what": "Team ticket queue snapshot as of today: 33 tickets total, 15 unassigned (45%), 5 stale (30+ days) &mdash; oldest is 209 days (James, #50929404, Odyssey-related, still only \"Accepted\"). Michael is carrying 3 stale CRs; Asta has one about to cross the stale threshold.",
+     "status": "<i>Source: pasted ticket-system (Linda) data, supplied directly by Kevin as of today &mdash; not connector-verified. Full per-person/per-ticket breakdown kept in Lauren's own memory record, not in this brief.</i>",
+     "say": "Two things from the ticket queue actually worth raising: James's #50929404 has sat at 209 days and still isn't closed &mdash; needs urgent escalation. And 45% of the queue, 15 of 33 tickets, is sitting unassigned. Separately, Michael's got three stale CRs and Asta's got one about to cross the stale line &mdash; worth a quick check-in on both."},
     {"id": "5", "title": "T-shirt size application-form question change with Michael", "pill": "info",
      "what": "Application form change: add internal-candidate identification to the application form &mdash; requested by Laura Porter/Phil Taylor, forwarded by Simon Burford 19&nbsp;Aug 15:51 (Kevin's effort estimate sent back 9&nbsp;Sept). To be t-shirt sized with Michael before Marie decides whether to progress it.",
      "status": "Sizing outcome not confirmed. Original sender (Laura Porter vs Phil Taylor) and whether Marie was cc'd &mdash; not confirmed from available connector data, no live Outlook/Graph search attempted.",
@@ -62,22 +81,10 @@ SK_ITEMS = [
      "what": "Job-site bug: the internal job-site portal 404s, currently patched only with a pre-leave workaround &mdash; Kevin's own open item from the 19&nbsp;Aug 1-1, needs raising as an official ticket.",
      "status": "No ticket confirmed raised since 19&nbsp;Aug.",
      "say": "Has that 404 bug actually been logged as an official ticket yet?"},
-    {"id": "7", "title": "Cover / plus-one for Simon at meetings", "pill": "info",
-     "what": "Meeting cover: be Simon's stand-in/plus-one when he can't attend, particularly while the org structure work runs without dedicated PM cover &mdash; agreed directly between Simon and Kevin, confirmed verbatim in the 19&nbsp;Aug transcript (distinct from the separate Crispin PM-absence situation).",
-     "status": "Standing arrangement &mdash; no specific instance to check yet.",
-     "say": "Just confirming &mdash; I'm still your plus-one if you can't make a meeting, right?"},
-    {"id": "8", "title": "Manage own workload &mdash; calendar breaks, avoid back-to-back meetings", "pill": "info",
-     "what": "Workload management: calendar breaks and no back-to-back meetings, flagging early to Simon if struggling &mdash; part of Kevin's own return-to-work approach after surgery, agreed in the 19&nbsp;Aug 1-1.",
-     "status": "Agreed approach; no specific update found.",
-     "say": "The calendar-breaks approach is genuinely working &mdash; I'll flag you directly if that changes."},
-    {"id": "9", "title": "Book PDR with Simon &mdash; late September", "pill": "resolved",
+    {"id": "7", "title": "Book PDR with Simon &mdash; late September", "pill": "resolved",
      "what": "PDR booking: Simon agreed to send Kevin a calendar invite for his PDR in late September &mdash; agreed in the 19&nbsp;Aug 1-1.",
      "status": "<b>Resolved</b> &mdash; confirmed for today, 15:00&ndash;16:00 (Google Calendar).",
      "say": "PDR's booked for later today &mdash; nothing needed from you on this one."},
-    {"id": "10", "title": "Decide on remaining 2.5 days annual leave", "pill": "onhold",
-     "what": "Annual leave: 2.5 days remaining need a decision &mdash; use them or carry over, with Jonathan updating the system if carried &mdash; raised by Kevin himself in the 19&nbsp;Aug 1-1.",
-     "status": "No decision communicated to Simon on record since 19&nbsp;Aug.",
-     "say": "I still owe you a decision on those 2.5 days &mdash; let me get back to you on that today."},
 ]
 
 MM_ITEMS = [
@@ -189,7 +196,7 @@ GLANCE_TABLE = """<table>
           <thead><tr><th>Section</th><th>Items</th></tr></thead>
           <tbody>
             <tr><td>Urgent &mdash; REF 2029 HESA UDF (pasted thread)</td><td>1 item, deadline tomorrow (17 Sept)</td></tr>
-            <tr><td>SK 1-1, 19 Aug 2026 (Simon &rarr; Kevin)</td><td>10 action items</td></tr>
+            <tr><td>SK 1-1, 19 Aug 2026 (Simon &rarr; Kevin)</td><td>7 action items</td></tr>
             <tr><td>HR Systems Managers Meeting, 20 Aug 2026</td><td>15 reconciled to-do items</td></tr>
             <tr><td>Also confirmed live (addendum)</td><td>8 items, live Sept 2026 Standing Agenda deck</td></tr>
           </tbody>
@@ -235,7 +242,7 @@ SECTIONS = f"""
 FOOTNOTE = """<div class="footnote">
     Rebuilt 16 Sept 2026 for today's 10:00 sitting; context lines and speaker notes added same day per Kevin's request &middot; Sources: SK 1-1 transcript (not_dIj3MwTSbme10y, 19 Aug), Managers Meeting transcript (not_ZSu5h6SBdMTD9o, 20 Aug), Monthly Standing Agenda September 2026.pptx (local OneDrive), a pasted email thread for the REF 2029 HESA UDF item and the Cority/RECSUP20 item (neither connector-verified, per Kevin), Work Inbox + Command Centre (pulled 15&ndash;16 Sept).<br>
     One SK 1-1 transcript item (a colleague's confidential upcoming leave) is deliberately omitted throughout, per Kevin's standing instruction.<br>
-    Tenth same-day authorized exception to the 21 Aug 2026 pipeline-review content-push freeze &mdash; not a general lifting of it. Full pass-by-pass history in Lauren's memory, not repeated here.<br>
+Eleventh same-day authorized exception to the 21 Aug 2026 pipeline-review content-push freeze &mdash; not a general lifting of it. Full pass-by-pass history in Lauren's memory, not repeated here.<br>
     Branding: command-centre/BRANDING.md v2.0 &mdash; Oxford Navy, Inter, canonical crest. Template shared via brief_chrome.py.
   </div>"""
 
@@ -255,7 +262,7 @@ html_out = render_page(
         "Everything else is dated 19&ndash;20&nbsp;Aug with no confirmed update since, per Work Inbox/Command Centre as of today. That's the honest picture, not padding.",
     ],
     glance_label="At a glance",
-    glance_sub="1 urgent + 10 SK 1-1 + 15 Managers Meeting + 8 addendum items",
+    glance_sub="1 urgent + 7 SK 1-1 + 15 Managers Meeting + 8 addendum items",
     glance_table_html=GLANCE_TABLE,
     sections_html=SECTIONS,
     footnote_html=FOOTNOTE,
