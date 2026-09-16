@@ -63,10 +63,13 @@ test("carry-forward copies only open and carried previous items with an auditabl
 
 function kv() {
   const store = new Map(); const calls = { put: 0, keys: [], options: [] };
-  return { store, calls, async get(key) { return store.get(key) || null; }, async put(key, value, options) { calls.put++; calls.keys.push(key); calls.options.push(options); store.set(key, value); }, async delete(key) { store.delete(key); } };
+  return { store, calls, async get(key) { return store.get(key) || null; }, async put(key, value, options) { calls.put++; calls.keys.push(key); calls.options.push(options); store.set(key, value); }, async delete(key) { store.delete(key); }, async list({ prefix }) { return { keys: [...store.keys()].filter((name) => name.startsWith(prefix)).map((name) => ({ name })) }; } };
 }
 async function call(path, body, env) {
   return worker.fetch(new Request(`https://meeting.test${path}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) }), { GITHUB_PAT: "test", ALLOWED_ORIGIN: "https://meeting.test", ...env });
+}
+async function pendingCall(path, body, env, secret) {
+  return worker.fetch(new Request(`https://meeting.test${path}`, { method: "POST", headers: { "content-type": "application/json", ...(secret === undefined ? {} : { "X-Automation-Secret": secret }) }, body: JSON.stringify(body) }), { GITHUB_PAT: "test", ALLOWED_ORIGIN: "https://meeting.test", ...env });
 }
 async function extractCall(fileName, bytes, env, itemId = "itm_extract") {
   const form = new FormData();
@@ -322,4 +325,30 @@ test("bounds sheet conversion to a huge declared range without materializing it"
   // generous headroom above real clamped cost while still catching a regression
   // back to unbounded conversion.
   assert.ok(elapsed < 500, `expected a bounded conversion, took ${elapsed}ms`);
+});
+
+const pendingItem = { itemId: "itm_roadmap_192_a", position: 1, priority: 1, title: "Roadmap status", tone: "update", detail: "Source detail", speakerNoteSeed: "", status: "open", sources: [{ kind: "roadmap-weekly", rowId: "192_a" }] };
+const pendingPayload = { meetingId: "hr-systems-roadmap", date: "2026-09-25", items: [pendingItem], generatedAt: "2026-09-18T07:00:00.000Z", sourceLabel: "Roadmap", sourceDigest: "sha256:test" };
+test("pending returns null without a matching KV entry", async () => {
+  const response = await pendingCall("/api/intakes/pending", { meetingId: "hr-systems-roadmap" }, { CHAT_KV: kv() });
+  assert.deepEqual((await response.json()).pending, null);
+});
+test("pending returns the stored draft and skips an already locked occurrence", async () => {
+  const memory = kv(); memory.store.set("pending:v1:hr-systems-roadmap:2026-09-25", JSON.stringify(pendingPayload)); memory.store.set("pending:v1:hr-systems-roadmap:2026-09-18", JSON.stringify({ ...pendingPayload, date: "2026-09-18" }));
+  const original = globalThis.fetch; globalThis.fetch = async (url) => new Response(JSON.stringify(String(url).includes("2026-09-25.json") ? { content: btoa(JSON.stringify({ status: "submitted" })), sha: "x" } : { message: "Not Found" }), { status: String(url).includes("2026-09-25.json") ? 200 : 404 });
+  try { const data = await (await pendingCall("/api/intakes/pending", { meetingId: "hr-systems-roadmap" }, { CHAT_KV: memory })).json(); assert.equal(data.pending.date, "2026-09-18"); } finally { globalThis.fetch = original; }
+});
+test("pending write guards secret and validation before KV writes", async () => {
+  const memory = kv();
+  assert.equal((await pendingCall("/api/intakes/pending/write", pendingPayload, { CHAT_KV: memory, PENDING_WRITE_SECRET: "secret" })).status, 401);
+  assert.equal((await pendingCall("/api/intakes/pending/write", pendingPayload, { CHAT_KV: memory, PENDING_WRITE_SECRET: "secret" }, "wrong")).status, 401);
+  assert.equal((await pendingCall("/api/intakes/pending/write", pendingPayload, { CHAT_KV: memory }, "secret")).status, 501);
+  for (const invalid of [{ ...pendingPayload, meetingId: "bad id" }, { ...pendingPayload, date: "bad" }, { ...pendingPayload, items: Array.from({ length: 101 }, () => pendingItem) }, { ...pendingPayload, items: [{ ...pendingItem, title: "" }] }, { ...pendingPayload, items: [{ ...pendingItem, tone: "bad" }] }]) assert.equal((await pendingCall("/api/intakes/pending/write", invalid, { CHAT_KV: memory, PENDING_WRITE_SECRET: "secret" }, "secret")).status, 400);
+  assert.equal(memory.calls.put, 0);
+});
+test("pending write round-trips through the matching read key and TTL", async () => {
+  const memory = kv(); const write = await pendingCall("/api/intakes/pending/write", pendingPayload, { CHAT_KV: memory, PENDING_WRITE_SECRET: "secret" }, "secret");
+  assert.equal(write.status, 200); assert.equal(memory.calls.keys[0], "pending:v1:hr-systems-roadmap:2026-09-25"); assert.deepEqual(memory.calls.options[0], { expirationTtl: 1814400 });
+  const original = globalThis.fetch; globalThis.fetch = async () => new Response(JSON.stringify({ message: "Not Found" }), { status: 404 });
+  try { const read = await (await pendingCall("/api/intakes/pending", { meetingId: "hr-systems-roadmap" }, { CHAT_KV: memory })).json(); assert.deepEqual(read.pending, { date: pendingPayload.date, items: pendingPayload.items, generatedAt: pendingPayload.generatedAt, sourceLabel: pendingPayload.sourceLabel, sourceDigest: pendingPayload.sourceDigest }); } finally { globalThis.fetch = original; }
 });

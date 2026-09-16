@@ -8,6 +8,8 @@ const TONES = new Set(["update", "raise", "fyi", "decision-needed"]);
 const STATUSES = new Set(["open", "carried", "resolved", "dismissed"]);
 const CHAT_TTL_SECONDS = 7 * 24 * 60 * 60;
 const EXTRACTION_TTL_SECONDS = 60 * 60;
+const PENDING_TTL_SECONDS = 21 * 24 * 60 * 60;
+const MAX_PENDING_ITEMS = 100;
 const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
 const MAX_SHEETS = 20;
 const MAX_DATA_ROWS = 50;
@@ -56,7 +58,7 @@ function headers(origin) {
   return {
     "Access-Control-Allow-Origin": origin,
     "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Headers": "Content-Type, X-Automation-Secret",
     "Content-Type": "application/json",
   };
 }
@@ -264,6 +266,51 @@ async function submit(env, input) {
   if (!r.ok) throw error(`GitHub write failed (${r.status}).`, 502);
   const out = await r.json();
   return { path, commitSha: out.commit.sha, record };
+}
+
+function secretMatches(actual, expected) {
+  if (typeof actual !== "string" || actual.length !== expected.length) return false;
+  let difference = 0;
+  for (let i = 0; i < actual.length; i++) difference |= actual.charCodeAt(i) ^ expected.charCodeAt(i);
+  return difference === 0;
+}
+function pendingKey(meetingId, date) { return `pending:v1:${meetingId}:${date}`; }
+function validatePendingItem(item, ids) {
+  if (!/^itm_[A-Za-z0-9_-]+$/.test(item?.itemId || "") || ids.has(item.itemId)) throw error("Every pending item needs one unique stable itemId.");
+  ids.add(item.itemId);
+  if (!Number.isInteger(item.position) || item.position < 0 || !Number.isInteger(item.priority) || item.priority < 0) throw error("Pending item position and priority must be non-negative integers.");
+  if (!item.title?.trim() || !TONES.has(item.tone) || !STATUSES.has(item.status)) throw error("A pending item has missing or invalid fields.");
+  for (const field of ["detail", "speakerNoteSeed"]) if (typeof item[field] !== "string" || item[field].length > MAX_ITEM_TEXT_CHARS) throw error(`Pending item ${field} must be a string within the length limit.`);
+  if (!Array.isArray(item.sources)) throw error("Pending item sources must be an array.");
+}
+function validatePendingWrite(input) {
+  if (!/^[a-z0-9-]+$/.test(input?.meetingId || "")) throw error("Invalid meetingId.");
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(input.date || "")) throw error("Invalid date.");
+  if (!Array.isArray(input.items) || !input.items.length || input.items.length > MAX_PENDING_ITEMS) throw error(`Pending drafts require 1 to ${MAX_PENDING_ITEMS} items.`);
+  const ids = new Set(); input.items.forEach((item) => validatePendingItem(item, ids));
+}
+async function pending(env, input, origin) {
+  if (!/^[a-z0-9-]+$/.test(input?.meetingId || "")) throw error("Invalid meetingId.");
+  if (!env.CHAT_KV) return response(501, { ok: false, error: "Pending draft storage is not configured." }, origin);
+  const prefix = `pending:v1:${input.meetingId}:`;
+  const keys = (await env.CHAT_KV.list({ prefix })).keys.map((entry) => entry.name).sort().reverse();
+  for (const key of keys) {
+    const date = key.slice(prefix.length);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) continue;
+    const locked = await getJson(env, `intakes/${input.meetingId}/${date}.json`);
+    if (locked?.data?.status === "submitted") continue;
+    try { const raw = await env.CHAT_KV.get(key); const doc = raw ? JSON.parse(raw) : null; if (doc && Array.isArray(doc.items)) return response(200, { ok: true, pending: { date, items: doc.items, generatedAt: doc.generatedAt, sourceLabel: doc.sourceLabel, sourceDigest: doc.sourceDigest } }, origin); } catch {}
+  }
+  return response(200, { ok: true, pending: null }, origin);
+}
+async function writePending(env, request, input, origin) {
+  if (!env.PENDING_WRITE_SECRET) return response(501, { ok: false, error: "Pending draft writing is not configured." }, origin);
+  if (!secretMatches(request.headers.get("X-Automation-Secret"), env.PENDING_WRITE_SECRET)) return response(401, { ok: false, error: "Unauthorised." }, origin);
+  if (!env.CHAT_KV) return response(501, { ok: false, error: "Pending draft storage is not configured." }, origin);
+  validatePendingWrite(input);
+  const key = pendingKey(input.meetingId, input.date); const expiresAt = new Date(Date.now() + PENDING_TTL_SECONDS * 1000).toISOString();
+  await env.CHAT_KV.put(key, JSON.stringify({ date: input.date, items: input.items, generatedAt: input.generatedAt, sourceLabel: input.sourceLabel, sourceDigest: input.sourceDigest }), { expirationTtl: PENDING_TTL_SECONDS });
+  return response(200, { ok: true, key, expiresAt }, origin);
 }
 
 function chatKey(draftId, itemId) {
@@ -625,6 +672,8 @@ export default {
           origin,
         );
       }
+      if (url.pathname === "/api/intakes/pending") return await pending(env, input, origin);
+      if (url.pathname === "/api/intakes/pending/write") return await writePending(env, request, input, origin);
       if (url.pathname === "/api/intakes/submit")
         return response(
           201,
