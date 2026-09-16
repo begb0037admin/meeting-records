@@ -163,10 +163,16 @@ REF_HESA_STATUS = (
 REF_HESA_SAY = "Good news on the HESA UDF &mdash; Nathan's confirmed the template structure matches and we're on track for tomorrow's upload."
 
 
+# Column layout, applied consistently to every fixed-grid table in this
+# brief: narrow-ish Item column, deliberately widest What/Status column
+# (holds the most content), moderate Say This column. No standalone "#"
+# column -- numbering is folded into the Item cell's own text instead.
+ITEM_COLGROUP = '''<colgroup><col style="width:24%"><col style="width:51%"><col style="width:25%"></colgroup>'''
+
+
 def render_row(a):
     return f'''<tr>
-            <td class="idcell">{a["id"]}</td>
-            <td>{a["title"]} <span class="pill pill-{a["pill"]}">{ {"raise":"Raise","onhold":"Historic — unresolved","info":"Update","overdue":"Overdue","resolved":"Resolved","new":"New"}[a["pill"]] }</span></td>
+            <td>{a["id"]}. {a["title"]} <span class="pill pill-{a["pill"]}">{ {"raise":"Raise","onhold":"Historic — unresolved","info":"Update","overdue":"Overdue","resolved":"Resolved","new":"New"}[a["pill"]] }</span></td>
             <td><b>What:</b> {a["what"]}<br><span class="cur-label">Status</span> {a["status"]}</td>
             <td><span class="say-label">Say</span> &ldquo;{a["say"]}&rdquo;</td>
           </tr>'''
@@ -174,8 +180,9 @@ def render_row(a):
 
 def rows_table(items):
     rows = "\n".join(render_row(a) for a in items)
-    return f'''<table>
-          <thead><tr><th>#</th><th>Item</th><th>What / Status</th><th>Say this</th></tr></thead>
+    return f'''<table class="fixed-grid">
+          {ITEM_COLGROUP}
+          <thead><tr><th>Item</th><th>What / Status</th><th>Say this</th></tr></thead>
           <tbody>
 {rows}
           </tbody>
@@ -185,7 +192,8 @@ def rows_table(items):
 SK_TABLE = rows_table(SK_ITEMS)
 MM_TABLE = rows_table(MM_ITEMS)
 
-GLANCE_TABLE = """<table>
+GLANCE_TABLE = """<table class="fixed-grid">
+          <colgroup><col style="width:60%"><col style="width:40%"></colgroup>
           <thead><tr><th>Section</th><th>Items</th></tr></thead>
           <tbody>
             <tr><td>Urgent &mdash; REF 2029 HESA UDF (pasted thread)</td><td>1 item, deadline tomorrow (17 Sept)</td></tr>
@@ -216,7 +224,8 @@ SECTIONS = f"""
 
   <h2>Also confirmed live &mdash; additional active items <span class="h2-sub">Live Sept 2026 Standing Agenda deck (local OneDrive)</span></h2>
   <p class="body-loose"><span class="say-label">Say</span> &ldquo;A few more things ticking along from the team's own Standing Agenda &mdash; nothing needs deciding here today, just flagging where they're at.&rdquo;</p>
-  <table>
+  <table class="fixed-grid">
+    <colgroup><col style="width:32%"><col style="width:68%"></colgroup>
     <thead><tr><th>Item</th><th>Status</th></tr></thead>
     <tbody>
       <tr><td>Staff Request Audit / Insight</td><td>Reviewing PeopleXD's Insight audit capability for staff requests, following recent Access Group enhancements.</td></tr>
@@ -234,7 +243,7 @@ SECTIONS = f"""
 FOOTNOTE = """<div class="footnote">
     Rebuilt 16 Sept 2026 for today's 10:00 sitting; context lines and speaker notes added same day per Kevin's request &middot; Sources: SK 1-1 transcript (not_dIj3MwTSbme10y, 19 Aug), Managers Meeting transcript (not_ZSu5h6SBdMTD9o, 20 Aug), Monthly Standing Agenda September 2026.pptx (local OneDrive), a pasted email thread for the REF 2029 HESA UDF item and the Cority/RECSUP20 item (neither connector-verified, per Kevin), Work Inbox + Command Centre (pulled 15&ndash;16 Sept).<br>
     One SK 1-1 transcript item (a colleague's confidential upcoming leave) is deliberately omitted throughout, per Kevin's standing instruction.<br>
-Thirteenth same-day authorized exception to the 21 Aug 2026 pipeline-review content-push freeze &mdash; not a general lifting of it. Full pass-by-pass history in Lauren's memory, not repeated here.<br>
+Fourteenth same-day authorized exception to the 21 Aug 2026 pipeline-review content-push freeze &mdash; not a general lifting of it. Full pass-by-pass history in Lauren's memory, not repeated here.<br>
     Branding: command-centre/BRANDING.md v2.0 &mdash; Oxford Navy, Inter, canonical crest. Template shared via brief_chrome.py.
   </div>"""
 
