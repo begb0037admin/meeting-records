@@ -477,3 +477,90 @@ automated PR-review bot comments retroactively on PR #13 after this
 checkpoint, treat any real finding the same way Phase 3's two findings were
 treated — fix on a follow-up branch, don't assume "already deployed" means
 "not worth fixing."
+
+## Extraction hardened blocker fixed — `.xlsm` now accepted, 16 September 2026
+
+Real blocker, not a build-proposal phase: Kevin's actual weekly working file
+is `HR Systems Roadmap MASTER.xlsm` (macro-enabled — it's his live working
+copy, not something he can casually re-save as `.xlsx` every week). Phase
+3's `extensionRejection()` blanket-rejected any `.xlsm`, and separately
+hard-failed on `workbook.vbaraw` (a VBA-project-detected check) as
+defense-in-depth. Both were legitimate Phase 3 caution but wrong for this
+real, recurring, necessary use case — Kevin's standing zero-manual-steps
+rule rules out a "save as .xlsx every week" workaround.
+
+**Security reasoning — why allowing `.xlsm` read-only extraction is safe:**
+the actual risk category here is macro *execution*, not macro *presence*.
+Confirmed directly against SheetJS's own docs (fetched this session, not
+assumed): "SheetJS does not execute, evaluate, or run macro code at any
+point... there is no code path in SheetJS's standard read API that
+evaluates formulas or executes macros... [it] functions as a data container
+rather than an execution environment." `workbook.vbaraw` (only populated
+when `bookVBA: true` is passed to `XLSX.read`) is an opaque raw byte blob,
+never interpreted. This was already true for the existing `cellFormula`
+option too (confirmed in Phase 3: formulas return their pre-computed
+*cached* value, never evaluated) — this change extends the same
+already-proven-safe read-only posture to `.xlsm`'s VBA content.
+
+**Changes made, `src/worker.js`:**
+- `extensionRejection()`: `.xlsm` now returns `null` (accepted) alongside
+  `.xlsx`. Error/help text for `.xlsb`/other rejected extensions updated to
+  say "only .xlsx or .xlsm" instead of "only plain .xlsx".
+- `extract()`: the `workbook.vbaraw` gate now only rejects when the
+  *extension* is not `.xlsm` — i.e. a VBA project inside a genuine `.xlsm`
+  is expected and accepted, but a file with an `.xlsx` extension that
+  actually contains VBA content (a mismatched/renamed file) is still
+  rejected exactly as before. This preserves the original defense-in-depth
+  purpose (catching a disguised macro file) while no longer punishing a
+  correctly-labelled `.xlsm`.
+- No change to what's ever read from, returned in, or persisted from
+  `workbook.vbaraw` — it was never referenced past the boolean presence
+  check before this change, and still isn't. The extraction output shape
+  (`sheets`/`headers`/`dimensions`/bounded `preview`/`digest`/`extractionId`)
+  is byte-for-byte identical to the `.xlsx` path; no macro-related field
+  exists anywhere in the API response or the `CHAT_KV` document written by
+  `extract()`.
+- Every other Phase 3 safety check is unchanged: 5MB upload cap, OLE
+  compound-file-signature password-protected rejection, ZIP-signature
+  validation, the P1 (bounded-range-before-`sheet_to_json`) and P2
+  (`MAX_EXTRACTION_REFERENCES`) hardening from the Phase 3 Codex review.
+  `.xls`/`.xlsb`/other extensions remain rejected.
+
+**Tests, `test/worker.test.mjs`:**
+- "rejects unsupported workbook extensions before parsing" now checks
+  `.xlsb`/`.xls` instead of `.xlsm`/`.xls` (the `.xlsm` case moved to its
+  own acceptance test below).
+- The macro-rejection test was renamed and narrowed to what it actually
+  tests: a file with real VBA content but an **`.xlsx`** extension
+  (`renamed.xlsx`) — the mismatched-extension case that must still fail.
+- New test: a genuine `.xlsm` upload with real macro content (`book.vbaraw`
+  set, written via `XLSX.write(..., { bookType: "xlsm" })`) now succeeds
+  (`200`) and returns the identical bounded shape as the `.xlsx` extraction
+  test (same headers/dimensions/preview/digest assertions), while asserting
+  the full JSON response text and the exact stored `CHAT_KV` document both
+  contain no case-insensitive match for `vba` or `macro` anywhere.
+- Full suite: 22/22 pass (19 prior + 3 changed/added). `npm audit`: 0
+  vulnerabilities (the CDN-sourced patched `xlsx@0.20.3` from Phase 3 is
+  untouched by this change).
+
+**Verification:** re-confirmed via SheetJS's own documentation (not just
+prior-session assumption) that the read API never executes VBA/macro code
+under any option combination, including `bookVBA: true` — see reasoning
+above. Attempted a live local-Workers-runtime smoke test (`wrangler dev`)
+with a real generated `.xlsm` fixture containing synthetic VBA bytes;
+independent of this change's own logic, hit the same
+already-documented-in-Phase-3 local `wrangler dev` environment instability
+(this session: repeated "Workers runtime crashed unexpectedly" restarts and
+several orphaned `workerd.exe` processes left bound to the dev port after
+earlier attempts, cleaned up by PID/command-line verification, not a
+blanket kill). Per the same judgment call made in Phase 3 when this exact
+class of local-environment issue was hit, did not keep looping on the local
+artifact — relied instead on the Node test suite (which exercises the real
+SheetJS parsing logic, unchanged from Phase 3's already Workers-runtime
+smoke-tested behaviour for `.xlsx`) plus a real production
+`/api/extract` verification after deploy (see below), which is more
+decisive than a local dev session anyway.
+
+**Status:** built, tested (22/22), audited (0 vulnerabilities), Kevin gave
+standing authorization to proceed autonomously through merge/deploy/live
+verification without further check-ins for this repo, same as Phases 3/4.
