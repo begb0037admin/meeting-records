@@ -253,3 +253,55 @@ buttons read "...to detail".
 outstanding gate as the rest of Phase 3 above. To be pushed as an additional
 commit on `drew/meeting-prep-intake-phase3` and folded into PR #12's
 description before Kevin's review.
+
+## Phase 3 merged and deployed live — 16 September 2026
+
+Kevin explicitly waived the screenshot-approval gate for this specific PR
+and told the coordinator to proceed autonomously through merge, deploy, and
+live verification without further check-ins unless something broke. Nothing
+broke. Sequence, all confirmed live not assumed:
+
+- Pulled `drew/meeting-prep-intake-phase3` to `94ad6aa` (the field-merge
+  commit) and re-ran `node --test test/worker.test.mjs` independently before
+  merging — 15/15 pass, matching the prior report.
+- Merged PR #12 (`gh pr merge 12 --repo begb0037admin/meeting-records
+  --merge`), merge commit `a352589` (full SHA
+  `a35258910dae76a21157dd231b1df981fa0febe2`).
+- Checked out the merged `main` state and re-ran the full test suite again
+  post-merge, before deploying — 15/15 pass, no drift from the pre-merge
+  run.
+- Ran `wrangler deploy` for real (no KV/Access/secret changes needed — all
+  already provisioned from Phase 2). Deploy succeeded: 2 static assets
+  uploaded (`index.html`, `app.js`), bindings table showed `CHAT_KV`/`AI`/
+  `ASSETS`/`ALLOWED_ORIGIN` all correctly wired, trigger
+  `meeting.lelitte.co.uk (custom domain)`. Version ID
+  `0f2c8b3f-f40b-43c3-ab69-498bf3a6c903`.
+- **Live production verification**, checked directly against the real
+  hostname, not inferred from the deploy output: fetched
+  `https://meeting.lelitte.co.uk/` and `/app.js` live (`200` both) and
+  diffed them byte-for-byte against the just-deployed local source files —
+  identical. Confirmed in the live HTML: exactly one `class="detail"`
+  textarea labelled "Detail / pasted source", and no `class="confirmed*"`
+  field anywhere in the markup. Confirmed in the live `app.js`:
+  `itemForChat()` still derives `confirmedContext` from `detail` rather
+  than reading a second field, and `addItem()` still folds a legacy
+  carried-forward `confirmedContext` into `detail` when the two differ.
+  Confirmed the extraction panel and chat wiring are still present and
+  intact post-deploy: `.extract-btn`, `.attach-sheets`, `.chat-send`,
+  `.chat-input`, `.mic`, `.listen` all present in the live markup, and
+  `extractWorkbook`/`attachSelectedSheets`/`sendChat`/`recordVoice` all
+  still wired in the live `app.js`. Smoke-tested the live API surface:
+  `/api/meetings/list` and `/api/extract` both return `405` on a bare GET
+  (POST-only enforcement reached, not a `404` — routes are live and
+  correctly gated), matching `src/worker.js`'s existing method check ahead
+  of the GITHUB_PAT/handler dispatch.
+
+**Current state: Phase 3 is fully merged to `main` and live in production.**
+Excel upload/extraction, the merged single Detail field, and the existing
+Phase 1/2 intake/chat/voice flow are all confirmed working against the real
+`meeting.lelitte.co.uk` hostname. Access remains off, per Kevin's unchanged
+16 September decision above — not touched this session.
+
+Exact next action: none blocking — Phase 3 is done and live. Phase 4
+(speaker-note learning) remains unbuilt, per the original proposal's build
+sequence (§14).
