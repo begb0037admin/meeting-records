@@ -50,7 +50,9 @@ Exact next action: none blocking — Phase 2 is done and live. Phase 3 (file upl
 Built on `drew/meeting-prep-intake-phase3`, with no deployment, KV provisioning,
 Access change, or Phase 4 work:
 
-- `da80fa3` adds npm-registry-current `xlsx@^0.18.5` and its lockfile.
+- `da80fa3` adds npm-registry `xlsx@^0.18.5` and its lockfile (superseded, see
+  Drew's review pass below — this exact version has a known unpatched
+  vulnerability).
 - `ab1aeda` adds multipart `/api/extract` before JSON parsing, explicit
   extension/size/OLE/ZIP/parse/macro checks, raw-byte SHA-256, bounded
   sheet previews, plus the selected-sheet-only CHAT_KV resolver for `/api/chat`.
@@ -66,15 +68,64 @@ are TSV-like text using the first row as a documented v1 header heuristic;
 checkboxes begin unchecked so a sheet is not supplied to Lauren or made durable
 until Kevin selects it. The raw upload is never persisted.
 
-Verification: Codex and Drew independently ran `node --test test/worker.test.mjs`;
-both runs were **12 pass, 0 fail**. This proves the dependency imports and behaviour
-under plain Node only. It does **not** prove SheetJS bundles or runs correctly in
-the actual Wrangler/Workers runtime.
+**Drew's review pass (same day):** independently re-ran `node --test
+test/worker.test.mjs` — 12/12 pass, matching Codex's self-report. Read the
+full `worker.js`/`app.js`/`index.html`/`style.css`/test diffs directly.
+Confirmed the extension/signature/macro/size rejection order matches the
+brief, that `chatMessages` is correctly `await`ed everywhere it's now async,
+and that the client-side failure isolation holds (an extraction error only
+ever touches `.extract-message`, never the item's other fields, chat panel,
+or submit flow).
 
-**Status:** built, committed, independently reviewed; not pushed, PR-opened,
-merged, deployed, or live-tested.
+**Real security finding, fixed, not just noted:** `npm audit` on Codex's
+committed `xlsx@^0.18.5` (the public npm registry's version) showed **1 high
+severity** finding — Prototype Pollution
+([GHSA-4r6h-8v6p-xvw6](https://github.com/advisories/GHSA-4r6h-8v6p-xvw6))
+and a ReDoS advisory
+([GHSA-5pgg-2g8v-p4x9](https://github.com/advisories/GHSA-5pgg-2g8v-p4x9)),
+both marked "No fix available" on the registry. This is a known, real
+SheetJS situation, not a false positive — confirmed directly against
+SheetJS's own installation docs (`docs.sheetjs.com`), which state the public
+npm registry is outdated at 0.18.5 and the SheetJS CDN
+(`cdn.sheetjs.com`) is the authoritative source for patched builds. Directly
+relevant here since this route's entire job is parsing untrusted
+user-uploaded files — prototype pollution and ReDoS are exactly the
+exploitable class of bug for that threat model, not an abstract supply-chain
+nicety. **Fix applied:** `package.json`'s `xlsx` dependency now points at
+`https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz` (the current SheetJS
+CDN release, confirmed live via their docs) instead of the registry
+`^0.18.5`. Reinstalled (`package-lock.json` regenerated), `npm audit` now
+reports **0 vulnerabilities**, and the full test suite was re-run against
+the patched build with no code changes needed — still 12/12 pass.
 
-**Exact next action:** push the Phase 3 branch and open a review PR. Before any
-production deployment, Drew must run a real `wrangler dev` smoke test that
-uploads a safe synthetic `.xlsx` against the actual Workers runtime/bindings;
-do not treat the Node tests as that proof.
+**Real Workers-runtime smoke test (the verification Codex correctly flagged
+as still outstanding — Node tests alone don't prove this):** ran a local
+`wrangler dev` session (bundled by Wrangler's real esbuild pipeline into the
+actual Workers/V8 isolate runtime, not Node) and exercised `/api/extract`
+with a real generated `.xlsx` (two sheets, one cell containing a live
+formula `B2+B3` with cached value `5`) via genuine multipart HTTP upload —
+confirmed the Worker bundled and ran the patched SheetJS build cleanly,
+correctly extracted both sheets' names/dimensions/headers/previews, correctly
+returned the formula cell's **cached value** (`5`) rather than evaluating
+anything itself, produced a correctly-formatted `sha256:` digest and
+`extract_...` ID, and set a live TTL ~1 hour out. Also live-confirmed the
+rejection paths under the real runtime: a copy of the same file renamed to
+`.xlsm` was rejected with the macro-specific message, and a file starting
+with the OLE compound-file signature bytes was rejected with the
+password-protected-specific message. Did not re-run a live Anthropic-backed
+chat call against a real stored extraction in this pass — that resolution
+path (selecting only the checked sheet, explicit "no longer available" note
+on a missing reference) is already covered by two high-fidelity mocked unit
+tests exercising the exact same KV shape, so a redundant live model call
+wasn't judged worth the extra cost/time here. All local KV/dev-server state
+was disposable (local-mode Miniflare storage, not production `CHAT_KV`); no
+production resource was touched by any of this.
+
+**Status:** built, committed, independently reviewed, security-fixed, and
+live-smoke-tested under the real Workers runtime — not yet pushed,
+PR-opened, merged, or deployed.
+
+**Exact next action:** push the Phase 3 branch, open a review PR, and report
+to Kevin (screenshots of the upload/sheet-selection UI) for his explicit
+approval — this repo has no UI-approval-gate waiver. Do not merge or deploy
+without it.
