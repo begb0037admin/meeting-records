@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "meetings": [
+    {"meetingId":"hr-systems-managers","displayName":"HR Systems Managers Meeting","active":true,"cadence":"fortnightly","createdAt":"2026-09-16T00:00:00Z","createdBy":"Kevin"},
+    {"meetingId":"fa-team-catch-up","displayName":"FA Team Catch-up","active":true,"cadence":"twice-weekly","createdAt":"2026-09-16T00:00:00Z","createdBy":"Kevin"},
+    {"meetingId":"hr-systems-roadmap","displayName":"HR Systems Roadmap","active":true,"cadence":"weekly","createdAt":"2026-09-16T00:00:00Z","createdBy":"Kevin"},
+    {"meetingId":"hs-roadmap","displayName":"H&S Roadmap","active":true,"cadence":"weekly","createdAt":"2026-09-16T00:00:00Z","createdBy":"Kevin"},
+    {"meetingId":"sk-1-1","displayName":"SK 1-1","active":true,"cadence":"fortnightly","createdAt":"2026-09-16T00:00:00Z","createdBy":"Kevin"}
+  ]
+}
