@@ -149,13 +149,18 @@ MM_ITEMS = [
 REF_HESA_WHAT = (
     "REF 2029 UDF upload file for the HESA annual return &mdash; Person-level UDF (not appointment-level), "
     "using the current CorePortal template, all 12 field columns retained even if blank (Contract Id / Appointment ID "
-    "blank for person-level records). Nathan preparing the file; last confirmed correct 10&nbsp;Sept."
+    "blank for person-level records)."
 )
 REF_HESA_STATUS = (
+    "<b>Updated 15&nbsp;Sept (yesterday):</b> Nathan has matched the UDF template structure to the data items and "
+    "re-confirmed the team is on track for delivery; Kevin gave technical guidance on keeping the Contract ID column "
+    "and confirmed the current UDF template download is needed. "
     "<b>Deadline Thursday 17&nbsp;Sept &mdash; tomorrow</b> (moved up from 18&nbsp;Sept per Kevin's own 10&nbsp;Sept email). "
-    "<i>Source: pasted email thread (Kevin &harr; Nathan Kirwan, cc Sarah Rowles) &mdash; not connector/Granola-verified, per Kevin's instruction.</i>"
+    "<i>Source: Command Centre task t2609141649162 (dated 15&nbsp;Sept) for the updated status; original item from a pasted "
+    "email thread (Kevin &harr; Nathan Kirwan, cc Sarah Rowles) &mdash; neither connector/Granola-verified beyond the "
+    "Command Centre task itself, per Kevin's instruction.</i>"
 )
-REF_HESA_SAY = "Nathan's file for the REF 2029 HESA upload needs to land tomorrow &mdash; is it actually on track?"
+REF_HESA_SAY = "Good news on the HESA UDF &mdash; Nathan's confirmed the template structure matches and we're on track for tomorrow's upload."
 
 
 def render_row(a):
@@ -230,7 +235,7 @@ SECTIONS = f"""
 FOOTNOTE = """<div class="footnote">
     Rebuilt 16 Sept 2026 for today's 10:00 sitting; context lines and speaker notes added same day per Kevin's request &middot; Sources: SK 1-1 transcript (not_dIj3MwTSbme10y, 19 Aug), Managers Meeting transcript (not_ZSu5h6SBdMTD9o, 20 Aug), Monthly Standing Agenda September 2026.pptx (local OneDrive), a pasted email thread for the REF 2029 HESA UDF item and the Cority/RECSUP20 item (neither connector-verified, per Kevin), Work Inbox + Command Centre (pulled 15&ndash;16 Sept).<br>
     One SK 1-1 transcript item (a colleague's confidential upcoming leave) is deliberately omitted throughout, per Kevin's standing instruction.<br>
-    Ninth same-day authorized exception to the 21 Aug 2026 pipeline-review content-push freeze &mdash; not a general lifting of it. Full pass-by-pass history in Lauren's memory, not repeated here.<br>
+    Tenth same-day authorized exception to the 21 Aug 2026 pipeline-review content-push freeze &mdash; not a general lifting of it. Full pass-by-pass history in Lauren's memory, not repeated here.<br>
     Branding: command-centre/BRANDING.md v2.0 &mdash; Oxford Navy, Inter, canonical crest. Template shared via brief_chrome.py.
   </div>"""
 
