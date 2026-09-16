@@ -16,10 +16,12 @@ binding = "ASSETS"
 [ai]
 binding = "AI"
 
-# Replace after running `wrangler kv namespace create CHAT_KV` once; do not deploy this placeholder.
+# Created 16 Sep 2026 via `wrangler kv namespace create CHAT_KV`, dedicated
+# to this Worker only (not Linda's shared KV). 7-day TTL enforced in
+# src/worker.js, not here.
 [[kv_namespaces]]
 binding = "CHAT_KV"
-id = "REPLACE_WITH_CHAT_KV_NAMESPACE_ID"
+id = "6acfe1592caa47bea6656b921d75dcca"
 
 [vars]
 ALLOWED_ORIGIN = "https://meeting.lelitte.co.uk"
