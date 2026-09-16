@@ -103,10 +103,15 @@ ITEMS = [
 ]
 
 
+# Same fixed-grid fix applied to the Managers Meeting brief the same day:
+# no standalone # column (numbering folded into the Item cell's own text),
+# fixed column widths via <colgroup> with What/Status clearly the widest.
+ITEM_COLGROUP = '''<colgroup><col style="width:24%"><col style="width:51%"><col style="width:25%"></colgroup>'''
+
+
 def render_row(a):
     return f'''<tr>
-            <td class="idcell">{a["id"]}</td>
-            <td>{a["title"]} <span class="pill pill-{a["pill"]}">{ {"raise":"Raise","onhold":"Historic — unresolved","info":"Update","overdue":"Overdue","resolved":"Resolved","new":"New"}[a["pill"]] }</span></td>
+            <td>{a["id"]}. {a["title"]} <span class="pill pill-{a["pill"]}">{ {"raise":"Raise","onhold":"Historic — unresolved","info":"Update","overdue":"Overdue","resolved":"Resolved","new":"New"}[a["pill"]] }</span></td>
             <td><b>What:</b> {a["what"]}<br><span class="cur-label">Status</span> {a["status"]}</td>
             <td><span class="say-label">Say</span> &ldquo;{a["say"]}&rdquo;</td>
           </tr>'''
@@ -114,19 +119,21 @@ def render_row(a):
 
 ITEMS_TABLE = "\n".join(render_row(a) for a in ITEMS)
 
-GLANCE_TABLE = """<table>
-          <thead><tr><th>ID</th><th>Item</th><th>Type</th></tr></thead>
+GLANCE_TABLE = """<table class="fixed-grid">
+          <colgroup><col style="width:70%"><col style="width:30%"></colgroup>
+          <thead><tr><th>Item</th><th>Type</th></tr></thead>
           <tbody>
-            <tr><td class="idcell">1</td><td>Standing agenda (James presenting today)</td><td><span class="pill pill-onhold">Historic</span></td></tr>
-            <tr><td class="idcell">2</td><td>Patch release notes (Kevin presenting for Michael)</td><td><span class="pill pill-raise">Raise</span></td></tr>
-            <tr><td class="idcell">3</td><td>PXD UDF HESA update (Kevin's own)</td><td><span class="pill pill-new">New</span></td></tr>
+            <tr><td>1. Standing agenda (James presenting today)</td><td><span class="pill pill-onhold">Historic</span></td></tr>
+            <tr><td>2. Patch release notes (Kevin presenting for Michael)</td><td><span class="pill pill-raise">Raise</span></td></tr>
+            <tr><td>3. PXD UDF HESA update (Kevin's own)</td><td><span class="pill pill-new">New</span></td></tr>
           </tbody>
         </table>"""
 
 SECTIONS = f"""
   <h2>Today's three focus areas <span class="h2-sub">Verified against Work Inbox / Command Centre / Granola, not inferred</span></h2>
-  <table>
-    <thead><tr><th>#</th><th>Item</th><th>What / Status</th><th>Say this</th></tr></thead>
+  <table class="fixed-grid">
+    {ITEM_COLGROUP}
+    <thead><tr><th>Item</th><th>What / Status</th><th>Say this</th></tr></thead>
     <tbody>
 {ITEMS_TABLE}
     </tbody>
