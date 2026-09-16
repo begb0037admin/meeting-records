@@ -1,0 +1,10 @@
+name = "meeting-prep-intake"
+main = "src/worker.js"
+compatibility_date = "2026-09-16"
+
+[assets]
+directory = "public"
+binding = "ASSETS"
+
+# Set GITHUB_PAT with `wrangler secret put GITHUB_PAT`; never commit it.
+# This Worker is intentionally not deployed by this change.
