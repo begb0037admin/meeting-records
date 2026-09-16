@@ -1,15 +1,21 @@
-# Meeting Prep Intake — Phase 1
+# Meeting Prep Intake
 
 Private Cloudflare Worker and static interface for creating immutable meeting-intake records. GitHub remains the only durable store; the browser never has a GitHub credential. Revisions create a new `*.revision-<timestamp>.json` record with `supersedes`; the client must provide the latest Contents API SHA, so a stale revision is rejected instead of overwriting anything.
+
+**Phase 1** (merged, live at `meeting.lelitte.co.uk`): meeting picker, agenda-item workspace, carry-forward, and the immutable GitHub submission gateway.
+
+**Phase 2** (this branch, not yet deployed): per-item Lauren chat (`/api/chat`) backed by a dedicated `CHAT_KV` namespace keyed by `draftId:itemId`, and Workers AI voice routes (`/api/voice/stt`, `/api/voice/tts`). Chat is never durable on its own — Kevin explicitly copies a Lauren reply into the existing `confirmedContext` textarea before it can be submitted.
 
 ## Deploy preparation (do not deploy from this build)
 
 1. In `meeting-prep-intake/`, run `wrangler secret put GITHUB_PAT`. Use a fine-grained token limited to Contents read/write for `begb0037admin/meeting-records` only.
-2. Set `ALLOWED_ORIGIN` as a Worker environment variable to the exact deployed origin, for example `https://meeting-prep.example.org`; `GITHUB_PAT` is the only secret.
-3. Deploy with `wrangler deploy` only after review.
-4. In Cloudflare Zero Trust, add an **Access Application** for that exact deployed hostname and a policy allowing only Kevin’s approved identity; leave the Worker origin behind that application. This is the one required manual Access configuration step.
+2. Run `wrangler secret put ANTHROPIC_API_KEY` for Lauren chat; never commit either secret.
+3. Run `wrangler kv namespace create CHAT_KV` once and paste its returned ID into `wrangler.toml` in place of the documented placeholder.
+4. Set `ALLOWED_ORIGIN` as a Worker environment variable to the exact deployed origin, for example `https://meeting-prep.example.org`.
+5. Deploy with `wrangler deploy` only after review.
+6. In Cloudflare Zero Trust, add an **Access Application** for that exact deployed hostname and a policy allowing only Kevin’s approved identity; leave the Worker origin behind that application. This is the one required manual Access configuration step. (As of the Phase 1 deploy, Kevin explicitly asked for this to be reversed on the live `meeting.lelitte.co.uk` hostname — see `CHECKPOINT.md`'s "Access provisioned, then explicitly removed" entry before assuming this step should run again without checking with him first.)
 
-Phase 2/3 integration points are intentionally marked in the UI and Worker. There is no chat, voice, extraction, file upload, Outlook, Graph, COM, or SharePoint access in Phase 1.
+Phase 3 integration points (file upload, Excel/CSV extraction) are intentionally marked in the UI and Worker and are not built yet. There is still no Outlook, Graph, COM, or SharePoint access anywhere in this tool.
 
 ## Tests
 
