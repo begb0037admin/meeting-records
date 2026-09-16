@@ -47,6 +47,19 @@ from brief_chrome import SCRATCH, e, render_page, write_brief_output
 #      only references Managers Meeting item numbers, a separate table with
 #      its own independent numbering).
 #
+#      TWELFTH PASS, same day: the RECSUP20/Cority provenance question (item
+#      2) is now genuinely resolved via a real Codex Outlook connector search
+#      of Kevin's own Sent Items (the plugin is actually wired up on this
+#      machine -- checked `~/.codex/config.toml`, found `outlook-email@
+#      openai-curated` enabled; ran `codex exec -s read-only
+#      --skip-git-repo-check "<search prompt>"`, took ~2.5 min, found a real
+#      match: Kevin's own 20 Aug reply to Simon Burford/James Salas Guillen
+#      confirming Grace built the report originally and that CR 20020740 has
+#      since been raised for retrospective change control). This is the
+#      first genuinely connector-verified answer in this brief rather than a
+#      pasted thread -- tagged accordingly, distinct from the item's
+#      remaining pasted-thread content (the actual fix list).
+#
 #      No item, source tag, date, or the Athena exclusion was dropped. Full
 #      pass-by-pass history is in Lauren's memory
 #      (`managers-meeting-16sep-second-pass.md` and its addenda), not
@@ -61,10 +74,10 @@ SK_ITEMS = [
      "what": "Org structure: create three new pack management units in the system (a portal approach, not the old back-end process) and keep documentation updated &mdash; raised by Simon as Kevin's main focus item in the 19&nbsp;Aug 1-1.",
      "status": "No confirmation found since 19&nbsp;Aug that they've been created.",
      "say": "Let's get those three management units built and keep the docs updated as we go &mdash; has that actually started?"},
-    {"id": "2", "title": "Cority Applicant Data Import (RECSUP20) &mdash; report fixes &amp; provenance question", "pill": "raise",
-     "what": "RECSUP20's Cority interface file needs source-level PXD fixes (quote-stripping, CSV header/DOB formatting, 27-column completeness) and has a real provenance gap &mdash; no QA-server copy or change request on record for how it was built. A separate Cority column-mapping mismatch has its own support ticket open.",
-     "status": "<i>Source: pasted email thread (\"Cority - Applicant Data Import file\" &mdash; Simon Burford/James Salas Guillen/Kevin Lelitte) &mdash; not connector/Granola-verified, per Kevin's instruction. Distinct from any other Cority-related item elsewhere in this brief.</i>",
-     "say": "The Cority applicant import report needs real fixes at source, and nobody can tell me how it was originally built &mdash; I want an actual plan, not another patch."},
+    {"id": "2", "title": "Cority Applicant Data Import (RECSUP20) &mdash; report fixes, provenance resolved", "pill": "raise",
+     "what": "RECSUP20's Cority interface file needs source-level PXD fixes (quote-stripping, CSV header/DOB formatting, 27-column completeness). <b>Provenance question resolved:</b> the report was originally built by Grace, not Lee (Lee and James picked it up after her involvement ended) &mdash; it existed only in HR Reporting DEV, never promoted to QA/Production or put through change control. A separate Cority column-mapping mismatch has its own support ticket open.",
+     "status": "<b>Resolved 20&nbsp;Aug, found via the Codex Outlook connector (Kevin's own Sent Items &mdash; genuinely connector-verified, not a pasted thread):</b> Kevin's own reply to Simon Burford and James Salas Guillen confirms Grace built it originally; Kevin has since raised <b>CR 20020740</b> for retrospective change control and rebuild. <i>Source: Kevin Lelitte &lt;kevin.lelitte@admin.ox.ac.uk&gt;, 20&nbsp;Aug 2026 16:42&nbsp;UTC, \"Re: Cority - Applicant Data Import file.\" Original fix-list content still from the earlier pasted email thread (Simon Burford/James Salas Guillen/Kevin Lelitte) &mdash; only this provenance answer is freshly connector-verified.</i>",
+     "say": "Good news on the Cority report &mdash; we actually know now: Grace built it originally, it never went through change control, and I've already raised CR 20020740 to fix that retrospectively. The remaining work is the actual field-level fixes."},
     {"id": "3", "title": "38-day leave balance &mdash; how-to guide with Michael", "pill": "info",
      "what": "38-day leave balance: write a how-to guide with Michael so the fix is repeatable (Clockify ref 208 already on the Roadmap) &mdash; raised by Simon in the 19&nbsp;Aug 1-1.",
      "status": "Guide's write-up not confirmed since 19&nbsp;Aug.",
@@ -112,39 +125,19 @@ MM_ITEMS = [
      "what": "Signals absence reporting: a separate recurring meeting Kevin needs adding back onto after being away &mdash; raised by Kevin himself at the 20&nbsp;Aug meeting, genuinely distinct from the WFM meeting above (transcript confirms two separate things, not one).",
      "status": "Invite status unconfirmed.",
      "say": "Did I actually get added to the Signals absence reporting invite for Tuesday?"},
-    {"id": "7", "title": "Tableau &mdash; email Jasmine and Sarah", "pill": "raise",
-     "what": "Tableau spreadsheet: update the spreadsheet behind the statutory equal pay audit (due roughly every 3 years) and loop in Reward-team contacts Jasmine and Sarah by email &mdash; raised at the 20&nbsp;Aug meeting (specific requester not named in the transcript).",
-     "status": "Not confirmed sent since 20&nbsp;Aug.",
-     "say": "Did that email to Jasmine and Sarah on the Tableau spreadsheet actually go out?"},
-    {"id": "8", "title": "Tableau &mdash; final audit run + migration on Roadmap", "pill": "raise",
-     "what": "Tableau migration: run the equal pay audit in Tableau one final time ahead of the July 2027 deadline, then migrate off Tableau over three years, added to the Roadmap with documented rationale &mdash; agreed at the 20&nbsp;Aug meeting.",
-     "status": "Not confirmed added since 20&nbsp;Aug.",
-     "say": "Is the Tableau migration actually written into the Roadmap yet, with the reasoning behind it?"},
-    {"id": "9", "title": "PDR tracker &mdash; reshare with leads", "pill": "info",
+    {"id": "7", "title": "PDR tracker &mdash; reshare with leads", "pill": "info",
      "what": "PDR tracker: reshare the tracker link with leads so booked/completed sessions stay visible across the whole team &mdash; raised at the 20&nbsp;Aug meeting as a general reminder to leads.",
      "status": "Kevin's own PDR is today; wider reshare to leads not confirmed.",
      "say": "Has the PDR tracker link actually gone back out to the leads?"},
-    {"id": "10", "title": "Susan's acting-up allowance business case", "pill": "raise",
-     "what": "Susan's business case: Kevin drafted a two-page business case (approx. &pound;300 total) for Susan's acting-up allowance at the 20&nbsp;Aug meeting, to raise with Renu in person once she's back from leave &mdash; no guarantee of approval.",
-     "status": "1-1 with Renu not confirmed held since 20&nbsp;Aug.",
-     "say": "Have you had that conversation with Renu on Susan's case yet?"},
-    {"id": "11", "title": "PSP work &mdash; via lead first, escalate to Renu if unresolved", "pill": "onhold",
-     "what": "PSP work process: PSP requests should route via the team lead first, with backfill agreed before it's taken on, escalating to Renu only if unresolved &mdash; discussed at the 20&nbsp;Aug meeting, part of a wider strategic workforce review Sarah Kay is running on Renu's behalf.",
-     "status": "No update on record since 20&nbsp;Aug &mdash; needs a live check.",
-     "say": "Are we actually holding the line on PSP work coming via the lead first?"},
-    {"id": "12", "title": "Nathan's AI inbox-logging skill", "pill": "new",
+    {"id": "8", "title": "Nathan's AI inbox-logging skill", "pill": "new",
      "what": "Nathan's AI skill: a rough prototype that reads the applicant inbox and logs requests into a spreadsheet automatically, demoed live by Nathan at the 20&nbsp;Aug meeting &mdash; could free up Anne and Henry's time on inbox cover once refined.",
      "status": "Real, demoed live 20&nbsp;Aug (confirmed via transcript). No further refinement/sharing on record.",
      "say": "Has Nathan's inbox-logging skill moved on at all since his demo?"},
-    {"id": "13", "title": "Executive dashboard &mdash; on hold pending data structure", "pill": "onhold",
+    {"id": "9", "title": "Executive dashboard &mdash; on hold pending data structure", "pill": "onhold",
      "what": "Executive dashboard: can't be built until the underlying calculation data is properly structured &mdash; status update given at the 20&nbsp;Aug meeting.",
      "status": "Progress made, not complete; no update since 20&nbsp;Aug.",
      "say": "Where's the calculation data got to &mdash; any closer to being able to build that dashboard?"},
-    {"id": "14", "title": "Broken SharePoint links &mdash; Julian to review/fix", "pill": "info",
-     "what": "Broken SharePoint links: a Codex scan Kevin ran surfaced broken hyperlinks across SharePoint pages (majority in the cyber security section), shared at the 20&nbsp;Aug meeting &mdash; Julian has the output (page, URL, link name) to work through.",
-     "status": "No completion on record.",
-     "say": "How far through the broken-links list has Julian actually got?"},
-    {"id": "15", "title": "OSM data access &mdash; for AI-driven FAQ/theme analysis", "pill": "onhold",
+    {"id": "10", "title": "OSM data access &mdash; for AI-driven FAQ/theme analysis", "pill": "onhold",
      "what": "OSM data access: early thinking on getting more direct access to OSM's support-request data, to use AI (not Power Automate &mdash; ruled out, non-Microsoft) to spot themes and maybe automate FAQ-style responses &mdash; discussed at the 20&nbsp;Aug meeting.",
      "status": "Early-stage only. No movement on record since 20&nbsp;Aug.",
      "say": "Has there been any real movement on getting proper access to that OSM data?"},
@@ -197,7 +190,7 @@ GLANCE_TABLE = """<table>
           <tbody>
             <tr><td>Urgent &mdash; REF 2029 HESA UDF (pasted thread)</td><td>1 item, deadline tomorrow (17 Sept)</td></tr>
             <tr><td>SK 1-1, 19 Aug 2026 (Simon &rarr; Kevin)</td><td>7 action items</td></tr>
-            <tr><td>HR Systems Managers Meeting, 20 Aug 2026</td><td>15 reconciled to-do items</td></tr>
+            <tr><td>HR Systems Managers Meeting, 20 Aug 2026</td><td>10 reconciled to-do items</td></tr>
             <tr><td>Also confirmed live (addendum)</td><td>8 items, live Sept 2026 Standing Agenda deck</td></tr>
           </tbody>
         </table>"""
@@ -217,8 +210,7 @@ SECTIONS = f"""
   <ul class="body-loose">
     <li>"WFM/signals absence" and "WFM/sickness" were wrongly merged in both relayed versions &mdash; they're two separate items (5 and 6 above).</li>
     <li>WhatsApp review timing confirmed as "next week," not "next team meeting."</li>
-    <li>Nathan's AI inbox-logging skill and the executive dashboard are real and restored (items 12&ndash;13) after being dropped from one relayed version.</li>
-    <li>PSP requests route via the team lead first, escalating to Renu only if unresolved &mdash; not "sign-off from Renu" directly (item 11).</li>
+    <li>Nathan's AI inbox-logging skill and the executive dashboard are real and restored (items 8&ndash;9) after being dropped from one relayed version.</li>
     <li>Not included: one inferred item ("share Codex broken-links output beyond Julian") &mdash; couldn't independently confirm, left out rather than guessed.</li>
   </ul>
 
@@ -242,7 +234,7 @@ SECTIONS = f"""
 FOOTNOTE = """<div class="footnote">
     Rebuilt 16 Sept 2026 for today's 10:00 sitting; context lines and speaker notes added same day per Kevin's request &middot; Sources: SK 1-1 transcript (not_dIj3MwTSbme10y, 19 Aug), Managers Meeting transcript (not_ZSu5h6SBdMTD9o, 20 Aug), Monthly Standing Agenda September 2026.pptx (local OneDrive), a pasted email thread for the REF 2029 HESA UDF item and the Cority/RECSUP20 item (neither connector-verified, per Kevin), Work Inbox + Command Centre (pulled 15&ndash;16 Sept).<br>
     One SK 1-1 transcript item (a colleague's confidential upcoming leave) is deliberately omitted throughout, per Kevin's standing instruction.<br>
-Eleventh same-day authorized exception to the 21 Aug 2026 pipeline-review content-push freeze &mdash; not a general lifting of it. Full pass-by-pass history in Lauren's memory, not repeated here.<br>
+Thirteenth same-day authorized exception to the 21 Aug 2026 pipeline-review content-push freeze &mdash; not a general lifting of it. Full pass-by-pass history in Lauren's memory, not repeated here.<br>
     Branding: command-centre/BRANDING.md v2.0 &mdash; Oxford Navy, Inter, canonical crest. Template shared via brief_chrome.py.
   </div>"""
 
@@ -262,7 +254,7 @@ html_out = render_page(
         "Everything else is dated 19&ndash;20&nbsp;Aug with no confirmed update since, per Work Inbox/Command Centre as of today. That's the honest picture, not padding.",
     ],
     glance_label="At a glance",
-    glance_sub="1 urgent + 7 SK 1-1 + 15 Managers Meeting + 8 addendum items",
+    glance_sub="1 urgent + 7 SK 1-1 + 10 Managers Meeting + 8 addendum items",
     glance_table_html=GLANCE_TABLE,
     sections_html=SECTIONS,
     footnote_html=FOOTNOTE,
