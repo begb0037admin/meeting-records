@@ -2,6 +2,12 @@
 
 Implemented on branch `drew/meeting-prep-intake-phase1` in commit `818f282` (Codex, lead implementer per Kevin's one-time role flip for this build): Worker/static intake UI, definitions schema, immutable GitHub submission gateway, recurring carry-forward, and the locked-record renderer handoff. No Worker was deployed and no Cloudflare setting was changed.
 
+## Phase 2 implementation â€” 16 September 2026
+
+Implemented on `drew/meeting-prep-intake-phase2`: per-item Lauren chat backed by isolated 7-day `CHAT_KV` records, Workers AI STT/TTS routes, and the browser chat/mic/listen/attach-context panel. Chat stays non-durable until Kevin copies a reply into the existing confirmed-context textarea; no new confirmation API was added. `node --test test/worker.test.mjs` passed **7/7**. No Worker was deployed, no secret was set, and no KV namespace was provisioned.
+
+Exact next action: Drew independently reviews this branch, including the UI failure-isolation path (a chat/voice error must leave all item fields and the overall submit flow untouched), then decides whether it is ready for Kevin's approval/merge. Before deployment, replace the documented `CHAT_KV` placeholder only after the one-time namespace creation and set `ANTHROPIC_API_KEY` through Wrangler.
+
 **Drew's review pass (same day), commit `d05c39e`:** independently re-ran the Worker test suite (3/3 pass) and the renderer against `test/fixtures/submitted-intake.json` (screenshotted real output — correct fixed-grid 3-column brief, real Oxford crest, tone framing applied) rather than trusting Codex's self-report on faith. Found the implementation genuinely complete but written as dense single-line functions; ran a formatting-only `prettier` pass on the 5 JS/CSS/test files (no logic change, tests re-verified after). Also screenshotted the static UI served locally.
 
 **Status:** pushed, PR open at https://github.com/begb0037admin/meeting-records/pull/10 — awaiting Kevin's review/approval (this repo has no UI-approval-gate waiver, unlike work-inbox/command-centre).

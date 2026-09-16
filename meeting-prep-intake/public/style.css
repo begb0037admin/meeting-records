@@ -26,6 +26,14 @@ h2 {
 .phase-placeholder {
   color: #56607a;
 }
+.chat-panel { border-top: 1px solid #dbe2ee; margin-top: 1rem; padding-top: .7rem; }
+.chat-panel h3 { margin: 0; }
+.chat-messages { max-height: 14rem; overflow: auto; }
+.chat-line { padding: .4rem .6rem; margin: .4rem 0; border-radius: 4px; white-space: pre-wrap; }
+.chat-line.user { background: #e9f1fb; }
+.chat-line.assistant { background: #f0f5ef; }
+.chat-line.error { background: #fff0f0; }
+.chat-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
 .section-head,
 .item header,
 .row {

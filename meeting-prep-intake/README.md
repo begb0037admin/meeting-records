@@ -5,7 +5,9 @@ Private Cloudflare Worker and static interface for creating immutable meeting-in
 ## Deploy preparation (do not deploy from this build)
 
 1. In `meeting-prep-intake/`, run `wrangler secret put GITHUB_PAT`. Use a fine-grained token limited to Contents read/write for `begb0037admin/meeting-records` only.
-2. Set `ALLOWED_ORIGIN` as a Worker environment variable to the exact deployed origin, for example `https://meeting-prep.example.org`; `GITHUB_PAT` is the only secret.
+2. Run `wrangler secret put ANTHROPIC_API_KEY` for Lauren chat; never commit either secret.
+3. Run `wrangler kv namespace create CHAT_KV` once and paste its returned ID into `wrangler.toml` in place of the documented placeholder.
+4. Set `ALLOWED_ORIGIN` as a Worker environment variable to the exact deployed origin, for example `https://meeting-prep.example.org`.
 3. Deploy with `wrangler deploy` only after review.
 4. In Cloudflare Zero Trust, add an **Access Application** for that exact deployed hostname and a policy allowing only Kevin’s approved identity; leave the Worker origin behind that application. This is the one required manual Access configuration step.
 
