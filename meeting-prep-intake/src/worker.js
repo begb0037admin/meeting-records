@@ -579,11 +579,14 @@ async function speakerNoteCandidate(env, input, origin) {
 function extensionRejection(fileName) {
   const lower = String(fileName || "").toLowerCase();
   if (lower.endsWith(".xlsx")) return null;
-  if (lower.endsWith(".xlsm")) return "Macro-enabled workbooks (.xlsm) are not accepted — only plain .xlsx.";
-  if (lower.endsWith(".xlsb")) return "Binary workbooks (.xlsb) are not accepted — only plain .xlsx.";
+  // .xlsm is accepted for read-only extraction: SheetJS's read API never executes VBA/macro
+  // content (see the security note above extract()) — a macro project inside an .xlsm is
+  // expected and does not need to be rejected the way a mismatched/renamed file would.
+  if (lower.endsWith(".xlsm")) return null;
+  if (lower.endsWith(".xlsb")) return "Binary workbooks (.xlsb) are not accepted — only .xlsx or .xlsm.";
   if (lower.endsWith(".xls")) return "Legacy .xls workbooks are not accepted.";
   const extension = lower.match(/\.[^.]+$/)?.[0] || "no extension";
-  return `Files with ${extension} are not accepted — only plain .xlsx.`;
+  return `Files with ${extension} are not accepted — only .xlsx or .xlsm.`;
 }
 function startsWith(bytes, signature) {
   return signature.every((value, index) => bytes[index] === value);
@@ -643,29 +646,45 @@ async function extract(request, env, origin) {
   const file = form.get("file");
   const itemId = form.get("itemId");
   if (!/^itm_[A-Za-z0-9_-]+$/.test(itemId || "")) throw error("Invalid itemId.");
-  if (!file || typeof file.arrayBuffer !== "function") throw error("A .xlsx file is required.");
+  if (!file || typeof file.arrayBuffer !== "function") throw error("A .xlsx or .xlsm file is required.");
   const extensionError = extensionRejection(file.name);
   if (extensionError) throw error(extensionError);
+  const isMacroEnabledExtension = /\.xlsm$/i.test(String(file.name || ""));
   if (file.size > MAX_UPLOAD_BYTES) throw error("Workbook exceeds the 5 MB upload limit.");
   const buffer = await file.arrayBuffer();
   const bytes = new Uint8Array(buffer);
   if (startsWith(bytes, [0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1]))
     throw error("Password-protected workbooks cannot be accepted.");
-  if (!zipSignature(bytes)) throw error("File is not a valid .xlsx workbook.");
+  if (!zipSignature(bytes)) throw error("File is not a valid .xlsx/.xlsm workbook.");
   let workbook;
   try {
+    // bookVBA:true only makes SheetJS *detect* a VBA project (workbook.vbaraw, an opaque raw
+    // byte blob) so we can gate on its presence below — SheetJS's read API has no VBA
+    // interpreter and never executes macro code under any option combination (confirmed
+    // against SheetJS's own docs during this change). cellFormula:true likewise only
+    // surfaces each cell's formula *string* alongside its already-cached value; it does not
+    // evaluate formulas. Neither vbaraw nor formula strings are ever placed on the `sheets`
+    // array below, returned in the API response, or written to CHAT_KV — boundedSheet() only
+    // ever reads cell display values via sheet_to_json.
     workbook = XLSX.read(bytes, { type: "array", bookVBA: true, cellFormula: true });
   } catch {
-    throw error("File is not a valid .xlsx workbook.");
+    throw error("File is not a valid .xlsx/.xlsm workbook.");
   }
-  if (workbook.vbaraw) throw error("This file contains macro content and cannot be accepted.");
+  // A VBA project is expected and harmless in a genuine .xlsm (never executed — see above).
+  // For any other accepted extension (.xlsx) it means the content doesn't match what the
+  // extension claims, which stays rejected as before — defense-in-depth against a renamed
+  // macro file, not a rule about macros themselves.
+  if (workbook.vbaraw && !isMacroEnabledExtension)
+    throw error("This file contains macro content and cannot be accepted.");
   const sheetNames = workbook.SheetNames || [];
-  if (!sheetNames.length) throw error("File is not a valid .xlsx workbook.");
+  if (!sheetNames.length) throw error("File is not a valid .xlsx/.xlsm workbook.");
   const sheets = sheetNames.slice(0, MAX_SHEETS).map((name) => boundedSheet(workbook.Sheets[name], name));
   const extractionId = `extract_${crypto.randomUUID().replaceAll("-", "")}`;
   const digest = await sha256(buffer);
   const createdAt = new Date().toISOString();
   const expiresAt = new Date(Date.now() + EXTRACTION_TTL_SECONDS * 1000).toISOString();
+  // Note: workbook.vbaraw is intentionally never referenced past the boolean check above —
+  // it is not included in this stored document, nor in the API response below.
   await env.CHAT_KV.put(
     extractionKey(extractionId),
     JSON.stringify({ itemId, fileName: file.name, digest, sheets, createdAt }),

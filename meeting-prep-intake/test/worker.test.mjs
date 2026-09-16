@@ -144,24 +144,49 @@ test("extracts a bounded two-sheet .xlsx without executing formulas", async () =
 
 test("rejects unsupported workbook extensions before parsing", async () => {
   const memory = kv(); const bytes = workbookBytes();
-  const xlsm = await extractCall("agenda.xlsm", bytes, { CHAT_KV: memory });
+  const xlsb = await extractCall("agenda.xlsb", bytes, { CHAT_KV: memory });
   const xls = await extractCall("agenda.xls", bytes, { CHAT_KV: memory });
-  assert.match((await xlsm.json()).error, /\.xlsm/);
+  assert.match((await xlsb.json()).error, /\.xlsb/);
   assert.match((await xls.json()).error, /\.xls/);
   assert.equal(memory.calls.put, 0);
 });
 
-test("rejects oversized, password-protected, macro, and garbage uploads cleanly", async () => {
+test("rejects oversized, password-protected, mismatched-extension-macro, and garbage uploads cleanly", async () => {
   const memory = kv();
   const oversized = await extractCall("large.xlsx", new Uint8Array(5 * 1024 * 1024 + 1), { CHAT_KV: memory });
   const ole = await extractCall("locked.xlsx", Uint8Array.from([0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1]), { CHAT_KV: memory });
-  const macro = await extractCall("renamed.xlsx", workbookBytes({ macro: true }), { CHAT_KV: memory });
+  // A file with real macro content but an .xlsx extension is still rejected — the extension
+  // claims no macros, so this is treated as a renamed/mismatched file, not a legitimate .xlsm.
+  const mismatched = await extractCall("renamed.xlsx", workbookBytes({ macro: true }), { CHAT_KV: memory });
   const garbage = await extractCall("garbage.xlsx", Uint8Array.from([0x50, 0x4b, 0x03, 0x04, 1, 2, 3]), { CHAT_KV: memory });
   assert.match((await oversized.json()).error, /5 MB/);
   assert.match((await ole.json()).error, /Password-protected/);
-  assert.match((await macro.json()).error, /macro content/);
-  assert.match((await garbage.json()).error, /valid .xlsx/);
+  assert.match((await mismatched.json()).error, /macro content/);
+  assert.match((await garbage.json()).error, /valid .xlsx\/.xlsm/);
   assert.equal(memory.calls.put, 0);
+});
+
+test("accepts a genuine .xlsm with real macro content and returns the same bounded shape as .xlsx, with no macro data anywhere", async () => {
+  const memory = kv();
+  const result = await extractCall("HR Systems Roadmap MASTER.xlsm", workbookBytes({ macro: true }), { CHAT_KV: memory });
+  assert.equal(result.status, 200);
+  const data = await result.json();
+  // Same bounded shape as the .xlsx extraction test above.
+  assert.equal(data.sheets.length, 2);
+  assert.deepEqual(data.sheets[0].headers, ["Name", "Count"]);
+  assert.deepEqual(data.sheets[0].dimensions, { rows: 4, cols: 2 });
+  assert.match(data.sheets[0].preview, /Carried\t3/);
+  assert.match(data.sheets[0].preview, /\t5/);
+  assert.match(data.digest, /^sha256:[a-f0-9]{64}$/);
+  assert.equal(memory.calls.put, 1);
+  // No macro-related field anywhere in the API response...
+  const responseText = JSON.stringify(data);
+  assert.doesNotMatch(responseText, /vba/i);
+  assert.doesNotMatch(responseText, /macro/i);
+  // ...nor in the exact document written to KV.
+  const stored = memory.store.get(memory.calls.keys[0]);
+  assert.doesNotMatch(stored, /vba/i);
+  assert.doesNotMatch(stored, /macro/i);
 });
 
 test("chat resolves only selected extraction sheets using isolated KV prefixes", async () => {
