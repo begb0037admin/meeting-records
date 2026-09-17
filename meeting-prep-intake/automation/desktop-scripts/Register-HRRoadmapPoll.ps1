@@ -44,9 +44,16 @@ if (-not [Environment]::GetEnvironmentVariable('MEETING_PREP_PENDING_SECRET', 'U
 # sub-minute RepetitionInterval (confirmed live, 17 Sep 2026 -- "The task XML
 # contains a value which is incorrectly formatted or out of range... PT30S").
 # 1 minute is the real platform floor for this trigger type.
-$action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument "-NoProfile -ExecutionPolicy Bypass -File `"$scriptPath`""
+# Window visibility is deliberately configured in both places: this task runs
+# in the interactive session, and -WindowStyle Hidden requests a hidden
+# powershell.exe process window. The disposable live test must verify that it
+# eliminates any console flash. The ScheduledTasks -Hidden setting only hides
+# this housekeeping task from Task Scheduler's default list; it does not hide
+# a process window by itself.
+$action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File `"$scriptPath`""
 $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval (New-TimeSpan -Minutes 1) -RepetitionDuration (New-TimeSpan -Days 3650)
-Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Force | Out-Null
+$settings = New-ScheduledTaskSettingsSet -Hidden
+Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Settings $settings -Force | Out-Null
 
 Write-Host "Registered '$taskName' -- polls every 1 minute."
 Write-Host "Run it once manually now to verify it does nothing harmful when idle: Start-ScheduledTask -TaskName `"$taskName`""
