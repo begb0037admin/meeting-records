@@ -1,7 +1,7 @@
 <#
 Register-HRRoadmapPoll.ps1
 ============================
-One-time registration: polls every 30 seconds, indefinitely, for an on-demand
+One-time registration: polls every 1 minute, indefinitely, for an on-demand
 HR Systems Roadmap pull request from the browser's "Pull roadmap now" button.
 Replaces an earlier design (a single silent Thursday 07:00 run) that Kevin
 explicitly rejected on 16 Sep 2026 -- he wants to trigger this himself, with
@@ -29,7 +29,7 @@ if (-not [Environment]::GetEnvironmentVariable('MEETING_PREP_PENDING_SECRET', 'U
     throw "MEETING_PREP_PENDING_SECRET is not set as a User environment variable. Set it before registering this task."
 }
 
-# Fires every 30 seconds, indefinitely, from creation -- this is the
+# Fires every 1 minute, indefinitely, from creation -- this is the
 # "frequently-polling local task" this feature depends on, not a once-daily
 # trigger. Registered via the ScheduledTasks PowerShell module, not
 # schtasks.exe directly -- schtasks.exe's /tr argument-quoting through
@@ -40,9 +40,13 @@ if (-not [Environment]::GetEnvironmentVariable('MEETING_PREP_PENDING_SECRET', 'U
 # only reads a local file and makes outbound HTTPS calls, needs no elevated
 # privilege, and this account isn't a local admin on this box (elevation was
 # attempted and denied, Access 0x80070005 -- this is standard user rights).
+# 1 minute, not 30 seconds: Register-ScheduledTask genuinely rejects a
+# sub-minute RepetitionInterval (confirmed live, 17 Sep 2026 -- "The task XML
+# contains a value which is incorrectly formatted or out of range... PT30S").
+# 1 minute is the real platform floor for this trigger type.
 $action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument "-NoProfile -ExecutionPolicy Bypass -File `"$scriptPath`""
-$trigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval (New-TimeSpan -Seconds 30) -RepetitionDuration (New-TimeSpan -Days 3650)
+$trigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval (New-TimeSpan -Minutes 1) -RepetitionDuration (New-TimeSpan -Days 3650)
 Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Force | Out-Null
 
-Write-Host "Registered '$taskName' -- polls every 30 seconds."
+Write-Host "Registered '$taskName' -- polls every 1 minute."
 Write-Host "Run it once manually now to verify it does nothing harmful when idle: Start-ScheduledTask -TaskName `"$taskName`""

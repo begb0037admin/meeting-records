@@ -83,7 +83,7 @@ function stopPulling() { if (pullTimer) { clearInterval(pullTimer); pullTimer = 
 function renderPullState(state) {
   const el = $("#pullStatus");
   if (!state || state.status === "idle") { el.textContent = ""; el.className = "message"; return; }
-  if (state.status === "requested" || state.status === "running") return message(el, "Pulling… (checks every 30s, usually done within a minute)", true);
+  if (state.status === "requested" || state.status === "running") return message(el, "Pulling… (checks every minute, usually done within 2 minutes)", true);
   if (state.status === "done") { const when = new Date(state.completedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }); return message(el, `Pulled at ${when} — ${state.itemCount} item(s).`, true); }
   message(el, `Failed — ${state.error || "unknown error"} (click to retry)`);
 }
@@ -99,7 +99,7 @@ function startPolling(meetingId) { stopPulling(); pullDeadline = Date.now() + 2 
 $("#pullRoadmap").onclick = async () => {
   const meetingId = $("#meetingSelect").value;
   if (meetingId !== HR_ROADMAP_MEETING_ID) return;
-  message($("#pullStatus"), "Pulling… (checks every 30s, usually done within a minute)", true);
+  message($("#pullStatus"), "Pulling… (checks every minute, usually done within 2 minutes)", true);
   try { await api("/api/intakes/pull-request", { meetingId }); startPolling(meetingId); }
   catch (e) {
     if (/already in progress/i.test(e.message)) { startPolling(meetingId); return; } // a real pull is running -- reflect it, not an error
