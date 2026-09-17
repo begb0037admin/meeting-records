@@ -841,3 +841,97 @@ field content), that's a product-spec question to route back through him
 before touching the extraction logic again — not something to silently
 adjust. **Any future engineering work on this feature or this repo goes
 through Codex as lead implementer first, per the standing rule above.**
+
+## Morning-after fixes — 17 September 2026
+
+Kevin used the live feature for real the next morning and hit two
+real, distinct problems. Both fixed same day, both via Codex as lead
+implementer per the standing rule, both personally live-verified by
+Drew before being reported done — not just "code pushed."
+
+### 1. "Pull roadmap now" appeared stuck on "Pulling…"
+
+Reported: clicked the button, still "Pulling…" after ~15 seconds,
+`pull-status` stuck on `"requested"`. Initial hypothesis (relayed) was
+that the poller/Task Scheduler job had stopped working.
+
+**Root-caused, not assumed — that hypothesis was wrong.** The Windows
+Task Scheduler event log
+(`Microsoft-Windows-TaskScheduler/Operational`) showed
+`MeetingPrep-HRRoadmap-Poll` had run successfully (return code 0) every
+single 2-minute cycle overnight with zero failures. Kevin's specific
+request (`requestedAt` `08:11:43` UTC) was correctly claimed and
+completed by the very next poll tick at `08:12:53`–`54` — about 71
+seconds later, well inside the then-current 2-minute cadence. The
+already-live 5-minute client-side timeout was never close to
+triggering. Checking after 15 seconds was always going to show
+`"requested"` at a 2-minute poll cadence — this was never a hang, but
+it read as one with zero expectation-setting in the UI, which is
+exactly the "silently guessing" experience this feature exists to
+avoid, even though the backend was correct throughout.
+
+**Fix (PR #16, then #17 for a platform correction):** poll interval
+cut from 2 minutes to (attempted) 30 seconds; `app.js`'s "Pulling…"
+text now sets a real expectation; client timeout shortened from 5 to 2
+minutes to match. **Real platform constraint found live:**
+`Register-ScheduledTask` rejects a sub-minute `RepetitionInterval`
+outright ("task XML contains a value which is incorrectly formatted or
+out of range... PT30S") — 1 minute is the actual floor for this
+trigger type, confirmed by successfully registering a disposable test
+task at exactly 1 minute. Corrected throughout (PR #17): 1-minute
+poll, "checks every minute, usually done within 2 minutes" copy,
+2-minute client timeout kept.
+
+**Personally live-verified end to end, twice** (once after the initial
+30s→platform-floor correction) — not inferred from code review alone:
+issued a real `pull-request` against production, watched `pull-status`
+advance from `"requested"` to `"done"` with a real `itemCount`. Second
+real run: requested `08:41:46` UTC, started `08:42:34`, completed
+`08:42:34.585` — 48 seconds later, matching the new 1-minute cadence.
+Deployed live (`d9a1cd5d…` then `97ba3dfe…`), Task Scheduler
+re-registered with the corrected 1-minute interval and confirmed via
+`Get-ScheduledTask`/`Get-ScheduledTaskInfo`.
+
+### 2. Visible PowerShell window flashing every minute
+
+Reported separately, same morning: a blank PowerShell/terminal window
+popping up on Kevin's desktop every minute — the poller task firing
+with no window-style flag, rendering its console on the interactive
+desktop each time (`Register-ScheduledTask` with no `-User`/logon type
+defaults to the current interactive session).
+
+**Fix (PR #18):** added `-WindowStyle Hidden` to the `powershell.exe`
+action arguments, and registered `New-ScheduledTaskSettingsSet -Hidden`
+via `-Settings` (that second setting only hides the task from Task
+Scheduler's own UI list — a different thing from hiding the process
+window, kept for hygiene, not relied on alone).
+
+**Verification, honestly scoped:** a disposable test task
+(`ZZTest-HiddenWindowCheck`, same action/settings shape, harmless
+heartbeat script) ran successfully (`LastTaskResult 0`) with the fix
+applied, then was unregistered. Attempted an objective programmatic
+check for a visible window (`Get-Process`'s `MainWindowHandle`) around
+a manual trigger, with and without `-WindowStyle Hidden` as a control
+— **the control case (no hidden flag) also showed no detectable
+window**, meaning the detection method itself was inconclusive (most
+likely PowerShell's console window belongs to `conhost.exe`/ConPTY,
+not the `powershell.exe` process object queried) — not evidence either
+way. This is disclosed rather than papered over: a sub-second console
+flash on a physical screen is something only a human watching that
+screen can truly confirm, and Kevin's own confirmation is still
+needed. What is verified: this is Microsoft's standard, documented fix
+for exactly this symptom, and the task continues to run successfully
+with it applied — confirmed on the real production task via
+`Get-ScheduledTask`: `Execute powershell.exe`,
+`Arguments -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden
+-File "C:\Users\admin\Desktop\Run-HRRoadmapPoll.ps1"`,
+`Settings.Hidden True`, `LastTaskResult 0`.
+
+**Current state:** all three fixes merged and live (`main` at the PR
+#18 merge commit), production task re-registered with 1-minute
+interval + hidden window, real end-to-end pull verified working.
+**Exact next action:** Kevin confirms directly (a) that clicking "Pull
+roadmap now" now completes within about a minute with clear status
+text, and (b) that no PowerShell window appears on his screen anymore
+— the second point specifically needs his own eyes, not just this
+record.
