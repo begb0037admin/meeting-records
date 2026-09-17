@@ -935,3 +935,54 @@ roadmap now" now completes within about a minute with clear status
 text, and (b) that no PowerShell window appears on his screen anymore
 — the second point specifically needs his own eyes, not just this
 record.
+
+## "Add new update" quick-prepend for Detail — 17 September 2026
+
+New, separate feature confirmed with Kevin via live testing — not a
+reversal of the 16 Sept Detail/Confirmed-context merge, which stays
+exactly as it is. Problem: a pre-populated roadmap item's Detail field
+contains a long historical block (ID, Description, Deadline, Deadline
+type, full Progress-updates history); adding a note for today's meeting
+meant scrolling into that block and editing inline. Works for every
+item, not just roadmap-pre-populated ones.
+
+Built by Codex (lead implementer per the standing rule), reviewed and
+live-tested by Drew:
+
+- `public/index.html`: a single-line `<input class="update-line">` +
+  `<button class="add-update-line">Add to detail</button>`, placed
+  directly above the existing "Detail / pasted source" field.
+- `public/app.js`: one new handler in `addItem()`, mirroring
+  `.attach-context`'s established shape but prepending instead of
+  appending. Formats today's date as `DD/MM/YY` (matching the exact
+  convention already used throughout the real Roadmap Master
+  workbook's own Progress-updates history, e.g. `21/08/26 - ...`) and
+  joins `` `${date} - ${text}` `` above the existing (trimmed) Detail
+  content with a blank line between, via
+  `[newLine, detail.value.trim()].filter(Boolean).join("\n\n")`. Blank
+  input is a silent no-op (matches `.attach-context`'s own no-op when
+  there's no chat reply yet); the input clears after a successful add.
+  No status paragraph added — a synchronous, no-failure-mode local edit
+  didn't warrant one, judgement call disclosed rather than silently
+  decided.
+- `src/worker.js` untouched — pure client-side textarea editing, no new
+  API route, nothing written anywhere until the existing "Submit locked
+  intake" button is clicked, same as any other manual Detail edit.
+- **Explicitly out of scope, confirmed with Kevin:** no write-back to
+  the live `HR Systems Roadmap MASTER.xlsm` itself — that file is
+  shared with other senior management and he wants to think carefully
+  about whether/how to do that safely. Not attempted here.
+
+**Verification, real not assumed:** `node --test test/worker.test.mjs`
+— 37/37 pass, unaffected (this feature has no backend surface for that
+suite to exercise). Live interaction test via Playwright against the
+actual served `public/` directory (not just a code read): pre-filled
+Detail with placeholder existing content, confirmed a blank-input click
+is a genuine no-op, then typed a real line and clicked "Add to detail"
+— resulting Detail read exactly
+`17/09/26 - Test update line for today's meeting\n\nID: 999\n\nDescription: Existing pre-filled detail content.`,
+input field confirmed cleared afterward. Screenshot taken of the live
+rendered result confirming the control's placement and the correct
+prepend behaviour visually, not just via the DOM value check.
+
+**Status:** merged and deployed live.
