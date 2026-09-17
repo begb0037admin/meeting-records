@@ -83,7 +83,7 @@ function stopPulling() { if (pullTimer) { clearInterval(pullTimer); pullTimer = 
 function renderPullState(state) {
   const el = $("#pullStatus");
   if (!state || state.status === "idle") { el.textContent = ""; el.className = "message"; return; }
-  if (state.status === "requested" || state.status === "running") return message(el, "Pulling…", true);
+  if (state.status === "requested" || state.status === "running") return message(el, "Pulling… (checks every 30s, usually done within a minute)", true);
   if (state.status === "done") { const when = new Date(state.completedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }); return message(el, `Pulled at ${when} — ${state.itemCount} item(s).`, true); }
   message(el, `Failed — ${state.error || "unknown error"} (click to retry)`);
 }
@@ -95,11 +95,11 @@ async function pollPullStatus(meetingId) {
     if (state.status === "done" || state.status === "failed") { stopPulling(); if (state.status === "done") await loadPendingDraft(meetingId); }
   } catch { /* transient network hiccup while polling -- keep trying until the deadline */ }
 }
-function startPolling(meetingId) { stopPulling(); pullDeadline = Date.now() + 5 * 60 * 1000; pollPullStatus(meetingId); pullTimer = setInterval(() => pollPullStatus(meetingId), 4000); }
+function startPolling(meetingId) { stopPulling(); pullDeadline = Date.now() + 2 * 60 * 1000; pollPullStatus(meetingId); pullTimer = setInterval(() => pollPullStatus(meetingId), 4000); }
 $("#pullRoadmap").onclick = async () => {
   const meetingId = $("#meetingSelect").value;
   if (meetingId !== HR_ROADMAP_MEETING_ID) return;
-  message($("#pullStatus"), "Pulling…", true);
+  message($("#pullStatus"), "Pulling… (checks every 30s, usually done within a minute)", true);
   try { await api("/api/intakes/pull-request", { meetingId }); startPolling(meetingId); }
   catch (e) {
     if (/already in progress/i.test(e.message)) { startPolling(meetingId); return; } // a real pull is running -- reflect it, not an error
