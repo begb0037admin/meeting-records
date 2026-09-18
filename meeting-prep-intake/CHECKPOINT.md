@@ -1399,5 +1399,65 @@ locally, not pushed — pushing an already-implemented, reviewed commit is
 integration/checkpointing, not implementation, so this stayed Drew's job
 per the restated rule).
 
-Exact next action: show Kevin all three screenshots; do not merge or
-deploy without his explicit approval.
+## 18 September 2026 — Round 6: functional pill colour-coding + icons found in-progress, two confirmed bugs, Codex capped mid-fix
+
+`CODEX_BRIEF.md` (the consolidated Round-1-through-5 brief) was committed to
+the branch (`d784228`) alongside the round-5 audit record (`42f4450`,
+`8a4dd68`). On resuming this task, the local working tree
+(`C:\Users\admin\github\meeting-records`, same branch) already had
+**uncommitted** local changes to `public/style.css` and `public/index.html`
+implementing `CODEX_BRIEF.md` section 2 (functional colour-coding — new
+`pill-violet` token, `#newRecurring`→violet, `.suggest-seed`→amber,
+`.chat-send`/`.mic`/`.listen`/`.attach-context`→teal,
+`.extract-btn`/`.attach-sheets`→green) and the inline-SVG-icon requirement
+on every pill, plus a `Choose File` fix: `.xlsx-file` visually hidden
+(`position:absolute;opacity:0`) behind a new `<label class="file-pill pill
+pill-green">` with a separate `.file-name` span. This was genuinely
+in-progress when first observed (file mtimes changed between two
+consecutive `git diff` checks seconds apart) but stabilised before any
+review began — not a race condition in the review itself.
+
+**Drew's independent review of this uncommitted work — two confirmed bugs,
+neither fixed yet:**
+
+1. **Hover state goes fully transparent on 8 recoloured pills.** The
+   shared hover rule `.chat-send:hover,.mic:hover,.listen:hover,
+   .attach-context:hover,.extract-btn:hover,.attach-sheets:hover,
+   #newRecurring:hover,.suggest-seed:hover{filter:brightness(.94);
+   background:inherit}` — `background:inherit` resolves to the parent's
+   computed background, which is transparent. Confirmed live via Playwright
+   `getComputedStyle` against the real served files (not source
+   inspection): `.mic` hover `backgroundColor` is genuinely
+   `rgba(0, 0, 0, 0)`, same for the other 7 selectors in that rule. The
+   pastel fill disappears on hover instead of dimming. `.file-pill` and
+   `.remove` were unaffected (separate, correct hover rules).
+2. **`.file-name` span never updates — functional regression, not just
+   styling.** `app.js` was not touched in this round. There is no `change`
+   listener on `.xlsx-file` writing the selected filename into the new
+   `.file-name` span, and the native input's own browser-default filename
+   text is now invisible (opacity:0). A user who picks a file gets zero
+   visible confirmation of what they selected until Extract runs.
+
+**Dispatched to Codex per the standing lead-implementer rule** (`codex exec
+--approve-for-me --cd . --skip-git-repo-check` with a written fix-only
+brief scoped to exactly these two bugs, explicit instruction not to redo
+or revert the good uncommitted work). **Codex returned
+`ERROR: You've hit your usage limit... try again at 8:01 PM` on both
+attempts inside the session — exit code 0 but no work done.** This is a
+confirmed Codex-unavailable event per `agent-commons/operating-model/
+COORDINATOR_AND_CODEX_POLICY.md` §5, not a "would be faster without it"
+judgment call.
+
+Per §5, this must be named to Kevin explicitly and needs his acknowledgement
+before Drew switches lanes to implement these two fixes directly — not
+silently absorbed. Neither bug has been fixed. Nothing further pushed or
+committed this round; the good uncommitted colour-coding/icon work remains
+local-only, untouched, ready to be finished once a lane is confirmed.
+
+Exact next action: **Kevin decides** — (a) wait for Codex capacity to
+return (~20:01 today) and re-dispatch the same two-bug fix brief, or
+(b) explicitly waive §5's touchpoint coverage for this specific fix and
+have Drew implement the two bugs directly under reduced review. Either
+way, still awaiting Kevin's own screenshot review/explicit approval per
+this repo's standing approval gate before any merge or deploy — that
+requirement is unchanged and untouched by this round.
