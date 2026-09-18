@@ -1258,3 +1258,71 @@ rigor rather than taken on the report above.
 Screenshots (scratchpad, regenerate if needed for a later session):
 `intake-v3-01-desktop-default.png`, `intake-v3-02-desktop-items.png`,
 `intake-v3-04-mobile.png`, compared directly against `pxd-reference-01.png`.
+
+## 18 September 2026 — Round 4: field-spacing regression + full pill-language unification
+
+Kevin sent annotated screenshots naming two more gaps: cramped field
+spacing throughout every item card, and inconsistent pill styling (the
+"Add agenda item" button, the "Remove" button, and the sidebar "Draft
+workspace" badge still reading as the old bordered/outlined language
+while the tone tags used the new solid-fill pill language).
+
+**Root cause found for the spacing complaint, not just a tweak:** the
+original pre-redesign stylesheet had `label{margin: 0.7rem 0}`. Round 1's
+rewrite dropped that margin entirely (`label{...}` with no margin
+property at all), so every stacked field in every item card has had zero
+vertical breathing room since round 1 — this is why it read as cramped
+everywhere, not just the two spots Kevin's arrows pointed at.
+
+**Fixed, commit `c597edc` (Codex, lead implementer):**
+- `label` restored to a real bottom margin (`0 0 1.15rem`); field
+  `margin-top` increased `.4rem` → `.6rem`.
+- `#addItem` ("Add agenda item"): converted to a solid navy, white-text,
+  borderless pill (`border-radius: 20px`) — matches pxd's own precedent
+  for a "primary/active" pill (`.pill.flash` uses solid navy), not an
+  invented style.
+- `.remove` ("Remove"): converted to a solid coral pill (same family as
+  the "Raise" tone tag), borderless.
+- "Draft workspace": relocated from the navy sidebar (where its pale
+  pastel fill read as washed-out/near-white against the dark background —
+  pxd never puts one of its pastel pills on a dark surface, only on white
+  cards) to the plain page background under the intro text, where the
+  existing pill styling renders exactly as designed.
+- Deliberately did NOT convert the other ~10 secondary utility buttons
+  (Create recurring definition, Pull roadmap now, Suggest speaker note,
+  Extract, Send/Mic/Listen/Attach, etc.) to pills — they're rectangular
+  (`border-radius: 7px`), not pill-shaped, Kevin didn't name them, and
+  pxd has no reference for a toolbar of many small action buttons.
+
+Codex disclosed it could not run a live browser check itself (its sandbox
+blocked opening the local `file:` preview) and gave only CSS-source-level
+values, explicitly flagged as unverified — did not claim a live check it
+hadn't done.
+
+**Drew's independent verification, all via live `getComputedStyle` calls
+in a real served page, not source-reading or a visual glance:**
+- `#addItem`: `border: 0px none`, `border-radius: 20px`, navy background,
+  white text.
+- `.remove`: `border: 0px none`, `border-radius: 20px`, coral fill.
+- Relocated "Draft workspace" pill: `border: 0px none`, `border-radius:
+  20px`, pale-blue fill — now on the white page background as intended;
+  also checked the wrapping element's own padding is `0px` (no leftover
+  22px sidebar padding bleeding through despite reusing the `.sidebar-
+  note` class name for layout).
+- Title input `margin-top`: `9.6px` (0.6rem). First `label`'s
+  `margin-bottom`: `18.4px` (1.15rem). Both match the intended values.
+- `npm test`: 37/37 pass, re-run independently.
+
+**Full-page screenshot, per Kevin's explicit request** (not fragments):
+avoided the already-known `page.screenshot({fullPage:true})` +
+`position:fixed` stitching artifact (see the Speaking Brief and Round 1
+entries above) by opening a fresh page with the viewport already sized to
+the full measured content height before load, rather than resizing after
+— so there's no post-load resize to trigger the artifact. One clean
+image, sidebar correctly navy top-to-bottom, both items fully visible.
+
+Screenshots (scratchpad): `intake-v4-01-viewport.png` (detail crop),
+`intake-v4-02-FULLPAGE.png` (the requested genuine full-page capture).
+
+Exact next action: show Kevin the full-page screenshot; do not merge or
+deploy without his explicit approval.
