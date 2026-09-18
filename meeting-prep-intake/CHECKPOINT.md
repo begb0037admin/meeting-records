@@ -1179,3 +1179,37 @@ Verified directly, not taken on the note above:
 Screenshots (scratchpad, regenerate if needed for a later session):
 `intake-v2-01-desktop-default.png`, `intake-v2-02-desktop-tone-pills.png`,
 `intake-v2-03-desktop-lock-card.png`, `intake-v2-04-mobile.png`.
+
+## 18 September 2026 — pxd structural and visual correction (Round 3, branch only)
+
+On `drew/meeting-prep-intake-branding-redesign`, the three intake section
+headings and descriptions now sit directly on `.page` (the main page
+background), not inside cards. Step 1's fields, recurring-definition action,
+status message and roadmap helper remain together in one `meeting-card` below
+its heading. Step 2's heading, description and Add agenda item control are
+free on the page; the outer `agenda-card` has been removed and `#items`
+contains each independent `.item` card directly. The final heading and
+description are also page children, with only the submit action/message in a
+separate `submit-card` below.
+
+The shared card rule now deliberately uses pxd's stronger icon-tile shadow:
+`0 1px 4px rgba(0,33,71,.07), 0 2px 12px rgba(0,33,71,.06)`, rather than the
+flatter env-col shadow, so cards visibly lift from the page. `.pill` now
+declares `border: none` defensively. A local browser computed-style check
+confirmed the rendered tone pill is `0px none`, 20px radius and 8px 18px
+padding; it also confirmed the dual-layer shadow, three direct `.page`
+section headings, no `.agenda-card`, and independent item cards in `#items`.
+
+Tone-pill labels now use the proportionate leading-emoji interpretation:
+`🔄 Update`, `🚩 Raise`, `ℹ️ FYI`, and `⚖️ Decision needed`; the select options
+remain plain. This is a judgment call for Kevin to react to, not a claim that
+the intake should use pxd's larger circular icon tiles.
+
+Validation: `npm test` passed 37/37 (the sandbox initially blocked the Node
+test-worker spawn with EPERM; the same command outside that sandbox passed).
+No Worker, Access, deployment state, or unrelated files changed. The two
+pre-existing untracked speaking-brief scripts remain intentionally excluded.
+
+Exact next action: review the branch UI with Kevin; do not merge or deploy
+without his explicit approval. If he changes the tone-icon decision, alter
+only `toneLabels` in `public/app.js` and repeat the browser/style check.

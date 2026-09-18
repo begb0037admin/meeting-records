@@ -10,7 +10,7 @@ if (!draftId) { draftId = `draft_${crypto.randomUUID().replaceAll("-", "")}`; se
 const resetDraft = () => { draftId = `draft_${crypto.randomUUID().replaceAll("-", "")}`; sessionStorage.setItem("meetingPrepDraftId", draftId); };
 function message(el, text, ok = false) { el.textContent = text; el.className = `message ${ok ? "ok" : "error"}`; }
 function renderNumbers() { [...items.children].forEach((el, i) => ($(".item-number", el).textContent = `Item ${i + 1}`)); }
-const toneLabels = { update: "Update", raise: "Raise", fyi: "FYI", "decision-needed": "Decision needed" };
+const toneLabels = { update: "🔄 Update", raise: "🚩 Raise", fyi: "ℹ️ FYI", "decision-needed": "⚖️ Decision needed" };
 const tonePillClasses = { update: "pill-blue", raise: "pill-coral", fyi: "pill-teal", "decision-needed": "pill-amber" };
 function renderTone(el) { const tone = $(".tone", el).value; const pill = $(".tone-pill", el); pill.className = `tone-pill pill ${tonePillClasses[tone]}`; pill.textContent = toneLabels[tone]; }
 async function api(path, body = {}, opts = {}) {
