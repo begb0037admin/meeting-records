@@ -11,7 +11,8 @@ const resetDraft = () => { draftId = `draft_${crypto.randomUUID().replaceAll("-"
 function message(el, text, ok = false) { el.textContent = text; el.className = `message ${ok ? "ok" : "error"}`; }
 function renderNumbers() { [...items.children].forEach((el, i) => ($(".item-number", el).textContent = `Item ${i + 1}`)); }
 const toneLabels = { update: "Update", raise: "Raise", fyi: "FYI", "decision-needed": "Decision needed" };
-function renderTone(el) { const tone = $(".tone", el).value; el.classList.remove("tone-update", "tone-raise", "tone-fyi", "tone-decision-needed"); el.classList.add(`tone-${tone}`); $(".tone-pill", el).textContent = toneLabels[tone]; }
+const tonePillClasses = { update: "pill-blue", raise: "pill-coral", fyi: "pill-teal", "decision-needed": "pill-amber" };
+function renderTone(el) { const tone = $(".tone", el).value; const pill = $(".tone-pill", el); pill.className = `tone-pill pill ${tonePillClasses[tone]}`; pill.textContent = toneLabels[tone]; }
 async function api(path, body = {}, opts = {}) {
   const r = await fetch(path, { method: "POST", headers: opts.headers || { "Content-Type": "application/json" }, body: opts.body || JSON.stringify(body) });
   if (!r.ok) { let data = {}; try { data = await r.json(); } catch {} throw new Error(data.error || "Request failed"); }

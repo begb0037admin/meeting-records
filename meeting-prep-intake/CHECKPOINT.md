@@ -1103,3 +1103,37 @@ Did not trust the note above on its own; verified directly:
   final step," worth Kevin's own reaction; (2) the outstanding KV-pre-stage
   reliability fix (18 Sep GITHUB_PAT-403 entry above) is still unbuilt by
   design — Kevin's call whether to greenlit it as a follow-up.
+
+## 18 September 2026 — pxd.lelitte.co.uk visual-language follow-up (branch only)
+
+Kevin supplied `pxd.lelitte.co.uk` as the primary visual reference after
+reviewing the first redesign screenshots. On the existing
+`drew/meeting-prep-intake-branding-redesign` branch, the intake now uses its
+static `env-col` card treatment and normal-case colour pills:
+
+- Removed the agenda-item coloured left accent bars completely, including all
+  `tone-*` wrapper classes and their border overrides. The success/error
+  message-banner bars remain unchanged by design.
+- Restyled `.card`, `.meeting-card`, `.agenda-card`, `.item`, and
+  `.submit-card` as static white cards: 16px radius, `rgba(0,33,71,.07)`
+  border, and `0 1px 4px rgba(0,33,71,.05)` shadow. The lock card retains its
+  existing explicit permanent/uneditable copy but now shares this same visual
+  language instead of using a warm danger tint.
+- Replaced the three form-section eyebrow headings with the pxd pattern: a
+  bold 15px Oxford-navy `Step / title` label and a flexible `#d1d9e6` rule;
+  the explanatory copy remains directly below so the form still communicates
+  its purpose.
+- Added pxd's five literal pill classes to the intake stylesheet. `renderTone()`
+  now assigns the class directly to `.tone-pill`: update=blue, raise=coral,
+  FYI=teal, decision-needed=amber; green remains available but unused.
+
+Verification: `npm test` passes 37/37. Local browser review against the
+served `public/` directory confirmed the desktop layout, section rules,
+rounded static cards, and direct Raise-to-coral pill transition; the expected
+local API failure banner was visible and unchanged. No Worker, Access,
+deployment, or crest asset change was made.
+
+Exact next action: review the updated branch screenshots with Kevin. Do not
+merge or deploy until he explicitly approves the UI. Keep the unrelated,
+untracked `tools/speaking-briefs/build_access_holiday_reports.py` and
+`tools/speaking-briefs/build_org_structure_walkthrough.py` out of this change.
