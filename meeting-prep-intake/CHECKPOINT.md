@@ -1061,3 +1061,45 @@ Changes are confined to `public/index.html`, `public/style.css`, and the additiv
 Validation: `npm test` — 37/37 pass. Local desktop screenshot visually checked at `http://127.0.0.1:4173/`; it confirms the normal-image crest, Inter-based hierarchy, cards, form controls, agenda treatment, and the hidden roadmap helper remains hidden until its existing JS reveals it. A local server has no API backing, so its intentionally visible failure banner also confirmed that operational errors are now conspicuous.
 
 Exact next action: review the committed branch and local visual evidence with Kevin. Do not merge or deploy until Kevin explicitly approves the screenshots/UI. Keep the separate, untracked `tools/speaking-briefs/build_org_structure_walkthrough.py` out of this change. The outstanding KV pre-stage-before-GitHub-write reliability improvement remains explicitly flag-only and requires separate approval.
+
+### Drew's independent review pass, same day — not taken on Codex's self-report
+
+Did not trust the note above on its own; verified directly:
+
+- Read the full diff (`git diff main` against `3d31773`) line by line —
+  `src/worker.js` genuinely untouched, confirmed via diffstat; `app.js`'s
+  only change is the additive `renderTone()` helper wired into `addItem()`,
+  no existing behaviour altered.
+- Ran `npm test` independently in a fresh shell — 37/37 pass, matches the
+  claim.
+- Served `public/` locally (`python -m http.server`, no backend behind it)
+  and screenshotted with Playwright (not the legacy `chrome.exe --headless
+  --screenshot` flag — known false-negative risk, see the same day's
+  `brief_chrome.py` redesign entry above) at desktop (1440px), a filled
+  multi-item state, the submit error-banner state, and a 390px mobile
+  viewport. All four screenshots confirm: real Inter font actually loading
+  (`document.fonts` check, not just the CSS declaration), the normal
+  `<img>` crest (not base64), navy sidebar, card/pill language matching
+  `brief_chrome.py`'s tokens, and the new prominent red error banners on
+  both the meeting-context and per-item chat sections plus the final submit
+  card when a request fails locally.
+- One apparent issue investigated and ruled a screenshot-tooling artifact,
+  not a real bug, matching the exact pattern already documented in this
+  file's Speaking Brief entry above: a Playwright `fullPage: true` capture
+  of a long (3+ item) page showed the fixed navy sidebar only filling the
+  bottom portion of the image, not the full height. Re-checked with
+  `getComputedStyle` (`position: fixed`, confirmed) and a real scroll to
+  the bottom of a long page + a viewport-only (non-fullPage) screenshot —
+  the sidebar is correctly pinned full-height at every scroll position.
+  `fullPage: true` on Chromium mis-renders `position: fixed` elements; it
+  is not a reliable check for fixed-position correctness. New confirmed-
+  fact candidate for `drew/memory/index.json` (Playwright fullPage +
+  position:fixed screenshot artifact).
+- Flagged two judgment calls back to Kevin for his own sign-off rather than
+  silently accepting or overriding them: (1) the final "Lock this intake"
+  card uses a warm/reddish tint (border + background gradient) to signal
+  irreversibility — reuses the same red family as the new error-banner
+  colour, which could read as "something's wrong" rather than "this is the
+  final step," worth Kevin's own reaction; (2) the outstanding KV-pre-stage
+  reliability fix (18 Sep GITHUB_PAT-403 entry above) is still unbuilt by
+  design — Kevin's call whether to greenlit it as a follow-up.
