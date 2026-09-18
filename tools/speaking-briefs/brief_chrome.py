@@ -181,7 +181,7 @@ CSS_BASE = r"""
   .table-wrap { overflow-x: auto; border-radius: 10px; max-width: 980px; }
   table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
   thead th { position: sticky; top: 0; z-index: 2; text-align: left; font-size: 10.5px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-faint); padding: 0.8rem 0.9rem; border-bottom: 1px solid var(--line-strong); white-space: nowrap; background: color-mix(in srgb, var(--navy) 3%, var(--card)); }
-  tbody td { padding: 0.7rem 0.9rem; border-bottom: 1px solid var(--line); vertical-align: top; color: var(--ink); }
+  tbody td { padding: 1rem 1.1rem; border-bottom: 1px solid var(--line); vertical-align: top; color: var(--ink); }
   tbody tr:last-child td { border-bottom: none; }
   td.idcell { font-weight: 700; color: var(--navy-soft); font-variant-numeric: tabular-nums; white-space: nowrap; }
   td.datecell { font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--ink-soft); }
@@ -196,8 +196,9 @@ CSS_BASE = r"""
      untouched. */
   table.fixed-grid { table-layout: fixed; }
   table.fixed-grid td, table.fixed-grid th { overflow-wrap: break-word; word-break: break-word; }
-  .agenda-latest, .agenda-status { margin: 0; line-height: 1.55; }
-  .agenda-status { margin-top: 0.8rem; padding-top: 0.7rem; border-top: 1px solid var(--line); color: var(--ink-soft); }
+  .agenda-latest, .agenda-status { margin: 0; line-height: 1.65; }
+  .agenda-status { margin-top: 1.2rem; padding-top: 1rem; border-top: 1px solid var(--line); color: var(--ink-soft); }
+  .agenda-latest .cur-label, .agenda-status .cur-label { margin-bottom: 0.45rem; }
 
   .pill { display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.26rem 0.58rem; border-radius: 999px; white-space: nowrap; }
   .pill-overdue, .pill-raise { background: var(--overdue-bg); color: var(--overdue); }

@@ -66,6 +66,9 @@ _NEXT_SECTION = re.compile(r"\n\s*(?:Next\s+steps|Date\s+last\s+reviewed|Next\s+
 _DATED_UPDATE = re.compile(
     r"(?s)(?P<date>\d{1,2}/\d{1,2}/\d{2,4})\s*-\s*(?P<text>.+?)(?=\s*\d{1,2}/\d{1,2}/\d{2,4}\s*-|\Z)"
 )
+_LEADING_DATED_UPDATE = re.compile(
+    r"^\s*(?P<date>\d{1,2}/\d{1,2}/\d{2,4})\s*-\s*(?P<text>.+?)\s*$"
+)
 
 
 def _parse_date(raw):
@@ -80,6 +83,14 @@ def _parse_date(raw):
 def newest_dated_progress_entry(text):
     """Return the newest DD/MM/YY-prefixed entry inside a 'Progress updates:'
     section, if one exists. This is a fallback only -- see agenda_text()."""
+    newest = newest_dated_progress_entry_parts(text)
+    if not newest:
+        return None
+    return f"{newest[0].strftime('%d/%m/%y')} - {newest[1]}"
+
+
+def newest_dated_progress_entry_parts(text):
+    """Return the newest dated Progress-updates entry as (date, text)."""
     match = _PROGRESS_SECTION.search(text or "")
     if not match:
         return None
@@ -92,10 +103,30 @@ def newest_dated_progress_entry(text):
         date = _parse_date(entry.group("date"))
         if date:
             updates.append((date, " ".join(entry.group("text").split())))
-    if not updates:
-        return None
-    newest = max(updates, key=lambda update: update[0])
-    return f"{newest[0].strftime('%d/%m/%y')} - {newest[1]}"
+    return max(updates, key=lambda update: update[0]) if updates else None
+
+
+def split_leading_update_date(text):
+    """Separate a leading DD/MM/YY date from a rendered update, if present."""
+    match = _LEADING_DATED_UPDATE.match(text or "")
+    if not match:
+        return None, (text or "").strip()
+    date = _parse_date(match.group("date"))
+    if not date:
+        return None, (text or "").strip()
+    return date, " ".join(match.group("text").split())
+
+
+def same_update_text(left, right):
+    return " ".join(left.split()).casefold() == " ".join(right.split()).casefold()
+
+
+def update_html(text, *, label=None, secondary=False):
+    date, body = split_leading_update_date(text)
+    label_html = f'<span class="cur-label">{label}</span>' if label else ""
+    date_html = f'<small><strong><time datetime="{date.date().isoformat()}">{date.strftime("%d %b %Y")}</time></strong></small><br>' if date else ""
+    css_class = "agenda-status" if secondary else "agenda-latest"
+    return f'<p class="{css_class}">{label_html}{date_html}{e(body)}</p>'
 
 
 # Backward-compatible alias (kept in case anything else imports the old name).
@@ -145,11 +176,18 @@ def agenda_text(text):
 def table(items):
     rows = []
     for item in sorted(items, key=lambda row: row["position"]):
-        detail = agenda_text(item["detail"])
-        status = agenda_text(item["confirmedContext"])
-        status_html = "" if not status or status == detail else f"<p class=\"agenda-status\"><span class=\"cur-label\">Status</span> {e(status)}</p>"
-        rows.append(f"<tr><td>{item['position']}. {e(item['title'])} <span class=\"pill pill-info\">{e(item['tone'])}</span><br><small>Priority {item['priority']}</small></td><td><p class=\"agenda-latest\"><span class=\"cur-label\">What</span> {e(detail)}</p>{status_html}</td><td><span class=\"say-label\">Say</span> &ldquo;{e(say_this(item))}&rdquo;</td></tr>")
-    return "<table class=\"fixed-grid\"><colgroup><col style=\"width:24%\"><col style=\"width:51%\"><col style=\"width:25%\"></colgroup><thead><tr><th>Item</th><th>What / Status</th><th>Say This</th></tr></thead><tbody>" + "\n".join(rows) + "</tbody></table>"
+        current = agenda_text(item["detail"])
+        previous = newest_dated_progress_entry_parts(item["detail"])
+        _, current_text = split_leading_update_date(current)
+        has_previous = previous and not same_update_text(current_text, previous[1])
+        current_html = update_html(current, label="New update")
+        previous_html = "" if not has_previous else update_html(
+            f"{previous[0].strftime('%d/%m/%y')} - {previous[1]}",
+            label="Last update",
+            secondary=True,
+        )
+        rows.append(f"<tr><td>{item['position']}. {e(item['title'])} <span class=\"pill pill-info\">{e(item['tone'])}</span><br><small>Priority {item['priority']}</small></td><td>{current_html}{previous_html}</td><td><span class=\"say-label\">Say</span> <em>&ldquo;{e(say_this(item))}&rdquo;</em></td></tr>")
+    return "<table class=\"fixed-grid\"><colgroup><col style=\"width:24%\"><col style=\"width:51%\"><col style=\"width:25%\"></colgroup><thead><tr><th>Item</th><th>Update</th><th>Say This</th></tr></thead><tbody>" + "\n".join(rows) + "</tbody></table>"
 
 def render(record):
     validate_items(record["items"])
