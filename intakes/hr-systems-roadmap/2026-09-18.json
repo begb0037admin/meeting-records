@@ -1,0 +1,176 @@
+{
+  "schemaVersion": 1,
+  "status": "submitted",
+  "meeting": {
+    "meetingId": "hr-systems-roadmap",
+    "title": "HR Systems Roadmap",
+    "date": "2026-09-18",
+    "kind": "recurring"
+  },
+  "items": [
+    {
+      "itemId": "itm_roadmap_136",
+      "position": 1,
+      "priority": 1,
+      "title": "PeopleXD Data Protection Impact Assessment",
+      "tone": "update",
+      "detail": "18/09/26 - SoundCloud had been released or its pilot extended, based on a section in the university update/cascade from the previous week.\n\nID: 136\n\nDescription: Creation of a Data Protection Impact Assessment (DPIA) for PeopleXD\n\nDeadline: 30 Sep 2026\n\nDeadline type: Self imposed (fixed)\n\nProgress updates: 21/08/26 - Pilot of Soundcloud now in place. \n03/07/26 - Still awaiting contact from project team to get pilot of Soundcloud.\n26/06/26 - Going to upload to soundcloud to test the document to see if it throws out any errors\n19/06/26 - Waiting for MarieC to sign off on wording.\n24/04/26 - Kevin has finished tweaks.\n06/03/26 - Kevin and Simon reviewed DPIA in 121\n27/02/26 - Kevin has shared the document with SB\n14/11/25 - Feedback received, substantial updates required.\n24/10/24 - Chase email sent to Ruzha Toneva \n24/10/25 - Kevin has compared WFM DPIA with HR Systems DPIA.\n25/09/25 - DPIA has been submitted to Ruzha and we're waiting for feedback\n18/09/25 - Kevin working with Ruzha in information compliance \n04/04/25 - Kevin has provided details of DPIA in handover workspace for Simon to pick up whilst he's on leave. KL now 50% of way through document!\n29/03/25 - Kevin around 30% of the way through the document. Focussing on getting the information available.\nhttps://compliance.admin.ox.ac.uk/data-protection-by-design\n\nNext steps: - On Marie's list to review and finalise DPIA.\n- Use pilot of soundcloud to test the DPIA and identify anything we need to tweak.\n\nDate last reviewed: 21 Aug 2026\n\nNext checkpoint date: 11 Sep 2026",
+      "confirmedContext": "18/09/26 - SoundCloud had been released or its pilot extended, based on a section in the university update/cascade from the previous week.\n\nID: 136\n\nDescription: Creation of a Data Protection Impact Assessment (DPIA) for PeopleXD\n\nDeadline: 30 Sep 2026\n\nDeadline type: Self imposed (fixed)\n\nProgress updates: 21/08/26 - Pilot of Soundcloud now in place. \n03/07/26 - Still awaiting contact from project team to get pilot of Soundcloud.\n26/06/26 - Going to upload to soundcloud to test the document to see if it throws out any errors\n19/06/26 - Waiting for MarieC to sign off on wording.\n24/04/26 - Kevin has finished tweaks.\n06/03/26 - Kevin and Simon reviewed DPIA in 121\n27/02/26 - Kevin has shared the document with SB\n14/11/25 - Feedback received, substantial updates required.\n24/10/24 - Chase email sent to Ruzha Toneva \n24/10/25 - Kevin has compared WFM DPIA with HR Systems DPIA.\n25/09/25 - DPIA has been submitted to Ruzha and we're waiting for feedback\n18/09/25 - Kevin working with Ruzha in information compliance \n04/04/25 - Kevin has provided details of DPIA in handover workspace for Simon to pick up whilst he's on leave. KL now 50% of way through document!\n29/03/25 - Kevin around 30% of the way through the document. Focussing on getting the information available.\nhttps://compliance.admin.ox.ac.uk/data-protection-by-design\n\nNext steps: - On Marie's list to review and finalise DPIA.\n- Use pilot of soundcloud to test the DPIA and identify anything we need to tweak.\n\nDate last reviewed: 21 Aug 2026\n\nNext checkpoint date: 11 Sep 2026",
+      "speakerNoteSeed": "Status update: the PeopleXD DPIA is with Marie to review and finalise, and we're also planning to run it through the Soundcloud pilot to catch anything that needs tweaking — deadline is end of September.",
+      "status": "open",
+      "sources": [
+        {
+          "kind": "roadmap-weekly",
+          "rowId": "136"
+        }
+      ],
+      "carryForward": null
+    },
+    {
+      "itemId": "itm_roadmap_its960",
+      "position": 2,
+      "priority": 1,
+      "title": "DSE Online Assessment",
+      "tone": "update",
+      "detail": "18/09/26 - This is complete as per deadline - no further updates\n\nID: ITS960\n\nDescription: DSE Online Assessment Project\n\nDeadline: 31 Aug 2026\n\nDeadline type: Fixed - compulsory\n\nProgress updates: 07/08/26 - Feed updated and James has tested \n03/07/26 - Tony Boydell has provided a quote that's been sent over to Marie for approval.\n26/06/26 - Tony Boydell has reached out and asked us to reach out to Erika for a quote.\n19/06/26 - This went live on 03/06. Some changes still required, as users without University email addresses are missing from the feed, so James must raise a change request due to concerns that there may be a cost involved.\n29/05/26 - James has completed testing of the DSE interface, all passed. \n15/05/26 - Everything looks good to go but few final tests need to take place first.\n27/02/26 - Ralph to continue to do manual uploads until interface is live. Have provisional date of interface go live of 6th May.\n13/02/26 - Do have the documentation now. Don't have timescales for when integration is going to happen.\n06/02/26 - Project closed but handover still to take place\n24/10/25 - System live but has a phased roll out\nCompleted the data check report (PERX90 DSE Data Validation - pending approval and deployment)\nGrace - to take lead and support the data interface and attend meetings to provide updates.\nA review meeting is scheduled for March 2025 to reassess project needs and determine next steps.\n\nNext steps: - James / Marie to confirm if it's gone live\n\nDate last reviewed: 07 Aug 2026\n\nNext checkpoint date: 28 Aug 2026",
+      "confirmedContext": "18/09/26 - This is complete as per deadline - no further updates\n\nID: ITS960\n\nDescription: DSE Online Assessment Project\n\nDeadline: 31 Aug 2026\n\nDeadline type: Fixed - compulsory\n\nProgress updates: 07/08/26 - Feed updated and James has tested \n03/07/26 - Tony Boydell has provided a quote that's been sent over to Marie for approval.\n26/06/26 - Tony Boydell has reached out and asked us to reach out to Erika for a quote.\n19/06/26 - This went live on 03/06. Some changes still required, as users without University email addresses are missing from the feed, so James must raise a change request due to concerns that there may be a cost involved.\n29/05/26 - James has completed testing of the DSE interface, all passed. \n15/05/26 - Everything looks good to go but few final tests need to take place first.\n27/02/26 - Ralph to continue to do manual uploads until interface is live. Have provisional date of interface go live of 6th May.\n13/02/26 - Do have the documentation now. Don't have timescales for when integration is going to happen.\n06/02/26 - Project closed but handover still to take place\n24/10/25 - System live but has a phased roll out\nCompleted the data check report (PERX90 DSE Data Validation - pending approval and deployment)\nGrace - to take lead and support the data interface and attend meetings to provide updates.\nA review meeting is scheduled for March 2025 to reassess project needs and determine next steps.\n\nNext steps: - James / Marie to confirm if it's gone live\n\nDate last reviewed: 07 Aug 2026\n\nNext checkpoint date: 28 Aug 2026",
+      "speakerNoteSeed": "Status update: DSE Online Assessment is complete — finished ahead of the 31 August deadline, no further action needed.",
+      "status": "open",
+      "sources": [
+        {
+          "kind": "roadmap-weekly",
+          "rowId": "ITS960"
+        }
+      ],
+      "carryForward": null
+    },
+    {
+      "itemId": "itm_roadmap_ca102_2526",
+      "position": 3,
+      "priority": 1,
+      "title": "Annual Leave Year End Rollover 2026",
+      "tone": "update",
+      "detail": "18/09/26 - With Michael and on track for dealine\n\nID: CA102_2526\n\nDescription: System Maintenance for the new annual leave year; Including information gathering, data loading, configuration and testing, annual leave rollover and balance recalculation.\n\nDeadline: 02 Oct 2026\n\nDeadline type: Fixed - compulsory\n\nProgress updates: October\n\nNext steps: none logged\n\nDate last reviewed: not set\n\nNext checkpoint date: not set",
+      "confirmedContext": "18/09/26 - With Michael and on track for dealine\n\nID: CA102_2526\n\nDescription: System Maintenance for the new annual leave year; Including information gathering, data loading, configuration and testing, annual leave rollover and balance recalculation.\n\nDeadline: 02 Oct 2026\n\nDeadline type: Fixed - compulsory\n\nProgress updates: October\n\nNext steps: none logged\n\nDate last reviewed: not set\n\nNext checkpoint date: not set",
+      "speakerNoteSeed": "Status update: Annual Leave Year End Rollover — I'm working through this with Michael and we're on track for the 2 October fixed deadline.",
+      "status": "open",
+      "sources": [
+        {
+          "kind": "roadmap-weekly",
+          "rowId": "CA102_2526"
+        }
+      ],
+      "carryForward": null
+    },
+    {
+      "itemId": "itm_roadmap_ca103_2526",
+      "position": 4,
+      "priority": 1,
+      "title": "Update Payroll Calendars",
+      "tone": "update",
+      "detail": "18/09/26 - Flag - with Asta\n\nID: CA103_2526\n\nDescription: Update payroll calendar in ESS\n\nDeadline: 21 Dec 2026\n\nDeadline type: Fixed - discretionary\n\nProgress updates: none logged\n\nNext steps: none logged\n\nDate last reviewed: not set\n\nNext checkpoint date: 27 Nov 2026",
+      "confirmedContext": "18/09/26 - Flag - with Asta\n\nID: CA103_2526\n\nDescription: Update payroll calendar in ESS\n\nDeadline: 21 Dec 2026\n\nDeadline type: Fixed - discretionary\n\nProgress updates: none logged\n\nNext steps: none logged\n\nDate last reviewed: not set\n\nNext checkpoint date: 27 Nov 2026",
+      "speakerNoteSeed": "Status update: CA103 — updating the payroll calendar in ESS — deadline is 21 December, next checkpoint is 27 November, and this is currently flagged with Asta with no progress or next steps logged yet.",
+      "status": "open",
+      "sources": [
+        {
+          "kind": "roadmap-weekly",
+          "rowId": "CA103_2526"
+        }
+      ],
+      "carryForward": null
+    },
+    {
+      "itemId": "itm_roadmap_22_d",
+      "position": 5,
+      "priority": 1,
+      "title": "Security Model Review",
+      "tone": "update",
+      "detail": "ID: 22_d\n\nDescription: not set\n\nDeadline: not set\n\nDeadline type: not set\n\nProgress updates: none logged\n\nNext steps: none logged\n\nDate last reviewed: 27 Jun 2025\n\nNext checkpoint date: not set",
+      "confirmedContext": "ID: 22_d\n\nDescription: not set\n\nDeadline: not set\n\nDeadline type: not set\n\nProgress updates: none logged\n\nNext steps: none logged\n\nDate last reviewed: 27 Jun 2025\n\nNext checkpoint date: not set",
+      "speakerNoteSeed": "",
+      "status": "open",
+      "sources": [
+        {
+          "kind": "roadmap-weekly",
+          "rowId": "22_d"
+        }
+      ],
+      "carryForward": null
+    },
+    {
+      "itemId": "itm_roadmap_ca104_2526",
+      "position": 6,
+      "priority": 1,
+      "title": "Hierarchy Restructuring",
+      "tone": "update",
+      "detail": "18/09/26 - ## Organisational Structure update  - B8 will be reactivated rather than a new code created. Entity names over 40 characters and People XD/Packs mismatches - lists sent for confirmation. Subsidiary-company creations/deletions are on hold until Catherine returns. Deletions and straightforward name changes can proceed after checking for active People XD records. College REF-structure work remains deferred.\n\nID: CA104_2526\n\nDescription: Updates to the Organisation Structure in response to any changes to the PRAC Org Structure (January update/August update)\n\nDeadline: 09 Sep 2026\n\nDeadline type: Self imposed (fixed)\n\nProgress updates: none logged\n\nNext steps: none logged\n\nDate last reviewed: not set\n\nNext checkpoint date: 11 Sep 2026",
+      "confirmedContext": "18/09/26 - ## Organisational Structure update  - B8 will be reactivated rather than a new code created. Entity names over 40 characters and People XD/Packs mismatches - lists sent for confirmation. Subsidiary-company creations/deletions are on hold until Catherine returns. Deletions and straightforward name changes can proceed after checking for active People XD records. College REF-structure work remains deferred.\n\nID: CA104_2526\n\nDescription: Updates to the Organisation Structure in response to any changes to the PRAC Org Structure (January update/August update)\n\nDeadline: 09 Sep 2026\n\nDeadline type: Self imposed (fixed)\n\nProgress updates: none logged\n\nNext steps: none logged\n\nDate last reviewed: not set\n\nNext checkpoint date: 11 Sep 2026",
+      "speakerNoteSeed": "Status update: on hierarchy restructuring, B8 will be reactivated rather than creating a new code, lists have gone out for confirmation on entity names over 40 characters and People XD/Packs mismatches, subsidiary creations and deletions are on hold until Catherine is back, and College REF-structure work remains deferred.",
+      "status": "open",
+      "sources": [
+        {
+          "kind": "roadmap-weekly",
+          "rowId": "CA104_2526"
+        }
+      ],
+      "carryForward": null
+    },
+    {
+      "itemId": "itm_roadmap_dtp1334",
+      "position": 7,
+      "priority": 1,
+      "title": "Health & Safety Management System",
+      "tone": "update",
+      "detail": "18/09/26 - priorities are handing the Entra ID admin guide to Brian, approving the supplier-shortlist scores, and confirming resource requirements. The SHSMS evaluation has shortlisted Ideagen, Vatix and RiskEx; this remains confidential until Procurement has notified all suppliers. Workshops/demos and Q&A with the shortlisted suppliers start 25 September, with the stage deadline extended to 7 October. The evaluation document now includes supplier-specific tabs capturing outstanding questions\n\nID: DTP1334\n\nDescription: Investigative project\n\nDeadline: 25 Sep 2026\n\nDeadline type: Fixed - compulsory\n\nProgress updates: 21/08/26 - Kevin and Marie have reviewed  6  supplier questionnaires and forwarded their findings and feedback to the project team. Project team have extended this phase (identifying a software supplier) to end of September.\n31/07/26 - Chris, James and Marie (Kevin if back from leave) to review supplier responses by 21/08\n03/07/26 - Kevin, Chris and James met with project lead (Helen Harper) on 18th June to discuss the required scoring methdology for incidents recorded in an H&S system. This is a key risk as the scoring needs to comply with H&S legislation. Chris and James met with project team on 30th June to evaluate the scoring.\n01/05/26 - Need a discussion - MC to meet with James and Chris to discuss our engagement in project going forward and potential resource required from January onwards.\n09/01/26 - Had the first board\n28/11/25 - Mandated funding stream confirmed.\n24/10/25 - Looking for sponsor, Brian is co-sponsor.\n\nNext steps: - Project team to analyse HRSys feedback and project board will meet in September to shortlist suppliers.\n- Workshops to begin on 25/9 to discuss shortlisted suppliers.\n\nDate last reviewed: 21 Aug 2026\n\nNext checkpoint date: 27 Aug 2026",
+      "confirmedContext": "18/09/26 - priorities are handing the Entra ID admin guide to Brian, approving the supplier-shortlist scores, and confirming resource requirements. The SHSMS evaluation has shortlisted Ideagen, Vatix and RiskEx; this remains confidential until Procurement has notified all suppliers. Workshops/demos and Q&A with the shortlisted suppliers start 25 September, with the stage deadline extended to 7 October. The evaluation document now includes supplier-specific tabs capturing outstanding questions\n\nID: DTP1334\n\nDescription: Investigative project\n\nDeadline: 25 Sep 2026\n\nDeadline type: Fixed - compulsory\n\nProgress updates: 21/08/26 - Kevin and Marie have reviewed  6  supplier questionnaires and forwarded their findings and feedback to the project team. Project team have extended this phase (identifying a software supplier) to end of September.\n31/07/26 - Chris, James and Marie (Kevin if back from leave) to review supplier responses by 21/08\n03/07/26 - Kevin, Chris and James met with project lead (Helen Harper) on 18th June to discuss the required scoring methdology for incidents recorded in an H&S system. This is a key risk as the scoring needs to comply with H&S legislation. Chris and James met with project team on 30th June to evaluate the scoring.\n01/05/26 - Need a discussion - MC to meet with James and Chris to discuss our engagement in project going forward and potential resource required from January onwards.\n09/01/26 - Had the first board\n28/11/25 - Mandated funding stream confirmed.\n24/10/25 - Looking for sponsor, Brian is co-sponsor.\n\nNext steps: - Project team to analyse HRSys feedback and project board will meet in September to shortlist suppliers.\n- Workshops to begin on 25/9 to discuss shortlisted suppliers.\n\nDate last reviewed: 21 Aug 2026\n\nNext checkpoint date: 27 Aug 2026",
+      "speakerNoteSeed": "Status update: the SHSMS evaluation has shortlisted three suppliers, workshops and demos kick off on 25 September, and the stage deadline has been extended to 7 October — shortlist details remain confidential until Procurement has notified all suppliers.",
+      "status": "open",
+      "sources": [
+        {
+          "kind": "roadmap-weekly",
+          "rowId": "DTP1334"
+        }
+      ],
+      "carryForward": null
+    },
+    {
+      "itemId": "itm_roadmap_212",
+      "position": 8,
+      "priority": 1,
+      "title": "Outstanding WFM Work",
+      "tone": "update",
+      "detail": "18/09/26 - Julie has confirmed that the 38-day balance work is ready to progress. Chemistry is the priority pilot, with 131 workgroups scheduled for update and rollover in early October. GLAM will follow with an agreed first tranche of 39 workgroups. Any further GLAM work will depend on capacity after rollover, and departments should not make balance changes independently.\n\nID: 212\n\nDescription: Working with WFM BA and PM to complete work items outstanding from the WFM project\n\nDeadline: 09 Oct 2026\n\nDeadline type: Self imposed (fixed)\n\nProgress updates: 02/09/26 - Initial kick off meeting with Tracy Barlow-Bacon, Mel Furniss, Julie, Michael, Simon and Rachel Midgley. Agreed on priorities - 1. Migration of the remaining 3 depts (Paediatrics, SBS, GLAM) 2. Clean up data load 2 ready for upload 3. Validate if all depts have been using PXD to record their data since go-live 4. Work with Glam to review their rostering requirements.\n\nNext steps: - Tracy BB to outline tasks and expected timescales. \n- Mel to review position re sickness absence data load and get in touch with Simon where assistance is needed. \n- Julie to send through notes from meeting with GLAM and Maths. \n- Tracy to reach out to Michelle to catch up on progress re Paeds, SBS and GLAM onboarding. Then Mel to reach out to departments to scope out the support required.\n\nDate last reviewed: 02 Sep 2026\n\nNext checkpoint date: 11 Sep 2026",
+      "confirmedContext": "18/09/26 - Julie has confirmed that the 38-day balance work is ready to progress. Chemistry is the priority pilot, with 131 workgroups scheduled for update and rollover in early October. GLAM will follow with an agreed first tranche of 39 workgroups. Any further GLAM work will depend on capacity after rollover, and departments should not make balance changes independently.\n\nID: 212\n\nDescription: Working with WFM BA and PM to complete work items outstanding from the WFM project\n\nDeadline: 09 Oct 2026\n\nDeadline type: Self imposed (fixed)\n\nProgress updates: 02/09/26 - Initial kick off meeting with Tracy Barlow-Bacon, Mel Furniss, Julie, Michael, Simon and Rachel Midgley. Agreed on priorities - 1. Migration of the remaining 3 depts (Paediatrics, SBS, GLAM) 2. Clean up data load 2 ready for upload 3. Validate if all depts have been using PXD to record their data since go-live 4. Work with Glam to review their rostering requirements.\n\nNext steps: - Tracy BB to outline tasks and expected timescales. \n- Mel to review position re sickness absence data load and get in touch with Simon where assistance is needed. \n- Julie to send through notes from meeting with GLAM and Maths. \n- Tracy to reach out to Michelle to catch up on progress re Paeds, SBS and GLAM onboarding. Then Mel to reach out to departments to scope out the support required.\n\nDate last reviewed: 02 Sep 2026\n\nNext checkpoint date: 11 Sep 2026",
+      "speakerNoteSeed": "Status update: Julie has confirmed the 38-day balance work is ready to progress — Chemistry is the priority pilot with 131 workgroups scheduled for update and rollover in early October, and GLAM will follow with an agreed first tranche of 39 workgroups, though any further GLAM work depends on capacity after rollover, so departments should not make balance changes independently in the meantime.",
+      "status": "open",
+      "sources": [
+        {
+          "kind": "roadmap-weekly",
+          "rowId": "212"
+        }
+      ],
+      "carryForward": null
+    },
+    {
+      "itemId": "itm_roadmap_213",
+      "position": 9,
+      "priority": 1,
+      "title": "Update of Cority Applicant Interface",
+      "tone": "update",
+      "detail": "ID: 213\n\nDescription: Implement an automated export of applicant data from PeopleXD to load into Cority\n\nDeadline: 30 Oct 2026\n\nDeadline type: Self imposed (flexible)\n\nProgress updates: 09/09/26 - Simon built v2 of the report and set up an automated subscription to export a CSV to a secure network location. Kevin has provided information about the issues with v1 which will need to be addressed as part of the build and testing.\n\nNext steps: - James to test the upload file into Cority\n\nDate last reviewed: 09 Sep 2026\n\nNext checkpoint date: 25 Oct 2026",
+      "confirmedContext": "ID: 213\n\nDescription: Implement an automated export of applicant data from PeopleXD to load into Cority\n\nDeadline: 30 Oct 2026\n\nDeadline type: Self imposed (flexible)\n\nProgress updates: 09/09/26 - Simon built v2 of the report and set up an automated subscription to export a CSV to a secure network location. Kevin has provided information about the issues with v1 which will need to be addressed as part of the build and testing.\n\nNext steps: - James to test the upload file into Cority\n\nDate last reviewed: 09 Sep 2026\n\nNext checkpoint date: 25 Oct 2026",
+      "speakerNoteSeed": "",
+      "status": "open",
+      "sources": [
+        {
+          "kind": "roadmap-weekly",
+          "rowId": "213"
+        }
+      ],
+      "carryForward": null
+    }
+  ],
+  "submittedAt": "2026-09-18T02:29:54.044Z",
+  "submittedBy": "Kevin"
+}
