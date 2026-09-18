@@ -1213,3 +1213,48 @@ pre-existing untracked speaking-brief scripts remain intentionally excluded.
 Exact next action: review the branch UI with Kevin; do not merge or deploy
 without his explicit approval. If he changes the tone-icon decision, alter
 only `toneLabels` in `public/app.js` and repeat the browser/style check.
+
+### Drew's independent review of Round 3, same day
+
+This is the third revision cycle on this feature — Kevin had flagged the
+same class of problem twice already, so this pass was checked with extra
+rigor rather than taken on the report above.
+
+- Re-fetched `pxd.lelitte.co.uk` myself via Playwright `getComputedStyle`
+  (not just its source CSS) before writing Codex's brief, specifically to
+  get real rendered values for: pill border/shadow, tile vs env-col shadow
+  (two different values on the real site — tile is the stronger dual-layer
+  one, env-col is a single flat layer), and confirmation that
+  `.section-heading` is a direct child of `<main>`, never inside a card.
+  Used the tile's stronger shadow deliberately for our cards even though
+  it's technically the wrong pxd token for a content card like ours — a
+  disclosed judgment call, not a mistake, because Kevin's own wording
+  ("pop off the page") pointed at that stronger value.
+- Read the full `git diff af5104c..eef4eea` line by line: confirmed
+  `.section-heading`/`.section-copy` are now direct children of `.page` in
+  all three sections, the `agenda-card` wrapper is gone, `.pill` declares
+  `border: none` explicitly, and the shared card rule uses the dual-layer
+  shadow. `src/worker.js` untouched.
+- Re-ran `npm test` independently — 37/37 pass.
+- Re-served `public/` locally and verified with my own Playwright
+  screenshots AND my own `getComputedStyle` checks (not trusting Codex's
+  stated values) — confirmed live: tone-pill `border` is genuinely `0px
+  none`, the item card's rendered `box-shadow` is the exact dual-layer
+  value, `#agenda-heading`'s nearest `.card` ancestor is null (i.e.
+  genuinely not inside any card), and a manually-triggered error banner
+  also renders with `border: 0px none` — the specific element Kevin named
+  ("Request failed").
+- Screenshots taken at desktop (empty + two items at different tones),
+  mobile, and directly next to a fresh screenshot of the real pxd site for
+  side-by-side comparison before sending anything to Kevin.
+- Flagging again, explicitly, for Kevin's reaction rather than treating as
+  settled: (1) the card shadow is deliberately the stronger of pxd's two
+  real values, not pxd's own value for a content card like ours; (2) the
+  tone-pill emoji choices are Drew/Codex's proposed interpretation of
+  "icons, not just words," not something pxd itself does at this scale —
+  pxd's own icons only appear on its large circular launcher tiles, which
+  don't have a natural equivalent in a repeated data-entry form.
+
+Screenshots (scratchpad, regenerate if needed for a later session):
+`intake-v3-01-desktop-default.png`, `intake-v3-02-desktop-items.png`,
+`intake-v3-04-mobile.png`, compared directly against `pxd-reference-01.png`.
