@@ -1,8 +1,6 @@
 """
-Shared chrome for all speaking-brief artifacts: Oxford brandbar, live clock +
-meeting stopwatch, dual-month calendar, and the two-grid layout system
-(top-grid: flag / clock / at-a-glance-style summary / calendar, all on one
-shared 3-column backbone; item-grid: card tiles below).
+Shared chrome for all speaking-brief artifacts: Oxford fixed sidebar, live
+clock + meeting stopwatch, calendar, and the main brief-content layout.
 
 Every meeting brief (Roadmap, Managers Meeting, H&S Roadmap, 1-1s, FA
 Catch-up, project meetings) imports this instead of redefining the chrome,
@@ -103,15 +101,17 @@ CSS_BASE = r"""
   a { color: var(--navy-soft); }
   a:focus-visible, [tabindex]:focus-visible, summary:focus-visible { outline: 2px solid var(--navy-soft); outline-offset: 2px; }
 
-  .brandbar { background: var(--navy); padding: 18px clamp(20px, 3vw, 48px) 16px; }
-  .sidebar-logo { display: flex; align-items: center; gap: 14px; }
-  .sidebar-crest { width: 64px; height: 64px; object-fit: contain; flex-shrink: 0; }
+  .sidebar { width: var(--sidebar-width); background: var(--navy); color: #fff; position: fixed; top: 0; left: 0; height: 100vh; overflow-y: auto; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.15) transparent; }
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); border-radius: 4px; }
+  .sidebar-logo { padding: 20px 20px 18px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 16px; }
+  .sidebar-crest { width: 80px; height: 80px; object-fit: contain; flex-shrink: 0; }
   .sidebar-brand-text { display: inline-flex; flex-direction: column; }
   .sb-univ-of { font-size: 9px; font-weight: 400; letter-spacing: 0.30em; text-transform: uppercase; color: rgba(255,255,255,0.70); line-height: 1.5; white-space: nowrap; }
-  .sb-oxford { font-size: 22px; font-weight: 800; letter-spacing: 0.03em; text-transform: uppercase; color: #fff; line-height: 1.1; white-space: nowrap; }
-  .sb-app-name { font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.85); margin-top: 3px; }
+  .sb-oxford { font-size: 26px; font-weight: 800; letter-spacing: 0.03em; text-transform: uppercase; color: #fff; line-height: 1.1; white-space: nowrap; }
+  .sb-app-name { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #fff; margin-top: 4px; line-height: 1.4; }
 
-  .page { max-width: 1680px; margin: 0 auto; padding: 1.8rem clamp(16px, 3vw, 48px) 4rem; }
+  .page { margin-left: var(--sidebar-width); width: calc(100% - var(--sidebar-width)); min-width: 0; padding: 1.8rem clamp(16px, 3vw, 48px) 4rem; }
 
   .doc-title-row { margin-bottom: 1.4rem; }
   .doc-kicker { font-size: 11px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--navy-soft); margin: 0 0 0.4rem; }
@@ -119,51 +119,31 @@ CSS_BASE = r"""
   .meta-row { display: flex; flex-wrap: wrap; gap: 0.35rem 1.4rem; font-size: 0.85rem; color: var(--ink-soft); font-weight: 500; }
   .meta-row b { color: var(--ink); font-weight: 700; }
 
-  /* Top section: brief (left) + live clock/calendar (right), built on the SAME
-     3-column / var(--grid-gap) backbone as .item-grid below, so column
-     boundaries run straight down the page unbroken. Row-matched so each
-     right tile is always exactly as tall as its left-hand counterpart. */
-  .top-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    grid-auto-rows: auto;
-    gap: var(--grid-gap);
-    margin-bottom: 0.5rem;
-  }
-  .flag { grid-column: span 2; margin: 0; }
-  .glance { grid-column: span 2; min-width: 0; }
-  .clock-card { grid-column: span 1; }
-  .cal-card { grid-column: span 1; }
+  .sidebar-widget { padding: 18px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+  .clock-card { text-align: left; }
+  .clock-time { font-size: 1.9rem; font-weight: 800; color: #fff; font-variant-numeric: tabular-nums; letter-spacing: 0.01em; line-height: 1.1; }
+  .clock-date { font-size: 0.7rem; font-weight: 600; color: rgba(255,255,255,0.65); margin-top: 0.4rem; text-transform: uppercase; letter-spacing: 0.04em; line-height: 1.45; }
 
-  .clock-card { display: flex; align-items: stretch; padding: 0; }
-  .clock-half, .stopwatch-half { flex: 1 1 50%; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1rem 0.9rem; text-align: center; }
-  .clock-half { border-right: 1px solid var(--line); }
-  .clock-time { font-size: 1.7rem; font-weight: 800; color: var(--navy); font-variant-numeric: tabular-nums; letter-spacing: 0.01em; line-height: 1.1; }
-  .clock-date { font-size: 0.7rem; font-weight: 600; color: var(--ink-faint); margin-top: 0.35rem; text-transform: uppercase; letter-spacing: 0.04em; }
-
-  .stopwatch-label { font-size: 9.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin: 0 0 0.35rem; }
-  .stopwatch-time { font-size: 1.7rem; font-weight: 800; color: var(--ink); font-variant-numeric: tabular-nums; letter-spacing: 0.01em; line-height: 1.1; }
-  .stopwatch-time.running { color: var(--navy); }
+  .stopwatch-label, .sidebar-widget-label { font-size: 10px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: rgba(255,255,255,0.55); margin: 0 0 0.45rem; }
+  .stopwatch-time { font-size: 1.7rem; font-weight: 800; color: #fff; font-variant-numeric: tabular-nums; letter-spacing: 0.01em; line-height: 1.1; }
+  .stopwatch-time.running { color: #fff; }
   .stopwatch-btn {
     margin-top: 0.55rem; border: none; border-radius: 999px; padding: 0.32rem 1rem;
     font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
     cursor: pointer; background: var(--navy); color: #fff; transition: background 0.15s ease;
   }
-  .stopwatch-btn:hover { background: var(--navy-soft); }
+  .stopwatch-btn:hover { background: #1b3a63; }
   .stopwatch-btn.is-running { background: var(--overdue); }
   .stopwatch-reset {
     margin-top: 0.35rem; border: none; background: none; cursor: pointer;
     font-size: 0.68rem; font-weight: 600; letter-spacing: 0.03em; color: var(--ink-faint);
     text-decoration: underline; text-underline-offset: 2px; padding: 0.15rem;
   }
-  .stopwatch-reset:hover { color: var(--ink-soft); }
-  @media (max-width: 420px) {
-    .clock-card { flex-direction: column; }
-    .clock-half { border-right: none; border-bottom: 1px solid var(--line); }
-  }
+  .stopwatch-reset { color: rgba(255,255,255,0.65); }
+  .stopwatch-reset:hover { color: #fff; }
 
-  .cal-card { display: flex; flex-direction: column; padding: 1rem 1.1rem; overflow: hidden; }
-  .cal-months { display: flex; flex-direction: column; justify-content: space-evenly; flex: 1; gap: 1.15rem; }
+  .cal-card { padding: 18px 20px; }
+  .cal-months { display: flex; flex-direction: column; gap: 1.15rem; }
   /* Divider moved to the BOTTOM inset edge of every non-last month (was the
      TOP edge of every non-first month). Visually it's the same single line
      at each month boundary, but anchoring it to the top of the block above
@@ -173,23 +153,20 @@ CSS_BASE = r"""
      without adding any height to a specific month's own box. Still a
      zero-height box-shadow, still doesn't touch the adaptive month-count
      measurement (which renders/measures a single, divider-free month). */
-  .cal-month:not(:last-child) { box-shadow: inset 0 -1px 0 0 var(--line); }
-  .cal-month-label { font-size: 0.82rem; font-weight: 700; color: var(--ink); margin: 0 0 0.9rem; text-align: center; }
+  .cal-month:not(:last-child) { box-shadow: inset 0 -1px 0 0 rgba(255,255,255,0.18); }
+  .cal-month-label { font-size: 0.82rem; font-weight: 700; color: #fff; margin: 0 0 0.9rem; text-align: center; }
   .cal-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; }
-  .cal-dow { font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: var(--ink-faint); text-align: center; padding: 2px 0 5px; }
-  .cal-day { font-size: 10.5px; text-align: center; padding: 4px 1px; color: var(--ink-soft); font-variant-numeric: tabular-nums; line-height: 1; }
+  .cal-dow { font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: rgba(255,255,255,0.55); text-align: center; padding: 2px 0 5px; }
+  .cal-day { font-size: 10.5px; text-align: center; padding: 4px 1px; color: rgba(255,255,255,0.83); font-variant-numeric: tabular-nums; line-height: 1; }
   .cal-day.blank { visibility: hidden; }
   .cal-day.today { background: var(--navy); color: #fff; font-weight: 700; border-radius: 4px; }
 
-  @media (max-width: 1100px) {
-    .top-grid { grid-template-columns: 1fr; }
-    .flag, .glance, .clock-card, .cal-card { grid-column: span 1; }
-  }
-
-  .flag { background: var(--overdue-bg); border: 1px solid color-mix(in srgb, var(--overdue) 35%, transparent); border-left: 4px solid var(--overdue); border-radius: 8px; padding: 1rem 1.3rem; display: flex; flex-direction: column; justify-content: center; }
+  .flag { margin: 0 0 0.5rem; background: var(--overdue-bg); border: 1px solid color-mix(in srgb, var(--overdue) 35%, transparent); border-left: 4px solid var(--overdue); border-radius: 8px; padding: 1rem 1.3rem; display: flex; flex-direction: column; justify-content: center; }
   .flag-label { font-size: 11px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--overdue); margin: 0 0 0.5rem; }
   .flag p { margin: 0 0 0.55rem; font-size: 0.92rem; line-height: 1.5; color: var(--ink); }
   .flag p:last-child { margin-bottom: 0; }
+
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; box-shadow: var(--shadow); }
 
   h2 { font-size: 0.95rem; font-weight: 700; letter-spacing: 0.01em; margin: 2.2rem 0 0.85rem; color: var(--ink); display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
   h2 .h2-sub { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint); }
@@ -200,19 +177,10 @@ CSS_BASE = r"""
   h2.h2-warn { color: var(--atrisk); font-size: 1.08rem; padding-left: 0.7rem; border-left: 3px solid var(--atrisk); }
   h2.h2-warn .h2-sub { color: color-mix(in srgb, var(--atrisk) 65%, var(--ink-faint)); }
 
-  /* "At a glance" as one card with an internal label, same pattern as .flag,
-     so its box top lines up exactly with the calendar's box top. */
-  .glance { display: flex; flex-direction: column; padding: 0; }
-  .glance-head { padding: 1rem 1.3rem 0.7rem; }
-  .glance-label { font-size: 11px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--navy-soft); margin: 0 0 0.3rem; }
-  .glance-sub { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint); margin: 0; }
-  .glance .table-wrap { flex: 1; max-width: none; border-radius: 0 0 10px 10px; }
-
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; box-shadow: var(--shadow); }
 
   .table-wrap { overflow-x: auto; border-radius: 10px; max-width: 980px; }
   table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
-  thead th { text-align: left; font-size: 10.5px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-faint); padding: 0.8rem 0.9rem; border-bottom: 1px solid var(--line-strong); white-space: nowrap; background: color-mix(in srgb, var(--navy) 3%, var(--card)); }
+  thead th { position: sticky; top: 0; z-index: 2; text-align: left; font-size: 10.5px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-faint); padding: 0.8rem 0.9rem; border-bottom: 1px solid var(--line-strong); white-space: nowrap; background: color-mix(in srgb, var(--navy) 3%, var(--card)); }
   tbody td { padding: 0.7rem 0.9rem; border-bottom: 1px solid var(--line); vertical-align: top; color: var(--ink); }
   tbody tr:last-child td { border-bottom: none; }
   td.idcell { font-weight: 700; color: var(--navy-soft); font-variant-numeric: tabular-nums; white-space: nowrap; }
@@ -228,6 +196,8 @@ CSS_BASE = r"""
      untouched. */
   table.fixed-grid { table-layout: fixed; }
   table.fixed-grid td, table.fixed-grid th { overflow-wrap: break-word; word-break: break-word; }
+  .agenda-latest, .agenda-status { margin: 0; line-height: 1.55; }
+  .agenda-status { margin-top: 0.8rem; padding-top: 0.7rem; border-top: 1px solid var(--line); color: var(--ink-soft); }
 
   .pill { display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.26rem 0.58rem; border-radius: 999px; white-space: nowrap; }
   .pill-overdue, .pill-raise { background: var(--overdue-bg); color: var(--overdue); }
@@ -236,8 +206,7 @@ CSS_BASE = r"""
   .pill-ontrack, .pill-resolved { background: var(--ontrack-bg); color: var(--ontrack); }
   .pill-info { background: var(--info-bg); color: var(--info); }
 
-  /* Item grid — same 3-column / var(--grid-gap) backbone as .top-grid above,
-     so column boundaries line up exactly. Fixed (not auto-fit) so a short
+  /* Item grid — fixed (not auto-fit) so a short
      final row leaves a genuine blank cell instead of stretching to fill it.
      align-items left at default (stretch) so every card in a row shares the
      same bottom edge. */
@@ -319,10 +288,14 @@ CSS_BASE = r"""
 
   .footnote { margin-top: 2.4rem; padding: 1rem 1.2rem; font-size: 0.75rem; color: var(--ink-faint); line-height: 1.7; border-top: 1px solid var(--line); max-width: 980px; }
 
+  @media (max-width: 700px) {
+    .sidebar { position: static; width: 100%; height: auto; }
+    .page { margin-left: 0; width: 100%; }
+  }
   @media (max-width: 560px) {
-    .brandbar { padding: 14px 14px 12px; }
-    .sb-oxford { font-size: 19px; }
-    .sidebar-crest { width: 48px; height: 48px; }
+    .sidebar-logo { padding: 14px; }
+    .sb-oxford { font-size: 22px; }
+    .sidebar-crest { width: 64px; height: 64px; }
     .page { padding: 1.4rem 0.9rem 3rem; }
     .item-head { flex-direction: column; align-items: flex-start; gap: 0.25rem; }
   }
@@ -376,11 +349,9 @@ SCRIPT_BASE = r"""
     return html;
   }
 
-  // Fills whatever vertical space the calendar tile has been given (it's
-  // grid-stretched to match the "at a glance" tile's height, which grows as
-  // more items are added) with as many consecutive months as actually fit,
-  // starting from the current month — 1 when the tile is short, more as it
-  // grows, rather than a fixed count that leaves dead space or overflows.
+  // Fills the sidebar calendar with as many consecutive months as fit,
+  // starting from the current month, rather than a fixed count that leaves
+  // dead space or overflows.
   function buildCalendars() {
     var now = new Date();
     var y = now.getFullYear(), m = now.getMonth(), d = now.getDate();
@@ -472,7 +443,7 @@ SCRIPT_BASE = r"""
 })();
 """
 
-BRANDBAR = """<div class="brandbar">
+SIDEBAR = """<aside class="sidebar">
   <div class="sidebar-logo">
     <img class="sidebar-crest" src="data:image/jpeg;base64,__CREST__" alt="University of Oxford crest">
     <div class="sidebar-brand-text">
@@ -481,24 +452,23 @@ BRANDBAR = """<div class="brandbar">
       <span class="sb-app-name">{app_name}</span>
     </div>
   </div>
-</div>"""
+</aside>"""
 
-CLOCK_CARD = """<div class="clock-card card">
-      <div class="clock-half">
+CLOCK_CARD = """<section class="sidebar-widget clock-card">
         <div class="clock-time" id="liveClock">--:--:--</div>
         <div class="clock-date" id="liveDate">&nbsp;</div>
-      </div>
-      <div class="stopwatch-half">
+</section>
+<section class="sidebar-widget stopwatch-card">
         <p class="stopwatch-label">Meeting stopwatch</p>
         <div class="stopwatch-time" id="stopwatchTime">00:00:00</div>
         <button type="button" class="stopwatch-btn" id="stopwatchBtn">Start</button>
         <button type="button" class="stopwatch-reset" id="stopwatchReset">Reset</button>
-      </div>
-    </div>"""
+ </section>"""
 
-CAL_CARD = """<div class="cal-card card">
+CAL_CARD = """<section class="sidebar-widget cal-card">
+      <p class="sidebar-widget-label">Calendar</p>
       <div class="cal-months" id="calMonths"></div>
-    </div>"""
+    </section>"""
 
 
 def write_brief_output(html_out, brief_name, date=None):
@@ -550,7 +520,6 @@ def write_brief_output(html_out, brief_name, date=None):
 
 
 def render_page(title, app_name, kicker, h1, meta_spans, flag_label, flag_paragraphs,
-                 glance_label, glance_sub, glance_table_html,
                  sections_html, footnote_html):
     """Assemble one full brief page from the shared chrome + a section's worth
     of caller-supplied HTML (item-grid, risks, footnote, etc.)."""
@@ -558,12 +527,18 @@ def render_page(title, app_name, kicker, h1, meta_spans, flag_label, flag_paragr
     flag_html = "".join(f"<p>{p}</p>" for p in flag_paragraphs)
     css = CSS_BASE.replace("__FONT_400__", FONT_400).replace("__FONT_600__", FONT_600) \
         .replace("__FONT_700__", FONT_700).replace("__FONT_800__", FONT_800)
-    brandbar = BRANDBAR.replace("__CREST__", CREST).format(app_name=e(app_name))
+    sidebar = SIDEBAR.replace("__CREST__", CREST).format(app_name=e(app_name))
 
     return f"""<title>{e(title)}</title>
 <style>{css}</style>
 
-{brandbar}
+{sidebar[:-8]}
+
+  {CLOCK_CARD}
+
+  {CAL_CARD}
+
+</aside>
 
 <div class="page">
 
@@ -573,25 +548,9 @@ def render_page(title, app_name, kicker, h1, meta_spans, flag_label, flag_paragr
     <div class="meta-row">{meta_html}</div>
   </div>
 
-  <div class="top-grid">
-    <div class="flag">
-      <p class="flag-label">{flag_label}</p>
-      {flag_html}
-    </div>
-
-    {CLOCK_CARD}
-
-    <div class="glance card">
-      <div class="glance-head">
-        <p class="glance-label">{glance_label}</p>
-        <p class="glance-sub">{glance_sub}</p>
-      </div>
-      <div class="table-wrap">
-        {glance_table_html}
-      </div>
-    </div>
-
-    {CAL_CARD}
+  <div class="flag">
+    <p class="flag-label">{flag_label}</p>
+    {flag_html}
   </div>
 
   {sections_html}

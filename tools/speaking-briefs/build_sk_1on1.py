@@ -139,19 +139,6 @@ def render_item(a):
 
 ITEMS_HTML = "\n".join(render_item(a) for a in AGENDA)
 
-GLANCE_TABLE = """<table>
-          <thead><tr><th>ID</th><th>Item</th><th>Owner</th><th>Type</th></tr></thead>
-          <tbody>
-            <tr><td class="idcell">1</td><td>Support cover w/c 6 Jul (+ 13 Jul gap)</td><td>Kevin</td><td><span class="pill pill-onhold">Historic</span></td></tr>
-            <tr><td class="idcell">2</td><td>SHSMS dedicated resource</td><td>Kevin</td><td><span class="pill pill-raise">Raise</span></td></tr>
-            <tr><td class="idcell">3</td><td>DPIA sign-off (Roadmap 136)</td><td>Marie</td><td><span class="pill pill-overdue">Overdue</span></td></tr>
-            <tr><td class="idcell">4</td><td>WFM/GLAM resolution meeting outcome</td><td>Kevin</td><td><span class="pill pill-onhold">Historic</span></td></tr>
-            <tr><td class="idcell">5</td><td>DTP1092 — REF/research-quality data (Company 90 testing)</td><td>Simon</td><td><span class="pill pill-info">Update</span></td></tr>
-            <tr><td class="idcell">6</td><td>REF attributes via ESS</td><td>Nathan</td><td><span class="pill pill-overdue">Overdue</span></td></tr>
-            <tr><td class="idcell">7</td><td>Sickness absence report bug</td><td>Simon</td><td><span class="pill pill-new">New</span></td></tr>
-          </tbody>
-        </table>"""
-
 CARRYOVER_TABLE = """<div class="table-wrap card">
         <table>
           <thead><tr><th>Action</th><th>Owed by</th><th>Raised</th><th>Status</th></tr></thead>
@@ -253,9 +240,6 @@ html_out = render_page(
         "<b>Granola could not be checked</b> in the session that built this brief &mdash; the connector was not connected, and repeated attempts to reach it failed. It was not possible to confirm whether a more recent SK 1-1 exists there. Check Granola directly before relying on this.",
         "Tell me if I've got the wrong sources, or if anything below is out of date, and I'll correct it before this goes anywhere near a commit.",
     ],
-    glance_label="At a glance",
-    glance_sub="7 agenda items + 4 owed actions + 4 leave-handover follow-ups — carried forward from 26 Jun, cross-checked against Work Inbox/Command Centre through 31 Jul",
-    glance_table_html=GLANCE_TABLE,
     sections_html=SECTIONS,
     footnote_html=FOOTNOTE_HTML,
 )

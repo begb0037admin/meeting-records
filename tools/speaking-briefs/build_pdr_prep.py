@@ -146,7 +146,7 @@ def recap_2025_block(name, docx_name, blocked_reason=None):
       </div>"""
 
 
-def build_person(slug, display_name, meeting_label, date_status_html, glance_rows, themes,
+def build_person(slug, display_name, meeting_label, date_status_html, themes,
                   scheduling_risk_html, docx_name, extra_conflict_html="", extra_section_html="",
                   blocked_reason=None, recap_label="2025 recap",
                   recap_sub="What was achieved, what wasn't, what carries forward"):
@@ -203,9 +203,6 @@ def build_person(slug, display_name, meeting_label, date_status_html, glance_row
         ],
         flag_label="Before anything else",
         flag_paragraphs=BLOCKER_FLAG_PARAGRAPHS,
-        glance_label="At a glance",
-        glance_sub="Confirmed facts only — see flag for what's blocked",
-        glance_table_html=glance_rows,
         sections_html=sections,
         footnote_html=footnote,
     )
@@ -221,12 +218,6 @@ build_person(
     meeting_label="Kevin's own 2026 PDR review (reviewee) — reviewer presumed Simon Burford, unconfirmed",
     date_status_html="<b>Confirmed</b> Tue 16 Sep 2026, 15:00&ndash;16:00 UK (Kevin's own Google Calendar, "
                       "\"Kevin's PDR Review 2026\")",
-    glance_rows="""<table><thead><tr><th>Item</th><th>Status</th></tr></thead><tbody>
-      <tr><td>Date/time</td><td><span class="pill pill-resolved">Confirmed</span> 16 Sep, 15:00-16:00 UK</td></tr>
-      <tr><td>Reviewer</td><td><span class="pill pill-overdue">Blocked</span> presumed Simon Burford, not verified</td></tr>
-      <tr><td>2025 review doc</td><td><span class="pill pill-overdue">Found, download blocked</span> confirmed exists, content unreachable (WinError 10061/403)</td></tr>
-      <tr><td>Simon's own PDR</td><td><span class="pill pill-onhold">Ongoing</span> still unbooked per command-centre</td></tr>
-      </tbody></table>""",
     themes=[
         {"id": "1", "title": "Team delivered through repeated absence-coverage gaps",
          "pill": "new", "category": "Leadership / capacity",
@@ -322,12 +313,6 @@ build_person(
                       "&ldquo;ahead of my PDR review this afternoon&rdquo;) &mdash; originally booked for 18 Sep, "
                       "rescheduled since; exact time not stated in the email itself, only &ldquo;this "
                       "afternoon&rdquo;",
-    glance_rows="""<table><thead><tr><th>Item</th><th>Status</th></tr></thead><tbody>
-      <tr><td>Date/time</td><td><span class="pill pill-resolved">Confirmed</span> today, this afternoon (exact time not stated in email)</td></tr>
-      <tr><td>2026 self-review</td><td><span class="pill pill-resolved">Received</span> full form submitted this morning, real content below</td></tr>
-      <tr><td>2025 review doc</td><td><span class="pill pill-overdue">Blocked</span> found + named, content unreachable (signed-URL 403)</td></tr>
-      <tr><td>Current workload signal</td><td><span class="pill pill-new">High</span> 79 CRs delivered, WFM/BAU dual-load all year</td></tr>
-      </tbody></table>""",
     themes=[
         {"id": "1", "title": "WFM Project transition back to BAU — dual-loaded all year", "pill": "new",
          "category": "Capacity / delivery", "desc": "His own submission: full-time on WFM to March 2026, but kept "
@@ -393,11 +378,6 @@ build_person(
                       "Guillen - PDR Review 2026&rdquo;, and James's own &ldquo;Accepted: James Salas "
                       "Guillen - PDR Review 2026&rdquo;) &mdash; not previously found in Google Calendar, "
                       "command-centre, or work-inbox, which is why the 13 Sep pass came up empty",
-    glance_rows="""<table><thead><tr><th>Item</th><th>Status</th></tr></thead><tbody>
-      <tr><td>Date/time</td><td><span class="pill pill-resolved">Confirmed</span> Mon 21 Sep, 12:00-1:00pm, accepted</td></tr>
-      <tr><td>2025 review doc</td><td><span class="pill pill-overdue">Not attempted</span> only Kevin's/Asta's pulled this pass</td></tr>
-      <tr><td>Scheduling constraint</td><td><span class="pill pill-resolved">Clear</span> 21 Sep is before his 25-28 Sep annual leave</td></tr>
-      </tbody></table>""",
     themes=[
         {"id": "1", "title": "Cority — SFTP feed, applicant import, ongoing ownership", "pill": "new",
          "category": "Systems ownership", "desc": "Owns/co-owns several live Cority H&S system issues this "
@@ -436,11 +416,6 @@ build_person(
     meeting_label="Kevin reviewing Asta Palmer's 2026 PDR",
     date_status_html="<b>Confirmed</b> Fri 25 Sep 2026, 12:00&ndash;1:00pm (corrected from an initial invite "
                       "sent to Asta Siautilaite in error)",
-    glance_rows="""<table><thead><tr><th>Item</th><th>Status</th></tr></thead><tbody>
-      <tr><td>Date/time</td><td><span class="pill pill-resolved">Confirmed</span> 25 Sep, 12:00-1:00pm</td></tr>
-      <tr><td>2025 review doc</td><td><span class="pill pill-overdue">Found, download blocked</span> confirmed exists (real name has no "2025"), content unreachable</td></tr>
-      <tr><td>Roadmap ownership</td><td><span class="pill pill-atrisk">Flag</span> leads zero active roadmap rows structurally</td></tr>
-      </tbody></table>""",
     themes=[
         {"id": "1", "title": "Holiday Records — 3 reports built", "pill": "resolved", "category": "Delivery",
          "desc": "Three holiday-records reports approved; kickoff call with Access Group confirmed for "

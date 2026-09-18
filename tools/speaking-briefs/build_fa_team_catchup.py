@@ -119,16 +119,6 @@ def render_row(a):
 
 ITEMS_TABLE = "\n".join(render_row(a) for a in ITEMS)
 
-GLANCE_TABLE = """<table class="fixed-grid">
-          <colgroup><col style="width:70%"><col style="width:30%"></colgroup>
-          <thead><tr><th>Item</th><th>Type</th></tr></thead>
-          <tbody>
-            <tr><td>1. Standing agenda (James presenting today)</td><td><span class="pill pill-onhold">Historic</span></td></tr>
-            <tr><td>2. Patch release notes (Kevin presenting for Michael)</td><td><span class="pill pill-raise">Raise</span></td></tr>
-            <tr><td>3. PXD UDF HESA update (Kevin's own)</td><td><span class="pill pill-new">New</span></td></tr>
-          </tbody>
-        </table>"""
-
 SECTIONS = f"""
   <h2>Today's three focus areas <span class="h2-sub">Verified against Work Inbox / Command Centre / Granola, not inferred</span></h2>
   <table class="fixed-grid">
@@ -168,9 +158,6 @@ html_out = render_page(
         "First-ever build of this meeting type &mdash; no prior brief or captured outcome doc exists to carry forward from, so everything below is built fresh from live sources.",
         "No FA Team Catch-up has been captured in Granola since 19&nbsp;Aug &mdash; nearly a month's gap. Tell me what's actually on the standing agenda today and I'll correct the record afterwards.",
     ],
-    glance_label="At a glance",
-    glance_sub="3 focus items, all verified against live sources",
-    glance_table_html=GLANCE_TABLE,
     sections_html=SECTIONS,
     footnote_html=FOOTNOTE,
 )

@@ -134,20 +134,6 @@ def render_item(item_id):
 ITEM_ORDER = ["136", "DTP1334", "DTP1092", "ITS1004", "179", "174_b", "22_c", "22_d"]
 ITEMS_HTML = "\n".join(render_item(i) for i in ITEM_ORDER)
 
-GLANCE_TABLE = """<table>
-          <thead><tr><th>ID</th><th>Item</th><th>Lead</th><th>Deadline</th><th>Status</th></tr></thead>
-          <tbody>
-            <tr><td class="idcell">136</td><td>PeopleXD DPIA</td><td>Kevin</td><td class="datecell">30 Jun</td><td><span class="pill pill-overdue">Overdue</span></td></tr>
-            <tr><td class="idcell">DTP1334</td><td>H&amp;S Management System</td><td>Kevin</td><td class="datecell">31 Jul</td><td><span class="pill pill-overdue">Overdue</span></td></tr>
-            <tr><td class="idcell">DTP1092</td><td>REF/research data &amp; College-PXD (Company 90 testing)</td><td>Nathan / Simon</td><td class="datecell">end-Jul / 14 Aug</td><td><span class="pill pill-info">Update</span></td></tr>
-            <tr><td class="idcell">ITS1004</td><td>WFM Rollout</td><td>Michael</td><td class="datecell">29 May</td><td><span class="pill pill-overdue">Overdue</span></td></tr>
-            <tr><td class="idcell">179</td><td>SSO Migration</td><td>Kevin</td><td class="datecell">30 Apr</td><td><span class="pill pill-overdue">Overdue</span></td></tr>
-            <tr><td class="idcell">174_b</td><td>H&amp;S Dashboards</td><td>David</td><td class="datecell">31 Mar</td><td><span class="pill pill-overdue">Overdue</span></td></tr>
-            <tr><td class="idcell">22_c</td><td>Security Model Review (Phase 1)</td><td>Tonya</td><td class="datecell">&mdash;</td><td><span class="pill pill-onhold">On hold</span></td></tr>
-            <tr><td class="idcell">22_d</td><td>Security Model Review (Univ.-wide)</td><td>Tonya</td><td class="datecell">&mdash;</td><td><span class="pill pill-onhold">On hold</span></td></tr>
-          </tbody>
-        </table>"""
-
 SECTIONS = f"""
   <h2>Team items — full context <span class="h2-sub">Description &amp; impact from the Roadmap Master &middot; full dated history &middot; expand for background</span></h2>
   <div class="item-grid">
@@ -205,9 +191,6 @@ html_out = render_page(
         "No HR Systems Roadmap outcome is captured in Granola, and no prep or outcome document exists in this repo, for 10, 17, 24, or 31 July — the last record either source holds is 3 July. You've said a meeting did happen in July; I can't independently confirm that yet. Everything below is built from the <b>3&nbsp;July position</b>, the Roadmap Master's own history, and what's changed in Command&nbsp;Centre and Work&nbsp;Inbox since — not a confirmed account of any July discussion.",
         "Tell me what actually happened and I'll correct the record before this goes anywhere near a commit.",
     ],
-    glance_label="At a glance",
-    glance_sub="8 tracked items &middot; 6 overdue against Roadmap Master deadlines",
-    glance_table_html=GLANCE_TABLE,
     sections_html=SECTIONS,
     footnote_html=FOOTNOTE,
 )

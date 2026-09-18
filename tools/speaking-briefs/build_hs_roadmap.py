@@ -104,13 +104,6 @@ for ref in ITEM_ORDER:
         f'<tr><td class="idcell">{e(ref)}</td><td>{e(d["item_name"])}</td><td>{e(d.get("system"))}</td>'
         f'<td>{e(d.get("owner") or "Unassigned")}</td><td><span class="pill pill-{pill}">{PILL_TEXT[pill]}</span></td></tr>'
     )
-GLANCE_TABLE = f"""<table>
-          <thead><tr><th>Ref</th><th>Item</th><th>System</th><th>Owner</th><th>Status</th></tr></thead>
-          <tbody>
-            {''.join(GLANCE_ROWS)}
-          </tbody>
-        </table>"""
-
 SECTIONS = f"""
   <h2>Backlog items — full context <span class="h2-sub">Must Have + In Progress, plus every James/Kevin-owned item regardless &middot; full dated comment history &middot; expand for background</span></h2>
   <div class="item-grid">
@@ -168,9 +161,6 @@ html_out = render_page(
         "No H&amp;S Roadmap meeting outcome is captured in meeting-records since 22&nbsp;June &mdash; six weeks. Unlike the HR Systems Roadmap, though, the underlying H&amp;S Systems Backlog workbook has stayed live throughout, with comments logged as recently as 30&nbsp;July, so the item detail in this brief is current. What's missing is a record of what was actually agreed as a group in that time, not the underlying data.",
         "This brief covers the 9 items rated <b>Must Have</b> and/or currently <b>In&nbsp;Progress</b>, plus 3 more added because they're owned by <b>James</b> or <b>Kevin</b> regardless of priority or status (HSB025, HSB050, HSB089) &mdash; 12 of 33 active backlog items. As more James/Kevin items move active, they'll be added here too, same 3-across format.",
     ],
-    glance_label="At a glance",
-    glance_sub="12 featured items &middot; Must Have / In Progress + every James/Kevin item, out of 33 active in the backlog",
-    glance_table_html=GLANCE_TABLE,
     sections_html=SECTIONS,
     footnote_html=FOOTNOTE,
 )

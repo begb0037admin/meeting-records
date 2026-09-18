@@ -192,17 +192,6 @@ def rows_table(items):
 SK_TABLE = rows_table(SK_ITEMS)
 MM_TABLE = rows_table(MM_ITEMS)
 
-GLANCE_TABLE = """<table class="fixed-grid">
-          <colgroup><col style="width:60%"><col style="width:40%"></colgroup>
-          <thead><tr><th>Section</th><th>Items</th></tr></thead>
-          <tbody>
-            <tr><td>Urgent &mdash; REF 2029 HESA UDF (pasted thread)</td><td>1 item, deadline tomorrow (17 Sept)</td></tr>
-            <tr><td>SK 1-1, 19 Aug 2026 (Simon &rarr; Kevin)</td><td>7 action items</td></tr>
-            <tr><td>HR Systems Managers Meeting, 20 Aug 2026</td><td>10 reconciled to-do items</td></tr>
-            <tr><td>Also confirmed live (addendum)</td><td>8 items, live Sept 2026 Standing Agenda deck</td></tr>
-          </tbody>
-        </table>"""
-
 SECTIONS = f"""
   <h2 class="h2-warn">Urgent &mdash; REF 2029 HESA UDF upload, deadline tomorrow</h2>
   <p class="body-loose"><b>REF 2029 HESA UDF Upload &mdash; Nathan Kirwan (Research Services).</b> {REF_HESA_WHAT} {REF_HESA_STATUS}</p>
@@ -262,9 +251,6 @@ html_out = render_page(
         "REF 2029 HESA UDF upload is due tomorrow &mdash; see the top item.",
         "Everything else is dated 19&ndash;20&nbsp;Aug with no confirmed update since, per Work Inbox/Command Centre as of today. That's the honest picture, not padding.",
     ],
-    glance_label="At a glance",
-    glance_sub="1 urgent + 7 SK 1-1 + 10 Managers Meeting + 8 addendum items",
-    glance_table_html=GLANCE_TABLE,
     sections_html=SECTIONS,
     footnote_html=FOOTNOTE,
 )
