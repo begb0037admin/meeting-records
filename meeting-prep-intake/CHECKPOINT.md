@@ -1137,3 +1137,45 @@ Exact next action: review the updated branch screenshots with Kevin. Do not
 merge or deploy until he explicitly approves the UI. Keep the unrelated,
 untracked `tools/speaking-briefs/build_access_holiday_reports.py` and
 `tools/speaking-briefs/build_org_structure_walkthrough.py` out of this change.
+
+### Drew's independent review of the pxd follow-up, same day
+
+Verified directly, not taken on the note above:
+
+- Fetched `https://pxd.lelitte.co.uk/` myself (both `curl` for the raw CSS
+  and a live Playwright screenshot) before writing Codex's brief, rather
+  than relying on the coordinator's paraphrase of Kevin's feedback — the
+  first-pass `WebFetch` attempt on this same URL returned a garbled,
+  wrong description (a stale/JS-blind markdown conversion calling it a
+  plain link list with "no visible box-shadows or rounded corners"); the
+  real page is a proper CSS shell with exactly the tile/pill/env-col
+  system this task needed. Didn't trust that first automated fetch and
+  went to the raw HTML directly.
+- Read the full `git diff 3d31773..c260b08` line by line: confirmed every
+  `.tone-raise`/`.tone-fyi`/`.tone-decision-needed` border-left override
+  is gone, `.item`'s own `border-left: 5px solid var(--navy)` is gone, the
+  five `.pill-*` classes are pxd's literal hex values, and `renderTone()`
+  now sets the pill's own class directly instead of relying on a parent
+  selector. `src/worker.js` untouched.
+- Re-ran `npm test` independently — 37/37 pass, matches the claim.
+- Re-served `public/` locally and re-screenshotted with Playwright:
+  desktop default state, three items with three different tones (Update/
+  Raise/Decision needed) to confirm each pill colour, a scroll-to-bottom
+  shot of the lock card, and a 390px mobile view. Confirmed live: no
+  accent bar on any card at any tone, pills render as pxd's soft rounded
+  normal-case badges (not the old bold/uppercase tight pill), section
+  headings now read as a bold navy label + thin rule exactly matching
+  pxd's `.section-heading`. Also re-confirmed via `document.fonts` that
+  the newly-required Inter 500 weight (added to the Google Fonts URL for
+  the pill's `font-weight: 500`) is genuinely loading, not just declared.
+- **One of the two judgment calls flagged after the first pass is now
+  moot, as a side effect of this change, not a separate fix:** the "Lock
+  this intake" card's warm/reddish tint is gone — it now shares the same
+  neutral white `env-col`-style card as everything else, since the danger-
+  tint special-case was part of what got replaced by the uniform pxd card
+  treatment. No longer flagging that one. The second flag (KV pre-stage
+  reliability fix) remains open and unbuilt, unchanged.
+
+Screenshots (scratchpad, regenerate if needed for a later session):
+`intake-v2-01-desktop-default.png`, `intake-v2-02-desktop-tone-pills.png`,
+`intake-v2-03-desktop-lock-card.png`, `intake-v2-04-mobile.png`.
