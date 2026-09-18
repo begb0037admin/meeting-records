@@ -10,6 +10,8 @@ if (!draftId) { draftId = `draft_${crypto.randomUUID().replaceAll("-", "")}`; se
 const resetDraft = () => { draftId = `draft_${crypto.randomUUID().replaceAll("-", "")}`; sessionStorage.setItem("meetingPrepDraftId", draftId); };
 function message(el, text, ok = false) { el.textContent = text; el.className = `message ${ok ? "ok" : "error"}`; }
 function renderNumbers() { [...items.children].forEach((el, i) => ($(".item-number", el).textContent = `Item ${i + 1}`)); }
+const toneLabels = { update: "Update", raise: "Raise", fyi: "FYI", "decision-needed": "Decision needed" };
+function renderTone(el) { const tone = $(".tone", el).value; el.classList.remove("tone-update", "tone-raise", "tone-fyi", "tone-decision-needed"); el.classList.add(`tone-${tone}`); $(".tone-pill", el).textContent = toneLabels[tone]; }
 async function api(path, body = {}, opts = {}) {
   const r = await fetch(path, { method: "POST", headers: opts.headers || { "Content-Type": "application/json" }, body: opts.body || JSON.stringify(body) });
   if (!r.ok) { let data = {}; try { data = await r.json(); } catch {} throw new Error(data.error || "Request failed"); }
@@ -56,7 +58,7 @@ function addItem(data = {}) {
   // two fields were merged (16 Sept 2026) — fold any extra content into detail rather than drop it.
   const detailValue = data.detail || ""; const priorContext = data.confirmedContext || "";
   const mergedDetail = priorContext && priorContext.trim() !== detailValue.trim() ? [detailValue, priorContext].filter(Boolean).join("\n\n") : detailValue;
-  $(".title", el).value = data.title || ""; $(".tone", el).value = data.tone || "update"; $(".priority", el).value = data.priority ?? 1; $(".detail", el).value = mergedDetail; $(".seed", el).value = data.speakerNoteSeed || ""; el.dataset.sources = JSON.stringify(data.sources || []);
+  $(".title", el).value = data.title || ""; $(".tone", el).value = data.tone || "update"; $(".priority", el).value = data.priority ?? 1; $(".detail", el).value = mergedDetail; $(".seed", el).value = data.speakerNoteSeed || ""; el.dataset.sources = JSON.stringify(data.sources || []); renderTone(el); $(".tone", el).addEventListener("change", () => renderTone(el));
   if (data.carryForward) { $(".carry", el).textContent = `Carry-forward from ${data.carryForward.fromIntake} (${data.carryForward.fromItemId}); choose carried, resolved, or dismissed.`; const status = document.createElement("select"); status.className = "status"; status.innerHTML = '<option value="carried">Carried</option><option value="resolved">Resolved</option><option value="dismissed">Dismissed</option>'; status.value = data.status || "carried"; $(".carry", el).append(" ", status); el.dataset.carry = JSON.stringify(data.carryForward); } else { $(".carry", el).textContent = data.origin === "roadmap-weekly" ? `Pre-populated from ${data.sourceLabel || "the weekly roadmap"} — review before submitting.` : ""; el.dataset.carry = ""; }
   $(".remove", el).onclick = () => { clearChat(el); el.remove(); renderNumbers(); };
   $(".chat-send", el).onclick = () => sendChat(el); $(".chat-input", el).addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendChat(el); } }); $(".mic", el).onclick = () => recordVoice(el); $(".listen", el).onclick = () => listen(el);

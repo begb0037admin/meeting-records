@@ -1051,3 +1051,13 @@ the same way — worth a KV pre-stage-on-submit-attempt write (write to
 never means lost data again. Neither addressed here; flagging for
 Kevin's/Lauren's prioritization since this is Drew's engineering scope
 on this repo already reported to Kevin the risk of.
+
+## 18 September 2026 — Oxford intake visual redesign (branch only)
+
+Redesigned the static intake interface on `drew/meeting-prep-intake-branding-redesign` to match the canonical Speaking Brief / `command-centre/BRANDING.md` v2.0 language. The live-dashboard convention is used: Google Fonts Inter (400/600/700/800) and the provided normal asset `/images/oxford-crest.jpg`, never embedded data.
+
+Changes are confined to `public/index.html`, `public/style.css`, and the additive tone-pill presentation helper in `public/app.js`, plus the supplied `public/images/oxford-crest.jpg`. The fixed 340px navy Oxford sidebar uses the canonical brand classes; the responsive form uses cards, grouped item panels, secondary/danger actions, tone-specific pills, an explicit drag handle, and status banners. The final submit is a distinct lock card explaining that the resulting source record is permanent and cannot be edited afterwards. Existing Worker logic, Cloudflare Access, deployment state, and `submit()` write ordering are untouched.
+
+Validation: `npm test` — 37/37 pass. Local desktop screenshot visually checked at `http://127.0.0.1:4173/`; it confirms the normal-image crest, Inter-based hierarchy, cards, form controls, agenda treatment, and the hidden roadmap helper remains hidden until its existing JS reveals it. A local server has no API backing, so its intentionally visible failure banner also confirmed that operational errors are now conspicuous.
+
+Exact next action: review the committed branch and local visual evidence with Kevin. Do not merge or deploy until Kevin explicitly approves the screenshots/UI. Keep the separate, untracked `tools/speaking-briefs/build_org_structure_walkthrough.py` out of this change. The outstanding KV pre-stage-before-GitHub-write reliability improvement remains explicitly flag-only and requires separate approval.
