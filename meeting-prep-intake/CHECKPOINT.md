@@ -1461,3 +1461,34 @@ have Drew implement the two bugs directly under reduced review. Either
 way, still awaiting Kevin's own screenshot review/explicit approval per
 this repo's standing approval gate before any merge or deploy — that
 requirement is unchanged and untouched by this round.
+
+### Round 6 update — Codex re-dispatched via failover, two bugs fixed and live-verified (18 Sep 2026, evening)
+
+Codex co.uk account still capped; re-dispatched through `agent-commons/bin/codex-failover.mjs`
+(accounts.json order: default co.uk, then lelittecom). Failover worked: default hit the usage
+limit, `lelittecom` (kevin@lelitte.com, gpt-5.6-luna, effort high) completed both passes.
+Codex implemented; Drew reviewed, verified, and checkpointed only.
+
+- **Pass 1** (`codex-failover.mjs`, brief: remove `background:inherit`; add `.xlsx-file` change
+  listener). Codex did both. Drew's live Playwright check showed the hover fix was NOT sufficient:
+  removing `background:inherit` exposed the base `button:hover{background:var(--navy-soft)}`, so
+  7 of 8 pills turned dark navy on hover. Root cause was an incomplete instruction in Drew's own
+  pass-1 brief, not a Codex error. The file-name fix passed.
+- **Pass 2** (same wrapper): per-colour-group hover backgrounds using the existing pill custom
+  properties, plus `.button-secondary:hover`. Codex changed `style.css` only.
+- **Live verification (Playwright `getComputedStyle`, real served files):** all 12 action pills
+  keep their own fill on hover (navy `#addItem`/`#submit` correctly go navy-soft), all `0px none`
+  border, radii 999px/20px; `.add-update-line` and `#pullRoadmap` keep blue on hover;
+  `.file-name` reads "No file chosen" -> "Test Workbook.xlsx" -> "No file chosen" on
+  select/clear. `npm test` 37/37. `src/` and `test/` untouched.
+- **Note for Kevin (not a defect, his call):** cards/items/submit-card carry a 1px near-invisible
+  full-perimeter hairline (`rgba(0,33,71,.07)`, pxd's own card treatment); no coloured or
+  left-only accent border exists anywhere. `Choose File` is weight 500 vs 700 on the other
+  action pills (inherits `.pill`); flag if he wants them uniform.
+- **Tooling note:** the first failover run started Codex in the parent `C:\Users\admin\github`
+  (the wrapper spawns without `cwd`); Codex self-corrected. Pass 2 used an absolute `--cd`.
+
+Screenshots (local scratch, regenerable): `intake-v6-02-FULLPAGE.png`, `intake-v6-03-item-card.png`,
+`intake-v6-04-hover-mic.png`.
+
+Exact next action: show Kevin the screenshots; no merge/deploy without his explicit approval.
