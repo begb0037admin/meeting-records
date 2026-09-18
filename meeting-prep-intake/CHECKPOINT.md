@@ -1054,7 +1054,7 @@ on this repo already reported to Kevin the risk of.
 
 ## 18 September 2026 — Oxford intake visual redesign (branch only)
 
-Redesigned the static intake interface on `drew/meeting-prep-intake-branding-redesign` to match the canonical Speaking Brief / `command-centre/BRANDING.md` v2.0 language. The live-dashboard convention is used: Google Fonts Inter (400/600/700/800) and the provided normal asset `/images/oxford-crest.jpg`, never embedded data.
+Redesigned the static intake interface on `drew/meeting-prep-intake-branding-redesign` in commit `3d31773` to match the canonical Speaking Brief / `command-centre/BRANDING.md` v2.0 language. The live-dashboard convention is used: Google Fonts Inter (400/600/700/800) and the provided normal asset `/images/oxford-crest.jpg`, never embedded data.
 
 Changes are confined to `public/index.html`, `public/style.css`, and the additive tone-pill presentation helper in `public/app.js`, plus the supplied `public/images/oxford-crest.jpg`. The fixed 340px navy Oxford sidebar uses the canonical brand classes; the responsive form uses cards, grouped item panels, secondary/danger actions, tone-specific pills, an explicit drag handle, and status banners. The final submit is a distinct lock card explaining that the resulting source record is permanent and cannot be edited afterwards. Existing Worker logic, Cloudflare Access, deployment state, and `submit()` write ordering are untouched.
 
