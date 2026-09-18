@@ -986,3 +986,68 @@ rendered result confirming the control's placement and the correct
 prepend behaviour visually, not just via the DOM value check.
 
 **Status:** merged and deployed live.
+
+
+---
+
+## 18 Sep 2026 — GITHUB_PAT rotated after live 403 on "Submit locked intake" (Drew)
+
+**Incident:** Kevin used the live meeting-prep-intake form at
+meeting.lelitte.co.uk, clicked "Submit locked intake", and got a 403
+write failure. He flagged immediately that the update must not be lost.
+
+**Root cause:** `src/worker.js`'s `submit()` calls the GitHub Contents
+API directly (`PUT /repos/begb0037admin/meeting-records/contents/...`)
+using the Worker secret `GITHUB_PAT`, wrapping any non-2xx GitHub
+response as `GitHub write failed (${status})` — so the message Kevin
+saw ("403") was GitHub's own contents-API response passed through, not
+a Worker-level auth failure (the `!env.GITHUB_PAT` case returns a
+distinct 500, ruled out). The `GITHUB_PAT` secret was set on 16 Sep
+2026 via `wrangler secret put` (SSH + 1Password from the Mac). Whatever
+token was stored either lacked write/Contents permission, wasn't
+authorized for the `begb0037admin` org (SSO), or had expired — branch
+protection on `main` was checked and ruled out (`Branch not
+protected`, confirmed via `gh api .../branches/main/protection` →
+404), and the repo has no other write restriction (`gh api
+repos/.../meeting-records` shows `push: true` for a correctly-scoped
+token). The exact original token was never retrievable for inspection
+— Cloudflare secrets are write-only, no read-back API.
+
+**Data-loss finding (the actual priority):** The "Submit locked
+intake" flow has **no staging step**. `public/app.js`'s submit handler
+builds the payload straight from the live DOM at click time and POSTs
+directly to `/api/intakes/submit`; nothing is written to `CHAT_KV` or
+anywhere durable before that call. `sessionStorage` only ever holds a
+`draftId` (chat correlation key), never the item content. So when the
+GitHub PUT 403'd, **the submitted content was never persisted
+anywhere** — not in GitHub (the `intakes/` directory did not exist in
+the repo at all until this fix's own verification write), not in KV.
+If Kevin's browser tab with the filled-in form was still open when
+this was diagnosed, the only surviving copy of his update was that
+live, unsaved DOM state. This was flagged to Kevin directly rather than
+inferred or fabricated.
+
+**Fix:** Rotated `GITHUB_PAT` via `wrangler secret put GITHUB_PAT
+--name meeting-prep-intake`, using the estate's existing
+`begb0037admin`-account `gh` CLI OAuth token (already confirmed via
+`gh api` to have `repo` scope and `push: true` on this repo) rather
+than asking Kevin to generate/paste a new PAT — no manual step needed.
+Verified end-to-end against the live Worker with a disposable ad-hoc
+test intake (`itm_zzverify0001`, meeting title
+`zz-drew-secret-verify-delete-me`): got a real `201` and commit
+`903449b`, then deleted that test file immediately
+(`885b2fb`) to leave the repo clean. The write path is confirmed
+working again as of this fix.
+
+**Follow-up worth considering, not yet acted on:** the reused `gh` CLI
+OAuth token is broad-scope (whole-account `repo`), not a
+purpose-scoped fine-grained PAT the way the 16 Sep setup intended —
+fine for an emergency unblock, but a dedicated least-privilege PAT
+(Contents: Read & write, scoped to `meeting-records` only) would be
+tighter. Separately, the no-staging design in `submit()` means *any*
+future GitHub-write failure at this step loses unsaved form content
+the same way — worth a KV pre-stage-on-submit-attempt write (write to
+`CHAT_KV` first, then attempt the GitHub PUT) so a failed GitHub write
+never means lost data again. Neither addressed here; flagging for
+Kevin's/Lauren's prioritization since this is Drew's engineering scope
+on this repo already reported to Kevin the risk of.
