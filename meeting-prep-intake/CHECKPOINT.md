@@ -1326,3 +1326,31 @@ Screenshots (scratchpad): `intake-v4-01-viewport.png` (detail crop),
 
 Exact next action: show Kevin the full-page screenshot; do not merge or
 deploy without his explicit approval.
+
+## 18 September 2026 — Round 5: blanket action-button pill rule
+
+On `drew/meeting-prep-intake-branding-redesign`, all custom `<button>`
+elements now use the pill language without selector-by-selector exceptions.
+The base `button` rule is borderless with `border-radius:999px`, preserving
+navy/white primary actions (`#addItem`, `.chat-send`, and `#submit`). The
+shared `.button-secondary` rule is now a borderless, `999px`-radius
+solid blue pill (`#eff6ff` / `#1d4ed8`) and its hover uses
+`filter:brightness(.94)`. The existing coral `.button-danger,.remove` rule
+remains borderless and coral; its 20px rounded pill styling is unchanged.
+
+The literal markup audit still has exactly 13 action `<button>` elements.
+Deliberately excluded: `.xlsx-file` is a browser-rendered native file input,
+not a custom button; `.drag` is an HTML5 drag affordance with no click handler,
+not a click target. No IDs/classes, Worker code, Access, or deployment state
+changed. The two unrelated untracked speaking-brief scripts remain untouched.
+
+Validation: `npm test` passed 37/37 outside the sandbox after the sandbox's
+Node test-worker spawn was blocked with `EPERM`; `git diff --check` passed.
+The local `file:` browser preview was blocked by browser security policy, so
+no new live computed-style values were asserted for any button. Drew must run
+the requested literal `getComputedStyle` audit for all 13 buttons before this
+goes to Kevin; do not substitute source inspection for it.
+
+Exact next action: Drew obtains and records the live computed `border` and
+`border-radius` for all 13 action buttons, then Kevin reviews the branch; do
+not merge, push, or deploy without his explicit approval.
