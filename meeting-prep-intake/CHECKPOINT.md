@@ -1051,3 +1051,472 @@ the same way — worth a KV pre-stage-on-submit-attempt write (write to
 never means lost data again. Neither addressed here; flagging for
 Kevin's/Lauren's prioritization since this is Drew's engineering scope
 on this repo already reported to Kevin the risk of.
+
+## 18 September 2026 — Oxford intake visual redesign (branch only)
+
+Redesigned the static intake interface on `drew/meeting-prep-intake-branding-redesign` in commit `3d31773` to match the canonical Speaking Brief / `command-centre/BRANDING.md` v2.0 language. The live-dashboard convention is used: Google Fonts Inter (400/600/700/800) and the provided normal asset `/images/oxford-crest.jpg`, never embedded data.
+
+Changes are confined to `public/index.html`, `public/style.css`, and the additive tone-pill presentation helper in `public/app.js`, plus the supplied `public/images/oxford-crest.jpg`. The fixed 340px navy Oxford sidebar uses the canonical brand classes; the responsive form uses cards, grouped item panels, secondary/danger actions, tone-specific pills, an explicit drag handle, and status banners. The final submit is a distinct lock card explaining that the resulting source record is permanent and cannot be edited afterwards. Existing Worker logic, Cloudflare Access, deployment state, and `submit()` write ordering are untouched.
+
+Validation: `npm test` — 37/37 pass. Local desktop screenshot visually checked at `http://127.0.0.1:4173/`; it confirms the normal-image crest, Inter-based hierarchy, cards, form controls, agenda treatment, and the hidden roadmap helper remains hidden until its existing JS reveals it. A local server has no API backing, so its intentionally visible failure banner also confirmed that operational errors are now conspicuous.
+
+Exact next action: review the committed branch and local visual evidence with Kevin. Do not merge or deploy until Kevin explicitly approves the screenshots/UI. Keep the separate, untracked `tools/speaking-briefs/build_org_structure_walkthrough.py` out of this change. The outstanding KV pre-stage-before-GitHub-write reliability improvement remains explicitly flag-only and requires separate approval.
+
+### Drew's independent review pass, same day — not taken on Codex's self-report
+
+Did not trust the note above on its own; verified directly:
+
+- Read the full diff (`git diff main` against `3d31773`) line by line —
+  `src/worker.js` genuinely untouched, confirmed via diffstat; `app.js`'s
+  only change is the additive `renderTone()` helper wired into `addItem()`,
+  no existing behaviour altered.
+- Ran `npm test` independently in a fresh shell — 37/37 pass, matches the
+  claim.
+- Served `public/` locally (`python -m http.server`, no backend behind it)
+  and screenshotted with Playwright (not the legacy `chrome.exe --headless
+  --screenshot` flag — known false-negative risk, see the same day's
+  `brief_chrome.py` redesign entry above) at desktop (1440px), a filled
+  multi-item state, the submit error-banner state, and a 390px mobile
+  viewport. All four screenshots confirm: real Inter font actually loading
+  (`document.fonts` check, not just the CSS declaration), the normal
+  `<img>` crest (not base64), navy sidebar, card/pill language matching
+  `brief_chrome.py`'s tokens, and the new prominent red error banners on
+  both the meeting-context and per-item chat sections plus the final submit
+  card when a request fails locally.
+- One apparent issue investigated and ruled a screenshot-tooling artifact,
+  not a real bug, matching the exact pattern already documented in this
+  file's Speaking Brief entry above: a Playwright `fullPage: true` capture
+  of a long (3+ item) page showed the fixed navy sidebar only filling the
+  bottom portion of the image, not the full height. Re-checked with
+  `getComputedStyle` (`position: fixed`, confirmed) and a real scroll to
+  the bottom of a long page + a viewport-only (non-fullPage) screenshot —
+  the sidebar is correctly pinned full-height at every scroll position.
+  `fullPage: true` on Chromium mis-renders `position: fixed` elements; it
+  is not a reliable check for fixed-position correctness. New confirmed-
+  fact candidate for `drew/memory/index.json` (Playwright fullPage +
+  position:fixed screenshot artifact).
+- Flagged two judgment calls back to Kevin for his own sign-off rather than
+  silently accepting or overriding them: (1) the final "Lock this intake"
+  card uses a warm/reddish tint (border + background gradient) to signal
+  irreversibility — reuses the same red family as the new error-banner
+  colour, which could read as "something's wrong" rather than "this is the
+  final step," worth Kevin's own reaction; (2) the outstanding KV-pre-stage
+  reliability fix (18 Sep GITHUB_PAT-403 entry above) is still unbuilt by
+  design — Kevin's call whether to greenlit it as a follow-up.
+
+## 18 September 2026 — pxd.lelitte.co.uk visual-language follow-up (branch only)
+
+Kevin supplied `pxd.lelitte.co.uk` as the primary visual reference after
+reviewing the first redesign screenshots. On the existing
+`drew/meeting-prep-intake-branding-redesign` branch, the intake now uses its
+static `env-col` card treatment and normal-case colour pills:
+
+- Removed the agenda-item coloured left accent bars completely, including all
+  `tone-*` wrapper classes and their border overrides. The success/error
+  message-banner bars remain unchanged by design.
+- Restyled `.card`, `.meeting-card`, `.agenda-card`, `.item`, and
+  `.submit-card` as static white cards: 16px radius, `rgba(0,33,71,.07)`
+  border, and `0 1px 4px rgba(0,33,71,.05)` shadow. The lock card retains its
+  existing explicit permanent/uneditable copy but now shares this same visual
+  language instead of using a warm danger tint.
+- Replaced the three form-section eyebrow headings with the pxd pattern: a
+  bold 15px Oxford-navy `Step / title` label and a flexible `#d1d9e6` rule;
+  the explanatory copy remains directly below so the form still communicates
+  its purpose.
+- Added pxd's five literal pill classes to the intake stylesheet. `renderTone()`
+  now assigns the class directly to `.tone-pill`: update=blue, raise=coral,
+  FYI=teal, decision-needed=amber; green remains available but unused.
+
+Verification: `npm test` passes 37/37. Local browser review against the
+served `public/` directory confirmed the desktop layout, section rules,
+rounded static cards, and direct Raise-to-coral pill transition; the expected
+local API failure banner was visible and unchanged. No Worker, Access,
+deployment, or crest asset change was made.
+
+Exact next action: review the updated branch screenshots with Kevin. Do not
+merge or deploy until he explicitly approves the UI. Keep the unrelated,
+untracked `tools/speaking-briefs/build_access_holiday_reports.py` and
+`tools/speaking-briefs/build_org_structure_walkthrough.py` out of this change.
+
+### Drew's independent review of the pxd follow-up, same day
+
+Verified directly, not taken on the note above:
+
+- Fetched `https://pxd.lelitte.co.uk/` myself (both `curl` for the raw CSS
+  and a live Playwright screenshot) before writing Codex's brief, rather
+  than relying on the coordinator's paraphrase of Kevin's feedback — the
+  first-pass `WebFetch` attempt on this same URL returned a garbled,
+  wrong description (a stale/JS-blind markdown conversion calling it a
+  plain link list with "no visible box-shadows or rounded corners"); the
+  real page is a proper CSS shell with exactly the tile/pill/env-col
+  system this task needed. Didn't trust that first automated fetch and
+  went to the raw HTML directly.
+- Read the full `git diff 3d31773..c260b08` line by line: confirmed every
+  `.tone-raise`/`.tone-fyi`/`.tone-decision-needed` border-left override
+  is gone, `.item`'s own `border-left: 5px solid var(--navy)` is gone, the
+  five `.pill-*` classes are pxd's literal hex values, and `renderTone()`
+  now sets the pill's own class directly instead of relying on a parent
+  selector. `src/worker.js` untouched.
+- Re-ran `npm test` independently — 37/37 pass, matches the claim.
+- Re-served `public/` locally and re-screenshotted with Playwright:
+  desktop default state, three items with three different tones (Update/
+  Raise/Decision needed) to confirm each pill colour, a scroll-to-bottom
+  shot of the lock card, and a 390px mobile view. Confirmed live: no
+  accent bar on any card at any tone, pills render as pxd's soft rounded
+  normal-case badges (not the old bold/uppercase tight pill), section
+  headings now read as a bold navy label + thin rule exactly matching
+  pxd's `.section-heading`. Also re-confirmed via `document.fonts` that
+  the newly-required Inter 500 weight (added to the Google Fonts URL for
+  the pill's `font-weight: 500`) is genuinely loading, not just declared.
+- **One of the two judgment calls flagged after the first pass is now
+  moot, as a side effect of this change, not a separate fix:** the "Lock
+  this intake" card's warm/reddish tint is gone — it now shares the same
+  neutral white `env-col`-style card as everything else, since the danger-
+  tint special-case was part of what got replaced by the uniform pxd card
+  treatment. No longer flagging that one. The second flag (KV pre-stage
+  reliability fix) remains open and unbuilt, unchanged.
+
+Screenshots (scratchpad, regenerate if needed for a later session):
+`intake-v2-01-desktop-default.png`, `intake-v2-02-desktop-tone-pills.png`,
+`intake-v2-03-desktop-lock-card.png`, `intake-v2-04-mobile.png`.
+
+## 18 September 2026 — pxd structural and visual correction (Round 3, branch only)
+
+On `drew/meeting-prep-intake-branding-redesign`, the three intake section
+headings and descriptions now sit directly on `.page` (the main page
+background), not inside cards. Step 1's fields, recurring-definition action,
+status message and roadmap helper remain together in one `meeting-card` below
+its heading. Step 2's heading, description and Add agenda item control are
+free on the page; the outer `agenda-card` has been removed and `#items`
+contains each independent `.item` card directly. The final heading and
+description are also page children, with only the submit action/message in a
+separate `submit-card` below.
+
+The shared card rule now deliberately uses pxd's stronger icon-tile shadow:
+`0 1px 4px rgba(0,33,71,.07), 0 2px 12px rgba(0,33,71,.06)`, rather than the
+flatter env-col shadow, so cards visibly lift from the page. `.pill` now
+declares `border: none` defensively. A local browser computed-style check
+confirmed the rendered tone pill is `0px none`, 20px radius and 8px 18px
+padding; it also confirmed the dual-layer shadow, three direct `.page`
+section headings, no `.agenda-card`, and independent item cards in `#items`.
+
+Tone-pill labels now use the proportionate leading-emoji interpretation:
+`🔄 Update`, `🚩 Raise`, `ℹ️ FYI`, and `⚖️ Decision needed`; the select options
+remain plain. This is a judgment call for Kevin to react to, not a claim that
+the intake should use pxd's larger circular icon tiles.
+
+Validation: `npm test` passed 37/37 (the sandbox initially blocked the Node
+test-worker spawn with EPERM; the same command outside that sandbox passed).
+No Worker, Access, deployment state, or unrelated files changed. The two
+pre-existing untracked speaking-brief scripts remain intentionally excluded.
+
+Exact next action: review the branch UI with Kevin; do not merge or deploy
+without his explicit approval. If he changes the tone-icon decision, alter
+only `toneLabels` in `public/app.js` and repeat the browser/style check.
+
+### Drew's independent review of Round 3, same day
+
+This is the third revision cycle on this feature — Kevin had flagged the
+same class of problem twice already, so this pass was checked with extra
+rigor rather than taken on the report above.
+
+- Re-fetched `pxd.lelitte.co.uk` myself via Playwright `getComputedStyle`
+  (not just its source CSS) before writing Codex's brief, specifically to
+  get real rendered values for: pill border/shadow, tile vs env-col shadow
+  (two different values on the real site — tile is the stronger dual-layer
+  one, env-col is a single flat layer), and confirmation that
+  `.section-heading` is a direct child of `<main>`, never inside a card.
+  Used the tile's stronger shadow deliberately for our cards even though
+  it's technically the wrong pxd token for a content card like ours — a
+  disclosed judgment call, not a mistake, because Kevin's own wording
+  ("pop off the page") pointed at that stronger value.
+- Read the full `git diff af5104c..eef4eea` line by line: confirmed
+  `.section-heading`/`.section-copy` are now direct children of `.page` in
+  all three sections, the `agenda-card` wrapper is gone, `.pill` declares
+  `border: none` explicitly, and the shared card rule uses the dual-layer
+  shadow. `src/worker.js` untouched.
+- Re-ran `npm test` independently — 37/37 pass.
+- Re-served `public/` locally and verified with my own Playwright
+  screenshots AND my own `getComputedStyle` checks (not trusting Codex's
+  stated values) — confirmed live: tone-pill `border` is genuinely `0px
+  none`, the item card's rendered `box-shadow` is the exact dual-layer
+  value, `#agenda-heading`'s nearest `.card` ancestor is null (i.e.
+  genuinely not inside any card), and a manually-triggered error banner
+  also renders with `border: 0px none` — the specific element Kevin named
+  ("Request failed").
+- Screenshots taken at desktop (empty + two items at different tones),
+  mobile, and directly next to a fresh screenshot of the real pxd site for
+  side-by-side comparison before sending anything to Kevin.
+- Flagging again, explicitly, for Kevin's reaction rather than treating as
+  settled: (1) the card shadow is deliberately the stronger of pxd's two
+  real values, not pxd's own value for a content card like ours; (2) the
+  tone-pill emoji choices are Drew/Codex's proposed interpretation of
+  "icons, not just words," not something pxd itself does at this scale —
+  pxd's own icons only appear on its large circular launcher tiles, which
+  don't have a natural equivalent in a repeated data-entry form.
+
+Screenshots (scratchpad, regenerate if needed for a later session):
+`intake-v3-01-desktop-default.png`, `intake-v3-02-desktop-items.png`,
+`intake-v3-04-mobile.png`, compared directly against `pxd-reference-01.png`.
+
+## 18 September 2026 — Round 4: field-spacing regression + full pill-language unification
+
+Kevin sent annotated screenshots naming two more gaps: cramped field
+spacing throughout every item card, and inconsistent pill styling (the
+"Add agenda item" button, the "Remove" button, and the sidebar "Draft
+workspace" badge still reading as the old bordered/outlined language
+while the tone tags used the new solid-fill pill language).
+
+**Root cause found for the spacing complaint, not just a tweak:** the
+original pre-redesign stylesheet had `label{margin: 0.7rem 0}`. Round 1's
+rewrite dropped that margin entirely (`label{...}` with no margin
+property at all), so every stacked field in every item card has had zero
+vertical breathing room since round 1 — this is why it read as cramped
+everywhere, not just the two spots Kevin's arrows pointed at.
+
+**Fixed, commit `c597edc` (Codex, lead implementer):**
+- `label` restored to a real bottom margin (`0 0 1.15rem`); field
+  `margin-top` increased `.4rem` → `.6rem`.
+- `#addItem` ("Add agenda item"): converted to a solid navy, white-text,
+  borderless pill (`border-radius: 20px`) — matches pxd's own precedent
+  for a "primary/active" pill (`.pill.flash` uses solid navy), not an
+  invented style.
+- `.remove` ("Remove"): converted to a solid coral pill (same family as
+  the "Raise" tone tag), borderless.
+- "Draft workspace": relocated from the navy sidebar (where its pale
+  pastel fill read as washed-out/near-white against the dark background —
+  pxd never puts one of its pastel pills on a dark surface, only on white
+  cards) to the plain page background under the intro text, where the
+  existing pill styling renders exactly as designed.
+- Deliberately did NOT convert the other ~10 secondary utility buttons
+  (Create recurring definition, Pull roadmap now, Suggest speaker note,
+  Extract, Send/Mic/Listen/Attach, etc.) to pills — they're rectangular
+  (`border-radius: 7px`), not pill-shaped, Kevin didn't name them, and
+  pxd has no reference for a toolbar of many small action buttons.
+
+Codex disclosed it could not run a live browser check itself (its sandbox
+blocked opening the local `file:` preview) and gave only CSS-source-level
+values, explicitly flagged as unverified — did not claim a live check it
+hadn't done.
+
+**Drew's independent verification, all via live `getComputedStyle` calls
+in a real served page, not source-reading or a visual glance:**
+- `#addItem`: `border: 0px none`, `border-radius: 20px`, navy background,
+  white text.
+- `.remove`: `border: 0px none`, `border-radius: 20px`, coral fill.
+- Relocated "Draft workspace" pill: `border: 0px none`, `border-radius:
+  20px`, pale-blue fill — now on the white page background as intended;
+  also checked the wrapping element's own padding is `0px` (no leftover
+  22px sidebar padding bleeding through despite reusing the `.sidebar-
+  note` class name for layout).
+- Title input `margin-top`: `9.6px` (0.6rem). First `label`'s
+  `margin-bottom`: `18.4px` (1.15rem). Both match the intended values.
+- `npm test`: 37/37 pass, re-run independently.
+
+**Full-page screenshot, per Kevin's explicit request** (not fragments):
+avoided the already-known `page.screenshot({fullPage:true})` +
+`position:fixed` stitching artifact (see the Speaking Brief and Round 1
+entries above) by opening a fresh page with the viewport already sized to
+the full measured content height before load, rather than resizing after
+— so there's no post-load resize to trigger the artifact. One clean
+image, sidebar correctly navy top-to-bottom, both items fully visible.
+
+Screenshots (scratchpad): `intake-v4-01-viewport.png` (detail crop),
+`intake-v4-02-FULLPAGE.png` (the requested genuine full-page capture).
+
+Exact next action: show Kevin the full-page screenshot; do not merge or
+deploy without his explicit approval.
+
+## 18 September 2026 — Round 5: blanket action-button pill rule
+
+On `drew/meeting-prep-intake-branding-redesign`, all custom `<button>`
+elements now use the pill language without selector-by-selector exceptions.
+The base `button` rule is borderless with `border-radius:999px`, preserving
+navy/white primary actions (`#addItem`, `.chat-send`, and `#submit`). The
+shared `.button-secondary` rule is now a borderless, `999px`-radius
+solid blue pill (`#eff6ff` / `#1d4ed8`) and its hover uses
+`filter:brightness(.94)`. The existing coral `.button-danger,.remove` rule
+remains borderless and coral; its 20px rounded pill styling is unchanged.
+
+The literal markup audit still has exactly 13 action `<button>` elements.
+Deliberately excluded: `.xlsx-file` is a browser-rendered native file input,
+not a custom button; `.drag` is an HTML5 drag affordance with no click handler,
+not a click target. No IDs/classes, Worker code, Access, or deployment state
+changed. The two unrelated untracked speaking-brief scripts remain untouched.
+
+Validation: `npm test` passed 37/37 outside the sandbox after the sandbox's
+Node test-worker spawn was blocked with `EPERM`; `git diff --check` passed.
+The local `file:` browser preview was blocked by browser security policy, so
+no new live computed-style values were asserted for any button. Drew must run
+the requested literal `getComputedStyle` audit for all 13 buttons before this
+goes to Kevin; do not substitute source inspection for it.
+
+Exact next action: Drew obtains and records the live computed `border` and
+`border-radius` for all 13 action buttons, then Kevin reviews the branch; do
+not merge, push, or deploy without his explicit approval.
+
+### Drew's independent verification of Round 5 — literal per-button audit
+
+Standing rule restated to Drew this round: Drew never writes the diff
+directly, however small — Codex implements every change, Drew reviews,
+verifies, and checkpoints only. Applied strictly from this point on.
+
+Ran the literal `getComputedStyle` audit Codex's own sandbox couldn't run
+(browser-preview policy blocked it there), against a locally served copy
+of the real committed files. All 13 action buttons, confirmed live:
+
+| Button | border | border-radius | fill |
+|---|---|---|---|
+| `#newRecurring` | `0px none` | `999px` | blue |
+| `#pullRoadmap` | `0px none` | `999px` | blue |
+| `#addItem` | `0px none` | `20px` | navy |
+| `.remove` | `0px none` | `20px` | coral |
+| `.add-update-line` | `0px none` | `999px` | blue |
+| `.suggest-seed` | `0px none` | `999px` | blue |
+| `.chat-send` | `0px none` | `999px` | navy |
+| `.mic` | `0px none` | `999px` | blue |
+| `.listen` | `0px none` | `999px` | blue |
+| `.attach-context` | `0px none` | `999px` | blue |
+| `.extract-btn` | `0px none` | `999px` | blue |
+| `.attach-sheets` | `0px none` | `999px` | blue |
+| `#submit` | `0px none` | `999px` | navy |
+
+13/13 genuinely borderless and fully rounded — no exceptions found. Two
+radius values (`20px` vs `999px`) coexist by design, not a defect: both
+are large enough relative to each button's own height to render as a
+full stadium/pill shape; `999px` is simply the more robust value used for
+the varying-height utility buttons.
+
+Screenshots: `intake-v5-01-viewport.png` (detail crop, confirms
+Create-recurring-definition and Add-to-detail — the two Kevin re-circled
+— are now blue pills), `intake-v5-02-FULLPAGE.png` (genuine full-page
+capture, same pre-sized-viewport technique as round 4), `intake-v5-03-
+chat-extract-detail.png` (scrolled crop covering Send/Mic/Listen/Attach/
+Extract/Suggest/Submit together). `npm test`: 37/37, re-run independently.
+
+Pushed to origin (Codex's round-5 commit `5ddd437` had only been made
+locally, not pushed — pushing an already-implemented, reviewed commit is
+integration/checkpointing, not implementation, so this stayed Drew's job
+per the restated rule).
+
+## 18 September 2026 — Round 6: functional pill colour-coding + icons found in-progress, two confirmed bugs, Codex capped mid-fix
+
+`CODEX_BRIEF.md` (the consolidated Round-1-through-5 brief) was committed to
+the branch (`d784228`) alongside the round-5 audit record (`42f4450`,
+`8a4dd68`). On resuming this task, the local working tree
+(`C:\Users\admin\github\meeting-records`, same branch) already had
+**uncommitted** local changes to `public/style.css` and `public/index.html`
+implementing `CODEX_BRIEF.md` section 2 (functional colour-coding — new
+`pill-violet` token, `#newRecurring`→violet, `.suggest-seed`→amber,
+`.chat-send`/`.mic`/`.listen`/`.attach-context`→teal,
+`.extract-btn`/`.attach-sheets`→green) and the inline-SVG-icon requirement
+on every pill, plus a `Choose File` fix: `.xlsx-file` visually hidden
+(`position:absolute;opacity:0`) behind a new `<label class="file-pill pill
+pill-green">` with a separate `.file-name` span. This was genuinely
+in-progress when first observed (file mtimes changed between two
+consecutive `git diff` checks seconds apart) but stabilised before any
+review began — not a race condition in the review itself.
+
+**Drew's independent review of this uncommitted work — two confirmed bugs,
+neither fixed yet:**
+
+1. **Hover state goes fully transparent on 8 recoloured pills.** The
+   shared hover rule `.chat-send:hover,.mic:hover,.listen:hover,
+   .attach-context:hover,.extract-btn:hover,.attach-sheets:hover,
+   #newRecurring:hover,.suggest-seed:hover{filter:brightness(.94);
+   background:inherit}` — `background:inherit` resolves to the parent's
+   computed background, which is transparent. Confirmed live via Playwright
+   `getComputedStyle` against the real served files (not source
+   inspection): `.mic` hover `backgroundColor` is genuinely
+   `rgba(0, 0, 0, 0)`, same for the other 7 selectors in that rule. The
+   pastel fill disappears on hover instead of dimming. `.file-pill` and
+   `.remove` were unaffected (separate, correct hover rules).
+2. **`.file-name` span never updates — functional regression, not just
+   styling.** `app.js` was not touched in this round. There is no `change`
+   listener on `.xlsx-file` writing the selected filename into the new
+   `.file-name` span, and the native input's own browser-default filename
+   text is now invisible (opacity:0). A user who picks a file gets zero
+   visible confirmation of what they selected until Extract runs.
+
+**Dispatched to Codex per the standing lead-implementer rule** (`codex exec
+--approve-for-me --cd . --skip-git-repo-check` with a written fix-only
+brief scoped to exactly these two bugs, explicit instruction not to redo
+or revert the good uncommitted work). **Codex returned
+`ERROR: You've hit your usage limit... try again at 8:01 PM` on both
+attempts inside the session — exit code 0 but no work done.** This is a
+confirmed Codex-unavailable event per `agent-commons/operating-model/
+COORDINATOR_AND_CODEX_POLICY.md` §5, not a "would be faster without it"
+judgment call.
+
+Per §5, this must be named to Kevin explicitly and needs his acknowledgement
+before Drew switches lanes to implement these two fixes directly — not
+silently absorbed. Neither bug has been fixed. Nothing further pushed or
+committed this round; the good uncommitted colour-coding/icon work remains
+local-only, untouched, ready to be finished once a lane is confirmed.
+
+Exact next action: **Kevin decides** — (a) wait for Codex capacity to
+return (~20:01 today) and re-dispatch the same two-bug fix brief, or
+(b) explicitly waive §5's touchpoint coverage for this specific fix and
+have Drew implement the two bugs directly under reduced review. Either
+way, still awaiting Kevin's own screenshot review/explicit approval per
+this repo's standing approval gate before any merge or deploy — that
+requirement is unchanged and untouched by this round.
+
+### Round 6 update — Codex re-dispatched via failover, two bugs fixed and live-verified (18 Sep 2026, evening)
+
+Codex co.uk account still capped; re-dispatched through `agent-commons/bin/codex-failover.mjs`
+(accounts.json order: default co.uk, then lelittecom). Failover worked: default hit the usage
+limit, `lelittecom` (kevin@lelitte.com, gpt-5.6-luna, effort high) completed both passes.
+Codex implemented; Drew reviewed, verified, and checkpointed only.
+
+- **Pass 1** (`codex-failover.mjs`, brief: remove `background:inherit`; add `.xlsx-file` change
+  listener). Codex did both. Drew's live Playwright check showed the hover fix was NOT sufficient:
+  removing `background:inherit` exposed the base `button:hover{background:var(--navy-soft)}`, so
+  7 of 8 pills turned dark navy on hover. Root cause was an incomplete instruction in Drew's own
+  pass-1 brief, not a Codex error. The file-name fix passed.
+- **Pass 2** (same wrapper): per-colour-group hover backgrounds using the existing pill custom
+  properties, plus `.button-secondary:hover`. Codex changed `style.css` only.
+- **Live verification (Playwright `getComputedStyle`, real served files):** all 12 action pills
+  keep their own fill on hover (navy `#addItem`/`#submit` correctly go navy-soft), all `0px none`
+  border, radii 999px/20px; `.add-update-line` and `#pullRoadmap` keep blue on hover;
+  `.file-name` reads "No file chosen" -> "Test Workbook.xlsx" -> "No file chosen" on
+  select/clear. `npm test` 37/37. `src/` and `test/` untouched.
+- **Note for Kevin (not a defect, his call):** cards/items/submit-card carry a 1px near-invisible
+  full-perimeter hairline (`rgba(0,33,71,.07)`, pxd's own card treatment); no coloured or
+  left-only accent border exists anywhere. `Choose File` is weight 500 vs 700 on the other
+  action pills (inherits `.pill`); flag if he wants them uniform.
+- **Tooling note:** the first failover run started Codex in the parent `C:\Users\admin\github`
+  (the wrapper spawns without `cwd`); Codex self-corrected. Pass 2 used an absolute `--cd`.
+
+Screenshots (local scratch, regenerable): `intake-v6-02-FULLPAGE.png`, `intake-v6-03-item-card.png`,
+`intake-v6-04-hover-mic.png`.
+
+Exact next action: show Kevin the screenshots; no merge/deploy without his explicit approval.
+
+### Purple recolour of the Excel-extraction pills (19 Sep 2026)
+
+Kevin found the green Excel-extraction pills (Choose File, Extract, Attach selected sheets to
+detail) too close to the teal Ask Lauren group. Recoloured to fuchsia (`#fdf4ff` fill, `#a21caf`
+text), chosen because a plain purple would collide with the existing violet (`#f5f3ff`/`#6d28d9`,
+Create recurring definition). Codex (via `codex-failover.mjs`, lelittecom account) implemented it;
+Drew verified live with `getComputedStyle`: all 13 action pills keep their fill on hover, 0px
+border, weight 700; `.file-name` updates; `npm test` 37/37.
+
+Known open item: Choose File renders smaller than the other action pills (14px text / 33px tall vs
+16px / 40px, and cursor default vs pointer). A follow-up Codex attempt to match its size produced no
+output (process exited 127, no file change) and the agreed attempt cap was reached, so it was
+left unfixed rather than retried. Needed fix (style.css `.file-pill`): `font-size:1rem;
+padding:.62rem .9rem;justify-content:center;cursor:pointer`.
+
+Exact next action: Kevin reviews the screenshots and says whether to fix the Choose File size; no
+merge or deploy without his explicit approval.
+
+### Purple recolour finished (19 Sep 2026)
+
+Kevin's request: the three Excel-extraction pills (Choose File, Extract, Attach selected sheets to detail) were too close to the teal Send/Mic/Listen/Attach reply group, so they are now fuchsia-purple (`#fdf4ff` fill, `#a21caf` text; plain purple would have collided with the violet on "Create recurring definition"). Commit `35d8db0` (recolour) plus the follow-up commit below (Choose File size and cursor).
+
+- **Choose File size/cursor fix.** `.file-pill` now uses `font-size:1rem;padding:.62rem .9rem;line-height:normal;cursor:pointer`. Live `getComputedStyle` check in a real browser: Choose File and Extract are both 39.8px tall, 16px, weight 700, pointer cursor. All 12 action pills keep their fill on hover, 0px border. `npm test` 37/37.
+- **Codex was waived by Kevin for this one change** (policy section 5 waiver, scoped to the Choose File size/cursor fix only) because both Codex attempts this session hung and produced no change.
+- **Codex `exec` stdin hang (finding, not yet fixed).** Run from an agent shell, `codex exec "<prompt>"` via `agent-commons/bin/codex-failover.mjs` sat idle with no session and ~0 CPU for 15 minutes (default account) and printed "Reading additional input from stdin..." until killed (lelittecom-only account). The wrapper spawns Codex with `stdio: ["inherit","pipe","pipe"]` (runCodex, ~line 197), so Codex inherits the agent shell's never-closing stdin pipe and waits for EOF. Redirecting stdin from `/dev/null` was not tested (attempt cap reached). A hung Codex from the previous evening (Round 7b brief) was also found still running and was killed. Proposed wrapper fix, not applied: use `stdio: ["ignore","pipe","pipe"]` when a prompt argument is present or stdin is not a TTY.
+
+Exact next action: Kevin reviews the screenshots (`C:\Users\admin\Desktop\intake-purple-recolour-FINAL\`). No merge or deploy without his explicit approval.
