@@ -1543,3 +1543,15 @@ Kevin asked for the "Source material / Excel extraction" group to collapse like 
 - Speaker-note seed: NOT made collapsible. It is not one block in the DOM (see report to coordinator); awaiting Kevin's decision.
 
 Exact next action: Kevin approves screenshots (`C:\Users\admin\Desktop\intake-assistant-collapsible\`); coordinator merges and deploys. Not merged or deployed.
+
+### Speaker notes collapsible, message() bug fix, stronger focus outline (19 Sep 2026)
+
+Kevin decided ("agree on all - go ahead") on `drew/intake-assistant-collapsible`:
+
+- **Speaker notes** is now a third collapsible block (`.speaker-notes-panel`, header button "Speaker notes", `.speaker-body` hidden by default). It wraps the "Speaker-note seed" label + textarea AND the Suggest speaker note row + status line together; nothing removed, so typed/generated text is kept. Independent of the other two toggles. There was no existing "Speaker notes" heading in the DOM before; the header wording is new.
+- **Bug fix:** `message()` in app.js now uses `classList` (keeps `extract-message` / `suggest-message`, toggles `ok`/`error`) instead of overwriting `className`. Fixes the TypeError on a second Extract click and the missing confirmation after "Attach selected sheets to detail". Verified: Extract twice + Attach shows "Selected sheets attached to detail." with zero page errors.
+- **Focus outline** on all three toggles: `3px solid #1d4ed8`, offset 2px (measured after the 0.15s transition settles: `solid 3px rgb(29,78,216) 2px` via real Tab key).
+- Codex: implemented via `codex-failover.mjs` (absolute `--cd`, `< /dev/null`, run in background to completion, printed its own report, 37/37). Drew reviewed the diff and verified live (Playwright, `getComputedStyle`).
+- Test-only note: re-clicking Extract intentionally re-renders the sheet list and clears the checkbox selection (existing behaviour); collapse/expand alone preserves it.
+
+Exact next action: Kevin approves screenshots (`C:\Users\admin\Desktop\intake-assistant-collapsible\`); coordinator merges and deploys. Not merged or deployed.
