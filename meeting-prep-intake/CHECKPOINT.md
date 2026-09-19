@@ -1492,3 +1492,21 @@ Screenshots (local scratch, regenerable): `intake-v6-02-FULLPAGE.png`, `intake-v
 `intake-v6-04-hover-mic.png`.
 
 Exact next action: show Kevin the screenshots; no merge/deploy without his explicit approval.
+
+### Purple recolour of the Excel-extraction pills (19 Sep 2026)
+
+Kevin found the green Excel-extraction pills (Choose File, Extract, Attach selected sheets to
+detail) too close to the teal Ask Lauren group. Recoloured to fuchsia (`#fdf4ff` fill, `#a21caf`
+text), chosen because a plain purple would collide with the existing violet (`#f5f3ff`/`#6d28d9`,
+Create recurring definition). Codex (via `codex-failover.mjs`, lelittecom account) implemented it;
+Drew verified live with `getComputedStyle`: all 13 action pills keep their fill on hover, 0px
+border, weight 700; `.file-name` updates; `npm test` 37/37.
+
+Known open item: Choose File renders smaller than the other action pills (14px text / 33px tall vs
+16px / 40px, and cursor default vs pointer). A follow-up Codex attempt to match its size produced no
+output (process exited 127, no file change) and the agreed attempt cap was reached, so it was
+left unfixed rather than retried. Needed fix (style.css `.file-pill`): `font-size:1rem;
+padding:.62rem .9rem;justify-content:center;cursor:pointer`.
+
+Exact next action: Kevin reviews the screenshots and says whether to fix the Choose File size; no
+merge or deploy without his explicit approval.
