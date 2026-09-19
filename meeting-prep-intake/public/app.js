@@ -2,6 +2,7 @@ const $ = (s, root = document) => root.querySelector(s);
 const items = $("#items");
 let definitions = [];
 let dragged = null;
+let assistantBodyCounter = 0;
 $("#meetingDate").value = new Date().toISOString().slice(0, 10);
 const uid = () => `itm_${new Date().toISOString().slice(0, 10).replaceAll("-", "")}_${crypto.randomUUID().replaceAll("-", "").slice(0, 12)}`;
 // Session scope restores accidental refreshes, but does not carry chat into the next intake.
@@ -55,6 +56,7 @@ async function suggestSpeakerNote(el) {
 function attachSelectedSheets(el) { try { const extraction = JSON.parse(el.dataset.extraction || "null"); const names = [...el.querySelectorAll(".extract-sheet:checked")].map((input) => input.value); if (!extraction || !names.length) return message($(".extract-message", el), "Select at least one sheet to attach."); const sheets = extraction.sheets.filter((sheet) => names.includes(sheet.name)); const text = sheets.map((sheet) => "[" + extraction.fileName + " — " + sheet.name + "]\n" + sheet.preview).join("\n\n"); const detail = $(".detail", el); detail.value = [detail.value.trim(), text].filter(Boolean).join(detail.value.trim() ? "\n\n" : ""); const sources = JSON.parse(el.dataset.sources || "[]"); sources.push({ kind: "extract", fileName: extraction.fileName, digest: extraction.digest, sheets: names }); el.dataset.sources = JSON.stringify(sources); message($(".extract-message", el), "Selected sheets attached to detail.", true); } catch (e) { message($(".extract-message", el), "Could not attach selected sheets: " + e.message); } }
 function addItem(data = {}) {
   const el = $("#itemTemplate").content.firstElementChild.cloneNode(true); el.dataset.itemId = data.itemId || uid();
+  const assistantBodyId = `assistant-body-${++assistantBodyCounter}`; const assistantToggle = $(".assistant-toggle", el); const assistantBody = $(".assistant-body", el); assistantBody.id = assistantBodyId; assistantToggle.setAttribute("aria-controls", assistantBodyId); assistantToggle.addEventListener("click", () => { const expanded = assistantToggle.getAttribute("aria-expanded") === "true"; assistantToggle.setAttribute("aria-expanded", String(!expanded)); assistantBody.hidden = expanded; });
   // Older carried-forward records may still carry a distinct confirmedContext from before the
   // two fields were merged (16 Sept 2026) — fold any extra content into detail rather than drop it.
   const detailValue = data.detail || ""; const priorContext = data.confirmedContext || "";

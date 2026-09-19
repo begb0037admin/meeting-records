@@ -1520,3 +1520,14 @@ Kevin's request: the three Excel-extraction pills (Choose File, Extract, Attach 
 - **Codex `exec` stdin hang (finding, not yet fixed).** Run from an agent shell, `codex exec "<prompt>"` via `agent-commons/bin/codex-failover.mjs` sat idle with no session and ~0 CPU for 15 minutes (default account) and printed "Reading additional input from stdin..." until killed (lelittecom-only account). The wrapper spawns Codex with `stdio: ["inherit","pipe","pipe"]` (runCodex, ~line 197), so Codex inherits the agent shell's never-closing stdin pipe and waits for EOF. Redirecting stdin from `/dev/null` was not tested (attempt cap reached). A hung Codex from the previous evening (Round 7b brief) was also found still running and was killed. Proposed wrapper fix, not applied: use `stdio: ["ignore","pipe","pipe"]` when a prompt argument is present or stdin is not a TTY.
 
 Exact next action: Kevin reviews the screenshots (`C:\Users\admin\Desktop\intake-purple-recolour-FINAL\`). No merge or deploy without his explicit approval.
+
+### Collapsible item assistant (19 Sep 2026)
+
+Kevin: "collapse and expandable item, so I don't want it to show the default, and I will expand it if I want to use it." Branch `drew/intake-assistant-collapsible` (off main `b4894cc`, after PR #20).
+
+- Each item's "Ask Lauren" block now starts collapsed. A full-width header button (`.assistant-toggle`, "Item assistant / Ask Lauren" plus a chevron, `aria-expanded`, `aria-controls` with a per-item unique id) toggles a `.assistant-body` wrapper (chat messages, input, Send/Mic/Listen/Attach reply) via the `hidden` attribute, so typed text and any existing conversation are kept.
+- DOM finding: the Excel extraction group (`.extract-panel`) lives INSIDE `.chat-panel`, but after the collapsible body, so it stays always visible and unchanged.
+- Codex implemented (via `codex-failover.mjs`, absolute `--cd`, stdin from `/dev/null`); it landed all edits but was killed at my 9-minute timeout while still running tests, before it printed a final report. Drew reviewed the diff and verified live. Confirms the earlier stdin-hang diagnosis: with `< /dev/null` Codex ran normally.
+- Live check (Playwright, `getComputedStyle`): all items collapsed on load, click and Enter/Space toggle, unique ids, typed text and existing messages preserved, Send/Mic/Listen/Attach keep teal fill on hover, Excel pills purple, Choose File still matches Extract, filename updates, no page errors. `npm test` 37/37.
+
+Exact next action: Kevin approves screenshots (`C:\Users\admin\Desktop\intake-assistant-collapsible\`); coordinator merges and deploys. Not merged or deployed.
