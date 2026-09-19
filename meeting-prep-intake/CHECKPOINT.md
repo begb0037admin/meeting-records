@@ -1510,3 +1510,13 @@ padding:.62rem .9rem;justify-content:center;cursor:pointer`.
 
 Exact next action: Kevin reviews the screenshots and says whether to fix the Choose File size; no
 merge or deploy without his explicit approval.
+
+### Purple recolour finished (19 Sep 2026)
+
+Kevin's request: the three Excel-extraction pills (Choose File, Extract, Attach selected sheets to detail) were too close to the teal Send/Mic/Listen/Attach reply group, so they are now fuchsia-purple (`#fdf4ff` fill, `#a21caf` text; plain purple would have collided with the violet on "Create recurring definition"). Commit `35d8db0` (recolour) plus the follow-up commit below (Choose File size and cursor).
+
+- **Choose File size/cursor fix.** `.file-pill` now uses `font-size:1rem;padding:.62rem .9rem;line-height:normal;cursor:pointer`. Live `getComputedStyle` check in a real browser: Choose File and Extract are both 39.8px tall, 16px, weight 700, pointer cursor. All 12 action pills keep their fill on hover, 0px border. `npm test` 37/37.
+- **Codex was waived by Kevin for this one change** (policy section 5 waiver, scoped to the Choose File size/cursor fix only) because both Codex attempts this session hung and produced no change.
+- **Codex `exec` stdin hang (finding, not yet fixed).** Run from an agent shell, `codex exec "<prompt>"` via `agent-commons/bin/codex-failover.mjs` sat idle with no session and ~0 CPU for 15 minutes (default account) and printed "Reading additional input from stdin..." until killed (lelittecom-only account). The wrapper spawns Codex with `stdio: ["inherit","pipe","pipe"]` (runCodex, ~line 197), so Codex inherits the agent shell's never-closing stdin pipe and waits for EOF. Redirecting stdin from `/dev/null` was not tested (attempt cap reached). A hung Codex from the previous evening (Round 7b brief) was also found still running and was killed. Proposed wrapper fix, not applied: use `stdio: ["ignore","pipe","pipe"]` when a prompt argument is present or stdin is not a TTY.
+
+Exact next action: Kevin reviews the screenshots (`C:\Users\admin\Desktop\intake-purple-recolour-FINAL\`). No merge or deploy without his explicit approval.
