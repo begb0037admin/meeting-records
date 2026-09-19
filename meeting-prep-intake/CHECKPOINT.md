@@ -1520,3 +1520,38 @@ Kevin's request: the three Excel-extraction pills (Choose File, Extract, Attach 
 - **Codex `exec` stdin hang (finding, not yet fixed).** Run from an agent shell, `codex exec "<prompt>"` via `agent-commons/bin/codex-failover.mjs` sat idle with no session and ~0 CPU for 15 minutes (default account) and printed "Reading additional input from stdin..." until killed (lelittecom-only account). The wrapper spawns Codex with `stdio: ["inherit","pipe","pipe"]` (runCodex, ~line 197), so Codex inherits the agent shell's never-closing stdin pipe and waits for EOF. Redirecting stdin from `/dev/null` was not tested (attempt cap reached). A hung Codex from the previous evening (Round 7b brief) was also found still running and was killed. Proposed wrapper fix, not applied: use `stdio: ["ignore","pipe","pipe"]` when a prompt argument is present or stdin is not a TTY.
 
 Exact next action: Kevin reviews the screenshots (`C:\Users\admin\Desktop\intake-purple-recolour-FINAL\`). No merge or deploy without his explicit approval.
+
+### Collapsible item assistant (19 Sep 2026)
+
+Kevin: "collapse and expandable item, so I don't want it to show the default, and I will expand it if I want to use it." Branch `drew/intake-assistant-collapsible` (off main `b4894cc`, after PR #20).
+
+- Each item's "Ask Lauren" block now starts collapsed. A full-width header button (`.assistant-toggle`, "Item assistant / Ask Lauren" plus a chevron, `aria-expanded`, `aria-controls` with a per-item unique id) toggles a `.assistant-body` wrapper (chat messages, input, Send/Mic/Listen/Attach reply) via the `hidden` attribute, so typed text and any existing conversation are kept.
+- DOM finding: the Excel extraction group (`.extract-panel`) lives INSIDE `.chat-panel`, but after the collapsible body, so it stays always visible and unchanged.
+- Codex implemented (via `codex-failover.mjs`, absolute `--cd`, stdin from `/dev/null`); it landed all edits but was killed at my 9-minute timeout while still running tests, before it printed a final report. Drew reviewed the diff and verified live. Confirms the earlier stdin-hang diagnosis: with `< /dev/null` Codex ran normally.
+- Live check (Playwright, `getComputedStyle`): all items collapsed on load, click and Enter/Space toggle, unique ids, typed text and existing messages preserved, Send/Mic/Listen/Attach keep teal fill on hover, Excel pills purple, Choose File still matches Extract, filename updates, no page errors. `npm test` 37/37.
+
+Exact next action: Kevin approves screenshots (`C:\Users\admin\Desktop\intake-assistant-collapsible\`); coordinator merges and deploys. Not merged or deployed.
+
+### Collapsible Source material / Excel extraction (19 Sep 2026)
+
+Kevin asked for the "Source material / Excel extraction" group to collapse like the Item assistant. Same branch `drew/intake-assistant-collapsible`.
+
+- `.extract-panel` header is now a full-width button (`assistant-toggle extract-toggle`, wording unchanged, chevron, `aria-expanded`, per-item unique `aria-controls`); everything below it (file row, sheet list, Attach selected sheets, message) is in `.extract-body`, hidden by default via the `hidden` attribute. Nothing removed, so chosen file, filename, extracted sheets and selection are kept. The two toggles are independent.
+- Codex implemented (`codex-failover.mjs`, absolute `--cd`, stdin from `/dev/null`, run in background to completion and printed its own report; 39k tokens, 37/37 tests). Drew reviewed the 3-file diff and verified live.
+- Live check (Playwright + `getComputedStyle`): both sections collapsed on load, independent toggling, Enter/Space, unique ids, file name/sheet selection/typed text kept, Excel pills purple with hover fill held, Choose File = Extract (39.8px, 16px, 700, pointer), Send/Mic/Listen/Attach teal and held. Real Tab-key focus shows a solid 3px outline (colour rgba(27,52,86,.30), faint; a stronger colour is proposed, not applied).
+- **Pre-existing bug found (not from this change, reproduces on 2869b37 and main):** `message(el, text, ok)` in app.js does `el.className = "message ok|error"`, which drops the `extract-message` / `suggest-message` class. After one message on an element, the next `$(".extract-message", el)` returns null and throws `TypeError: Cannot set properties of null (setting 'textContent')`. Visible effect: after Extract, "Attach selected sheets to detail" attaches the text but shows no confirmation and throws in the console; a second Extract click throws. Proposed fix (not applied): use `classList` to toggle `ok`/`error` instead of overwriting `className`.
+- Speaker-note seed: NOT made collapsible. It is not one block in the DOM (see report to coordinator); awaiting Kevin's decision.
+
+Exact next action: Kevin approves screenshots (`C:\Users\admin\Desktop\intake-assistant-collapsible\`); coordinator merges and deploys. Not merged or deployed.
+
+### Speaker notes collapsible, message() bug fix, stronger focus outline (19 Sep 2026)
+
+Kevin decided ("agree on all - go ahead") on `drew/intake-assistant-collapsible`:
+
+- **Speaker notes** is now a third collapsible block (`.speaker-notes-panel`, header button "Speaker notes", `.speaker-body` hidden by default). It wraps the "Speaker-note seed" label + textarea AND the Suggest speaker note row + status line together; nothing removed, so typed/generated text is kept. Independent of the other two toggles. There was no existing "Speaker notes" heading in the DOM before; the header wording is new.
+- **Bug fix:** `message()` in app.js now uses `classList` (keeps `extract-message` / `suggest-message`, toggles `ok`/`error`) instead of overwriting `className`. Fixes the TypeError on a second Extract click and the missing confirmation after "Attach selected sheets to detail". Verified: Extract twice + Attach shows "Selected sheets attached to detail." with zero page errors.
+- **Focus outline** on all three toggles: `3px solid #1d4ed8`, offset 2px (measured after the 0.15s transition settles: `solid 3px rgb(29,78,216) 2px` via real Tab key).
+- Codex: implemented via `codex-failover.mjs` (absolute `--cd`, `< /dev/null`, run in background to completion, printed its own report, 37/37). Drew reviewed the diff and verified live (Playwright, `getComputedStyle`).
+- Test-only note: re-clicking Extract intentionally re-renders the sheet list and clears the checkbox selection (existing behaviour); collapse/expand alone preserves it.
+
+Exact next action: Kevin approves screenshots (`C:\Users\admin\Desktop\intake-assistant-collapsible\`); coordinator merges and deploys. Not merged or deployed.
