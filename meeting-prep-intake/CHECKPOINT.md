@@ -1531,3 +1531,15 @@ Kevin: "collapse and expandable item, so I don't want it to show the default, an
 - Live check (Playwright, `getComputedStyle`): all items collapsed on load, click and Enter/Space toggle, unique ids, typed text and existing messages preserved, Send/Mic/Listen/Attach keep teal fill on hover, Excel pills purple, Choose File still matches Extract, filename updates, no page errors. `npm test` 37/37.
 
 Exact next action: Kevin approves screenshots (`C:\Users\admin\Desktop\intake-assistant-collapsible\`); coordinator merges and deploys. Not merged or deployed.
+
+### Collapsible Source material / Excel extraction (19 Sep 2026)
+
+Kevin asked for the "Source material / Excel extraction" group to collapse like the Item assistant. Same branch `drew/intake-assistant-collapsible`.
+
+- `.extract-panel` header is now a full-width button (`assistant-toggle extract-toggle`, wording unchanged, chevron, `aria-expanded`, per-item unique `aria-controls`); everything below it (file row, sheet list, Attach selected sheets, message) is in `.extract-body`, hidden by default via the `hidden` attribute. Nothing removed, so chosen file, filename, extracted sheets and selection are kept. The two toggles are independent.
+- Codex implemented (`codex-failover.mjs`, absolute `--cd`, stdin from `/dev/null`, run in background to completion and printed its own report; 39k tokens, 37/37 tests). Drew reviewed the 3-file diff and verified live.
+- Live check (Playwright + `getComputedStyle`): both sections collapsed on load, independent toggling, Enter/Space, unique ids, file name/sheet selection/typed text kept, Excel pills purple with hover fill held, Choose File = Extract (39.8px, 16px, 700, pointer), Send/Mic/Listen/Attach teal and held. Real Tab-key focus shows a solid 3px outline (colour rgba(27,52,86,.30), faint; a stronger colour is proposed, not applied).
+- **Pre-existing bug found (not from this change, reproduces on 2869b37 and main):** `message(el, text, ok)` in app.js does `el.className = "message ok|error"`, which drops the `extract-message` / `suggest-message` class. After one message on an element, the next `$(".extract-message", el)` returns null and throws `TypeError: Cannot set properties of null (setting 'textContent')`. Visible effect: after Extract, "Attach selected sheets to detail" attaches the text but shows no confirmation and throws in the console; a second Extract click throws. Proposed fix (not applied): use `classList` to toggle `ok`/`error` instead of overwriting `className`.
+- Speaker-note seed: NOT made collapsible. It is not one block in the DOM (see report to coordinator); awaiting Kevin's decision.
+
+Exact next action: Kevin approves screenshots (`C:\Users\admin\Desktop\intake-assistant-collapsible\`); coordinator merges and deploys. Not merged or deployed.
