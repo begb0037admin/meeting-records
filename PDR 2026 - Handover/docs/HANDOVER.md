@@ -13,7 +13,7 @@ Kevin now uses a `PDR 2026/<Person Name>/` folder structure in his Meetings fold
 | Kevin Lelitte | Confirmed, 16 Sep 2026, 15:00–16:00 | Built, comparatively thin | Confirmed to exist, content blocked (download layer) | Closest upcoming meeting of the three still ahead — worth a quality pass first if time allows |
 | Michael O'Sullivan | Already happened, 14 Sep 2026 | Done, real 2025-vs-2026 content | Extracted in full (Kevin dropped the file manually) | Manager Summary still pending — see dedicated handover |
 | James Salas Guillen | Confirmed, Mon 21 Sep 2026, 12:00–1:00pm | Built, comparatively thin | Never attempted this cycle | Clears before his 25–28 Sep annual leave |
-| Asta Palmer | Confirmed, 25 Sep 2026, 12:00–1:00pm | Built | Confirmed to exist, content blocked (download layer) | — |
+| Asta Palmer | Thu 24 Sep 2026, 12:00–1:00pm (moved 21 Sep from Fri 25; Kevin on leave Fri 25) | Rebuilt 21 Sep | Now in her local folder; read in full 21 Sep | See 21 Sep Asta update at the end of this file |
 
 ## Build history
 - `tools/speaking-briefs/build_pdr_prep.py` added — commit `928c816` (13 Sep 2026), README documented — commit `d2797c4`.
@@ -134,3 +134,13 @@ Commits: `f2aeb81`/`635b310` (canonical guide docx), `13676eb` (`PDR_SOP.md`), `
 **Open — Kevin's call:** `PDR 2026/James Salas Guillen/PDR Review Form - 21-SEP-2026.md`, `PDR 2026/Asta Palmer/...` and `PDR 2026/Kevin Lelitte/...` are already committed in this public repo and contain personal workload and development detail from the 2025 recordings. The James copy is now superseded and out of date. Not removed or changed here; needs a decision on whether to take these out of the public repo.
 
 **Next concrete action:** Kevin runs the meeting Tue 22 Sep 13:30 from the brief; afterwards the Manager Summary is drafted from the Granola recording (windows: Wed 23–Thu 24 Sep or Tue 29–Wed 30 Sep) and Kevin logs completion in the HR Systems PDR Completion 2026 tracker himself (still unreadable from here). Then Kevin's own PDR folder is the next task. Asta's PDR is booked Fri 25 Sep 12:00, which is Kevin's leave day — flag to Kevin.
+
+---
+
+## Update — 21 Sep 2026 (later): Asta Palmer PDR moved to Thu 24 Sep 12:00
+
+- **Moved** from Fri 25 Sep 12:00-1:00pm to **Thu 24 Sep 2026, 12:00-1:00pm** because Kevin is on annual leave Fri 25 (back Mon 28). Kevin moves the calendar entry himself; the live calendar (work-inbox briefing refreshed 21 Sep 12:25) still showed Fri 25 when the brief was built.
+- **Rebuilt (local Meetings folder only, not committed):** `PDR 2026\Asta Palmer\PDR 2026 - Asta Palmer - 21-09-2026.html` and `PDR Review Form - 24-SEP-2026.md`. Superseded versions are in that folder's `_older versions`. Same one-off scratchpad generator pattern as James's; `build_pdr_prep.py` still hard-codes 25 Sep for Asta and regenerates all four briefs, so do not run it.
+- **Decision closed (Kevin, 21 Sep):** the PDR `.md` files already in this public repo stay exactly as they are. This supersedes the "Open — Kevin's call" item in the James entry above; do not raise it again. No new PDR personal detail has been pushed here.
+- **Not seen:** Asta's 2026 form (nothing in her folder, work-inbox or command-centre as of 21 Sep).
+- **Next concrete action:** Kevin moves the calendar entry and confirms Thu 24 12:00 with Asta; James's meeting is first (Tue 22 Sep 13:30); Asta's Manager Summary from the Granola recording on Thu 24 after the meeting or Mon 28-Wed 30 Sep (PDRs due by end of September); Kevin's own PDR folder after that. Full detail is in Lauren's private memory (`memory/pdr-asta-24sep-move.md`).
