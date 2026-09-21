@@ -1,0 +1,289 @@
+{
+ "meetingId": "hs-roadmap",
+ "date": "2026-09-21",
+ "items": [
+  {
+   "itemId": "itm_hs_iris_golive",
+   "title": "IRIS enhancements go live, night of Mon 28 Sept",
+   "tone": "update",
+   "priority": 1,
+   "detail": "Date decided: night of Mon 28 Sept (plan row 2 Completed; Granola 14/09; Command Centre logs Kevin confirming 18 Sept). EcoOnline have no sandbox, changes go straight to production. EcoOnline remove access and make the changes on the night; James and Kevin test Tue 29 Sept; access restored after sign-off.\n\nPlan status (file saved 15 Sept): guidance updates and IRIS report updates due 19 Sept are Not started; test plans due 21 Sept Not started. Chris is on leave until Tue 22 Sept (Work Inbox absences). Pre-go-live comms to users Tue 22 Sept. James away Fri 25 to Mon 28 Sept, back 29th.\n\nOpen question: the plan does not cite HSB references. HSB030, HSB031, HSB062, HSB096 look like the set (EcoOnline started 27 Aug); HSB017 (supervisor name/email relocation, On hold) is in the Nov 2025 change request but may not be included. Confirm the change list.\n\nFull brief: OneDrive - Nexus365\\Meetings\\Meetings\\Health and Safety Roadmap\\Health and Safety Roadmap - 21-09-2026.html",
+   "speakerNoteSeed": "The IRIS changes go live the night of Monday 28 September. EcoOnline have no test environment, so it is production only. I want the exact change list confirmed against the HSB references, and to know where the guidance updates and test plan stand while Chris is away until tomorrow.",
+   "sources": [
+    {
+     "kind": "workbook",
+     "ref": "HSB030"
+    },
+    {
+     "kind": "workbook",
+     "ref": "HSB031"
+    },
+    {
+     "kind": "workbook",
+     "ref": "HSB062"
+    },
+    {
+     "kind": "workbook",
+     "ref": "HSB096"
+    },
+    {
+     "kind": "iris-plan",
+     "ref": "IRIS Enhancement Work - September 2026"
+    },
+    {
+     "kind": "granola",
+     "ref": "not_11HR2RMim2Hkbj"
+    },
+    {
+     "kind": "command-centre",
+     "ref": "t2608271801020"
+    }
+   ],
+   "position": 1,
+   "status": "open"
+  },
+  {
+   "itemId": "itm_hs_iris_handover",
+   "title": "IRIS testing handover: 21 Sept (plan) or Thu 24 Sept (14 Sept meeting)?",
+   "tone": "decision-needed",
+   "priority": 1,
+   "detail": "Plan row 11 (testing handover, James and Kevin) says Mon 21 Sept. The 14 Sept meeting agreed an internal handover with Chris, James and Kevin around Thu 24 Sept, because James is away from Fri 25 Sept. No calendar entry seen. Test plan (Chris, plan row 10) due 21 Sept, Not started at the 15 Sept save. Debrief with EcoOnline: plan Wed 30 Sept, 14 Sept meeting said the day after go-live (29 Sept); James to email Amanda Bracks copying Joanne Grant, not confirmed sent.",
+   "speakerNoteSeed": "The plan says the testing handover is today, but on 14 September we agreed Thursday 24th because James is away from the 25th. I want one date in the diary today, and the test plan from Chris before then.",
+   "sources": [
+    {
+     "kind": "iris-plan",
+     "ref": "rows 10, 11, 22"
+    },
+    {
+     "kind": "granola",
+     "ref": "not_11HR2RMim2Hkbj"
+    }
+   ],
+   "position": 2,
+   "status": "open"
+  },
+  {
+   "itemId": "itm_hs_hsb096",
+   "title": "HSB096 Supervisor notification: is it signed off?",
+   "tone": "raise",
+   "priority": 1,
+   "detail": "Workbook (24/08/2026): Brian has signed off the change, risk assessment completed, change to be coordinated with supplier once RA signed by Brian. Command Centre (15 Sept): Chris asks Kevin to check the GDPR risk with Brian on the supervisor notification email content. Expected delivery was 11 Sept, now passed. Establish which is current and whether it is in the 28 Sept set.",
+   "speakerNoteSeed": "Supervisor notification wording: the workbook says Brian signed it off and the risk assessment is done, but Chris's 15 September email asks me to check the GDPR point with Brian. Which is current, and is this in the 28 September set? Delivery date of 11 September has passed.",
+   "sources": [
+    {
+     "kind": "workbook",
+     "ref": "HSB096"
+    },
+    {
+     "kind": "command-centre",
+     "ref": "t2609082321250"
+    }
+   ],
+   "position": 3,
+   "status": "open"
+  },
+  {
+   "itemId": "itm_hs_hsb085",
+   "title": "HSB085 Safety Officers report",
+   "tone": "update",
+   "priority": 2,
+   "detail": "In progress, Chris, due 30 Sept. Only note: 24/08/2026 'Chase for a response'. Possibly linked to the plan's 'Update reports on IRIS' step (due 19 Sept, Not started at the 15 Sept save); that link is my inference.",
+   "speakerNoteSeed": "Safety Officers report: due 30 September, and the only note is 'chase for a response' on 24 August. Is this still on track, and is it part of the 'update reports on IRIS' step in the go-live plan?",
+   "sources": [
+    {
+     "kind": "workbook",
+     "ref": "HSB085"
+    },
+    {
+     "kind": "iris-plan",
+     "ref": "row 9"
+    }
+   ],
+   "position": 4,
+   "status": "open"
+  },
+  {
+   "itemId": "itm_hs_cority_pjp",
+   "title": "Cority consultancy: primary job position rules (HSB075/076)",
+   "tone": "update",
+   "priority": 1,
+   "detail": "PO went through 24 Aug (workbook). Cority scoping and statement-of-work call 14 Sept (Granola 10:29): priority 1 is the primary job position rules (19 nightly rules, inconsistent results, custom rules clash with an out-of-the-box rule); priority 2 compliance reports. SMS integration dropped from scope. Next call Mon 5 Oct 11:30; week of 28 Sept kept clear. Actions from the call (owners not stated): send prod/test URLs to Scott, share business rule details and ticket numbers, pass the Azure app IT guide to central IT, Kevin to request a test plan. 'Scott' appears only in Granola. Owner of HSB075/076 is James in the workbook; Marie on the 20 Aug brief.",
+   "speakerNoteSeed": "Primary job position, inactive clients: PO went through on 24 August and the scoping call with Cority was on 14 September. Their read is that 19 nightly business rules give inconsistent results because our custom rules clash with an out-of-the-box one. Next call is 5 October, 11:30. Owner in the workbook is now James; it was Marie on the last brief, so I just want to confirm that's intended.",
+   "sources": [
+    {
+     "kind": "workbook",
+     "ref": "HSB075"
+    },
+    {
+     "kind": "workbook",
+     "ref": "HSB076"
+    },
+    {
+     "kind": "granola",
+     "ref": "not_Kr3cDdaQJmbav6"
+    }
+   ],
+   "position": 5,
+   "status": "open"
+  },
+  {
+   "itemId": "itm_hs_cority_teams",
+   "title": "Outlook/Teams integration and the Teams licence (HSB028)",
+   "tone": "decision-needed",
+   "priority": 1,
+   "detail": "The statement of work covers Outlook only (10 hrs). Teams needs a Remote Expert licence, about $5,000 a year on a quote from around a year ago (Granola). The 23 Mar funding request (4,500 pounds, signed off by Marie Cooksey) was described as a one-off development charge. The Azure app needs central IT; another client took three months. Sophie Levy (Cority) to resolve the Teams licence question before work starts.",
+   "speakerNoteSeed": "Outlook and Teams: the statement of work only covers Outlook. Teams needs a Remote Expert licence, roughly $5,000 a year on Cority's quote from a year ago, and the March funding request was a one-off 4,500 pounds. Sophie needs to resolve that before work starts. Separately, central IT need to build the Azure app, and another client took three months.",
+   "sources": [
+    {
+     "kind": "workbook",
+     "ref": "HSB028"
+    },
+    {
+     "kind": "granola",
+     "ref": "not_Kr3cDdaQJmbav6"
+    },
+    {
+     "kind": "funding-request",
+     "ref": "23 Mar 2026"
+    }
+   ],
+   "position": 6,
+   "status": "open"
+  },
+  {
+   "itemId": "itm_hs_status_align",
+   "title": "Workbook status: HSB002 compliance reporting and HSB040 SMS reminders",
+   "tone": "decision-needed",
+   "priority": 2,
+   "detail": "HSB002 is On hold (Marie), last note 6 July 'Provisional funding secured. Awaiting approval from APC'. The 23 Mar funding request included the health surveillance compliance data fix and the 14 Sept Cority scope treats compliance reports as priority 2, so the workbook status looks stale. HSB040 SMS reminders is On hold; Rob Green de-scoped it 17 Aug (appointment reminders improved DNA rate) and SMS integration left the SOW on 14 Sept. Agree the statuses; Lauren has not written to the workbook.",
+   "speakerNoteSeed": "Compliance reporting: the workbook still says On hold, waiting for APC approval since 6 July. But the 14 September Cority call treated compliance reports as priority 2 inside the funded work, and the March funding request included the health surveillance compliance data fix. Can we agree the status is stale and update it? SMS reminders: Rob Green de-scoped it on 17 August because appointment reminders have improved the DNA rate, and SMS integration also came out of the 14 September statement of work as a third-party dependency. Can we agree this is not proceeding rather than leave it On hold?",
+   "sources": [
+    {
+     "kind": "workbook",
+     "ref": "HSB002"
+    },
+    {
+     "kind": "workbook",
+     "ref": "HSB040"
+    },
+    {
+     "kind": "granola",
+     "ref": "not_Kr3cDdaQJmbav6"
+    }
+   ],
+   "position": 7,
+   "status": "open"
+  },
+  {
+   "itemId": "itm_hs_shsms",
+   "title": "Strategic Health and Safety Modular System evaluation (DTP1334)",
+   "tone": "fyi",
+   "priority": 2,
+   "detail": "Helen Harbour emailed 16 Sept that the first stage of supplier evaluation and moderation is complete, with shortlisting outcome and next steps. Work Inbox holds only the opening line, so the outcome is not visible to Lauren; read the email directly. Command Centre (21 Aug) next steps: Entra ID admin guide (target 11 Sept handover to Brian), aggregate evaluator scores, resourcing meeting with Simon and Marie before the 25 Sept revised roadmap deadline. No later evidence found.",
+   "speakerNoteSeed": "For awareness: the first stage of the supplier evaluation is complete and Helen has sent the shortlisting outcome. I am reading it today and will bring next steps back.",
+   "sources": [
+    {
+     "kind": "work-inbox",
+     "ref": "Helen Harbour 16 Sept"
+    },
+    {
+     "kind": "command-centre",
+     "ref": "t2608171727070"
+    }
+   ],
+   "position": 8,
+   "status": "open"
+  },
+  {
+   "itemId": "itm_hs_hsb079",
+   "title": "HSB079 Retention and purge rules: no owner",
+   "tone": "raise",
+   "priority": 2,
+   "detail": "Must Have, Not started, unassigned. Start date 1 Jul 2026 in the workbook. Only note: 04/03/26 Rob Green emailed asking how retention periods are managed on Cority; business rules needed to archive, purge and delete records.",
+   "speakerNoteSeed": "Retention and purge rules: a Must Have, Not started, and it has no owner. The only note is Rob Green's 4 March email. I need us to name an owner today.",
+   "sources": [
+    {
+     "kind": "workbook",
+     "ref": "HSB079"
+    }
+   ],
+   "position": 9,
+   "status": "open"
+  },
+  {
+   "itemId": "itm_hs_hsb050",
+   "title": "HSB050 Smart notes: pursue or park",
+   "tone": "decision-needed",
+   "priority": 2,
+   "detail": "With supplier, owner Kevin. Cority position 8 June (Command Centre t002): intended feature, enhancement not on roadmap, early access needs Premium Support. Workbook last note 6 July: on hold until the funding work. t002 is marked done but its own log ends on two open TODOs: chase Cority for a firm date; decide whether to pursue via sales/account route or accept as a known limitation.",
+   "speakerNoteSeed": "Smart notes: still with Cority. Their position on 8 June was that it is an intended feature and an enhancement not on their roadmap, with early access needing Premium Support. My own open items are to chase for a date and decide whether we pursue it or accept the limitation. I'd like a decision.",
+   "sources": [
+    {
+     "kind": "workbook",
+     "ref": "HSB050"
+    },
+    {
+     "kind": "command-centre",
+     "ref": "t002"
+    }
+   ],
+   "position": 10,
+   "status": "open"
+  },
+  {
+   "itemId": "itm_hs_bau",
+   "title": "Cority BAU queue: HSB061, HSB088, HSB089, HSB097, HSB025",
+   "tone": "update",
+   "priority": 3,
+   "detail": "HSB061 duplicates: about 80 cleared by 24 Aug, automated monthly merge working. HSB088 immunisation recalls: now On hold (was In progress on the 20 Aug brief), no reason logged, 1 of 75 rules done. HSB089 Med Students dashboard: expected 31 Aug, Not started, only note is GW emailed 15 July. HSB097 outstanding questionnaires report: Not started, no comments (appears newly added). HSB025 Odyssey monthly returns prompts: Not started since reporting issues resolved 16 Mar. All James-owned. Closed since 20 Aug: HSB073 Cardinus feed (delivered 20 Aug), HSB087 chase-email suppression (delivered 25 Aug).",
+   "speakerNoteSeed": "Quick pass on the Cority queue: duplicates are being cleared by the monthly merge, immunisation recalls has moved to On hold with no reason, and the Med Students dashboard is past its 31 August date. James, is any of this stuck?",
+   "sources": [
+    {
+     "kind": "workbook",
+     "ref": "HSB061"
+    },
+    {
+     "kind": "workbook",
+     "ref": "HSB088"
+    },
+    {
+     "kind": "workbook",
+     "ref": "HSB089"
+    },
+    {
+     "kind": "workbook",
+     "ref": "HSB097"
+    },
+    {
+     "kind": "workbook",
+     "ref": "HSB025"
+    }
+   ],
+   "position": 11,
+   "status": "open"
+  },
+  {
+   "itemId": "itm_hs_actions",
+   "title": "Carried-forward actions to confirm or close",
+   "tone": "update",
+   "priority": 3,
+   "detail": "From 6 July, no evidence of closure found: Kevin to follow up with the safety office on the ticket-raising process; Kevin and Simon resourcing session (Oct resource and squad model, ahead of 25 Sept roadmap deadline); Chris to find why dosimetry was not taken forward in Odyssey; communicate paused roadmap items to stakeholders. From 14 Sept: James to email Amanda Bracks (copy Joanne Grant); Chris to build test plan; book internal handover meeting; Kevin to ask Lindsay Hale about SH SMS sessions. Done: initial IRIS comms on Teams (plan row 4). Nothing removed without Kevin's confirmation.",
+   "speakerNoteSeed": "Let's confirm which of the carried-forward actions from July and 14 September are done, so nothing sits open by default.",
+   "sources": [
+    {
+     "kind": "meeting-records",
+     "ref": "H&S Roadmap 6 Jul"
+    },
+    {
+     "kind": "granola",
+     "ref": "not_11HR2RMim2Hkbj"
+    }
+   ],
+   "position": 12,
+   "status": "open"
+  }
+ ],
+ "generatedAt": "2026-09-21T06:58:13Z",
+ "sourceLabel": "Lauren draft 21 Sept: H&S workbook copy (saved 14 Sept), IRIS plan (15 Sept), Granola 14/09, Work Inbox/Command Centre to 18 Sept",
+ "sourceDigest": "sha256:2bed58cf64ee4ef991863da98bc942b705d75ac34e00a8bd6b2742b4ecec073a"
+}
