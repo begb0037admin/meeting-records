@@ -17,13 +17,13 @@ Filename pattern is roughly `YYYY__MMDD_<name>_PDR.docx`, but it isn't perfectly
 
 These are `.docx` files but not Oxford template documents — `python-docx`'s normal `Document(path).paragraphs` API reads them fine (unlike the canonical guide itself, see `docs/reference/README.md`).
 
-### 2. Confirm the meeting date and the Desktop folder
+### 2. Confirm the meeting date and the PDR folder
 
-Each person gets a folder under `D:\OneDrive - lelitte.com\Desktop\PDR 2026\<Person Name>\` — one subfolder per person, this is the standing convention (set 13–14 Sep 2026, do not drop a PDR file flat on the Desktop). Confirm the actual scheduled date/time live (Granola, calendar, or command-centre task) before naming the file — don't assume it hasn't moved.
+Each person gets a folder under `C:\Users\admin\OneDrive - Nexus365\Meetings\Meetings\PDR 2026\<Person Name>\` — one subfolder per person, this is the standing convention (set 13–14 Sep 2026, do not drop a PDR file flat in the Meetings folder root; moved from the Desktop on 21 Sep 2026). Confirm the actual scheduled date/time live (Granola, calendar, or command-centre task) before naming the file — don't assume it hasn't moved.
 
 ### 3. Build the single flow doc
 
-One file per person: `PDR Review Form - DD-MMM-YYYY.md`, saved into their Desktop folder. This is a script-style markdown document to run the meeting from directly — not a reference doc, not a form with blank fields to fill in later. Structure follows Oxford's real six-stage PDR Conversation Guide exactly (see `docs/reference/`):
+One file per person: `PDR Review Form - DD-MMM-YYYY.md`, saved into their PDR 2026 person folder. This is a script-style markdown document to run the meeting from directly — not a reference doc, not a form with blank fields to fill in later. Structure follows Oxford's real six-stage PDR Conversation Guide exactly (see `docs/reference/`):
 
 1. Workload & wellbeing
 2. Performance / progress
