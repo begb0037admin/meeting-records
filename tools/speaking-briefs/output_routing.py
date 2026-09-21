@@ -8,7 +8,7 @@ ROUTES = [
     (re.compile(r"^SK 1-1$", re.IGNORECASE), "1-1s"),
     (re.compile(r"^HR Systems Managers Meeting$", re.IGNORECASE), "HR Systems Managers Meeting"),
     (re.compile(r"^HR Systems Roadmap$", re.IGNORECASE), "HR Systems Roadmap"),
-    (re.compile(r"^Health and Safety Roadmap$", re.IGNORECASE), "Health and Safety Roadmap"),
+    (re.compile(r"^(Health and Safety|H&S) Roadmap$", re.IGNORECASE), "Health and Safety Roadmap"),
     (re.compile(r"^FA Team Catch-up$", re.IGNORECASE), "FA Team Catch-ups"),
     (
         re.compile(r"^Holiday Records Reports - Access Group Scoping$", re.IGNORECASE),

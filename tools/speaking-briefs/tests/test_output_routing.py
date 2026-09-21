@@ -151,6 +151,33 @@ class OutputRoutingTests(unittest.TestCase):
                 self.assertEqual(subdir, expected)
                 self.assertTrue(matched)
 
+    def test_hs_roadmap_aliases_route_to_same_folder(self):
+        for brief_name in (
+            "H&S Roadmap",
+            "Health and Safety Roadmap",
+            "h&s roadmap",
+        ):
+            with self.subTest(brief_name=brief_name):
+                subdir, matched = resolve_output_subdir(brief_name)
+                self.assertEqual(subdir, "Health and Safety Roadmap")
+                self.assertTrue(matched)
+
+    def test_hs_roadmap_alias_resolve_output_dir_has_no_warning(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            captured = io.StringIO()
+            with contextlib.redirect_stdout(captured):
+                output_dir = resolve_output_dir(temp_dir, "H&S Roadmap")
+
+            self.assertTrue(
+                output_dir.endswith(os.path.join("Health and Safety Roadmap"))
+            )
+            self.assertEqual(captured.getvalue(), "")
+
+    def test_hs_roadmap_near_miss_uses_fallback(self):
+        subdir, matched = resolve_output_subdir("H&S Roadmap extra")
+        self.assertEqual(subdir, "Reference and Other")
+        self.assertFalse(matched)
+
     def test_pdr_person_folders_preserve_names(self):
         for person in (
             "Kevin Lelitte",
