@@ -2,8 +2,8 @@ from brief_chrome import render_page, write_brief_output
 
 # ---- Ad hoc supplier scoping meeting: Oxford Holiday Records Reports —
 #      Access Group (PeopleXD Insight Reporting), Fri 18 Sep 2026, 14:00-15:00.
-#      Attendees: Kevin Lelitte, Simon Burford (Oxford); Conor O'Shea, Alan
-#      Quirke, Marie Cooksey (Access Group side per email thread).
+#      Attendees: Kevin Lelitte, Simon Burford, Marie Cooksey (Head of HR
+#      Systems) (Oxford); Conor O'Shea, Alan Quirke (Access Group).
 #
 # Source: content already drafted and confirmed with Kevin earlier the same
 # day, built from the Athena Artuso (10 Jun) and Ann-Marie Topliss (12 Jun)
@@ -118,7 +118,7 @@ html_out = render_page(
     h1="Oxford Holiday Records Reports — Access Group Scoping Call",
     meta_spans=[
         "<b>Date</b> Friday 18 September 2026, 14:00&ndash;15:00",
-        "<b>Attendees</b> Kevin Lelitte, Simon Burford &middot; Conor O'Shea, Alan Quirke, Marie Cooksey (Access Group)",
+        "<b>Attendees</b> Kevin Lelitte, Simon Burford, Marie Cooksey (Head of HR Systems) &middot; Conor O'Shea, Alan Quirke (Access Group)",
         "<b>Quote</b> Access Group quotation of 12 Jun 2026 &middot; 4 consultancy days (2.5 Payroll + 1.5 WFM)",
     ],
     flag_label="Opening position",
