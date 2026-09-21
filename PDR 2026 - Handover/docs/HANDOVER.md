@@ -116,3 +116,21 @@ The gaps flagged in the previous update above — no 2025 continuity for James, 
 **Not done / still open:** Kevin's and Asta's *written* 2025 review-form docx files remain genuinely SharePoint-blocked (Issue B above, unchanged) — this session's transcript-based fill is a different, working path around that gap, not a fix for it. The HR Systems PDR Completion 2026 SharePoint tracker (Open Gap #4 above) is still never successfully read. 2026 self-review content for Sections 1/3/4/5 across James, Asta, and Kevin is still genuinely absent — worth asking directly in each real meeting rather than assuming the transcript fill covers it.
 
 Commits: `f2aeb81`/`635b310` (canonical guide docx), `13676eb` (`PDR_SOP.md`), `b56a6ca` (`docs/reference/README.md`), plus updates to the three flow docs above (James, Asta, Kevin) with new commit SHAs on `main`.
+
+---
+
+## Update — 21 Sep 2026: James Salas Guillen brief rebuilt for the real 2026 form; meeting moved to Tue 22 Sep 13:30
+
+**What changed since the 14 Sep entries above:** James's completed 2026 form arrived (saved by him and emailed to Kevin 18 Sep). The PDR meeting itself moved: live calendar data (work-inbox briefing, 21 Sep) shows **Tue 22 Sep 2026, 13:30**, not Mon 21 Sep 12:00 as the earlier briefs said. End time is not in the data; James's email subject still carries the old date. James is off Fri 25–Mon 28 Sep, back Tue 29; Kevin is off Fri 25 Sep. PDRs are due by end of September.
+
+**Built (local Meetings folder only, deliberately not committed — the content names an individual's performance review and this repo is public):**
+- `PDR 2026\James Salas Guillen\PDR 2026 - James Salas Guillen - 21-09-2026.html` — standing-format brief on `brief_chrome.py`, replaces the 13 and 14 Sep briefs.
+- `PDR 2026\James Salas Guillen\PDR Review Form - 22-SEP-2026.md` — matching meeting-flow note, named for the new meeting date.
+- Superseded files (both old HTML briefs and the 14 Sep flow note) are in that person's `_older versions` folder. James's `.docx` forms were not touched.
+- The generator was a one-off scratchpad script over `brief_chrome.write_brief_output` (no change to any committed `build_*.py`). `build_pdr_prep.py` regenerates all four people in one run and would overwrite finished briefs, so it was not used.
+
+**Method gotchas worth keeping:** (1) Check the live calendar before trusting any PDR date recorded in an earlier brief. (2) Oxford `.docx` forms: python-docx and lxml tree walks lose content-control text; extracting `w:t` runs per `w:p` with a regex on `word/document.xml` works. (3) Verify the person's own claims against the H&S backlog workbook and the monthly incident statistics (KPI source data) before they go into a Manager Summary. (4) Granola's API history starts 13 Apr 2026; earlier 2026 meetings can't be checked there.
+
+**Open — Kevin's call:** `PDR 2026/James Salas Guillen/PDR Review Form - 21-SEP-2026.md`, `PDR 2026/Asta Palmer/...` and `PDR 2026/Kevin Lelitte/...` are already committed in this public repo and contain personal workload and development detail from the 2025 recordings. The James copy is now superseded and out of date. Not removed or changed here; needs a decision on whether to take these out of the public repo.
+
+**Next concrete action:** Kevin runs the meeting Tue 22 Sep 13:30 from the brief; afterwards the Manager Summary is drafted from the Granola recording (windows: Wed 23–Thu 24 Sep or Tue 29–Wed 30 Sep) and Kevin logs completion in the HR Systems PDR Completion 2026 tracker himself (still unreadable from here). Then Kevin's own PDR folder is the next task. Asta's PDR is booked Fri 25 Sep 12:00, which is Kevin's leave day — flag to Kevin.
