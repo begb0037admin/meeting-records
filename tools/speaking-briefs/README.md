@@ -38,6 +38,10 @@ This section is a self-contained runbook for the monthly KPI Presentation deck �
 
 Where a brief's Unresolved conflicts section has more than one genuinely separate point, it's built as multiple `.risk-block` divs (bold `.risk-head` title + body copy each, divider between blocks) rather than one running paragraph — restructured 2 Aug 2026 on `build_roadmap.py`, `build_managers_meeting.py`, and `build_sk_1on1.py` after the flat-paragraph version read as a single wall of text. `build_hs_roadmap.py` was left as a single point deliberately (see above) — the `.risk-block` CSS in `brief_chrome.py` still applies cleanly to a lone block, it just doesn't get a divider (`:last-child` has none).
 
+## Output location
+
+Finished speaking briefs are filed into per-series subfolders by `output_routing.py`. New meeting types need a routing rule added to that module's `ROUTES` list. Brief names that match no rule go to `Reference and Other` and print a warning so the missing rule is visible.
+
 ## Not yet built (planned rollout order per Kevin, 1 Aug 2026)
 
 Managers Meeting (done) → H&S Roadmap (done) → SK 1-1 (done) → FA Team Catch-up (Wed/Fri) → Team 1-1s (James, Michael, Asta). Roadmap-style meetings (a tracked-items master behind them, e.g. H&S Roadmap, ongoing project meetings like College Staff PeopleXD / OrcID PeopleXD) can likely reuse `build_roadmap.py`'s per-item-card shape directly. 1-1 / team-catch-up style meetings need a different card shape (agenda points, actions, carry-overs) — same chrome, different `render_item`; `build_sk_1on1.py` is the reference example for that shape, and FA Team Catch-up (twice-weekly, Wed/Fri) is next and should be able to follow it closely.

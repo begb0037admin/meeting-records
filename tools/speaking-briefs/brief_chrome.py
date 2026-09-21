@@ -482,9 +482,9 @@ def write_brief_output(html_out, brief_name, date=None):
     in one place.
 
     Always writes a SCRATCH copy first (unchanged prior behaviour -- still
-    useful in-session, e.g. for Artifact-tool prep), then writes the SAME
-    bytes to Kevin's canonical meetings folder (MEETINGS_DIR) as the
-    durable, final deliverable, per Kevin's instruction that these briefs
+    useful in-session, e.g. for Artifact-tool prep), then files the SAME
+    bytes into the appropriate per-series subfolder under Kevin's canonical
+    meetings folder (MEETINGS_DIR) as the durable, final deliverable, per Kevin's instruction that these briefs
     must not live only in scratchpad (a per-session temp path that gets
     cleaned up and isn't visible in Explorer). Same-day reruns overwrite in
     place, deliberately -- a brief only exists for one meeting per day, so
@@ -507,8 +507,24 @@ def write_brief_output(html_out, brief_name, date=None):
     print(f"written {scratch_path} ({len(html_out)} chars)")
 
     try:
-        os.makedirs(MEETINGS_DIR, exist_ok=True)
-        final_path = os.path.join(MEETINGS_DIR, fname)
+        import sys
+
+        sibling_dir = os.path.dirname(os.path.abspath(__file__))
+        if sibling_dir not in sys.path:
+            sys.path.insert(0, sibling_dir)
+        try:
+            from output_routing import resolve_output_dir
+        except ImportError as ex:
+            out_dir = os.path.join(MEETINGS_DIR, "Reference and Other")
+            print(
+                f"WARNING: could not import output_routing ({ex}); "
+                f"falling back to {out_dir}."
+            )
+        else:
+            out_dir = resolve_output_dir(MEETINGS_DIR, brief_name)
+
+        os.makedirs(out_dir, exist_ok=True)
+        final_path = os.path.join(out_dir, fname)
         with open(final_path, "w", encoding="utf-8") as f:
             f.write(html_out)
         print(f"written {final_path} ({len(html_out)} chars) -- final output")
