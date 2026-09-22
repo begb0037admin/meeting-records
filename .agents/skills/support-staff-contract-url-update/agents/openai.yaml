@@ -1,7 +1,0 @@
-interface:
-  display_name: "Support Staff Contract Update"
-  short_description: "Update and verify the Support Staff contract template"
-  default_prompt: "Use $support-staff-contract-url-update to update the template file."
-
-policy:
-  allow_implicit_invocation: true

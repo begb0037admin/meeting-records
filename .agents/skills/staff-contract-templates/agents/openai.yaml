@@ -1,0 +1,7 @@
+interface:
+  display_name: "Staff Contract Templates"
+  short_description: "Update and verify Staff Contract Templates"
+  default_prompt: "Use $staff-contract-templates to update the template file."
+
+policy:
+  allow_implicit_invocation: true
