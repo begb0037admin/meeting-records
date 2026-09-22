@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "status": "submitted",
+  "meeting": {
+    "meetingId": "sickness-absence-survey-working-group",
+    "title": "Sickness Absence Survey working group",
+    "date": "2026-09-22",
+    "kind": "recurring"
+  },
+  "items": [
+    {
+      "itemId": "itm_sasw_20260922_combined",
+      "position": 1,
+      "priority": 1,
+      "title": "Follow-up round-up on all 5 outstanding items from 8 Sep",
+      "tone": "raise",
+      "detail": "Combined follow-up on everything still open from the 8 Sep meeting: (1) Comms -- chase Louise on sign-off of the Marcos-to-PeopleXD-users email, plus her separate senior-staff university cascade item. (2) Data -- confirm Sarah's data availability analysis has actually gone across to Mel on SharePoint (her access was approved just before 8 Sep; this is not the same document as Sarah's separate data-completeness spreadsheet, which is Kevin's own action). (3) Dashboard build -- check progress on the two outstanding sections: annual leave calculations (fixed close-days logic needs revisiting) and under-reporting/possible missing staff-group data (~56 of ~15,000 FTE falling out of the logic on two short lists, cause not yet identified); target was end of September, ahead of the 9 Oct survey release. (4) Bulletin -- confirm whether Simon's open-ended sickness-absence prompt (asking departments to close genuinely resolved long-term cases before the next data pull) made it into this month's bulletin. (5) Dashboard review -- check whether Chris or Michelle have flagged anything from reviewing the live test-server dashboard.",
+      "confirmedContext": "Combined follow-up on everything still open from the 8 Sep meeting: (1) Comms -- chase Louise on sign-off of the Marcos-to-PeopleXD-users email, plus her separate senior-staff university cascade item. (2) Data -- confirm Sarah's data availability analysis has actually gone across to Mel on SharePoint (her access was approved just before 8 Sep; this is not the same document as Sarah's separate data-completeness spreadsheet, which is Kevin's own action). (3) Dashboard build -- check progress on the two outstanding sections: annual leave calculations (fixed close-days logic needs revisiting) and under-reporting/possible missing staff-group data (~56 of ~15,000 FTE falling out of the logic on two short lists, cause not yet identified); target was end of September, ahead of the 9 Oct survey release. (4) Bulletin -- confirm whether Simon's open-ended sickness-absence prompt (asking departments to close genuinely resolved long-term cases before the next data pull) made it into this month's bulletin. (5) Dashboard review -- check whether Chris or Michelle have flagged anything from reviewing the live test-server dashboard.",
+      "speakerNoteSeed": "Quick round-up from 8 Sep: where are we on the Louise/Marcos comms email and cascade, Sarah's data share with Mel, the dashboard's annual leave and under-reporting sections, the bulletin's open-ended-absence prompt, and Chris/Michelle's review of the test dashboard?",
+      "status": "open",
+      "sources": [
+        {
+          "kind": "granola-note",
+          "rowId": "not_2Vb3zFrEdry9DI"
+        }
+      ],
+      "carryForward": null
+    }
+  ],
+  "submittedAt": "2026-09-22T10:36:28.837Z",
+  "submittedBy": "Kevin"
+}
