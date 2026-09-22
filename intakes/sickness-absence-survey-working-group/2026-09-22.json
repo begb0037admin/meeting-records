@@ -9,24 +9,93 @@
   },
   "items": [
     {
-      "itemId": "itm_sasw_20260922_combined",
+      "itemId": "itm_sasw_20260922_louise_comms",
       "position": 1,
       "priority": 1,
-      "title": "Follow-up round-up on all 5 outstanding items from 8 Sep",
+      "title": "Chase Louise on the Marcos comms email + university cascade",
       "tone": "raise",
-      "detail": "Combined follow-up on everything still open from the 8 Sep meeting:\n1. Comms -- chase Louise on sign-off of the Marcos-to-PeopleXD-users email, plus her separate senior-staff university cascade item.\n2. Data -- confirm Sarah's data availability analysis has actually gone across to Mel on SharePoint (her access was approved just before 8 Sep; this is not the same document as Sarah's separate data-completeness spreadsheet, which is Kevin's own action).\n3. Dashboard build -- check progress on the two outstanding sections: annual leave calculations (fixed close-days logic needs revisiting) and under-reporting/possible missing staff-group data (~56 of ~15,000 FTE falling out of the logic on two short lists, cause not yet identified); target was end of September, ahead of the 9 Oct survey release.\n4. Bulletin -- confirm whether Simon's open-ended sickness-absence prompt (asking departments to close genuinely resolved long-term cases before the next data pull) made it into this month's bulletin.\n5. Dashboard review -- check whether Chris or Michelle have flagged anything from reviewing the live test-server dashboard.",
-      "confirmedContext": "Combined follow-up on everything still open from the 8 Sep meeting:\n1. Comms -- chase Louise on sign-off of the Marcos-to-PeopleXD-users email, plus her separate senior-staff university cascade item.\n2. Data -- confirm Sarah's data availability analysis has actually gone across to Mel on SharePoint (her access was approved just before 8 Sep; this is not the same document as Sarah's separate data-completeness spreadsheet, which is Kevin's own action).\n3. Dashboard build -- check progress on the two outstanding sections: annual leave calculations (fixed close-days logic needs revisiting) and under-reporting/possible missing staff-group data (~56 of ~15,000 FTE falling out of the logic on two short lists, cause not yet identified); target was end of September, ahead of the 9 Oct survey release.\n4. Bulletin -- confirm whether Simon's open-ended sickness-absence prompt (asking departments to close genuinely resolved long-term cases before the next data pull) made it into this month's bulletin.\n5. Dashboard review -- check whether Chris or Michelle have flagged anything from reviewing the live test-server dashboard.",
-      "speakerNoteSeed": "Quick round-up from 8 Sep: where are we on the Louise/Marcos comms email and cascade, Sarah's data share with Mel, the dashboard's annual leave and under-reporting sections, the bulletin's open-ended-absence prompt, and Chris/Michelle's review of the test dashboard?",
+      "detail": "Not raised or mentioned at the 22 Sep meeting -- no update on the Marcos-to-PeopleXD-users email or Louise's separate senior-staff cascade item. Stays open, unchanged since 8 Sep. Note: a related but distinct comms item (the open-ended-absence reminder) did go out this week -- see itm_sasw_20260922_bulletin_prompt -- do not conflate the two.",
+      "confirmedContext": "Not raised or mentioned at the 22 Sep meeting -- no update on the Marcos-to-PeopleXD-users email or Louise's separate senior-staff cascade item. Stays open, unchanged since 8 Sep.",
+      "speakerNoteSeed": "Has the Marcos comms email to PeopleXD users gone out yet, and where's Louise got to on the senior-staff cascade item?",
       "status": "open",
       "sources": [
-        {
-          "kind": "granola-note",
-          "rowId": "not_2Vb3zFrEdry9DI"
-        }
+        { "kind": "granola-note", "rowId": "not_2Vb3zFrEdry9DI" },
+        { "kind": "granola-note", "rowId": "not_ibmG8vjVxFLa7n" }
+      ],
+      "carryForward": null
+    },
+    {
+      "itemId": "itm_sasw_20260922_mel_share",
+      "position": 2,
+      "priority": 1,
+      "title": "Share Sarah's data availability analysis with Mel",
+      "tone": "update",
+      "detail": "Blocked by a new development: Mel has left and is no longer working on the project (confirmed twice by Simon Burford in the 22 Sep meeting, including in direct response to a question about reaching out to her to check in -- 'No, because she's not working anymore'). The original SharePoint hand-off to Mel is dead. Tracy Bacon Barlow is now named as the project contact in her place, but only allocated 4 days; no confirmation yet that Sarah's data availability analysis has gone to Tracy or anyone else. Stays open with a changed blocker, not resolved.",
+      "confirmedContext": "Blocked: Mel has left the organisation and is no longer working on the project (confirmed twice by Simon Burford, 22 Sep). Tracy Bacon Barlow is now the named project contact (4 days allocated) but no confirmation the data analysis has been shared with her or anyone else.",
+      "speakerNoteSeed": "With Mel gone, who is Sarah's data availability analysis actually going to now -- has it reached Tracy Bacon Barlow or anyone else?",
+      "status": "open",
+      "sources": [
+        { "kind": "granola-note", "rowId": "not_2Vb3zFrEdry9DI" },
+        { "kind": "granola-note", "rowId": "not_ibmG8vjVxFLa7n" }
+      ],
+      "carryForward": null
+    },
+    {
+      "itemId": "itm_sasw_20260922_dashboard_al_underreport",
+      "position": 3,
+      "priority": 1,
+      "title": "Dashboard: annual leave + under-reporting sections",
+      "tone": "raise",
+      "detail": "Not discussed at the 22 Sep meeting at all -- the meeting's entire focus had shifted to SBS WFM data migration and cleaning the 9,286-row historic sickness absence data load (Simon: 8-9 hours spent, ahead of the ~6/7 Oct SBS go-live). No mention of the annual leave calculation fix or the ~56-FTE under-reporting issue. Stays open, unchanged since 8 Sep, with the end-of-September target now effectively passed without a status check.",
+      "confirmedContext": "Not discussed at the 22 Sep meeting. Meeting focus was entirely on SBS WFM data migration and historic sickness absence data cleaning instead. Stays open, unchanged since 8 Sep; end-of-September target passed without a status check.",
+      "speakerNoteSeed": "The dashboard's annual leave and under-reporting sections weren't mentioned at all on 22 Sep and the end-of-September target has now passed -- what's the actual status?",
+      "status": "open",
+      "sources": [
+        { "kind": "granola-note", "rowId": "not_2Vb3zFrEdry9DI" },
+        { "kind": "granola-note", "rowId": "not_ibmG8vjVxFLa7n" }
+      ],
+      "carryForward": null
+    },
+    {
+      "itemId": "itm_sasw_20260922_bulletin_prompt",
+      "position": 4,
+      "priority": 1,
+      "title": "Open-ended sickness absence prompt for this month's bulletin",
+      "tone": "raise",
+      "detail": "Resolved. Marie Cooksey confirmed the reminder went out on Friday -- but via the university-wide Cascade channel, not via Marcos as originally planned (Marcos comms were ruled out due to volume/bombardment concerns). Simon asked directly whether this comms had happened; Marie confirmed it had, describing it as 'all we can do' as a one-off reminder.",
+      "confirmedContext": "Resolved 22 Sep: reminder to close genuinely-resolved open-ended sickness absences went out Friday (19 Sep) via university Cascade, not Marcos (volume concern), confirmed live in the meeting by Marie Cooksey.",
+      "speakerNoteSeed": "",
+      "status": "resolved",
+      "sources": [
+        { "kind": "granola-note", "rowId": "not_2Vb3zFrEdry9DI" },
+        { "kind": "granola-note", "rowId": "not_ibmG8vjVxFLa7n" }
+      ],
+      "carryForward": null
+    },
+    {
+      "itemId": "itm_sasw_20260922_dashboard_review",
+      "position": 5,
+      "priority": 1,
+      "title": "Review published dashboard, flag errors",
+      "tone": "update",
+      "detail": "No substantive review reported. When Simon asked Chris directly whether he had anything to raise, Chris said 'No... Nothing for me.' New context surfaced at the end of the meeting: Marie and Chris (and possibly Michelle) have a separate recurring 'dashboard catch-up' meeting for this, which as of 22 Sep hadn't yet happened -- Marie was weighing whether to cancel it ('it's only you on Michelle, isn't it?'). So this item is tracked through a different, narrower meeting than the WG itself; stays open pending that catch-up actually happening.",
+      "confirmedContext": "No errors flagged -- Chris said 'nothing for me' when asked directly by Simon. A separate Marie/Chris(/Michelle) 'dashboard catch-up' meeting handles this specifically and had not yet taken place as of 22 Sep; Marie was considering cancelling it. Stays open.",
+      "speakerNoteSeed": "Has the separate Marie/Chris/Michelle dashboard catch-up actually happened yet, and did anything come out of it?",
+      "status": "open",
+      "sources": [
+        { "kind": "granola-note", "rowId": "not_2Vb3zFrEdry9DI" },
+        { "kind": "granola-note", "rowId": "not_ibmG8vjVxFLa7n" }
       ],
       "carryForward": null
     }
   ],
   "submittedAt": "2026-09-22T10:36:28.837Z",
-  "submittedBy": "Kevin"
+  "submittedBy": "Kevin",
+  "outcomeCapturedAt": "2026-09-22T00:00:00.000Z",
+  "outcomeSource": {
+    "kind": "granola-note",
+    "rowId": "not_ibmG8vjVxFLa7n",
+    "title": "Sickness Absence Survey working group 22/09",
+    "note": "Real 22 Sep Granola note pulled via public API after the meeting; original pre-meeting combined raise item (itm_sasw_20260922_combined) split into 5 items mirroring the 8 Sep record's structure, each updated with its actual outcome. New attendee confirmed via transcript speaker attribution: Christopher Sanders (Granola's own attendees field still only returns the recording account)."
+  }
 }
