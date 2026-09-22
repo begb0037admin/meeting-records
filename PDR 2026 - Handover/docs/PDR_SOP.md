@@ -1,5 +1,13 @@
 # PDR — Prep & Run SOP
 
+> **SUPERSEDED 22 Sep 2026 — see [`tools/speaking-briefs/PDR_PROCESS.md`](../../tools/speaking-briefs/PDR_PROCESS.md) for the current, permanent PDR process.**
+> That file replaces this one as the live checklist: it adds the Path A ("verify-a-submitted-draft")
+> vs. Path B ("ask-and-build", Kevin's own PDR) split, the permanent non-year-specific
+> `PDR\<Name>\input\output\archive\<year>\` folder convention (replacing `PDR 2026\<Name>\`),
+> and the 22 Sep 2026 HTML-only output rule (the `.md` flow-doc format described below is
+> retired — every live PDR deliverable is now HTML on `brief_chrome.py`, per that standing rule).
+> This file is kept only as the historical record of the original 14 Sep 2026 process design.
+>
 > Trigger phrases: **"prep PDR"**, **"prep [Name]'s PDR"**
 > First built 14 Sep 2026 across the 2026 PDR round (Kevin, Michael O'Sullivan, James Salas Guillen, Asta Palmer). This is the repeatable process — see `docs/HANDOVER.md` in this same folder for the session-by-session build history and open gaps.
 
