@@ -1555,3 +1555,24 @@ Kevin decided ("agree on all - go ahead") on `drew/intake-assistant-collapsible`
 - Test-only note: re-clicking Extract intentionally re-renders the sheet list and clears the checkbox selection (existing behaviour); collapse/expand alone preserves it.
 
 Exact next action: Kevin approves screenshots (`C:\Users\admin\Desktop\intake-assistant-collapsible\`); coordinator merges and deploys. Not merged or deployed.
+
+## Carry-forward label fix — 22 September 2026
+
+Kevin was confused by the Speaker-notes section on a carried-forward item showing a raw internal
+message: `Carry-forward from intakes/sickness-absence-survey-working-group/2026-09-22.json
+(itm_sasw_20260922_louise_comms); choose carried, resolved, or dismissed.` — exposing the JSON
+file path and internal item ID.
+
+Fixed directly (Drew, per Kevin's explicit instruction — small text-only fix, no Codex pass
+needed): `public/app.js` now derives a date from `carryForward.fromIntake`'s filename and renders
+`Carried over from your last meeting (22 Sep). Has this been resolved?` via a new
+`carryForwardLabel()` helper. The underlying pointer (`fromIntake` file path + `fromItemId`) is
+unchanged in `el.dataset.carry` and the submitted payload — only the visible label changed. The
+Carried/Resolved/Dismissed dropdown is untouched.
+
+Verified: `node --test test/worker.test.mjs` — 37/37 pass (no test depends on the exact UI
+string). Deployed via `wrangler deploy` (Version ID `b32bbc10-ae9d-4055-8a1e-7789fe34cc2d`).
+Confirmed live: `curl https://meeting.lelitte.co.uk/app.js` shows zero occurrences of
+`Carry-forward from` and the new `carryForwardLabel`/`MONTH_ABBR` code, live on the deployed site.
+
+Exact next action: none — closed. Commit `7091181` on `main`.
