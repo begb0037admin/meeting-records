@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "status": "submitted",
+  "meeting": {
+    "meetingId": "sickness-absence-survey-working-group",
+    "title": "Sickness Absence Survey working group",
+    "date": "2026-09-08",
+    "kind": "recurring"
+  },
+  "items": [
+    {
+      "itemId": "itm_sasw_louise_comms",
+      "position": 1,
+      "priority": 1,
+      "title": "Chase Louise on the Marcos comms email + university cascade",
+      "tone": "raise",
+      "detail": "Draft email from Marcos to PeopleXD users is with Louise for sign-off; Louise is also planning a separate university cascade item for senior staff. Agreed at the 8 Sep meeting that this needs to go out soon.",
+      "confirmedContext": "Draft email from Marcos to PeopleXD users is with Louise for sign-off; Louise is also planning a separate university cascade item for senior staff. Agreed at the 8 Sep meeting that this needs to go out soon.",
+      "speakerNoteSeed": "Has the Marcos comms email to PeopleXD users gone out yet, and where's Louise got to on the senior-staff cascade item?",
+      "status": "open",
+      "sources": [
+        {
+          "kind": "granola-note",
+          "rowId": "not_2Vb3zFrEdry9DI"
+        }
+      ],
+      "carryForward": null
+    },
+    {
+      "itemId": "itm_sasw_mel_share",
+      "position": 2,
+      "priority": 1,
+      "title": "Share Sarah's data availability analysis with Mel",
+      "tone": "update",
+      "detail": "To be shared via SharePoint -- Mel's access was approved the day before the 8 Sep meeting. Not the same document as Sarah's separate data-completeness spreadsheet Kevin has open as his own action.",
+      "confirmedContext": "To be shared via SharePoint -- Mel's access was approved the day before the 8 Sep meeting. Not the same document as Sarah's separate data-completeness spreadsheet Kevin has open as his own action.",
+      "speakerNoteSeed": "Has the data availability analysis actually gone across to Mel on SharePoint yet?",
+      "status": "open",
+      "sources": [
+        {
+          "kind": "granola-note",
+          "rowId": "not_2Vb3zFrEdry9DI"
+        }
+      ],
+      "carryForward": null
+    },
+    {
+      "itemId": "itm_sasw_dashboard_al_underreport",
+      "position": 3,
+      "priority": 1,
+      "title": "Dashboard: annual leave + under-reporting sections",
+      "tone": "raise",
+      "detail": "Two sections were still outstanding as of 8 Sep: annual leave calculations (fixed close-days logic needs revisiting) and under-reporting / potential missing staff-group data (~56 FTE out of ~15,000 falling out of the logic on two short lists, cause not yet identified). Target was end of September, ahead of the 9 Oct survey release.",
+      "confirmedContext": "Two sections were still outstanding as of 8 Sep: annual leave calculations (fixed close-days logic needs revisiting) and under-reporting / potential missing staff-group data (~56 FTE out of ~15,000 falling out of the logic on two short lists, cause not yet identified). Target was end of September, ahead of the 9 Oct survey release.",
+      "speakerNoteSeed": "The dashboard was targeted for end of September -- with that about a week out, are the annual leave and under-reporting sections still on track?",
+      "status": "open",
+      "sources": [
+        {
+          "kind": "granola-note",
+          "rowId": "not_2Vb3zFrEdry9DI"
+        }
+      ],
+      "carryForward": null
+    },
+    {
+      "itemId": "itm_sasw_bulletin_prompt",
+      "position": 4,
+      "priority": 1,
+      "title": "Open-ended sickness absence prompt for this month's bulletin",
+      "tone": "raise",
+      "detail": "Simon raised adding a prompt to this month's bulletin for departments to close any genuinely resolved open-ended sickness absences, since these could be inflating long-term sickness figures ahead of the next data pull.",
+      "confirmedContext": "Simon raised adding a prompt to this month's bulletin for departments to close any genuinely resolved open-ended sickness absences, since these could be inflating long-term sickness figures ahead of the next data pull.",
+      "speakerNoteSeed": "Did the open-ended-absence prompt make it into this month's bulletin, or is that still to go in?",
+      "status": "open",
+      "sources": [
+        {
+          "kind": "granola-note",
+          "rowId": "not_2Vb3zFrEdry9DI"
+        }
+      ],
+      "carryForward": null
+    },
+    {
+      "itemId": "itm_sasw_dashboard_review",
+      "position": 5,
+      "priority": 1,
+      "title": "Review published dashboard, flag errors",
+      "tone": "update",
+      "detail": "Dashboard was live on the team's test server as of 8 Sep, with Chris and Michelle invited to review it and flag anything wrong.",
+      "confirmedContext": "Dashboard was live on the team's test server as of 8 Sep, with Chris and Michelle invited to review it and flag anything wrong.",
+      "speakerNoteSeed": "Has Chris or Michelle flagged anything from reviewing the test-server dashboard yet?",
+      "status": "open",
+      "sources": [
+        {
+          "kind": "granola-note",
+          "rowId": "not_2Vb3zFrEdry9DI"
+        }
+      ],
+      "carryForward": null
+    }
+  ],
+  "submittedAt": "2026-09-08T09:00:00.000Z",
+  "submittedBy": "Kevin"
+}
