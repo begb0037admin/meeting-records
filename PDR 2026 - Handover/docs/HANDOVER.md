@@ -10,7 +10,7 @@ Kevin now uses a `PDR 2026/<Person Name>/` folder structure in his Meetings fold
 
 | Person | PDR date | Brief status | 2025 doc | Notes |
 |---|---|---|---|---|
-| Kevin Lelitte | Confirmed, 16 Sep 2026, 15:00–16:00 | Built, comparatively thin | Confirmed to exist, content blocked (download layer) | Closest upcoming meeting of the three still ahead — worth a quality pass first if time allows |
+| Kevin Lelitte | Confirmed, Thu 30 Sep 2026, with Simon Burford (moved from stale 16 Sep field, confirmed 22 Sep) | Rebuilt 22 Sep with real 2026 content — see 22 Sep update at the end of this file | Confirmed to exist, content blocked (download layer) | Complete and correct on disk; ready for Kevin's review ahead of the 30 Sep meeting |
 | Michael O'Sullivan | Already happened, 14 Sep 2026 | Done, real 2025-vs-2026 content | Extracted in full (Kevin dropped the file manually) | Manager Summary still pending — see dedicated handover |
 | James Salas Guillen | Confirmed, Mon 21 Sep 2026, 12:00–1:00pm | Built, comparatively thin | Never attempted this cycle | Clears before his 25–28 Sep annual leave |
 | Asta Palmer | Thu 1 Oct 2026, 12:00–1:00pm (moved again 22 Sep from Thu 24 Sep, which itself was moved 21 Sep from Fri 25) | Rebuilt 22 Sep | Now in her local folder; read in full 21 Sep | See 22 Sep Asta update at the end of this file |
@@ -156,3 +156,27 @@ Commits: `f2aeb81`/`635b310` (canonical guide docx), `13676eb` (`PDR_SOP.md`), `
 - Date-dependent facts that genuinely flipped with the new date (not just cosmetic swaps): the Holiday Records build (started w/c 28 Sep) is now underway by the meeting rather than pending; the ~29 Sep flex-point grace date referenced against that item has now passed; Kevin's Fri 25-Mon 28 Sep annual leave now falls entirely before the meeting rather than after, changing the realistic Manager Summary drafting windows.
 - **Not seen:** Asta's 2026 form (nothing in her folder, work-inbox or command-centre as of this rebuild).
 - **Next concrete action:** Kevin moves the calendar entry to Thu 1 Oct 12:00 and confirms with Asta; checks whether James's Thu 24 Sep slot and Asta's outgoing Thu 24 Sep entry actually clash once both moves are applied; decides whether the now-after-deadline meeting date needs flagging on the PDR Completion 2026 tracker. Full detail in Lauren's private memory (`memory/pdr-asta-1oct-move.md`).
+
+---
+
+## Update — 22 Sep 2026 (later): Kevin's own PDR — meeting date confirmed 30 Sep 2026; Tableau/SSO removed; Michael O'Sullivan BAU + Emma Fitz-Gibbon evidence added
+
+Direct continuation of the 22 Sep rebuild recorded above ("real 2026 draft replaces blank template"), which had left the meeting date genuinely TBC and flagged two of Simon's three named 2025 Manager-Summary priorities for Kevin as not visibly addressed in the new form. Both are now closed.
+
+- **Meeting date confirmed: Thu 30 Sep 2026, Kevin's PDR with Simon Burford.** No longer TBC. The docx (renamed from the stale `16-SEP-2026` filename to `PDR Review Form - 30-SEP-2026.docx`), the matching `.md` flow note, and the HTML brief's date fields are all aligned to this.
+- **Tableau/SSO content removed from the brief**, at Kevin's explicit instruction, reason recorded verbatim: **"I do not administer Tableau."** This was a misattribution correction, not a data gap — the underlying stalled Tableau/SSO item (t033) may still be real, just wrongly attributed to Kevin; don't reintroduce it into his PDR content without checking with him first.
+- **Michael O'Sullivan BAU-support evidence added**, sourced from Granola — closes the "supporting Michael's BAU return... uncredited" gap flagged in the prior update.
+- **Emma Fitz-Gibbon evidence added**, sourced via the Codex-connector email search — closes the "Emma isn't named anywhere in the 2026 form" gap flagged in the prior update.
+- **Standing lesson, recorded because it cost Kevin real frustration:** the first evidence-search pass this session was not scoped to named people up front — Kevin had to ask twice before it was narrowed. Once scoped, it worked. **Future evidence searches for this kind of task (PDR priorities/relationships evidence-gathering) should scope to the relevant named people as the first pass, without being asked** — for this task that list is Simon Burford, Marie Cooksey, Emma Fitz-Gibbon, Athena, Sarah Rowles, Michael O'Sullivan.
+
+**Output files confirmed complete and correct on disk** (local OneDrive, per the ephemeral-output rule — the `.md` flow note is the standing committed exception noted earlier in this handover, though the committed copy in this repo, `PDR 2026/Kevin Lelitte/PDR Review Form - 16-SEP-2026.md`, still carries the old date and was not touched in this checkpoint — see Watch Out For below):
+- `PDR 2026\Kevin Lelitte\PDR Review Form - 30-SEP-2026.docx`
+- `PDR 2026\Kevin Lelitte\PDR Review Form - 30-SEP-2026.md`
+- `PDR 2026\Kevin Lelitte\PDR 2026 - Kevin Lelitte - 22-09-2026.html`
+- Old versions (blank-template docx, prior transcript-only/16-SEP-dated md, earlier HTML briefs) archived to that folder's `_older versions`, renamed with clear `superseded-*` naming.
+
+**Watch Out For (new):** the committed `.md` copy in this GitHub repo (`PDR 2026/Kevin Lelitte/PDR Review Form - 16-SEP-2026.md`, committed 14 Sep per the exception above) still carries the old 16-Sep filename/date and has not been re-synced to the 30-Sep content in this checkpoint — this repo's copy is a snapshot from the meeting-flow-format work, not a live mirror of the local OneDrive file, so treat it as stale until someone deliberately re-commits it.
+
+Full session detail: Lauren's own memory, `begb0037admin/lauren` `memory/pdr-kevin-2026-30sep-confirmed-and-evidence-22sep.md`.
+
+**Next concrete action:** Kevin reviews the brief and review form, then attends his 30 Sep PDR meeting with Simon Burford. Post-meeting: Manager Summary drafted from the Granola recording, same pattern as the other PDRs this cycle.
