@@ -34,6 +34,33 @@ This section is a self-contained runbook for the monthly KPI Presentation deck �
 
 **Ownership.** Drew engineers `build_kpi_presentation.py` itself — fixes, extensions, new capabilities. Lauren owns running it monthly, curating/reviewing the output, and cross-referencing `work-inbox`/`command-centre` before anything is treated as final (see "Data sources beyond this repo" below). This is the general "engineer once, hand off as a standing task" split documented cross-agent in `begb0037admin/agent-commons`.
 
+## Standing process: PDR (permanent, yearly-recurring)
+
+**Full checklist: [`PDR_PROCESS.md`](./PDR_PROCESS.md) in this same folder.** Turned into
+a permanent, non-year-specific process on 22 Sep 2026, after the first full 2026 round
+(`build_pdr_prep.py`, above) surfaced the real shape of the work. Read `PDR_PROCESS.md`
+before touching any PDR brief, form, or folder — it covers:
+
+- **Two separate sourcing paths, not one** — Path A ("verify-a-submitted-draft", for
+  direct reports: James, Asta, Michael) vs. Path B ("ask-and-build", Kevin's own PDR
+  only, no separate draft exists to verify — content is built directly from his live
+  answers, section by section).
+- The 9 standard sections (Workload, Objectives/Performance, Values, Development ask,
+  Career aspirations, Working together, Single points of failure, Roadmap ownership,
+  Close/Manager Summary) and what each one needs sourced.
+- The **permanent folder convention**, replacing the old `PDR 2026\<Name>\` flat
+  layout: `PDR\<Name>\input\` / `output\` / `archive\<year>\`, not tied to a year
+  folder — `PDR\` itself is now permanent, each cycle's material sorts into that
+  person's own `archive\<year>\` as it's superseded.
+- The HTML-only output rule (one brief per person, running order + info-only sections,
+  screenshot-verified, no AI trace, never a Claude Artifact).
+- The standing, unprompted Granola/email/command-centre/work-inbox source-check —
+  same discipline as the Monthly Standing Agenda build, now applied to every PDR cycle.
+
+The old year-specific `PDR 2026 - Handover/docs/PDR_SOP.md` is kept as a historical
+record (now bannered to point here); `PDR 2026 - Handover/docs/HANDOVER.md` remains the
+session-by-session build history of the 2026 round.
+
 ## Design notes — Unresolved conflicts sections
 
 Where a brief's Unresolved conflicts section has more than one genuinely separate point, it's built as multiple `.risk-block` divs (bold `.risk-head` title + body copy each, divider between blocks) rather than one running paragraph — restructured 2 Aug 2026 on `build_roadmap.py`, `build_managers_meeting.py`, and `build_sk_1on1.py` after the flat-paragraph version read as a single wall of text. `build_hs_roadmap.py` was left as a single point deliberately (see above) — the `.risk-block` CSS in `brief_chrome.py` still applies cleanly to a lone block, it just doesn't get a divider (`:last-child` has none).
