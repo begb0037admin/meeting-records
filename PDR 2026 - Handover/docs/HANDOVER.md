@@ -180,3 +180,37 @@ Direct continuation of the 22 Sep rebuild recorded above ("real 2026 draft repla
 Full session detail: Lauren's own memory, `begb0037admin/lauren` `memory/pdr-kevin-2026-30sep-confirmed-and-evidence-22sep.md`.
 
 **Next concrete action:** Kevin reviews the brief and review form, then attends his 30 Sep PDR meeting with Simon Burford. Post-meeting: Manager Summary drafted from the Granola recording, same pattern as the other PDRs this cycle.
+
+---
+
+## Update — 22 Sep 2026 (later still): Kevin's own PDR — full content rebuild, brief AND the actual submittable form, driven by a live Q&A
+
+Direct continuation of the 22 Sep (later) update immediately above. That pass fixed the meeting date, removed Tableau/SSO, and added Michael/Emma evidence — but left the underlying content itself (Workload, Objectives/Performance, Roadmap ownership) in its earlier, thinner state, including one claim (roadmap "3 active rows, still proposed") that turned out to be wrong. This session was a genuine, substantive rewrite of 8 sections, driven directly by Kevin's own answers in a live Q&A with the coordinator, not inference — **and, per an explicit mid-task instruction from Kevin, written into the actual submittable PDR form itself (the `.docx`/`.md`), in his own first-person words, not just as coaching notes in the brief.**
+
+**The 8 sections rebuilt:**
+1. **Workload** — replaces the old July-only framing with a team-wide picture (firefighting mode, first-line under-resourced, burnout risk raised), sourced from 22 one-to-one notes across Asta/James/Kevin-SK/Michael's folders, 17 Apr–14 Sep 2026. Per-person detail: Asta's queue pressure (>20, growing), Michael's 79-change-request BAU volume, James's H&S burden (July's 15-ticket peak), Kevin's own capacity spread.
+2. **Objectives/Performance** — replaces the old "mixed bag" framing with a sourced summary from 123 meetings (13 Apr–22 Sep, 20 read in detail): delivery evidence, governance/risk surfacing, data/reporting, team leadership, four named objectives. **The old "I also ran the PDR conversations for Michael, James and Asta" line is dropped entirely** — Kevin's own words: "not required and obvious," not even kept as a flagged gap.
+3. **Values** — Continuous improvement gets real new evidence (the Multiverse AI & Data Apprenticeship EOI, dual-signed by Simon Burford and Jonathan Roger). People/Collaboration/Quality bullets kept exactly as-is, per instruction.
+4. **Development ask** — confirmed unchanged (4/5 asks repeat 2025), with the Level 4 Data Fellowship pivot added as live context after Multiverse closed the Level 3 route (Kevin rated fully capable across 40 skills, highest score seen at Oxford).
+5. **Career aspirations** — confirmed unchanged, cross-referenced to the Level 4 pivot.
+6. **Working together** — locked, Kevin confirmed "yes for now, may want to pad out further." Two new dated examples added: the Access Group PeopleXD Insight Reporting (Holiday Records) project and the cross-Divisional CDR/PD working group (with Lindsey Spriggs).
+7. **Single points of failure** — confirmed unchanged, "still the right framing."
+8. **Roadmap ownership** — full replacement. **The prior "3 active rows, still proposed" claim (carried from the 27 Aug alignment pass) was wrong, not supported by source.** Verified live against `HR Systems Roadmap - 18-09-2026.html` and `HR Systems Managers Meeting - 16-09-2026.html`: six real, dated rows (SHSMS supplier evaluation, Cority Applicant Interface v2, HESA UDF/REF 2029, CR 20020740, an internal-candidate ID effort estimate, and the job-site portal 404 bug), three of them flagged as still needing a status check before the meeting. Explicitly excludes an unrelated "Insight Reports not fit for purpose" item Kevin confirmed does not belong here.
+
+**Where "Working together" landed in the actual docx form — a judgement call, not an instructed location.** The PDR form has no dedicated "working together" field (it only exists as a stage in the live meeting-flow guide). Since Kevin's coordinator asked for this content in the real submittable form, it was added as a new paragraph under **Performance** — the broadest "summary of your performance... against agreed objectives/priorities" field — immediately after the new Roadmap-ownership paragraph. Flag to Kevin if he'd rather it sat elsewhere (e.g. folded into the Collaboration bullet under Values).
+
+**Output files confirmed complete and correct on disk** (all three: docx, md, html — verified by re-reading the docx's table cells after save, and by three Playwright/Chrome screenshots of the HTML at different scroll depths):
+- `PDR 2026\Kevin Lelitte\PDR Review Form - 30-SEP-2026.docx`
+- `PDR 2026\Kevin Lelitte\PDR Review Form - 30-SEP-2026.md`
+- `PDR 2026\Kevin Lelitte\PDR 2026 - Kevin Lelitte - 22-09-2026.html`
+- Pre-rebuild versions of all three archived to that folder's `_older versions` as `*-superseded-22-Sep-pre-content-rebuild.*`.
+
+**Genuine build gotchas worth keeping:**
+- **Screenshots ARE possible in this environment** — `playwright` (Python) + the system-installed Chrome (`channel="chrome"`) renders `file://` URLs including OneDrive paths with spaces, no bundled-browser install needed. An earlier PDR update in this same handover said "screenshot not possible, no render tool in this env" — that was true for whatever was tried at the time, but is not a hard environment limit.
+- **`python-docx` `insert_paragraph_before()` call-order and target-selection both matter** — calling it twice on the same target inserts in call order immediately before that target; inserting before the *wrong* existing paragraph (as happened once this session, on the Career Aspirations cross-reference) silently produces the wrong final order. Always re-read paragraph order after any insert.
+- **A Bash heredoc containing real English prose with apostrophes ("Kevin's", "team's") breaks with `unexpected EOF`** — write long Python/content scripts with the Write tool instead of a Bash heredoc when the body has natural-language apostrophes.
+- Terminal-rendered `�` for em-dashes/curly quotes in `print()`-ed docx text is a display artifact of this Git-Bash environment, not real file corruption — verified via character code points.
+
+Full session detail: Lauren's own memory, `begb0037admin/lauren` `memory/pdr-kevin-2026-full-content-rebuild-22sep-later.md`.
+
+**Next concrete action:** Kevin reviews the rebuilt brief and the actual PDR form content — especially the "Working together" placement decision inside Performance, and three still-outstanding checks (HESA UDF/REF 2029 status since 17 Sep, the internal-candidate-ID sizing outcome with Michael, whether the job-site portal 404 bug has been raised as a formal ticket) — then attends the 30 Sep PDR meeting with Simon Burford. Post-meeting: Manager Summary drafted from the Granola recording, same pattern as the other PDRs this cycle.
