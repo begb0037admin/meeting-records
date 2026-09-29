@@ -1,0 +1,302 @@
+{
+  "schemaVersion": 1,
+  "status": "submitted",
+  "meeting": {
+    "meetingId": "hr-systems-roadmap",
+    "title": "HR Systems Roadmap",
+    "date": "2026-10-02",
+    "kind": "recurring"
+  },
+  "items": [
+    {
+      "itemId": "itm_68724e738f124d1593f7e049a92451b1",
+      "position": 1,
+      "priority": 1,
+      "title": "PeopleXD Data Protection Impact Assessment",
+      "tone": "update",
+      "detail": "18/09/26 - SoundCloud had been released or its pilot extended, based on a section in the university update/cascade from the previous week.\n\nID: 136\n\nDescription: Creation of a Data Protection Impact Assessment (DPIA) for PeopleXD\n\nDeadline: 30 Sep 2026\n\nDeadline type: Self imposed (fixed)\n\nProgress updates: 21/08/26 - Pilot of Soundcloud now in place. \n03/07/26 - Still awaiting contact from project team to get pilot of Soundcloud.\n26/06/26 - Going to upload to soundcloud to test the document to see if it throws out any errors\n19/06/26 - Waiting for MarieC to sign off on wording.\n24/04/26 - Kevin has finished tweaks.\n06/03/26 - Kevin and Simon reviewed DPIA in 121\n27/02/26 - Kevin has shared the document with SB\n14/11/25 - Feedback received, substantial updates required.\n24/10/24 - Chase email sent to Ruzha Toneva \n24/10/25 - Kevin has compared WFM DPIA with HR Systems DPIA.\n25/09/25 - DPIA has been submitted to Ruzha and we're waiting for feedback\n18/09/25 - Kevin working with Ruzha in information compliance \n04/04/25 - Kevin has provided details of DPIA in handover workspace for Simon to pick up whilst he's on leave. KL now 50% of way through document!\n29/03/25 - Kevin around 30% of the way through the document. Focussing on getting the information available.\nhttps://compliance.admin.ox.ac.uk/data-protection-by-design\n\nNext steps: - On Marie's list to review and finalise DPIA.\n- Use pilot of soundcloud to test the DPIA and identify anything we need to tweak.\n\nDate last reviewed: 21 Aug 2026\n\nNext checkpoint date: 11 Sep 2026",
+      "confirmedContext": "18/09/26 - SoundCloud had been released or its pilot extended, based on a section in the university update/cascade from the previous week.\n\nID: 136\n\nDescription: Creation of a Data Protection Impact Assessment (DPIA) for PeopleXD\n\nDeadline: 30 Sep 2026\n\nDeadline type: Self imposed (fixed)\n\nProgress updates: 21/08/26 - Pilot of Soundcloud now in place. \n03/07/26 - Still awaiting contact from project team to get pilot of Soundcloud.\n26/06/26 - Going to upload to soundcloud to test the document to see if it throws out any errors\n19/06/26 - Waiting for MarieC to sign off on wording.\n24/04/26 - Kevin has finished tweaks.\n06/03/26 - Kevin and Simon reviewed DPIA in 121\n27/02/26 - Kevin has shared the document with SB\n14/11/25 - Feedback received, substantial updates required.\n24/10/24 - Chase email sent to Ruzha Toneva \n24/10/25 - Kevin has compared WFM DPIA with HR Systems DPIA.\n25/09/25 - DPIA has been submitted to Ruzha and we're waiting for feedback\n18/09/25 - Kevin working with Ruzha in information compliance \n04/04/25 - Kevin has provided details of DPIA in handover workspace for Simon to pick up whilst he's on leave. KL now 50% of way through document!\n29/03/25 - Kevin around 30% of the way through the document. Focussing on getting the information available.\nhttps://compliance.admin.ox.ac.uk/data-protection-by-design\n\nNext steps: - On Marie's list to review and finalise DPIA.\n- Use pilot of soundcloud to test the DPIA and identify anything we need to tweak.\n\nDate last reviewed: 21 Aug 2026\n\nNext checkpoint date: 11 Sep 2026",
+      "speakerNoteSeed": "Status update: the PeopleXD DPIA is with Marie to review and finalise, and we're also planning to run it through the Soundcloud pilot to catch anything that needs tweaking â deadline is end of September.",
+      "status": "carried",
+      "sources": [
+        {
+          "kind": "roadmap-weekly",
+          "rowId": "136"
+        }
+      ],
+      "carryForward": {
+        "fromIntake": "intakes/hr-systems-roadmap/2026-09-18.json",
+        "fromItemId": "itm_roadmap_136",
+        "disposition": "carried"
+      }
+    },
+    {
+      "itemId": "itm_fedf21561cde41fd9ae7f8b0a92ff15a",
+      "position": 2,
+      "priority": 1,
+      "title": "DSE Online Assessment",
+      "tone": "update",
+      "detail": "18/09/26 - This is complete as per deadline - no further updates\n\nID: ITS960\n\nDescription: DSE Online Assessment Project\n\nDeadline: 31 Aug 2026\n\nDeadline type: Fixed - compulsory\n\nProgress updates: 07/08/26 - Feed updated and James has tested \n03/07/26 - Tony Boydell has provided a quote that's been sent over to Marie for approval.\n26/06/26 - Tony Boydell has reached out and asked us to reach out to Erika for a quote.\n19/06/26 - This went live on 03/06. Some changes still required, as users without University email addresses are missing from the feed, so James must raise a change request due to concerns that there may be a cost involved.\n29/05/26 - James has completed testing of the DSE interface, all passed. \n15/05/26 - Everything looks good to go but few final tests need to take place first.\n27/02/26 - Ralph to continue to do manual uploads until interface is live. Have provisional date of interface go live of 6th May.\n13/02/26 - Do have the documentation now. Don't have timescales for when integration is going to happen.\n06/02/26 - Project closed but handover still to take place\n24/10/25 - System live but has a phased roll out\nCompleted the data check report (PERX90 DSE Data Validation - pending approval and deployment)\nGrace - to take lead and support the data interface and attend meetings to provide updates.\nA review meeting is scheduled for March 2025 to reassess project needs and determine next steps.\n\nNext steps: - James / Marie to confirm if it's gone live\n\nDate last reviewed: 07 Aug 2026\n\nNext checkpoint date: 28 Aug 2026",
+      "confirmedContext": "18/09/26 - This is complete as per deadline - no further updates\n\nID: ITS960\n\nDescription: DSE Online Assessment Project\n\nDeadline: 31 Aug 2026\n\nDeadline type: Fixed - compulsory\n\nProgress updates: 07/08/26 - Feed updated and James has tested \n03/07/26 - Tony Boydell has provided a quote that's been sent over to Marie for approval.\n26/06/26 - Tony Boydell has reached out and asked us to reach out to Erika for a quote.\n19/06/26 - This went live on 03/06. Some changes still required, as users without University email addresses are missing from the feed, so James must raise a change request due to concerns that there may be a cost involved.\n29/05/26 - James has completed testing of the DSE interface, all passed. \n15/05/26 - Everything looks good to go but few final tests need to take place first.\n27/02/26 - Ralph to continue to do manual uploads until interface is live. Have provisional date of interface go live of 6th May.\n13/02/26 - Do have the documentation now. Don't have timescales for when integration is going to happen.\n06/02/26 - Project closed but handover still to take place\n24/10/25 - System live but has a phased roll out\nCompleted the data check report (PERX90 DSE Data Validation - pending approval and deployment)\nGrace - to take lead and support the data interface and attend meetings to provide updates.\nA review meeting is scheduled for March 2025 to reassess project needs and determine next steps.\n\nNext steps: - James / Marie to confirm if it's gone live\n\nDate last reviewed: 07 Aug 2026\n\nNext checkpoint date: 28 Aug 2026",
+      "speakerNoteSeed": "Status update: DSE Online Assessment is complete â finished ahead of the 31 August deadline, no further action needed.",
+      "status": "carried",
+      "sources": [
+        {
+          "kind": "roadmap-weekly",
+          "rowId": "ITS960"
+        }
+      ],
+      "carryForward": {
+        "fromIntake": "intakes/hr-systems-roadmap/2026-09-18.json",
+        "fromItemId": "itm_roadmap_its960",
+        "disposition": "carried"
+      }
+    },
+    {
+      "itemId": "itm_81a314342cc5485b92dce86626732f77",
+      "position": 3,
+      "priority": 1,
+      "title": "Annual Leave Year End Rollover 2026",
+      "tone": "update",
+      "detail": "18/09/26 - With Michael and on track for dealine\n\nID: CA102_2526\n\nDescription: System Maintenance for the new annual leave year; Including information gathering, data loading, configuration and testing, annual leave rollover and balance recalculation.\n\nDeadline: 02 Oct 2026\n\nDeadline type: Fixed - compulsory\n\nProgress updates: October\n\nNext steps: none logged\n\nDate last reviewed: not set\n\nNext checkpoint date: not set",
+      "confirmedContext": "18/09/26 - With Michael and on track for dealine\n\nID: CA102_2526\n\nDescription: System Maintenance for the new annual leave year; Including information gathering, data loading, configuration and testing, annual leave rollover and balance recalculation.\n\nDeadline: 02 Oct 2026\n\nDeadline type: Fixed - compulsory\n\nProgress updates: October\n\nNext steps: none logged\n\nDate last reviewed: not set\n\nNext checkpoint date: not set",
+      "speakerNoteSeed": "Status update: Annual Leave Year End Rollover â I'm working through this with Michael and we're on track for the 2 October fixed deadline.",
+      "status": "carried",
+      "sources": [
+        {
+          "kind": "roadmap-weekly",
+          "rowId": "CA102_2526"
+        }
+      ],
+      "carryForward": {
+        "fromIntake": "intakes/hr-systems-roadmap/2026-09-18.json",
+        "fromItemId": "itm_roadmap_ca102_2526",
+        "disposition": "carried"
+      }
+    },
+    {
+      "itemId": "itm_56dc8ba2e9ba4450b4a25907442924ce",
+      "position": 4,
+      "priority": 1,
+      "title": "Update Payroll Calendars",
+      "tone": "update",
+      "detail": "18/09/26 - Flag - with Asta\n\nID: CA103_2526\n\nDescription: Update payroll calendar in ESS\n\nDeadline: 21 Dec 2026\n\nDeadline type: Fixed - discretionary\n\nProgress updates: none logged\n\nNext steps: none logged\n\nDate last reviewed: not set\n\nNext checkpoint date: 27 Nov 2026",
+      "confirmedContext": "18/09/26 - Flag - with Asta\n\nID: CA103_2526\n\nDescription: Update payroll calendar in ESS\n\nDeadline: 21 Dec 2026\n\nDeadline type: Fixed - discretionary\n\nProgress updates: none logged\n\nNext steps: none logged\n\nDate last reviewed: not set\n\nNext checkpoint date: 27 Nov 2026",
+      "speakerNoteSeed": "Status update: CA103 â updating the payroll calendar in ESS â deadline is 21 December, next checkpoint is 27 November, and this is currently flagged with Asta with no progress or next steps logged yet.",
+      "status": "carried",
+      "sources": [
+        {
+          "kind": "roadmap-weekly",
+          "rowId": "CA103_2526"
+        }
+      ],
+      "carryForward": {
+        "fromIntake": "intakes/hr-systems-roadmap/2026-09-18.json",
+        "fromItemId": "itm_roadmap_ca103_2526",
+        "disposition": "carried"
+      }
+    },
+    {
+      "itemId": "itm_32ec73ba99dd4ed9883b480edbd122a6",
+      "position": 5,
+      "priority": 1,
+      "title": "Security Model Review",
+      "tone": "update",
+      "detail": "ID: 22_d\n\nDescription: not set\n\nDeadline: not set\n\nDeadline type: not set\n\nProgress updates: none logged\n\nNext steps: none logged\n\nDate last reviewed: 27 Jun 2025\n\nNext checkpoint date: not set",
+      "confirmedContext": "ID: 22_d\n\nDescription: not set\n\nDeadline: not set\n\nDeadline type: not set\n\nProgress updates: none logged\n\nNext steps: none logged\n\nDate last reviewed: 27 Jun 2025\n\nNext checkpoint date: not set",
+      "speakerNoteSeed": "",
+      "status": "carried",
+      "sources": [
+        {
+          "kind": "roadmap-weekly",
+          "rowId": "22_d"
+        }
+      ],
+      "carryForward": {
+        "fromIntake": "intakes/hr-systems-roadmap/2026-09-18.json",
+        "fromItemId": "itm_roadmap_22_d",
+        "disposition": "carried"
+      }
+    },
+    {
+      "itemId": "itm_49f2a04d5f4848d39bed251ce3e263e3",
+      "position": 6,
+      "priority": 1,
+      "title": "Hierarchy Restructuring",
+      "tone": "update",
+      "detail": "18/09/26 - ## Organisational Structure update  - B8 will be reactivated rather than a new code created. Entity names over 40 characters and People XD/Packs mismatches - lists sent for confirmation. Subsidiary-company creations/deletions are on hold until Catherine returns. Deletions and straightforward name changes can proceed after checking for active People XD records. College REF-structure work remains deferred.\n\nID: CA104_2526\n\nDescription: Updates to the Organisation Structure in response to any changes to the PRAC Org Structure (January update/August update)\n\nDeadline: 09 Sep 2026\n\nDeadline type: Self imposed (fixed)\n\nProgress updates: none logged\n\nNext steps: none logged\n\nDate last reviewed: not set\n\nNext checkpoint date: 11 Sep 2026",
+      "confirmedContext": "18/09/26 - ## Organisational Structure update  - B8 will be reactivated rather than a new code created. Entity names over 40 characters and People XD/Packs mismatches - lists sent for confirmation. Subsidiary-company creations/deletions are on hold until Catherine returns. Deletions and straightforward name changes can proceed after checking for active People XD records. College REF-structure work remains deferred.\n\nID: CA104_2526\n\nDescription: Updates to the Organisation Structure in response to any changes to the PRAC Org Structure (January update/August update)\n\nDeadline: 09 Sep 2026\n\nDeadline type: Self imposed (fixed)\n\nProgress updates: none logged\n\nNext steps: none logged\n\nDate last reviewed: not set\n\nNext checkpoint date: 11 Sep 2026",
+      "speakerNoteSeed": "Status update: on hierarchy restructuring, B8 will be reactivated rather than creating a new code, lists have gone out for confirmation on entity names over 40 characters and People XD/Packs mismatches, subsidiary creations and deletions are on hold until Catherine is back, and College REF-structure work remains deferred.",
+      "status": "carried",
+      "sources": [
+        {
+          "kind": "roadmap-weekly",
+          "rowId": "CA104_2526"
+        }
+      ],
+      "carryForward": {
+        "fromIntake": "intakes/hr-systems-roadmap/2026-09-18.json",
+        "fromItemId": "itm_roadmap_ca104_2526",
+        "disposition": "carried"
+      }
+    },
+    {
+      "itemId": "itm_b273d954bff94e5a9fac24b8accf0516",
+      "position": 7,
+      "priority": 1,
+      "title": "Health & Safety Management System",
+      "tone": "update",
+      "detail": "18/09/26 - priorities are handing the Entra ID admin guide to Brian, approving the supplier-shortlist scores, and confirming resource requirements. The SHSMS evaluation has shortlisted Ideagen, Vatix and RiskEx; this remains confidential until Procurement has notified all suppliers. Workshops/demos and Q&A with the shortlisted suppliers start 25 September, with the stage deadline extended to 7 October. The evaluation document now includes supplier-specific tabs capturing outstanding questions\n\nID: DTP1334\n\nDescription: Investigative project\n\nDeadline: 25 Sep 2026\n\nDeadline type: Fixed - compulsory\n\nProgress updates: 21/08/26 - Kevin and Marie have reviewed  6  supplier questionnaires and forwarded their findings and feedback to the project team. Project team have extended this phase (identifying a software supplier) to end of September.\n31/07/26 - Chris, James and Marie (Kevin if back from leave) to review supplier responses by 21/08\n03/07/26 - Kevin, Chris and James met with project lead (Helen Harper) on 18th June to discuss the required scoring methdology for incidents recorded in an H&S system. This is a key risk as the scoring needs to comply with H&S legislation. Chris and James met with project team on 30th June to evaluate the scoring.\n01/05/26 - Need a discussion - MC to meet with James and Chris to discuss our engagement in project going forward and potential resource required from January onwards.\n09/01/26 - Had the first board\n28/11/25 - Mandated funding stream confirmed.\n24/10/25 - Looking for sponsor, Brian is co-sponsor.\n\nNext steps: - Project team to analyse HRSys feedback and project board will meet in September to shortlist suppliers.\n- Workshops to begin on 25/9 to discuss shortlisted suppliers.\n\nDate last reviewed: 21 Aug 2026\n\nNext checkpoint date: 27 Aug 2026",
+      "confirmedContext": "18/09/26 - priorities are handing the Entra ID admin guide to Brian, approving the supplier-shortlist scores, and confirming resource requirements. The SHSMS evaluation has shortlisted Ideagen, Vatix and RiskEx; this remains confidential until Procurement has notified all suppliers. Workshops/demos and Q&A with the shortlisted suppliers start 25 September, with the stage deadline extended to 7 October. The evaluation document now includes supplier-specific tabs capturing outstanding questions\n\nID: DTP1334\n\nDescription: Investigative project\n\nDeadline: 25 Sep 2026\n\nDeadline type: Fixed - compulsory\n\nProgress updates: 21/08/26 - Kevin and Marie have reviewed  6  supplier questionnaires and forwarded their findings and feedback to the project team. Project team have extended this phase (identifying a software supplier) to end of September.\n31/07/26 - Chris, James and Marie (Kevin if back from leave) to review supplier responses by 21/08\n03/07/26 - Kevin, Chris and James met with project lead (Helen Harper) on 18th June to discuss the required scoring methdology for incidents recorded in an H&S system. This is a key risk as the scoring needs to comply with H&S legislation. Chris and James met with project team on 30th June to evaluate the scoring.\n01/05/26 - Need a discussion - MC to meet with James and Chris to discuss our engagement in project going forward and potential resource required from January onwards.\n09/01/26 - Had the first board\n28/11/25 - Mandated funding stream confirmed.\n24/10/25 - Looking for sponsor, Brian is co-sponsor.\n\nNext steps: - Project team to analyse HRSys feedback and project board will meet in September to shortlist suppliers.\n- Workshops to begin on 25/9 to discuss shortlisted suppliers.\n\nDate last reviewed: 21 Aug 2026\n\nNext checkpoint date: 27 Aug 2026",
+      "speakerNoteSeed": "Status update: the SHSMS evaluation has shortlisted three suppliers, workshops and demos kick off on 25 September, and the stage deadline has been extended to 7 October â shortlist details remain confidential until Procurement has notified all suppliers.",
+      "status": "carried",
+      "sources": [
+        {
+          "kind": "roadmap-weekly",
+          "rowId": "DTP1334"
+        }
+      ],
+      "carryForward": {
+        "fromIntake": "intakes/hr-systems-roadmap/2026-09-18.json",
+        "fromItemId": "itm_roadmap_dtp1334",
+        "disposition": "carried"
+      }
+    },
+    {
+      "itemId": "itm_85ee7dadf39b4397bb25325b050cb808",
+      "position": 8,
+      "priority": 1,
+      "title": "Outstanding WFM Work",
+      "tone": "update",
+      "detail": "18/09/26 - Julie has confirmed that the 38-day balance work is ready to progress. Chemistry is the priority pilot, with 131 workgroups scheduled for update and rollover in early October. GLAM will follow with an agreed first tranche of 39 workgroups. Any further GLAM work will depend on capacity after rollover, and departments should not make balance changes independently.\n\nID: 212\n\nDescription: Working with WFM BA and PM to complete work items outstanding from the WFM project\n\nDeadline: 09 Oct 2026\n\nDeadline type: Self imposed (fixed)\n\nProgress updates: 02/09/26 - Initial kick off meeting with Tracy Barlow-Bacon, Mel Furniss, Julie, Michael, Simon and Rachel Midgley. Agreed on priorities - 1. Migration of the remaining 3 depts (Paediatrics, SBS, GLAM) 2. Clean up data load 2 ready for upload 3. Validate if all depts have been using PXD to record their data since go-live 4. Work with Glam to review their rostering requirements.\n\nNext steps: - Tracy BB to outline tasks and expected timescales. \n- Mel to review position re sickness absence data load and get in touch with Simon where assistance is needed. \n- Julie to send through notes from meeting with GLAM and Maths. \n- Tracy to reach out to Michelle to catch up on progress re Paeds, SBS and GLAM onboarding. Then Mel to reach out to departments to scope out the support required.\n\nDate last reviewed: 02 Sep 2026\n\nNext checkpoint date: 11 Sep 2026",
+      "confirmedContext": "18/09/26 - Julie has confirmed that the 38-day balance work is ready to progress. Chemistry is the priority pilot, with 131 workgroups scheduled for update and rollover in early October. GLAM will follow with an agreed first tranche of 39 workgroups. Any further GLAM work will depend on capacity after rollover, and departments should not make balance changes independently.\n\nID: 212\n\nDescription: Working with WFM BA and PM to complete work items outstanding from the WFM project\n\nDeadline: 09 Oct 2026\n\nDeadline type: Self imposed (fixed)\n\nProgress updates: 02/09/26 - Initial kick off meeting with Tracy Barlow-Bacon, Mel Furniss, Julie, Michael, Simon and Rachel Midgley. Agreed on priorities - 1. Migration of the remaining 3 depts (Paediatrics, SBS, GLAM) 2. Clean up data load 2 ready for upload 3. Validate if all depts have been using PXD to record their data since go-live 4. Work with Glam to review their rostering requirements.\n\nNext steps: - Tracy BB to outline tasks and expected timescales. \n- Mel to review position re sickness absence data load and get in touch with Simon where assistance is needed. \n- Julie to send through notes from meeting with GLAM and Maths. \n- Tracy to reach out to Michelle to catch up on progress re Paeds, SBS and GLAM onboarding. Then Mel to reach out to departments to scope out the support required.\n\nDate last reviewed: 02 Sep 2026\n\nNext checkpoint date: 11 Sep 2026",
+      "speakerNoteSeed": "Status update: Julie has confirmed the 38-day balance work is ready to progress â Chemistry is the priority pilot with 131 workgroups scheduled for update and rollover in early October, and GLAM will follow with an agreed first tranche of 39 workgroups, though any further GLAM work depends on capacity after rollover, so departments should not make balance changes independently in the meantime.",
+      "status": "carried",
+      "sources": [
+        {
+          "kind": "roadmap-weekly",
+          "rowId": "212"
+        }
+      ],
+      "carryForward": {
+        "fromIntake": "intakes/hr-systems-roadmap/2026-09-18.json",
+        "fromItemId": "itm_roadmap_212",
+        "disposition": "carried"
+      }
+    },
+    {
+      "itemId": "itm_5b483b7d03ec4c32a2668bea5cc5b9fa",
+      "position": 9,
+      "priority": 1,
+      "title": "Update of Cority Applicant Interface",
+      "tone": "update",
+      "detail": "ID: 213\n\nDescription: Implement an automated export of applicant data from PeopleXD to load into Cority\n\nDeadline: 30 Oct 2026\n\nDeadline type: Self imposed (flexible)\n\nProgress updates: 09/09/26 - Simon built v2 of the report and set up an automated subscription to export a CSV to a secure network location. Kevin has provided information about the issues with v1 which will need to be addressed as part of the build and testing.\n\nNext steps: - James to test the upload file into Cority\n\nDate last reviewed: 09 Sep 2026\n\nNext checkpoint date: 25 Oct 2026",
+      "confirmedContext": "ID: 213\n\nDescription: Implement an automated export of applicant data from PeopleXD to load into Cority\n\nDeadline: 30 Oct 2026\n\nDeadline type: Self imposed (flexible)\n\nProgress updates: 09/09/26 - Simon built v2 of the report and set up an automated subscription to export a CSV to a secure network location. Kevin has provided information about the issues with v1 which will need to be addressed as part of the build and testing.\n\nNext steps: - James to test the upload file into Cority\n\nDate last reviewed: 09 Sep 2026\n\nNext checkpoint date: 25 Oct 2026",
+      "speakerNoteSeed": "",
+      "status": "carried",
+      "sources": [
+        {
+          "kind": "roadmap-weekly",
+          "rowId": "213"
+        }
+      ],
+      "carryForward": {
+        "fromIntake": "intakes/hr-systems-roadmap/2026-09-18.json",
+        "fromItemId": "itm_roadmap_213",
+        "disposition": "carried"
+      }
+    },
+    {
+      "itemId": "itm_roadmap_174_b",
+      "position": 10,
+      "priority": 1,
+      "title": "Health & Safety dashboards",
+      "tone": "update",
+      "detail": "Lead: David\n\nTeam members involved: Simon, James, Chris\n\nID: 174_b\n\nDescription: Development of an Occupational Health dashboard as part of a suite of dashboards to support the analysis of  Health & Safety data\n\nDeadline: 11 Sep 2026\n\nDeadline type: Self imposed (fixed)\n\nProgress updates: 21/08/26 - MarieC met with Kate Vickers and Alex Gray on 11/8 to discuss resourcing requirements to further develop H&S dashboard with specific focus on fire safety. \n03/07/26 - Brian is going to take over admin rights for the dashboard and issue access as appropriate. \n17/04/26 - Waiting for Brian to provide comms to key stakeholders\n20/03/26 - Presented to SEG / Council and agreed next steps.\n27/02/26 - Socialising phase is in progress.\n20/02/26 - Meeting arranged with OH to discuss socialisation of the dashboard \n23/01/26 Presented dashboard to SNSG (Safety Network Steering Group) on 12/01/26\n28/11/25 - Chris has set up feedback sessions with H&S team\n\nNext steps: - Kate to take forward a discussion with Brian and Lukasz regarding resourcing requirements. \n- Marie to confirm with Brian that he has admin rights to the dashboard and has shared link with SEG and CCHS. There is documentation in place on how to manage admin rights, but rights have not yet been transferred over to Brian, as we're still awaiting finalisation of EntraID groups by IT. \n- IT Services to finish work on security groups documentation\n\nDate last reviewed: 21 Aug 2026\n\nNext checkpoint date: 11 Sep 2026",
+      "confirmedContext": "Lead: David\n\nTeam members involved: Simon, James, Chris\n\nID: 174_b\n\nDescription: Development of an Occupational Health dashboard as part of a suite of dashboards to support the analysis of  Health & Safety data\n\nDeadline: 11 Sep 2026\n\nDeadline type: Self imposed (fixed)\n\nProgress updates: 21/08/26 - MarieC met with Kate Vickers and Alex Gray on 11/8 to discuss resourcing requirements to further develop H&S dashboard with specific focus on fire safety. \n03/07/26 - Brian is going to take over admin rights for the dashboard and issue access as appropriate. \n17/04/26 - Waiting for Brian to provide comms to key stakeholders\n20/03/26 - Presented to SEG / Council and agreed next steps.\n27/02/26 - Socialising phase is in progress.\n20/02/26 - Meeting arranged with OH to discuss socialisation of the dashboard \n23/01/26 Presented dashboard to SNSG (Safety Network Steering Group) on 12/01/26\n28/11/25 - Chris has set up feedback sessions with H&S team\n\nNext steps: - Kate to take forward a discussion with Brian and Lukasz regarding resourcing requirements. \n- Marie to confirm with Brian that he has admin rights to the dashboard and has shared link with SEG and CCHS. There is documentation in place on how to manage admin rights, but rights have not yet been transferred over to Brian, as we're still awaiting finalisation of EntraID groups by IT. \n- IT Services to finish work on security groups documentation\n\nDate last reviewed: 21 Aug 2026\n\nNext checkpoint date: 11 Sep 2026",
+      "speakerNoteSeed": "",
+      "status": "open",
+      "sources": [
+        {
+          "kind": "roadmap-weekly",
+          "rowId": "174_b"
+        }
+      ],
+      "carryForward": null
+    },
+    {
+      "itemId": "itm_roadmap_dtp1092",
+      "position": 11,
+      "priority": 1,
+      "title": "Research management data for REF and research quality",
+      "tone": "update",
+      "detail": "Lead: Nathan\n\nTeam members involved: Marie C, Kevin\n\nID: DTP1092\n\nDescription: HR Systems team supporting multiple deliverables under the research management data for REF and research quality project\n\nDeadline: not set\n\nDeadline type: Fixed - compulsory\n\nProgress updates: 27/08/26 - SB and MC met with DRAM to discuss Data Warehouse restrictions. Ewan confirmed it was too complex to remove the data before it hits the data warehouse and that we would need to take responsibility for ensuring data doesn't enter any company 10 reporting. We reached a short term compromise with a longer term solution needing to be built in fabric.\n07/08/26 - Change request 20020465 has been raised to detail all of the configuration required for the live release.\nOrganisation Structure: - We have set up the organisation structure in UOXU, it is also set up in UOXC but this environment is due to be cloned soon and we don't want UOXC being used for testing Co90. \nBucket Post Setup - Bucket posts have been set up in UOXU. Nathan has manually set up a number of test/fake employee records in UOXU to allow integration testing to commence.\nIntegrations: - Crispin Muncaster is trying to coordinate testing with Guy Williams and David Hickman. The tester needs access to the staging environment and Azure platform to confirm that the expected test results are happening.\nData Warehouse - Simon and Marie C met with DRAM team and Alex Gray to discuss ensuring that company 90 data does not get moved into our current data warehouse schemas and has a separate area where the data will live with appropriate access controls to ensure its locked down and future proofed. - DRAM have been provided with logic which will determine which records can be considered as Company 10 in the first instance.\nGuidance and Training: - Julie and Michelle have been approached regarding changes to guidance materials as a result of company 10 going live\nAccess Provisioning: - Anne Mortimer and Nick Chandler are currently undertaking PXD training with Julie's support and Nathan coordinating.\n- Anne is being provisioned with people management admin access in UOXU. - Anne is getting sign off from all colleges that she can act as guardian of their data, once she has this confirmation we will officially set her up as guardian of Company 90.\n- I've asked Asta about Nathan having two accounts for reporting purposes, one which only has access to Company 10 and one which only has access to Company 90, to help him to report on exactly what he needs for any given request without having to check parameters or edit data manually.\nESS Requirements: - Nathan has logged in as a test account and shown Anne and Nik what the standard ESS profile looks like to an end user. It is with them to decide if they are happy with this or if they want to make any tweaks as a separate college ESS profile.\n30/07/26 - Issue with posts in resolved, there was an issue with the csv conversation from excel, so that's resolved in the base files. Interfaces have been adjusted to ensure no non company 10 data is passed downstream, currently being tested. Nathan has been able to manually load fake records into the system for testing purposes and has demo'd how it will look to an ESS user.\n- ORCID requirements have been passed back to Kevin to take forward.\n16/07/26 - Posts set up but issue with cost centres identified during testing - referred to AG for resolution.\n03/07/26 - FA team are testing scenarios for the visibility of Company 10 records within Company 90, and how these appear downstream in the BizTalk integration with PXD. \n26/06/26 - Org Structure set up in UOXU, discussions have been had with research services about the options for structuring posts, interface investigation has taken begun, £10k quoted to implement. Discussions have been had with Ewan and Alex Gray around ensuring data is handled appropriately in the data warehouse.\n12/06/26 - Proposal document written and with Marie C. Training on how to set up companies and link the structure taken place 12/06. \n 29/05/26 - Research Services have confirmed requirements in terms of hierarchy and reference data. Simon has completed the write up of the proposal and is waiting on a risk assessment from Crispin. Simon has lined up Conor O'Brien to lead a session on UAT config when he's back from leave.\n13/05/26 - Org training session took place. Flexpoints volunteered to the project to pay for AG consultancy. Conor O'Brien working with us on our config. \n24/04/26 - Decision made on approach to ORCID - we will amend the existing tile and the audience based on a review undertaken by Research Services\n27/02/26 - Project want the ORCID to go ahead but they want the college data to go ahead now. Project need to set out working and where it appears in the onboarding list. College data planning is complete.\n20/02/26 - Green light to go ahead with the project\n23/01/26 - Project board agreed to progress, we need to provide accurate costings as a next step.\n28/11/2025 - Project to take proposal to board on 12th December\n30/09/2025 - Simon and Sarah met with Marie to provide estimates for the effort and cost involved in onboarding college staff onto PeopleXD.\n29/09/2025 - Nathan has advised that \"we are done with the SSO business. Ive gone back to Martin Mcgovern with some extra lists to help him with snagging but he has been quiet for a bit now and i think he realises that the HR data side of things has played out\". \n27/6/2025 - Nathan provided a list of staff missing their SSO from PeopleXD\n2/4/2025 - Crispin asking about reporting on ROD titles directly from eRecruitment; HFRA won't need this data until YE2025 so currently paused.\n25/10/24 - Outcomes and recommendations were published, much of which is now part of other DTP streams. Formally the \"investigative assignment\" stage has finished and we're moving into an \"implementation\" phase (Anne Mortimer)\n\nNext steps: ====MULTI COMPANY DATA====\nData Loading\n- Nathan has the person details…",
+      "confirmedContext": "Lead: Nathan\n\nTeam members involved: Marie C, Kevin\n\nID: DTP1092\n\nDescription: HR Systems team supporting multiple deliverables under the research management data for REF and research quality project\n\nDeadline: not set\n\nDeadline type: Fixed - compulsory\n\nProgress updates: 27/08/26 - SB and MC met with DRAM to discuss Data Warehouse restrictions. Ewan confirmed it was too complex to remove the data before it hits the data warehouse and that we would need to take responsibility for ensuring data doesn't enter any company 10 reporting. We reached a short term compromise with a longer term solution needing to be built in fabric.\n07/08/26 - Change request 20020465 has been raised to detail all of the configuration required for the live release.\nOrganisation Structure: - We have set up the organisation structure in UOXU, it is also set up in UOXC but this environment is due to be cloned soon and we don't want UOXC being used for testing Co90. \nBucket Post Setup - Bucket posts have been set up in UOXU. Nathan has manually set up a number of test/fake employee records in UOXU to allow integration testing to commence.\nIntegrations: - Crispin Muncaster is trying to coordinate testing with Guy Williams and David Hickman. The tester needs access to the staging environment and Azure platform to confirm that the expected test results are happening.\nData Warehouse - Simon and Marie C met with DRAM team and Alex Gray to discuss ensuring that company 90 data does not get moved into our current data warehouse schemas and has a separate area where the data will live with appropriate access controls to ensure its locked down and future proofed. - DRAM have been provided with logic which will determine which records can be considered as Company 10 in the first instance.\nGuidance and Training: - Julie and Michelle have been approached regarding changes to guidance materials as a result of company 10 going live\nAccess Provisioning: - Anne Mortimer and Nick Chandler are currently undertaking PXD training with Julie's support and Nathan coordinating.\n- Anne is being provisioned with people management admin access in UOXU. - Anne is getting sign off from all colleges that she can act as guardian of their data, once she has this confirmation we will officially set her up as guardian of Company 90.\n- I've asked Asta about Nathan having two accounts for reporting purposes, one which only has access to Company 10 and one which only has access to Company 90, to help him to report on exactly what he needs for any given request without having to check parameters or edit data manually.\nESS Requirements: - Nathan has logged in as a test account and shown Anne and Nik what the standard ESS profile looks like to an end user. It is with them to decide if they are happy with this or if they want to make any tweaks as a separate college ESS profile.\n30/07/26 - Issue with posts in resolved, there was an issue with the csv conversation from excel, so that's resolved in the base files. Interfaces have been adjusted to ensure no non company 10 data is passed downstream, currently being tested. Nathan has been able to manually load fake records into the system for testing purposes and has demo'd how it will look to an ESS user.\n- ORCID requirements have been passed back to Kevin to take forward.\n16/07/26 - Posts set up but issue with cost centres identified during testing - referred to AG for resolution.\n03/07/26 - FA team are testing scenarios for the visibility of Company 10 records within Company 90, and how these appear downstream in the BizTalk integration with PXD. \n26/06/26 - Org Structure set up in UOXU, discussions have been had with research services about the options for structuring posts, interface investigation has taken begun, £10k quoted to implement. Discussions have been had with Ewan and Alex Gray around ensuring data is handled appropriately in the data warehouse.\n12/06/26 - Proposal document written and with Marie C. Training on how to set up companies and link the structure taken place 12/06. \n 29/05/26 - Research Services have confirmed requirements in terms of hierarchy and reference data. Simon has completed the write up of the proposal and is waiting on a risk assessment from Crispin. Simon has lined up Conor O'Brien to lead a session on UAT config when he's back from leave.\n13/05/26 - Org training session took place. Flexpoints volunteered to the project to pay for AG consultancy. Conor O'Brien working with us on our config. \n24/04/26 - Decision made on approach to ORCID - we will amend the existing tile and the audience based on a review undertaken by Research Services\n27/02/26 - Project want the ORCID to go ahead but they want the college data to go ahead now. Project need to set out working and where it appears in the onboarding list. College data planning is complete.\n20/02/26 - Green light to go ahead with the project\n23/01/26 - Project board agreed to progress, we need to provide accurate costings as a next step.\n28/11/2025 - Project to take proposal to board on 12th December\n30/09/2025 - Simon and Sarah met with Marie to provide estimates for the effort and cost involved in onboarding college staff onto PeopleXD.\n29/09/2025 - Nathan has advised that \"we are done with the SSO business. Ive gone back to Martin Mcgovern with some extra lists to help him with snagging but he has been quiet for a bit now and i think he realises that the HR data side of things has played out\". \n27/6/2025 - Nathan provided a list of staff missing their SSO from PeopleXD\n2/4/2025 - Crispin asking about reporting on ROD titles directly from eRecruitment; HFRA won't need this data until YE2025 so currently paused.\n25/10/24 - Outcomes and recommendations were published, much of which is now part of other DTP streams. Formally the \"investigative assignment\" stage has finished and we're moving into an \"implementation\" phase (Anne Mortimer)\n\nNext steps: ====MULTI COMPANY DATA====\nData Loading\n- Nathan has the person details…",
+      "speakerNoteSeed": "",
+      "status": "open",
+      "sources": [
+        {
+          "kind": "roadmap-weekly",
+          "rowId": "DTP1092"
+        }
+      ],
+      "carryForward": null
+    },
+    {
+      "itemId": "itm_roadmap_ca138_a",
+      "position": 12,
+      "priority": 1,
+      "title": "UCEA Main Pay Uplift",
+      "tone": "update",
+      "detail": "Lead: Athena\n\nTeam members involved: Michael\n\nID: CA138_a\n\nDescription: Mapping UCEA uplift rates to PXD salary scales and implementing in payroll.\n\nDeadline: not set\n\nDeadline type: not set\n\nProgress updates: 16/07/2026 - Planning meeting with all involved teams, sketched out timeframe for Sept implementation (as August implementation already too late). Relevant HRS deadlines UCEA instruction 3/8 latest, HRA to provide rates to FA by 7/8, for UAT by 13/8, load deadline for LIVE 24/8, NOTE need to plan contingency cover as MOS on leave 24/8 and no-one else in FA has experience loading rates.\n\nNext steps: Waiting on instruction to implement from UCEA\n\nDate last reviewed: not set\n\nNext checkpoint date: not set",
+      "confirmedContext": "Lead: Athena\n\nTeam members involved: Michael\n\nID: CA138_a\n\nDescription: Mapping UCEA uplift rates to PXD salary scales and implementing in payroll.\n\nDeadline: not set\n\nDeadline type: not set\n\nProgress updates: 16/07/2026 - Planning meeting with all involved teams, sketched out timeframe for Sept implementation (as August implementation already too late). Relevant HRS deadlines UCEA instruction 3/8 latest, HRA to provide rates to FA by 7/8, for UAT by 13/8, load deadline for LIVE 24/8, NOTE need to plan contingency cover as MOS on leave 24/8 and no-one else in FA has experience loading rates.\n\nNext steps: Waiting on instruction to implement from UCEA\n\nDate last reviewed: not set\n\nNext checkpoint date: not set",
+      "speakerNoteSeed": "",
+      "status": "open",
+      "sources": [
+        {
+          "kind": "roadmap-weekly",
+          "rowId": "CA138_a"
+        }
+      ],
+      "carryForward": null
+    },
+    {
+      "itemId": "itm_roadmap_207",
+      "position": 13,
+      "priority": 1,
+      "title": "Moving volunteering leave to an employee bookable leave type",
+      "tone": "update",
+      "detail": "Lead: Simon\n\nTeam members involved: Michael\n\nID: 207\n\nDescription: Enabling employees to book volunteering leave as well as managers.\n\nDeadline: 30 Sep 2026\n\nDeadline type: Fixed - discretionary\n\nProgress updates: 04/09/26 - OItter and Sarah have been set up in UOXU, Otter's data has been corrected and they will carry out UAT.\n27/08/26 - Leave configured in UOXU, including pay codes, workflows, emails, reason groups, calendar config etc. Config has been thoroughly unit tested by Simon, all scenarios which Michael highlighted have been covered and we're now ready to progress into UAT.\n23/07/26 - Simon met with Michael to agree what steps are required, what the risks are, and what the considerations will be to take this forward.\n\nNext steps: - Otter and Sarah to carry out UAT - deadline of 16th September.\n- Total Reward to cover comms\n- Julie to update guidance on our webpages, if necessary\n- Michelle to meet with Otter and Sarah to discuss reporting requirements - we can create them a table with volunteering leave data in the Total Reward schema of the data warehouse.\n- Simon to confirm pay code set up with HRA team members for their information.\n\nDate last reviewed: 27 Aug 2026\n\nNext checkpoint date: 18 Sep 2026",
+      "confirmedContext": "Lead: Simon\n\nTeam members involved: Michael\n\nID: 207\n\nDescription: Enabling employees to book volunteering leave as well as managers.\n\nDeadline: 30 Sep 2026\n\nDeadline type: Fixed - discretionary\n\nProgress updates: 04/09/26 - OItter and Sarah have been set up in UOXU, Otter's data has been corrected and they will carry out UAT.\n27/08/26 - Leave configured in UOXU, including pay codes, workflows, emails, reason groups, calendar config etc. Config has been thoroughly unit tested by Simon, all scenarios which Michael highlighted have been covered and we're now ready to progress into UAT.\n23/07/26 - Simon met with Michael to agree what steps are required, what the risks are, and what the considerations will be to take this forward.\n\nNext steps: - Otter and Sarah to carry out UAT - deadline of 16th September.\n- Total Reward to cover comms\n- Julie to update guidance on our webpages, if necessary\n- Michelle to meet with Otter and Sarah to discuss reporting requirements - we can create them a table with volunteering leave data in the Total Reward schema of the data warehouse.\n- Simon to confirm pay code set up with HRA team members for their information.\n\nDate last reviewed: 27 Aug 2026\n\nNext checkpoint date: 18 Sep 2026",
+      "speakerNoteSeed": "",
+      "status": "open",
+      "sources": [
+        {
+          "kind": "roadmap-weekly",
+          "rowId": "207"
+        }
+      ],
+      "carryForward": null
+    },
+    {
+      "itemId": "itm_roadmap_208",
+      "position": 14,
+      "priority": 1,
+      "title": "Migrating departments onto 38 day balances",
+      "tone": "update",
+      "detail": "Lead: Julie\n\nTeam members involved: Kevin, Simon, Michael, Marie C\n\nID: 208\n\nDescription: not set\n\nDeadline: 30 Sep 2026\n\nDeadline type: Fixed - discretionary\n\nProgress updates: none logged\n\nNext steps: - Julie to ocntact departments who have requested this to run through what it will mean and the work required. \n- Kevin to update balance/workgroup configuration\n- Kevin to discuss what steps need to take place with Michael\n\nDate last reviewed: 30 Jul 2026\n\nNext checkpoint date: 28 Aug 2026",
+      "confirmedContext": "Lead: Julie\n\nTeam members involved: Kevin, Simon, Michael, Marie C\n\nID: 208\n\nDescription: not set\n\nDeadline: 30 Sep 2026\n\nDeadline type: Fixed - discretionary\n\nProgress updates: none logged\n\nNext steps: - Julie to ocntact departments who have requested this to run through what it will mean and the work required. \n- Kevin to update balance/workgroup configuration\n- Kevin to discuss what steps need to take place with Michael\n\nDate last reviewed: 30 Jul 2026\n\nNext checkpoint date: 28 Aug 2026",
+      "speakerNoteSeed": "",
+      "status": "open",
+      "sources": [
+        {
+          "kind": "roadmap-weekly",
+          "rowId": "208"
+        }
+      ],
+      "carryForward": null
+    }
+  ],
+  "submittedAt": "2026-09-29T06:59:58.188Z",
+  "submittedBy": "Kevin"
+}
