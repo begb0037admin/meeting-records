@@ -1576,3 +1576,36 @@ Confirmed live: `curl https://meeting.lelitte.co.uk/app.js` shows zero occurrenc
 `Carry-forward from` and the new `carryForwardLabel`/`MONTH_ABBR` code, live on the deployed site.
 
 Exact next action: none — closed. Commit `7091181` on `main`.
+
+## Flagged follow-up (not built) — no browser path to revise a locked intake, 29 September 2026
+
+Kevin asked how to edit a meeting-prep intake record after it's been locked/submitted, and
+explicitly said "flag it to Drew as a follow-up" rather than build it now. Logged here per that
+instruction — this section is a flag only, nothing implemented.
+
+**Confirmed by reading the actual code (not inferred):**
+- `src/worker.js`, `submit()` — the backend already supports resubmitting a locked record as a
+  revision: if the caller sends `supersedes` (the existing locked intake's path) and
+  `expectedSha` (that file's current sha) in the `/api/intakes/submit` payload, it writes a new
+  file `<meetingId>/<date>.revision-<timestamp>.json` instead of erroring. `listPrevious()` then
+  picks this up as the new "latest" (sorted by `submittedAt`), so the revision mechanism itself
+  is real and already wired end to end on the backend.
+- `public/app.js`, the `$("#submit").onclick` handler — never sends `supersedes` or `expectedSha`.
+  It only sends `{schemaVersion, meeting, items, submittedBy}`. So attempting to resubmit an
+  already-locked meeting through the normal browser workflow today just hits the existing 409
+  ("This intake is already locked. Submit a revision with an explicit supersedes reference.")
+  with no UI path to supply what the backend actually needs. **There is currently no way to
+  edit/correct a locked meeting at all through the browser.**
+
+**Scope of the follow-up, when picked up:** add a "revise this locked meeting" affordance to the
+browser page — e.g. when selecting a meeting that already has a locked record for the target
+date, offer to load it back in as an editable draft, and wire the submit button to send
+`supersedes`/`expectedSha` so it creates a proper revision instead of erroring. Standard practice
+for this feature going forward is Codex as lead implementer, Drew reviews (see the standing rule
+established in the Phase 5 entry above) — not a Codex-waiver case like the small text-only fixes
+elsewhere in this file.
+
+**Status:** not started. No branch, no PR, no code change.
+
+Exact next action: pick up as a normal Codex-led implementation brief on this repo when Kevin
+wants it built — not before.
