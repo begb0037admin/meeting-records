@@ -35,10 +35,12 @@ selection must be by actual note recency, not by which one happens to
 score highest or appear first.
 
 Read-only. Every function below only ever issues HTTP GET.
+Includes a standalone CLI: `python -m meeting_context.granola_source fetch ...`.
 """
 
 from __future__ import annotations
 
+import argparse
 import json
 import os
 import re
@@ -420,3 +422,30 @@ def find_latest_meeting(
         "lookbackDays": safe_lookback_days,
         "notesScanned": len(all_notes),
     }
+
+
+def main() -> int:
+    """Run the standalone Granola source CLI."""
+    parser = argparse.ArgumentParser(
+        description="Fetch the latest Granola meeting matching a title pattern."
+    )
+    subparsers = parser.add_subparsers(dest="command", required=True)
+    fetch_parser = subparsers.add_parser("fetch")
+    fetch_parser.add_argument("--title-pattern", required=True)
+    fetch_parser.add_argument(
+        "--lookback-days", type=int, default=DEFAULT_LOOKBACK_DAYS
+    )
+    args = parser.parse_args()
+
+    if args.command == "fetch":
+        result = find_latest_meeting(
+            args.title_pattern, lookback_days=args.lookback_days
+        )
+        print(json.dumps(result, indent=2))
+        return 0 if result.get("status") in {"found", "no_match"} else 1
+
+    return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
