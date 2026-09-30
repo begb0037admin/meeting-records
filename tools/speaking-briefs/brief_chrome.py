@@ -143,7 +143,7 @@ CSS_BASE = r"""
   .stopwatch-reset:hover { color: #fff; }
 
   .cal-card { padding: 18px 20px; }
-  .cal-months { display: flex; flex-direction: column; gap: 1.15rem; }
+  .cal-months { display: flex; flex-direction: column; gap: 1.4rem; }
   /* Divider moved to the BOTTOM inset edge of every non-last month (was the
      TOP edge of every non-first month). Visually it's the same single line
      at each month boundary, but anchoring it to the top of the block above
@@ -154,10 +154,10 @@ CSS_BASE = r"""
      zero-height box-shadow, still doesn't touch the adaptive month-count
      measurement (which renders/measures a single, divider-free month). */
   .cal-month:not(:last-child) { box-shadow: inset 0 -1px 0 0 rgba(255,255,255,0.18); }
-  .cal-month-label { font-size: 0.82rem; font-weight: 700; color: #fff; margin: 0 0 0.9rem; text-align: center; }
-  .cal-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; }
-  .cal-dow { font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: rgba(255,255,255,0.55); text-align: center; padding: 2px 0 5px; }
-  .cal-day { font-size: 10.5px; text-align: center; padding: 4px 1px; color: rgba(255,255,255,0.83); font-variant-numeric: tabular-nums; line-height: 1; }
+  .cal-month-label { font-size: 0.82rem; font-weight: 700; color: #fff; margin: 0 0 1.1rem; text-align: center; }
+  .cal-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; }
+  .cal-dow { font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: rgba(255,255,255,0.55); text-align: center; padding: 3px 0 7px; }
+  .cal-day { font-size: 10.5px; text-align: center; padding: 7px 2px; color: rgba(255,255,255,0.83); font-variant-numeric: tabular-nums; line-height: 1; }
   .cal-day.blank { visibility: hidden; }
   .cal-day.today { background: var(--navy); color: #fff; font-weight: 700; border-radius: 4px; }
 
